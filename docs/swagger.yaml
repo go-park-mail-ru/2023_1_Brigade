@@ -1,0 +1,334 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANILAKALASH60/231/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANILAKALASH60/Sample/1.0.0
+info:
+  version: "1.0.0"
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
+paths:
+  /api/v1/user:
+    post:
+      description: Create new user chat. Auth was needed
+      tags:
+        - user
+      responses:
+        "201":
+          description: successfully creating chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat' #chats
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+  /api/v1/user/{userID}:
+    get:
+      description: Getting user info and info for changes. Auth was needed.
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - user
+      responses:
+        "200":
+          description: successfully getting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+    put:
+      description: Request for change user settings and data. Auth was needed.
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - user
+      responses:
+        "200":
+          description: successfully putting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "301":
+          description: successfully putting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "403":
+          description: wrong password
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrWrongPassword'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+    delete:
+      description: Request to delete user data. Auth was needed.
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - user
+      responses:
+        "204":
+          description: successfully deleting
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+  /api/v1/chat:
+    get:
+      description: Getting user chats. Auth was needed.
+      tags:
+        - list of chats
+      responses:
+        "200":
+          description: successfully getting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat' #chats
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+    post:
+      description: Create new user chat. Auth was needed.
+      tags:
+        - list of chats
+      responses:
+        "201":
+          description: successfully creating chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat' #chats
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+  /api/v1/chat/{chatID}:
+    get:
+      description: Getting user chats. Auth was needed.
+      parameters:
+        - name: chatID
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - list of chats
+      responses:
+        "200":
+          description: successfully getting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat' #chats
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+    delete:
+      description: Delete user chat. Auth was needed
+      parameters:
+        - name: chatID
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - list of chats
+      responses:
+        "204":
+          description: successfully deleting
+        "401":
+          description: no cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoCookie'
+        "404":
+          description: no such cookie
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNoSuchCookie'
+        "500":
+          description: something unusual has happened
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrServer'
+components:
+  schemas:
+    Message:
+      type: object
+    Chat:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    User:
+      type: object
+      properties:
+        phone:
+          type: string
+        login:
+          type: string
+        nickname:
+          type: string
+        password:
+          type: string
+      description: User model
+    ErrNoCookie:
+      type: object
+      properties:
+        error:
+          example: 'Request has no cookies'
+          type: string
+    ErrWrongPassword:
+      type: object
+      properties:
+        error:
+          example: 'Wrong password entered'
+          type: string
+    ErrNoSuchCookie:
+      type: object
+      properties:
+        error:
+          example: 'No such cookie'
+          type: string
+    ErrServer:
+      type: object
+      properties:
+        error:
+          example: 'Server error'
+          type: string

@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"encoding/json"
 	"project/internal/chat"
 	"project/internal/model"
@@ -14,7 +15,7 @@ func NewChatUsecase(chatRepo chat.Repository) chat.Usecase {
 	return &repositoryImpl{repo: chatRepo}
 }
 
-func (u *repositoryImpl) CreateChat(jsonChatData []byte) (model.Chat, error) {
+func (u *repositoryImpl) CreateChat(ctx context.Context, jsonChatData []byte) (model.Chat, error) {
 	chat := model.Chat{}
 	err := json.Unmarshal(jsonChatData, &chat)
 
@@ -22,17 +23,17 @@ func (u *repositoryImpl) CreateChat(jsonChatData []byte) (model.Chat, error) {
 		return chat, err
 	}
 
-	return u.repo.InsertChatInDB(chat)
+	return u.repo.InsertChatInDB(ctx, chat)
 }
 
-func (u *repositoryImpl) GetChatById(chatID int) (model.Chat, error) {
-	return u.repo.GetChatInDB(chatID)
+func (u *repositoryImpl) GetChatById(ctx context.Context, chatID int) (model.Chat, error) {
+	return u.repo.GetChatInDB(ctx, chatID)
 }
 
-func (u *repositoryImpl) GetAllChats() ([]model.Chat, error) {
-	return u.repo.GetAllChatsInDB()
+func (u *repositoryImpl) GetAllChats(ctx context.Context) ([]model.Chat, error) {
+	return u.repo.GetAllChatsInDB(ctx)
 }
 
-func (u *repositoryImpl) DeleteChatById(chatID int) error {
-	return u.repo.DeleteChatInDB(chatID)
+func (u *repositoryImpl) DeleteChatById(ctx context.Context, chatID int) error {
+	return u.repo.DeleteChatInDB(ctx, chatID)
 }

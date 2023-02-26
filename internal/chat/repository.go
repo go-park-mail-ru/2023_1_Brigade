@@ -1,10 +1,13 @@
 package chat
 
-import "project/internal/model"
+import (
+	"context"
+	"project/internal/model"
+)
 
 type Repository interface {
-	InsertChatInDB(chat model.Chat) (model.Chat, error)
-	GetChatInDB(chatID int) (model.Chat, error)
-	GetAllChatsInDB() ([]model.Chat, error)
-	DeleteChatInDB(chatID int) error
+	InsertChatInDB(ctx context.Context, chat model.Chat) (model.Chat, error)
+	GetChatInDB(ctx context.Context, chatID int) (model.Chat, error)
+	GetAllChatsInDB(ctx context.Context) ([]model.Chat, error)
+	DeleteChatInDB(ctx context.Context, chatID int) error
 }

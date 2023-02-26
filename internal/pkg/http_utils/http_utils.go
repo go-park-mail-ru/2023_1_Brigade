@@ -1,4 +1,4 @@
-package pkg
+package http_utils
 
 import (
 	"github.com/gorilla/mux"
@@ -8,7 +8,7 @@ import (
 
 func ParsingIdUrl(r *http.Request, param string) (int, error) {
 	vars := mux.Vars(r)
-	chatID, err := strconv.Atoi(vars[param])
+	entitiesID, err := strconv.Atoi(vars[param])
 
-	return chatID, err
+	return entitiesID, err
 }

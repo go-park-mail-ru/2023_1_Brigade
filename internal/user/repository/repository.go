@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 	"project/internal/model"
 	"project/internal/user"
@@ -14,17 +15,17 @@ func NewUserMemoryRepository() user.Repository {
 
 type repositoryImpl struct{}
 
-func (r *repositoryImpl) GetUserInDB(userID int) (model.User, error) {
+func (r *repositoryImpl) GetUserInDB(ctx context.Context, userID int) (model.User, error) {
 	fmt.Println("GET USER")
 	return users[0], nil
 }
 
-func (r *repositoryImpl) ChangeUserInDB(userID int, data []byte) (model.User, error) {
+func (r *repositoryImpl) ChangeUserInDB(ctx context.Context, userID int, data []byte) (model.User, error) {
 	fmt.Println("PUT USER")
 	return users[0], nil
 }
 
-func (r *repositoryImpl) DeleteUserInDB(userID int) error {
+func (r *repositoryImpl) DeleteUserInDB(ctx context.Context, userID int) error {
 	fmt.Println("DELETE USER")
 	return nil
 }

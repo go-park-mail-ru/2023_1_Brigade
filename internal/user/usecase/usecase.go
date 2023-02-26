@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"project/internal/model"
 	"project/internal/user"
 )
@@ -13,17 +14,17 @@ func NewUserUsecase(userRepo user.Repository) user.Usecase {
 	return &repositoryImpl{repo: userRepo}
 }
 
-func (u *repositoryImpl) GetUserById(userID int) (model.User, error) {
-	user, err := u.repo.GetUserInDB(userID)
+func (u *repositoryImpl) GetUserById(ctx context.Context, userID int) (model.User, error) {
+	user, err := u.repo.GetUserInDB(ctx, userID)
 	return user, err
 }
 
-func (u *repositoryImpl) ChangeUserById(userID int, newDataUser []byte) (model.User, error) {
-	user, err := u.repo.ChangeUserInDB(userID, newDataUser)
+func (u *repositoryImpl) ChangeUserById(ctx context.Context, userID int, newDataUser []byte) (model.User, error) {
+	user, err := u.repo.ChangeUserInDB(ctx, userID, newDataUser)
 	return user, err
 }
 
-func (u *repositoryImpl) DeleteUserById(userID int) error {
-	err := u.repo.DeleteUserInDB(userID)
+func (u *repositoryImpl) DeleteUserById(ctx context.Context, userID int) error {
+	err := u.repo.DeleteUserInDB(ctx, userID)
 	return err
 }

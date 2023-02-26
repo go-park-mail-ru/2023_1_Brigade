@@ -3,94 +3,88 @@ package http
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
+	http_utils "project/internal/pkg/http_utils"
 	"project/internal/user"
-	"project/pkg"
 )
 
 type userHandler struct {
 	usecase user.Usecase
 }
 
-func writeInLogAndWriter(w http.ResponseWriter, message []byte) {
-	log.Printf(string(message))
-	w.Write(message)
-}
-
 func (u *userHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := pkg.ParsingIdUrl(r, "userID")
+	userID, err := http_utils.ParsingIdUrl(r, "userID")
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	user, err := u.usecase.GetUserById(userID)
+	user, err := u.usecase.GetUserById(r.Context(), userID)
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	jsonUser, err := json.Marshal(user)
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	writeInLogAndWriter(w, jsonUser)
+	w.Write(jsonUser)
 }
 
 func (u *userHandler) PutUserHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := pkg.ParsingIdUrl(r, "userID")
+	userID, err := http_utils.ParsingIdUrl(r, "userID")
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	user, err := u.usecase.ChangeUserById(userID, []byte(""))
+	user, err := u.usecase.ChangeUserById(r.Context(), userID, []byte(""))
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	jsonUser, err := json.Marshal(user)
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	writeInLogAndWriter(w, jsonUser)
+	w.Write(jsonUser)
 }
 
 func (u *userHandler) DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := pkg.ParsingIdUrl(r, "userID")
+	userID, err := http_utils.ParsingIdUrl(r, "userID")
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	err = u.usecase.DeleteUserById(userID)
+	err = u.usecase.DeleteUserById(r.Context(), userID)
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	jsonError, err := json.Marshal(err)
 
 	if err != nil {
-		writeInLogAndWriter(w, []byte(err.Error()))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	writeInLogAndWriter(w, jsonError)
+	w.Write(jsonError)
 }
 
 func NewUserHandler(r *mux.Router, us user.Usecase) {

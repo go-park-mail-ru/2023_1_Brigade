@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-
+	"project/internal/chat/middleware"
 	chatrepository "project/internal/chat/repository"
 	userrepository "project/internal/user/repository"
 
@@ -23,6 +23,8 @@ func main() {
 	chatImpl := chatusecase.NewChatUsecase(repositoryChatImpl)
 
 	r := mux.NewRouter()
+
+	r.Use(middleware.RequestResponseMiddleware)
 
 	httpuser.NewUserHandler(r, userImpl)
 	httpchat.NewChatHandler(r, chatImpl)

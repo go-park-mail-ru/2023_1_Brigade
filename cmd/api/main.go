@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-	"project/internal/chat/middleware"
 	chatrepository "project/internal/chat/repository"
+	"project/internal/middleware"
 	userrepository "project/internal/user/repository"
 
 	chatusecase "project/internal/chat/usecase"

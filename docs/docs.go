@@ -255,15 +255,23 @@ const docTemplate = `{
         "http.User": {
             "type": "object",
             "required": [
+                "email",
                 "name",
                 "password",
+                "phone",
                 "username"
             ],
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 },
                 "username": {

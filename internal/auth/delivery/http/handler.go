@@ -15,10 +15,12 @@ type statusResponse struct {
 }
 
 type User struct {
-	Id       int    `json:"-" db:"id"`
+	Id       int    `json:"-"`
 	Name     string `json:"name" binding:"required"`
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	Phone    string `json:"phone" binding:"required"`
+	Email    string `json:"email" binding:"required"`
 }
 
 type signInInput struct {

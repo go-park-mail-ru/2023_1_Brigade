@@ -1,9 +1,0 @@
-basePath: /
-host: localhost:8081
-info:
-  contact: {}
-  description: Telegram wannabe
-  title: Technogram
-  version: 1.0.0
-paths: {}
-swagger: "2.0"

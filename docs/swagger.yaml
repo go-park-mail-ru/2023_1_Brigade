@@ -1,9 +1,34 @@
 basePath: /
 definitions:
+  http.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+  http.emptyBody:
+    type: object
   http.errorResponse:
     properties:
       message:
         type: string
+    type: object
+  http.signInInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
     type: object
 host: localhost:8081
 info:
@@ -12,26 +37,157 @@ info:
   title: Technogram
   version: 1.0.0
 paths:
-  /orders:
-    post:
+  /auth/:
+    put:
       consumes:
       - application/json
-      description: Create a new order with the input paylod
-      parameters:
-      - description: Create order
-        in: body
-        name: order
-        required: true
-        schema:
-          $ref: '#/definitions/http.errorResponse'
+      description: auth with cookie
+      operationId: auth-cookie
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
+            $ref: '#/definitions/http.emptyBody'
+        "400":
+          description: Bad Request
+          schema:
             $ref: '#/definitions/http.errorResponse'
-      summary: Create a new order
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Auth
       tags:
-      - orders
+      - auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: logout
+      operationId: logout
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.signInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Sign In
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Sign Up
+      tags:
+      - auth
 swagger: "2.0"

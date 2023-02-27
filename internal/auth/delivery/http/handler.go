@@ -10,57 +10,89 @@ type errorResponse struct {
 	Message string `json:"message"`
 }
 
-// CreateOrder godoc
-// @Summary Create a new order
-// @Description Create a new order with the input paylod
-// @Tags orders
+type statusResponse struct {
+	Status string `json:"status"`
+}
+
+type User struct {
+	Id       int    `json:"-" db:"id"`
+	Name     string `json:"name" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type signInInput struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type emptyBody struct {
+}
+
+// @Summary Auth
+// @Security ApiKeyAuth
+// @Tags auth
+// @Description auth with cookie
+// @ID auth-cookie
 // @Accept  json
 // @Produce  json
-// @Param order body errorResponse true "Create order"
-// @Success 200 {object} errorResponse
-// @Router /orders [post]
+// @Success 200 {object} emptyBody
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /auth/ [put]
 func Auth(w http.ResponseWriter, r *http.Request) {
 }
 
-// CreateOrder godoc
-// @Summary Create a new order
-// @Description Create a new order with the input paylod
-// @Tags orders
+// @Summary Sign In
+// @Tags auth
+// @Description login
+// @ID login
 // @Accept  json
 // @Produce  json
-// @Param order body errorResponse true "Create order"
-// @Success 200 {object} errorResponse
-// @Router /orders [post]
-func Login(w http.ResponseWriter, r *http.Request) {
+// @Param input body signInInput true "credentials"
+// @Success 200 {string} string "token"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /auth/sign-in [post]
+func SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
-// CreateOrder godoc
-// @Summary Create a new order
-// @Description Create a new order with the input paylod
-// @Tags orders
+// @Summary Logout
+// @Security ApiKeyAuth
+// @Tags auth
+// @Description logout
+// @ID logout
 // @Accept  json
 // @Produce  json
-// @Param order body errorResponse true "Create order"
-// @Success 200 {object} errorResponse
-// @Router /orders [post]
+// @Param input body User true "account info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /auth/logout [post]
 func Logout(w http.ResponseWriter, r *http.Request) {
 }
 
-// CreateOrder godoc
-// @Summary Create a new order
-// @Description Create a new order with the input paylod
-// @Tags orders
+// @Summary Sign Up
+// @Tags auth
+// @Description create account
+// @ID create-account
 // @Accept  json
 // @Produce  json
-// @Param order body errorResponse true "Create order"
-// @Success 200 {object} errorResponse
-// @Router /orders [post]
-func Signup(w http.ResponseWriter, r *http.Request) {
+// @Param input body User true "account info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /auth/sign-up [post]
+func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewAuthHandler(r *mux.Router) {
 	r.HandleFunc("/auth", Auth).Methods("PUT")
-	r.HandleFunc("/login", Login).Methods("POST")
-	r.HandleFunc("/logout", Logout).Methods("POST")
-	r.HandleFunc("/signup", Signup).Methods("POST")
+	r.HandleFunc("/auth/sign-in", SignIn).Methods("POST")
+	r.HandleFunc("/auth/logout", Logout).Methods("POST")
+	r.HandleFunc("/auth/sign-up", SignUp).Methods("POST")
 }

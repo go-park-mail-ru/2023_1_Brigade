@@ -135,7 +135,7 @@ func (u *chatHandler) PostChatHandler(w http.ResponseWriter, r *http.Request) {
 	//	return
 	//}
 
-	w.Write([]byte(""))
+	//w.Write([]byte(""))
 }
 
 func NewChatHandler(r *mux.Router, us chat.Usecase) {

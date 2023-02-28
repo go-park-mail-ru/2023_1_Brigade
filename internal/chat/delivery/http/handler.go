@@ -1,7 +1,7 @@
 package http
 
 import (
-	"encoding/json"
+	"context"
 	"github.com/gorilla/mux"
 	"net/http"
 	"project/internal/chat"
@@ -13,89 +13,129 @@ type chatHandler struct {
 }
 
 func (u *chatHandler) GetChatHandler(w http.ResponseWriter, r *http.Request) {
-	chatID, err := http_utils.ParsingIdUrl(r, "chatID")
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+	chatID := http_utils.ParsingIdUrl(r, "chatID")
+	response := u.usecase.GetChatById(context.Background(), chatID)
+	http_utils.SendJsonResponse(w, response)
 
-	chat, err := u.usecase.GetChatById(r.Context(), chatID)
+	//if err != nil {
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
+	//
+	//var response []byte
+	//err = json.Unmarshal(response, user)
+	//
+	//if err != nil {
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+	//w.WriteHeader(http.StatusOK)
+	//w.Write(response)
 
-	jsonChat, err := json.Marshal(chat)
-
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	w.Write(jsonChat)
+	//chatID, err := http_utils.ParsingIdUrl(r, "chatID")
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//chat, err := u.usecase.GetChatById(r.Context(), chatID)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//jsonChat, err := json.Marshal(chat)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//w.Write(jsonChat)
 }
 
 func (u *chatHandler) DeleteChatHandler(w http.ResponseWriter, r *http.Request) {
-	chatID, err := http_utils.ParsingIdUrl(r, "chatID")
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+	chatID := http_utils.ParsingIdUrl(r, "chatID")
+	response := u.usecase.DeleteChatById(context.Background(), chatID)
+	http_utils.SendJsonResponse(w, response)
 
-	err = u.usecase.DeleteChatById(r.Context(), chatID)
+	//chatID, err := http_utils.ParsingIdUrl(r, "chatID")
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//err = u.usecase.DeleteChatById(r.Context(), chatID)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//jsonError, err := json.Marshal(err)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//w.Write(jsonError)
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	jsonError, err := json.Marshal(err)
-
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	w.Write(jsonError)
 }
 
 func (u *chatHandler) GetAllChatsHandler(w http.ResponseWriter, r *http.Request) {
-	allChats, err := u.usecase.GetAllChats(r.Context())
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+	response := u.usecase.GetAllChats(context.Background())
+	http_utils.SendJsonResponse(w, response)
 
-	jsonAllChats, err := json.Marshal(allChats)
-
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	w.Write(jsonAllChats)
+	//allChats, err := u.usecase.GetAllChats(r.Context())
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//jsonAllChats, err := json.Marshal(allChats)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
+	//
+	//w.Write(jsonAllChats)
 }
 
 func (u *chatHandler) PostChatHandler(w http.ResponseWriter, r *http.Request) {
-	newChat, err := u.usecase.CreateChat(r.Context(), []byte(""))
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+	response := u.usecase.CreateChat(context.Background(), r.Body)
+	http_utils.SendJsonResponse(w, response)
 
-	jsonNewChat, err := json.Marshal(newChat)
+	//fmt.Println("POST HANDLER")
+	//chatik := model.Chat{1, "vanya", "2 nov", nil, nil}
+	//
+	//ch, _ := json.Marshal(chatik)
+	//
+	//err := u.usecase.CreateChat(r.Context(), ch)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
 
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+	//jsonNewChat, err := json.Marshal(newChat)
+	//
+	//if err != nil {
+	//	w.Write([]byte(err.Error()))
+	//	return
+	//}
 
-	w.Write(jsonNewChat)
+	w.Write([]byte(""))
 }
 
 func NewChatHandler(r *mux.Router, us chat.Usecase) {

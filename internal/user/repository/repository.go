@@ -3,26 +3,26 @@ package repository
 import (
 	"context"
 	"fmt"
+	"github.com/jmoiron/sqlx"
 	"project/internal/model"
 	"project/internal/user"
 )
 
-var users = [1]model.User{model.User{1, "marcussss", "danila", "123456", "88005553535"}}
-
-func NewUserMemoryRepository() user.Repository {
-	return &repositoryImpl{}
+func NewUserMemoryRepository(db *sqlx.DB) user.Repository {
+	return &repositoryImpl{db: db}
 }
 
-type repositoryImpl struct{}
+type repositoryImpl struct {
+	db *sqlx.DB
+}
 
 func (r *repositoryImpl) GetUserInDB(ctx context.Context, userID int) (model.User, error) {
-	fmt.Println("GET USER")
-	return users[0], nil
+	return model.User{}, nil
 }
 
 func (r *repositoryImpl) ChangeUserInDB(ctx context.Context, userID int, data []byte) (model.User, error) {
 	fmt.Println("PUT USER")
-	return users[0], nil
+	return model.User{}, nil
 }
 
 func (r *repositoryImpl) DeleteUserInDB(ctx context.Context, userID int) error {

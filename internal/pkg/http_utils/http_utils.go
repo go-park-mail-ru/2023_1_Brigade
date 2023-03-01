@@ -18,9 +18,7 @@ const (
 	STATUS_REDIRECTED   = 3
 	STATUS_UNAUTHORIZED = 4
 	STATUS_NOT_FOUND    = 5
-	STATUS_INTERNAL     = 6
-	STATUS_ERR_JSON     = 7
-	STATUS_ERR_DB       = 8
+	STATUS_INTERNAL_ERR = 6
 )
 
 func SendJsonResponse(w http.ResponseWriter, response Response) {

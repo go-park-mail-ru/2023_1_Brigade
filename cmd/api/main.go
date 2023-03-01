@@ -6,6 +6,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"net/http"
+	httpauth "project/internal/auth/delivery/http"
+	authrepository "project/internal/auth/repository"
+	authusecase "project/internal/auth/usecase"
 	httpchat "project/internal/chat/delivery/http"
 	chatrepository "project/internal/chat/repository"
 	chatusecase "project/internal/chat/usecase"
@@ -18,37 +21,18 @@ import (
 var schema = `
 -- DROP TABLE Chat;
 -- DROP TABLE Message;
--- DROP TABLE Profile;
+-- DROP TABLE profile;
 
-	
-CREATE TABLE Profile (
-	id       integer primary key,
-	username    varchar(255),
-	name varchar(255),
-	email    varchar(255),
-	status   varchar(255),
-	password varchar(255)
-);
+-- DROP SEQUENCE profileSeq;
+-- DROP SEQUENCE messageSeq;
+-- DROP SEQUENCE chatSeq;
 
-CREATE TABLE Message (
-    id        integer primary key,  
-	author_id  integer NOT NULL,
-	body      text,
-	media     text,  
-	created_at text,  
-	is_read    bit
-);
-
-CREATE TABLE Chat (
-    id        integer primary key,
-	name      varchar(255),
-	created_at text,
-	members   Profile[],
-	messages  Message[]
-);
-
+-- CREATE SEQUENCE profileSeq
+--    START 1
+--    INCREMENT 1;
+-- 
 -- CREATE TABLE Profile (
--- 	id       integer primary key,
+-- 	id       integer primary key not null DEFAULT nextval('profileSeq'),
 -- 	username    varchar(255),
 -- 	name varchar(255),
 -- 	email    varchar(255),
@@ -56,8 +40,12 @@ CREATE TABLE Chat (
 -- 	password varchar(255)
 -- );
 -- 
+-- CREATE SEQUENCE messageSeq
+--    START 1
+--    INCREMENT 1;
+-- 
 -- CREATE TABLE Message (
---     id        integer primary key,  
+--     id        integer primary key not null DEFAULT nextval('messageSeq'),
 -- 	author_id  integer NOT NULL,
 -- 	body      text,
 -- 	media     text,  
@@ -65,8 +53,12 @@ CREATE TABLE Chat (
 -- 	is_read    bit
 -- );
 -- 
+-- CREATE SEQUENCE chatSeq
+--    START 1
+--    INCREMENT 1;
+-- 
 -- CREATE TABLE Chat (
---  id        integer primary key,
+--  	id        integer primary key not null DEFAULT nextval('chatSeq'),
 -- 	name      varchar(255),
 -- 	created_at text,
 -- 	members   integer REFERENCES Profile (Id),
@@ -78,14 +70,16 @@ func main() {
 
 	connStr := "user=golang password=golang dbname=golang sslmode=disable"
 	db, err := sqlx.Open("postgres", connStr)
-	//db.MustExec(schema)
+	db.MustExec(schema)
 	if err != nil {
 		return
 	}
 
+	repositoryAuthImpl := authrepository.NewAuthMemoryRepository(db)
 	repositoryUserImpl := userrepository.NewUserMemoryRepository(db)
 	repositoryChatImpl := chatrepository.NewChatMemoryRepository(db)
 
+	authImpl := authusecase.NewAuthUsecase(repositoryAuthImpl)
 	userImpl := userusecase.NewUserUsecase(repositoryUserImpl)
 	chatImpl := chatusecase.NewChatUsecase(repositoryChatImpl)
 
@@ -93,6 +87,7 @@ func main() {
 
 	r.Use(middleware.RequestResponseMiddleware)
 
+	httpauth.NewChatHandler(r, authImpl)
 	httpuser.NewUserHandler(r, userImpl)
 	httpchat.NewChatHandler(r, chatImpl)
 

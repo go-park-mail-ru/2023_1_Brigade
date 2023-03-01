@@ -1,11 +1,9 @@
 package http
 
 import (
-	"context"
 	"github.com/gorilla/mux"
 	"net/http"
 	"project/internal/chat"
-	http_utils "project/internal/pkg/http_utils"
 )
 
 type chatHandler struct {
@@ -14,9 +12,9 @@ type chatHandler struct {
 
 func (u *chatHandler) GetChatHandler(w http.ResponseWriter, r *http.Request) {
 
-	chatID := http_utils.ParsingIdUrl(r, "chatID")
-	response := u.usecase.GetChatById(context.Background(), chatID)
-	http_utils.SendJsonResponse(w, response)
+	//chatID := http_utils.ParsingIdUrl(r, "chatID")
+	//response := u.usecase.GetChatById(context.Background(), chatID)
+	//http_utils.SendJsonResponse(w, response)
 
 	//if err != nil {
 	//	w.WriteHeader(http.StatusInternalServerError)
@@ -60,9 +58,9 @@ func (u *chatHandler) GetChatHandler(w http.ResponseWriter, r *http.Request) {
 
 func (u *chatHandler) DeleteChatHandler(w http.ResponseWriter, r *http.Request) {
 
-	chatID := http_utils.ParsingIdUrl(r, "chatID")
-	response := u.usecase.DeleteChatById(context.Background(), chatID)
-	http_utils.SendJsonResponse(w, response)
+	//chatID := http_utils.ParsingIdUrl(r, "chatID")
+	//response := u.usecase.DeleteChatById(context.Background(), chatID)
+	//http_utils.SendJsonResponse(w, response)
 
 	//chatID, err := http_utils.ParsingIdUrl(r, "chatID")
 	//
@@ -90,9 +88,9 @@ func (u *chatHandler) DeleteChatHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 func (u *chatHandler) GetAllChatsHandler(w http.ResponseWriter, r *http.Request) {
-
-	response := u.usecase.GetAllChats(context.Background())
-	http_utils.SendJsonResponse(w, response)
+	//
+	//response := u.usecase.GetAllChats(context.Background())
+	//http_utils.SendJsonResponse(w, response)
 
 	//allChats, err := u.usecase.GetAllChats(r.Context())
 	//
@@ -113,8 +111,8 @@ func (u *chatHandler) GetAllChatsHandler(w http.ResponseWriter, r *http.Request)
 
 func (u *chatHandler) PostChatHandler(w http.ResponseWriter, r *http.Request) {
 
-	response := u.usecase.CreateChat(context.Background(), r.Body)
-	http_utils.SendJsonResponse(w, response)
+	//response := u.usecase.CreateChat(context.Background(), r.Body)
+	//http_utils.SendJsonResponse(w, response)
 
 	//fmt.Println("POST HANDLER")
 	//chatik := model.Chat{1, "vanya", "2 nov", nil, nil}

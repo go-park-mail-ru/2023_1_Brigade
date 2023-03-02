@@ -8,3 +8,16 @@ type User struct {
 	Status   string `json:"status"   valid:"type(string)"`
 	Password string `json:"password" valid:"type(string),required"`
 }
+
+//func a() {
+//	govalidator
+//}
+//govalidator.
+
+//govalidator.CustomTypeTagMap.Set("customMinLengthValidator", func(i interface{}, context interface{}) bool {
+//	switch v := context.(type) { // this validates a field against the value in another field, i.e. dependent validation
+//		case StructWithCustomByteArray:
+//		return len(v.ID) >= v.CustomMinLength
+//	}
+//	return false
+//})

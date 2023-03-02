@@ -3,11 +3,12 @@ package usecase
 import (
 	"context"
 	"encoding/json"
-	"github.com/asaskevich/govalidator"
+	"errors"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/auth"
 	"project/internal/model"
-	"project/internal/pkg/http_utils"
+	my_errors "project/internal/pkg/errors"
 	"project/internal/pkg/security"
 )
 
@@ -19,44 +20,108 @@ func NewAuthUsecase(authRepo auth.Repository) auth.Usecase {
 	return &usecaseImpl{repo: authRepo}
 }
 
-func (u *usecaseImpl) Signup(ctx context.Context, r *http.Request) http_utils.Response {
-	user := model.User{
-		Id:       0,
-		Username: r.FormValue("username"),
-		Name:     r.FormValue("nickname"),
-		Email:    r.FormValue("email"),
-		Status:   "",
-		Password: r.FormValue("password"),
-	}
-	exist := u.repo.CheckExistUserByEmail(ctx, user.Email)
-	response := http_utils.Response{Status: http_utils.STATUS_INTERNAL_ERR}
+func (u *usecaseImpl) Signup(ctx context.Context, r *http.Request) ([]byte, []error) {
+	user := model.User{}
+	emptyResponse := []byte("")
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&user)
 
-	if exist {
-		return response
+	if err != nil {
+		log.Error(err)
+		return emptyResponse, []error{my_errors.InternalError}
+	}
+
+	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
+	if err != nil {
+		if errors.Is(err, my_errors.EmailIsAlreadyRegistred) {
+			log.Error(err)
+			return emptyResponse, []error{my_errors.EmailIsAlreadyRegistred}
+		}
+		if !errors.Is(err, my_errors.NoUserFound) {
+			log.Error(err)
+			return emptyResponse, []error{my_errors.InternalError}
+		}
+	}
+
+	userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
+	if err != nil {
+		if errors.Is(err, my_errors.UsernameIsAlreadyRegistred) {
+			log.Error(err)
+			return emptyResponse, []error{my_errors.UsernameIsAlreadyRegistred}
+		}
+		if !errors.Is(err, my_errors.NoUserFound) {
+			log.Error(err)
+			return emptyResponse, []error{my_errors.InternalError}
+		}
 	}
 
 	hashedPassword, err := security.Hash(user.Password)
 	if err != nil {
-		return response
+		log.Error(err)
+		return emptyResponse, []error{my_errors.InternalError}
 	}
 	user.Password = hashedPassword
 
-	_, err = govalidator.ValidateStruct(user)
-	if err != nil {
-		return response
+	validateErrors := security.ValidateSignup(user)
+	if len(validateErrors) != 0 {
+		log.Error(validateErrors)
+		return emptyResponse, validateErrors
 	}
 
-	userDB, err := u.repo.CreateUser(ctx, user)
+	userDB, err = u.repo.CreateUser(ctx, user)
 	if err != nil {
-		return response
+		log.Error(err)
+		return emptyResponse, []error{my_errors.InternalError}
 	}
 
 	jsonUserDB, err := json.Marshal(userDB)
-	response.Data = jsonUserDB
 	if err != nil {
-		return response
+		log.Error(err)
+		return emptyResponse, []error{my_errors.InternalError}
 	}
 
-	response.Status = http_utils.STATUS_CREATED
-	return response
+	return jsonUserDB, nil
+}
+
+func (u *usecaseImpl) Login(ctx context.Context, r *http.Request) ([]byte, error) {
+	user := model.User{}
+	emptyResponse := []byte("")
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&user)
+
+	if err != nil {
+		log.Error(err)
+		return emptyResponse, my_errors.InternalError
+	}
+
+	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
+	if err != nil {
+		if errors.Is(err, my_errors.NoUserFound) {
+			log.Error(err)
+			return emptyResponse, my_errors.NoUserFound
+		}
+		if !errors.Is(err, my_errors.EmailIsAlreadyRegistred) {
+			log.Error(err)
+			return emptyResponse, my_errors.InternalError
+		}
+	}
+
+	hashedPassword, err := security.Hash(user.Password)
+	if err != nil {
+		log.Error(err)
+		return emptyResponse, my_errors.InternalError
+	}
+
+	if userDB.Password != hashedPassword {
+		log.Error(my_errors.IncorrectPassword)
+		return emptyResponse, my_errors.IncorrectPassword
+	}
+
+	jsonUserDB, err := json.Marshal(userDB)
+	if err != nil {
+		log.Error(err)
+		return emptyResponse, my_errors.InternalError
+	}
+
+	return jsonUserDB, nil
 }

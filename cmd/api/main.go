@@ -5,13 +5,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	httpauth "project/internal/auth/delivery/http"
 	authrepository "project/internal/auth/repository"
 	authusecase "project/internal/auth/usecase"
-	httpchat "project/internal/chat/delivery/http"
-	chatrepository "project/internal/chat/repository"
-	chatusecase "project/internal/chat/usecase"
 	"project/internal/middleware"
 	httpuser "project/internal/user/delivery/http"
 	userrepository "project/internal/user/repository"
@@ -67,29 +65,40 @@ var schema = `
 `
 
 func main() {
+	//log.SetFormatter(&log.JSONFormatter{})
+	log.SetFormatter(&log.TextFormatter{
+		//DisableColors: true,
+		FullTimestamp: true,
+	})
+	log.SetReportCaller(true)
+	//log.WithFields(log.Fields{
+	//	"animal": "walrus",
+	//	"number": 1,
+	//	"size":   10,
+	//}).Warning("КУКУК")
 
 	connStr := "user=golang password=golang dbname=golang sslmode=disable"
 	db, err := sqlx.Open("postgres", connStr)
-	db.MustExec(schema)
+	//db.MustExec(schema)
 	if err != nil {
 		return
 	}
-
+	//
 	repositoryAuthImpl := authrepository.NewAuthMemoryRepository(db)
 	repositoryUserImpl := userrepository.NewUserMemoryRepository(db)
-	repositoryChatImpl := chatrepository.NewChatMemoryRepository(db)
+	//repositoryChatImpl := chatrepository.NewChatMemoryRepository(db)
 
 	authImpl := authusecase.NewAuthUsecase(repositoryAuthImpl)
 	userImpl := userusecase.NewUserUsecase(repositoryUserImpl)
-	chatImpl := chatusecase.NewChatUsecase(repositoryChatImpl)
+	//chatImpl := chatusecase.NewChatUsecase(repositoryChatImpl)
 
 	r := mux.NewRouter()
 
 	r.Use(middleware.RequestResponseMiddleware)
 
-	httpauth.NewChatHandler(r, authImpl)
+	httpauth.NewAuthHandler(r, authImpl)
 	httpuser.NewUserHandler(r, userImpl)
-	httpchat.NewChatHandler(r, chatImpl)
+	//httpchat.NewChatHandler(r, chatImpl)
 
 	http.ListenAndServe(":8081", r)
 

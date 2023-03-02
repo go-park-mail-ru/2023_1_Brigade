@@ -2,9 +2,11 @@ package repository
 
 import (
 	"context"
-	"fmt"
+	"database/sql"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"project/internal/model"
+	my_errors "project/internal/pkg/errors"
 	"project/internal/user"
 )
 
@@ -16,16 +18,18 @@ type repositoryImpl struct {
 	db *sqlx.DB
 }
 
-func (r *repositoryImpl) GetUserInDB(ctx context.Context, userID int) (model.User, error) {
-	return model.User{}, nil
-}
+func (u *repositoryImpl) GetUserById(ctx context.Context, userID int) (model.User, error) {
+	user := model.User{}
+	err := u.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
+		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
 
-func (r *repositoryImpl) ChangeUserInDB(ctx context.Context, userID int, data []byte) (model.User, error) {
-	fmt.Println("PUT USER")
-	return model.User{}, nil
-}
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return user, my_errors.NoUserFound
+		} else {
+			return user, err
+		}
+	}
 
-func (r *repositoryImpl) DeleteUserInDB(ctx context.Context, userID int) error {
-	fmt.Println("DELETE USER")
-	return nil
+	return user, my_errors.EmailIsAlreadyRegistred
 }

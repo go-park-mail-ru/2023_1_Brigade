@@ -1,45 +1,59 @@
 package http_utils
 
 import (
+	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
 
-type Response struct {
-	Status int    `json:"status"`
-	Data   []byte `json:"data"`
+//type Response struct {
+//	Status int    `json:"status"`
+//	Data   []byte `json:"data"`
+//}
+//
+//const (
+//	STATUS_OK           = 0
+//	STATUS_CREATED      = 1
+//	STATUS_DELETED      = 2
+//	STATUS_REDIRECTED   = 3
+//	STATUS_UNAUTHORIZED = 4
+//	STATUS_NOT_FOUND    = 5
+//	STATUS_INTERNAL_ERR = 6
+//)
+
+type JsonErrors struct {
+	Err error
 }
 
-const (
-	STATUS_OK           = 0
-	STATUS_CREATED      = 1
-	STATUS_DELETED      = 2
-	STATUS_REDIRECTED   = 3
-	STATUS_UNAUTHORIZED = 4
-	STATUS_NOT_FOUND    = 5
-	STATUS_INTERNAL_ERR = 6
-)
+func (e JsonErrors) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Err.Error())
+}
 
-func SendJsonResponse(w http.ResponseWriter, response Response) {
-	switch response.Status {
-	case STATUS_OK:
-		w.WriteHeader(http.StatusOK)
-	case STATUS_CREATED:
-		w.WriteHeader(http.StatusCreated)
-	case STATUS_DELETED:
-		w.WriteHeader(http.StatusNoContent)
-	case STATUS_REDIRECTED:
-		w.WriteHeader(http.StatusMovedPermanently)
-	case STATUS_UNAUTHORIZED:
-		w.WriteHeader(http.StatusUnauthorized)
-	case STATUS_NOT_FOUND:
-		w.WriteHeader(http.StatusNotFound)
-	default:
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(response.Data)
+func SendJsonResponse(w http.ResponseWriter, data []byte, err error) {
+	//switch err {
+	//case errors.InvalidUsername:
+	//	w.WriteHeader()
+	//}
+
+	//switch response.Status {
+	//case STATUS_OK:
+	//	w.WriteHeader(http.StatusOK)
+	//case STATUS_CREATED:
+	//	w.WriteHeader(http.StatusCreated)
+	//case STATUS_DELETED:
+	//	w.WriteHeader(http.StatusNoContent)
+	//case STATUS_REDIRECTED:
+	//	w.WriteHeader(http.StatusMovedPermanently)
+	//case STATUS_UNAUTHORIZED:
+	//	w.WriteHeader(http.StatusUnauthorized)
+	//case STATUS_NOT_FOUND:
+	//	w.WriteHeader(http.StatusNotFound)
+	//default:
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//}
+	//w.Header().Set("Content-Type", "application/json")
+	//_, err := w.Write(response.Data)
 }
 
 func ParsingIdUrl(r *http.Request, param string) int {

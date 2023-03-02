@@ -30,26 +30,6 @@ func (u *repositoryImpl) CreateUser(ctx context.Context, user model.User) (model
 	return user, nil
 }
 
-//func (u *repositoryImpl) CheckExistUserByEmail(ctx context.Context, email string) (bool, error) {
-//	err := u.db.QueryRow("SELECT * FROM profile WHERE email=$1", email).Scan()
-//
-//	if errors.Is(err, sql.ErrNoRows) {
-//		return false, nil
-//	}
-//
-//	return true, nil
-//}
-
-//func (u *repositoryImpl) CheckExistUserByUsername(ctx context.Context, username string) (bool, error) {
-//	err := u.db.QueryRow("SELECT * FROM profile WHERE username=$1", username).Scan()
-//
-//	if errors.Is(err, sql.ErrNoRows) {
-//		return false, nil
-//	}
-//
-//	return true, nil
-//}
-
 func (u *repositoryImpl) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
 	err := u.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
 

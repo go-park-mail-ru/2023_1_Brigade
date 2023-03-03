@@ -75,10 +75,10 @@ func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (u *authHandler) GetAuthHandler(w http.ResponseWriter, r *http.Request) {
+func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := r.Cookie("session_id")
 	if errors.Is(err, http.ErrNoCookie) {
-		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNoFound})
+		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNotFound})
 		return
 	}
 
@@ -91,11 +91,11 @@ func (u *authHandler) GetAuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (u *authHandler) DeleteLogoutHandler(w http.ResponseWriter, r *http.Request) {
+func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := r.Cookie("session_id")
 	if errors.Is(err, http.ErrNoCookie) {
 		log.Error(err)
-		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNoFound})
+		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNotFound})
 		return
 	}
 
@@ -103,10 +103,10 @@ func (u *authHandler) DeleteLogoutHandler(w http.ResponseWriter, r *http.Request
 	if err == nil {
 		session.Expires = time.Now().AddDate(0, 0, -1)
 		http.SetCookie(w, session)
-		httpUtils.JsonWriteErrors(w, []error{myErrors.CookieSuccessDeleted})
+		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
 	} else {
 		log.Error(err)
-		httpUtils.JsonWriteErrors(w, []error{myErrors.CookieSuccessDeleted})
+		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrInternal})
 	}
 }
 
@@ -117,9 +117,9 @@ func NewAuthHandler(r *mux.Router, us auth.Usecase) {
 	logoutUrl := "/logout/"
 	authUrl := "/auth/"
 
-	r.HandleFunc(logoutUrl, handler.DeleteLogoutHandler).
+	r.HandleFunc(logoutUrl, handler.LogoutHandler).
 		Methods("DELETE")
-	r.HandleFunc(authUrl, handler.GetAuthHandler).
+	r.HandleFunc(authUrl, handler.AuthHandler).
 		Methods("GET")
 	r.HandleFunc(signupUrl, handler.SignupHandler).
 		Methods("POST")

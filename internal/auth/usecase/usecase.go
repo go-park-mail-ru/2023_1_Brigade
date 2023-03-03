@@ -27,13 +27,13 @@ func (u *usecase) GetUserByEmail(ctx context.Context, email string) (model.User,
 			log.Error(err)
 			return userDB, myErrors.ErrEmailIsAlreadyRegistred
 		}
-		if !errors.Is(err, myErrors.ErrNoUserFound) {
+		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
 			return userDB, myErrors.ErrInternal
 		}
 	}
 
-	return userDB, myErrors.ErrNoUserFound
+	return userDB, myErrors.ErrUserNotFound
 }
 
 func (u *usecase) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
@@ -44,20 +44,20 @@ func (u *usecase) GetUserByUsername(ctx context.Context, username string) (model
 			log.Error(err)
 			return userDB, myErrors.ErrUsernameIsAlreadyRegistred
 		}
-		if !errors.Is(err, myErrors.ErrNoUserFound) {
+		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
 			return userDB, myErrors.ErrInternal
 		}
 	}
 
-	return userDB, myErrors.ErrNoUserFound
+	return userDB, myErrors.ErrUserNotFound
 }
 
 func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
 
 	if err != nil {
-		if !errors.Is(err, myErrors.ErrNoUserFound) {
+		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
 			return userDB, []error{err}
 		}
@@ -66,7 +66,7 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 	userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
 
 	if err != nil {
-		if !errors.Is(err, myErrors.ErrNoUserFound) {
+		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
 			return userDB, []error{err}
 		}
@@ -106,9 +106,9 @@ func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
 
 	if err != nil {
-		if errors.Is(err, myErrors.ErrNoUserFound) {
+		if errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
-			return user, myErrors.ErrNoUserFound
+			return user, myErrors.ErrUserNotFound
 		}
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
 			log.Error(err)
@@ -144,13 +144,13 @@ func (u *usecase) GetSessionById(ctx context.Context, userID uint64) (model.Sess
 			log.Error(err)
 			return session, myErrors.ErrSessionIsAlreadyCrated
 		}
-		if !errors.Is(err, myErrors.ErrNoSessionFound) {
+		if !errors.Is(err, myErrors.ErrSessionNotFound) {
 			log.Error(err)
 			return session, myErrors.ErrInternal
 		}
 	}
 
-	return session, myErrors.ErrNoSessionFound
+	return session, myErrors.ErrSessionNotFound
 }
 
 func (u *usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
@@ -161,20 +161,20 @@ func (u *usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.
 			log.Error(err)
 			return session, myErrors.ErrSessionIsAlreadyCrated
 		}
-		if !errors.Is(err, myErrors.ErrNoSessionFound) {
+		if !errors.Is(err, myErrors.ErrSessionNotFound) {
 			log.Error(err)
 			return session, myErrors.ErrInternal
 		}
 	}
 
-	return session, myErrors.ErrNoSessionFound
+	return session, myErrors.ErrSessionNotFound
 }
 
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
 	session, err := u.repo.GetSessionById(ctx, userID)
 
 	if err != nil {
-		if !errors.Is(err, myErrors.ErrNoSessionFound) {
+		if !errors.Is(err, myErrors.ErrSessionNotFound) {
 			log.Error(err)
 			return session, err
 		}

@@ -30,7 +30,7 @@ func setHeader(w http.ResponseWriter, err error) {
 		w.WriteHeader(http.StatusOK)
 	case errors.Is(err, myErrors.UserCreated):
 		w.WriteHeader(http.StatusCreated)
-	case errors.Is(err, myErrors.CookieSuccessDeleted):
+	case errors.Is(err, myErrors.SessionSuccessDeleted):
 		w.WriteHeader(http.StatusNoContent)
 	case errors.Is(err, myErrors.ErrInvalidUsername):
 		w.WriteHeader(http.StatusBadRequest)
@@ -44,6 +44,10 @@ func setHeader(w http.ResponseWriter, err error) {
 		w.WriteHeader(http.StatusConflict)
 	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
 		w.WriteHeader(http.StatusConflict)
+	case errors.Is(err, myErrors.ErrCookieNoFound):
+		w.WriteHeader(http.StatusUnauthorized)
+	case errors.Is(err, myErrors.ErrNoSessionFound):
+		w.WriteHeader(http.StatusNotFound)
 	case errors.Is(err, myErrors.ErrNoUserFound):
 		w.WriteHeader(http.StatusNotFound)
 	case errors.Is(err, myErrors.ErrIncorrectPassword):

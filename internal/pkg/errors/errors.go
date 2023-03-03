@@ -5,9 +5,9 @@ import (
 )
 
 var (
-	UserIdGiven          = errors.New("Successful return of the user's ID")
-	UserCreated          = errors.New("User created")
-	CookieSuccessDeleted = errors.New("Cookie success deleted")
+	UserIdGiven           = errors.New("Successful return of the user's ID")
+	UserCreated           = errors.New("User created")
+	SessionSuccessDeleted = errors.New("Session success deleted")
 
 	ErrInvalidUsername = errors.New("Invalid username")
 	ErrInvalidEmail    = errors.New("Invalid email")
@@ -18,10 +18,10 @@ var (
 	ErrEmailIsAlreadyRegistred    = errors.New("The email is already registered")
 	ErrUsernameIsAlreadyRegistred = errors.New("The username is already registered")
 
-	ErrCookieNoFound = errors.New("No cookie found")
+	ErrCookieNotFound = errors.New("Cookie not found")
 
-	ErrNoSessionFound    = errors.New("No session found")
-	ErrNoUserFound       = errors.New("No user found")
+	ErrSessionNotFound   = errors.New("Session not found")
+	ErrUserNotFound      = errors.New("User not found")
 	ErrIncorrectPassword = errors.New("Incorrect password")
 
 	ErrInternal = errors.New("Internal error")

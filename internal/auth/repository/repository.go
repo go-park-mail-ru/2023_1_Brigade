@@ -47,7 +47,7 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.Us
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return user, myErrors.ErrNoUserFound
+			return user, myErrors.ErrUserNotFound
 		} else {
 			return user, err
 		}
@@ -63,7 +63,7 @@ func (r *repository) GetUserByUsername(ctx context.Context, username string) (mo
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return user, myErrors.ErrNoUserFound
+			return user, myErrors.ErrUserNotFound
 		} else {
 			return user, err
 		}
@@ -79,7 +79,7 @@ func (r *repository) GetSessionById(ctx context.Context, userId uint64) (model.S
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return session, myErrors.ErrNoSessionFound
+			return session, myErrors.ErrSessionNotFound
 		} else {
 			return session, err
 		}
@@ -95,7 +95,7 @@ func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (mod
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return session, myErrors.ErrNoSessionFound
+			return session, myErrors.ErrSessionNotFound
 		} else {
 			return session, err
 		}

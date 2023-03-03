@@ -6,30 +6,30 @@ import (
 	"errors"
 	"github.com/jmoiron/sqlx"
 	"project/internal/model"
-	my_errors "project/internal/pkg/errors"
+	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
 )
 
 func NewUserMemoryRepository(db *sqlx.DB) user.Repository {
-	return &repositoryImpl{db: db}
+	return &repository{db: db}
 }
 
-type repositoryImpl struct {
+type repository struct {
 	db *sqlx.DB
 }
 
-func (u *repositoryImpl) GetUserById(ctx context.Context, userID int) (model.User, error) {
+func (r *repository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	user := model.User{}
-	err := u.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
+	err := r.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
 		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return user, my_errors.NoUserFound
+			return user, myErrors.ErrNoUserFound
 		} else {
 			return user, err
 		}
 	}
 
-	return user, my_errors.EmailIsAlreadyRegistred
+	return user, myErrors.ErrEmailIsAlreadyRegistred
 }

@@ -6,5 +6,5 @@ import (
 )
 
 type Repository interface {
-	GetUserById(ctx context.Context, userID int) (model.User, error)
+	GetUserById(ctx context.Context, userID uint64) (model.User, error)
 }

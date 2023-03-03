@@ -2,10 +2,10 @@ package http
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 	"net/http"
-	"project/internal/pkg/http_utils"
+	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/user"
 )
 
@@ -14,21 +14,21 @@ type userHandler struct {
 }
 
 func (u *userHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	userID := http_utils.ParsingIdUrl(r, "userID")
-	jsonUser, err := u.usecase.GetUserById(context.Background(), userID)
-	jsonResponse := []byte("")
+	userID, err := httpUtils.ParsingIdUrl(r, "userID")
 
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		inJsonError := http_utils.JsonErrors{Err: err}
-		jsonResponse, _ = json.Marshal(inJsonError) // TODO ERROR
-	} else {
-		w.WriteHeader(http.StatusOK)
-		jsonResponse = jsonUser
+		log.Error(err)
+		httpUtils.JsonWriteInternalError(w)
+		return
 	}
 
-	_, _ = w.Write(jsonResponse) // TODO ERROR
+	user, err := u.usecase.GetUserById(context.Background(), userID)
+
+	if err == nil {
+		httpUtils.JsonWriteUser(w, user)
+	} else {
+		httpUtils.JsonWriteErrors(w, []error{err})
+	}
 }
 
 func NewUserHandler(r *mux.Router, us user.Usecase) {

@@ -4,10 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/jmoiron/sqlx"
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+
+	"github.com/jmoiron/sqlx"
 )
 
 func NewAuthMemoryRepository(db *sqlx.DB) auth.Repository {
@@ -30,10 +31,19 @@ func (r *repository) CreateUser(ctx context.Context, user model.User) (model.Use
 	return user, nil
 }
 
-func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
-	err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
+func (r *repository) CheckCorrectPassword(ctx context.Context, userId uint64, hashedPassword string) (bool, error) {
+	var exists int
+	r.db.QueryRow(`
+	SELECT 
+		COUNT(*) 
+	FROM 
+		profile 
+	WHERE 
+		id = $1 AND password = $2`,
+		userId, hashedPassword).
+		Scan(&exists)
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if exists == 0 {
 		return false, nil
 	}
 
@@ -42,8 +52,24 @@ func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword st
 
 func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
 	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE email=$1", email).
-		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
+	err := r.db.QueryRow(`
+	SELECT 
+		id,
+		username,
+		name,
+		email,
+		status
+	FROM 
+		profile 
+	WHERE 
+		email=$1`,
+		email).
+		Scan(
+			&user.Id,
+			&user.Username,
+			&user.Name,
+			&user.Email,
+			&user.Status)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -58,8 +84,25 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.Us
 
 func (r *repository) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
 	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE username=$1", username).
-		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
+	err := r.db.QueryRow(`
+	SELECT 
+		id,
+		username,
+		name,
+		email,
+		status
+	FROM 
+		profile 
+	WHERE 
+		username = $1`,
+		username).
+		Scan(
+			&user.Id,
+			&user.Username,
+			&user.Name,
+			&user.Email,
+			&user.Status,
+			&user.Password)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

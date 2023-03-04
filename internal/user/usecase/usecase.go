@@ -3,10 +3,11 @@ package usecase
 import (
 	"context"
 	"errors"
-	log "github.com/sirupsen/logrus"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -21,9 +22,9 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 	user, err := u.repo.GetUserById(ctx, userID)
 
 	if err != nil {
-		if errors.Is(err, myErrors.ErrNoUserFound) {
+		if errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
-			return user, myErrors.ErrNoUserFound
+			return user, myErrors.ErrUserNotFound
 		}
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
 			log.Error(err)

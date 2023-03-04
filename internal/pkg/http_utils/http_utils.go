@@ -3,14 +3,17 @@ package http_utils
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"strconv"
 	"time"
+
+	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
+
+const cookieTTL = 10 * time.Hour
 
 type jsonErrors struct {
 	Err error
@@ -25,36 +28,13 @@ func (j jsonErrors) MarshalJSON() ([]byte, error) {
 }
 
 func setHeader(w http.ResponseWriter, err error) {
-	switch {
-	case errors.Is(err, myErrors.UserIdGiven):
-		w.WriteHeader(http.StatusOK)
-	case errors.Is(err, myErrors.UserCreated):
-		w.WriteHeader(http.StatusCreated)
-	case errors.Is(err, myErrors.SessionSuccessDeleted):
-		w.WriteHeader(http.StatusNoContent)
-	case errors.Is(err, myErrors.ErrInvalidUsername):
-		w.WriteHeader(http.StatusBadRequest)
-	case errors.Is(err, myErrors.ErrInvalidEmail):
-		w.WriteHeader(http.StatusBadRequest)
-	case errors.Is(err, myErrors.ErrInvalidName):
-		w.WriteHeader(http.StatusBadRequest)
-	case errors.Is(err, myErrors.ErrInvalidPassword):
-		w.WriteHeader(http.StatusBadRequest)
-	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred):
-		w.WriteHeader(http.StatusConflict)
-	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
-		w.WriteHeader(http.StatusConflict)
-	case errors.Is(err, myErrors.ErrCookieNoFound):
-		w.WriteHeader(http.StatusUnauthorized)
-	case errors.Is(err, myErrors.ErrNoSessionFound):
-		w.WriteHeader(http.StatusNotFound)
-	case errors.Is(err, myErrors.ErrNoUserFound):
-		w.WriteHeader(http.StatusNotFound)
-	case errors.Is(err, myErrors.ErrIncorrectPassword):
-		w.WriteHeader(http.StatusNotFound)
-	default:
-		w.WriteHeader(http.StatusInternalServerError)
+	for _, item := range error2HttpCode {
+		if errors.Is(err, item.Error) {
+			w.WriteHeader(item.HttpCode)
+			return
+		}
 	}
+	w.WriteHeader(http.StatusInternalServerError)
 }
 
 func writeInWriter(w http.ResponseWriter, data []byte) {
@@ -139,7 +119,7 @@ func SetCookie(w http.ResponseWriter, session model.Session) {
 	cookie := &http.Cookie{
 		Name:    "session_id",
 		Value:   session.Cookie,
-		Expires: time.Now().Add(10 * time.Hour),
+		Expires: time.Now().Add(cookieTTL),
 	}
 	http.SetCookie(w, cookie)
 }

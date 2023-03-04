@@ -20,10 +20,7 @@ type authHandler struct {
 
 func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&user)
-
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Error(err)
 		httpUtils.JsonWriteInternalError(w)
 		return
@@ -40,25 +37,22 @@ func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		httpUtils.SetCookie(w, session)
-		httpUtils.JsonWriteUser(w, user)
+		httpUtils.JsonWriteUserCreated(w, user)
 	} else {
-		log.Error(err)
+		log.Error(errors)
 		httpUtils.JsonWriteErrors(w, errors)
 	}
 }
 
 func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&user)
-
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Error(err)
 		httpUtils.JsonWriteInternalError(w)
 		return
 	}
 
-	user, err = u.usecase.Login(context.Background(), user)
+	user, err := u.usecase.Login(context.Background(), user)
 
 	if err == nil {
 		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
@@ -68,7 +62,7 @@ func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		httpUtils.SetCookie(w, session)
-		httpUtils.JsonWriteUser(w, user)
+		httpUtils.JsonWriteUserLogin(w, user)
 	} else {
 		log.Error(err)
 		httpUtils.JsonWriteErrors(w, []error{err})
@@ -83,11 +77,13 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
-	if err == nil {
-		httpUtils.JsonWriteUserId(w, authSession.UserId)
-	} else {
-		log.Error(err)
-		httpUtils.JsonWriteErrors(w, []error{err})
+	if err != nil {
+		if errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
+			httpUtils.JsonWriteUserId(w, authSession.UserId)
+		} else {
+			log.Error(err)
+			httpUtils.JsonWriteErrors(w, []error{err})
+		}
 	}
 }
 
@@ -106,11 +102,11 @@ func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
 	} else {
 		log.Error(err)
-		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrInternal})
+		httpUtils.JsonWriteErrors(w, []error{err})
 	}
 }
 
-func NewAuthHandler(r *mux.Router, us auth.Usecase) {
+func NewAuthHandler(r *mux.Router, us auth.Usecase) authHandler {
 	handler := authHandler{usecase: us}
 	signupUrl := "/signup/"
 	loginUrl := "/login/"
@@ -125,4 +121,5 @@ func NewAuthHandler(r *mux.Router, us auth.Usecase) {
 		Methods("POST")
 	r.HandleFunc(loginUrl, handler.LoginHandler).
 		Methods("POST")
+	return handler
 }

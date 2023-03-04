@@ -2,6 +2,9 @@ openapi: 3.0.0
 servers:
   # Added by API Auto Mocking Plugin
   # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANILAKALASH60/rk-1/1.0.0
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/DANILAKALASH60/231/1.0.0
   - description: SwaggerHub API Auto Mocking
@@ -11,324 +14,277 @@ info:
   title: home-iot-api
   description: The API for the EatBacon IOT project
 paths:
-  /api/v1/user:
-    post:
-      description: Create new user chat. Auth was needed
-      tags:
-        - user
-      responses:
-        "201":
-          description: successfully creating chat
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Chat' #chats
-        "401":
-          description: no cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoCookie'
-        "404":
-          description: no such cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
-        "500":
-          description: something unusual has happened
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrServer'
-  /api/v1/user/{userID}:
+  /api/v1/auth:
     get:
-      description: Getting user info and info for changes. Auth was needed.
-      parameters:
-        - name: userID
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
-        - user
+        - auth
       responses:
         "200":
-          description: successfully getting
+          description: The user is logged in
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        "401":
-          description: no cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoCookie'
+                $ref: '#/components/schemas/UserId'
         "404":
-          description: no such cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
-        "500":
-          description: something unusual has happened
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrServer'
-    put:
-      description: Request for change user settings and data. Auth was needed.
-      parameters:
-        - name: userID
-          in: path
-          required: true
-          schema:
-            type: integer
-      tags:
-        - user
-      responses:
-        "200":
-          description: successfully putting
+          description: Username, email, nickname, password validity check
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        "301":
-          description: successfully putting
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        "401":
-          description: no cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoCookie'
-        "403":
-          description: wrong password
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrWrongPassword'
-        "404":
-          description: no such cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
         "500":
-          description: something unusual has happened
+          description: Internal error
           content:
             error:
               schema:
-                $ref: '#/components/schemas/ErrServer'
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/logout:
     delete:
-      description: Request to delete user data. Auth was needed.
-      parameters:
-        - name: userID
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
-        - user
+        - auth
       responses:
         "204":
-          description: successfully deleting
-        "401":
-          description: no cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoCookie'
-        "404":
-          description: no such cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
-        "500":
-          description: something unusual has happened
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrServer'
-  /api/v1/chat:
-    get:
-      description: Getting user chats. Auth was needed.
-      tags:
-        - list of chats
-      responses:
-        "200":
-          description: successfully getting
+          description: The user successfully logged out
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Chat' #chats
+                $ref: '#/components/schemas/SessionSuccessDeleted'
         "401":
-          description: no cookie
+          description: Cookie not found
           content:
-            error:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrNoCookie'
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
         "404":
-          description: no such cookie
+          description: User session not found
           content:
-            error:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
         "500":
-          description: something unusual has happened
+          description: Internal error
           content:
             error:
               schema:
-                $ref: '#/components/schemas/ErrServer'
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/signup:
     post:
-      description: Create new user chat. Auth was needed.
       tags:
-        - list of chats
+        - auth
       responses:
         "201":
-          description: successfully creating chat
+          description: Successfully signup
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Chat' #chats
-        "401":
-          description: no cookie
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Username, email, nickname, password validity check
           content:
-            error:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrNoCookie'
-        "404":
-          description: no such cookie
+                anyOf:
+                  - $ref: '#/components/schemas/ErrInvalidUsername'
+                  - $ref: '#/components/schemas/ErrInvalidEmail'
+                  - $ref: '#/components/schemas/ErrInvalidNickname'
+                  - $ref: '#/components/schemas/ErrInvalidPassword'
+        "409":
+          description: Checking whether such an email and username is registered
           content:
-            error:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
+                anyOf:
+                  - $ref: '#/components/schemas/ErrEmailIsAlreadyRegistred'
+                  - $ref: '#/components/schemas/ErrUsernameIsAlreadyRegistred'
         "500":
-          description: something unusual has happened
+          description: Internal error
           content:
             error:
               schema:
-                $ref: '#/components/schemas/ErrServer'
-  /api/v1/chat/{chatID}:
-    get:
-      description: Getting user chats. Auth was needed.
-      parameters:
-        - name: chatID
-          in: path
-          required: true
-          schema:
-            type: integer
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationForm'
+  /api/v1/login:
+    post:
       tags:
-        - list of chats
+        - auth
       responses:
         "200":
-          description: successfully getting
+          description: Successfully login
+        "404":
+          description: Сhecking the correctness of the data and logging in to the account
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Chat' #chats
-        "401":
-          description: no cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoCookie'
-        "404":
-          description: no such cookie
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
+                oneOf:
+                  - $ref: '#/components/schemas/ErrUserEmailNotFound'
+                  - $ref: '#/components/schemas/ErrIncorrectPassword'
         "500":
-          description: something unusual has happened
+          description: Internal error
           content:
             error:
               schema:
-                $ref: '#/components/schemas/ErrServer'
-    delete:
-      description: Delete user chat. Auth was needed
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+  /api/v1/users/{userID}:
+    get:
+      description: Getting user info and info for changes.
       parameters:
-        - name: chatID
+        - name: userID
           in: path
           required: true
           schema:
             type: integer
       tags:
-        - list of chats
+        - user
       responses:
-        "204":
-          description: successfully deleting
-        "401":
-          description: no cookie
+        "200":
+          description: Successfully getting
           content:
-            error:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrNoCookie'
+                $ref: '#/components/schemas/User'
         "404":
-          description: no such cookie
+          description: No such cookie or user
           content:
-            error:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrNoSuchCookie'
+                oneOf:
+                  - $ref: '#/components/schemas/ErrUserNotFound'
         "500":
-          description: something unusual has happened
+          description: Internal error
           content:
             error:
               schema:
-                $ref: '#/components/schemas/ErrServer'
+                $ref: '#/components/schemas/ErrInternal'
 components:
   schemas:
-    Message:
-      type: object
-    Chat:
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
     User:
       type: object
       properties:
-        phone:
+        id:
+          type: integer
+        username:
           type: string
-        login:
+        email:
+          type: string
+        nickname:
+          type: string
+        status:
+          type: string
+        password:
+          type: string
+      description: User model
+    LoginForm:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      description: Login form
+    RegistrationForm:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
           type: string
         nickname:
           type: string
         password:
           type: string
-      description: User model
-    ErrNoCookie:
+      description: Registration form
+    UserId:
+      type: object
+      properties:
+        id:
+          type: integer
+      description: User id
+    SessionSuccessDeleted:
       type: object
       properties:
         error:
-          example: 'Request has no cookies'
+          example: 'Session success deleted'
           type: string
-    ErrWrongPassword:
+    ErrCookieNotFound:
       type: object
       properties:
         error:
-          example: 'Wrong password entered'
+          example: 'Cookie not found'
           type: string
-    ErrNoSuchCookie:
+    ErrInvalidUsername:
       type: object
       properties:
         error:
-          example: 'No such cookie'
+          example: 'Invalid username'
           type: string
-    ErrServer:
+    ErrInvalidEmail:
       type: object
       properties:
         error:
-          example: 'Server error'
+          example: 'Invalid email'
+          type: string
+    ErrInvalidNickname:
+      type: object
+      properties:
+        error:
+          example: 'Invalid nickname'
+          type: string
+    ErrInvalidPassword:
+      type: object
+      properties:
+        error:
+          example: 'Invalid password'
+          type: string
+    ErrEmailIsAlreadyRegistred:
+      type: object
+      properties:
+        error:
+          example: 'The email is already registered'
+          type: string
+    ErrUsernameIsAlreadyRegistred:
+      type: object
+      properties:
+        error:
+          example: 'The username is already registered'
+          type: string
+    ErrUserEmailNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Incorrect email'
+          type: string
+    ErrIncorrectPassword:
+      type: object
+      properties:
+        error:
+          example: 'Incorrect password'
+          type: string
+    ErrSessionNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Session not found'
+          type: string
+    ErrUserNotFound:
+      type: object
+      properties:
+        error:
+          example: 'User not found'
+          type: string
+    ErrInternal:
+      type: object
+      properties:
+        error:
+          example: 'Internal error'
           type: string

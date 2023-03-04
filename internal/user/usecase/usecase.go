@@ -21,9 +21,9 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 	user, err := u.repo.GetUserById(ctx, userID)
 
 	if err != nil {
-		if errors.Is(err, myErrors.ErrNoUserFound) {
+		if errors.Is(err, myErrors.ErrUserNotFound) {
 			log.Error(err)
-			return user, myErrors.ErrNoUserFound
+			return user, myErrors.ErrUserNotFound
 		}
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
 			log.Error(err)

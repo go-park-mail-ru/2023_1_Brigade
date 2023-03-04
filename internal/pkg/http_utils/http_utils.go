@@ -9,6 +9,7 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -24,9 +25,28 @@ func (j jsonErrors) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
+func ErrorsConversion(validateErrors []error) []error {
+	var errors []error
+	for _, err := range validateErrors {
+		words := strings.Split(err.Error(), " ")
+		log.Println(words[0])
+		switch words[0] {
+		case "username:":
+			errors = append(errors, myErrors.ErrInvalidUsername)
+		case "name:":
+			errors = append(errors, myErrors.ErrInvalidName)
+		case "email:":
+			errors = append(errors, myErrors.ErrInvalidEmail)
+		case "password:":
+			errors = append(errors, myErrors.ErrInvalidPassword)
+		}
+	}
+	return errors
+}
+
 func setHeader(w http.ResponseWriter, err error) {
 	switch {
-	case errors.Is(err, myErrors.UserIdGiven):
+	case errors.Is(err, myErrors.UserGetting):
 		w.WriteHeader(http.StatusOK)
 	case errors.Is(err, myErrors.UserCreated):
 		w.WriteHeader(http.StatusCreated)
@@ -44,11 +64,13 @@ func setHeader(w http.ResponseWriter, err error) {
 		w.WriteHeader(http.StatusConflict)
 	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
 		w.WriteHeader(http.StatusConflict)
-	case errors.Is(err, myErrors.ErrCookieNoFound):
+	case errors.Is(err, myErrors.ErrSessionIsAlreadyCreated):
+		w.WriteHeader(http.StatusConflict)
+	case errors.Is(err, myErrors.ErrCookieNotFound):
 		w.WriteHeader(http.StatusUnauthorized)
-	case errors.Is(err, myErrors.ErrNoSessionFound):
+	case errors.Is(err, myErrors.ErrSessionNotFound):
 		w.WriteHeader(http.StatusNotFound)
-	case errors.Is(err, myErrors.ErrNoUserFound):
+	case errors.Is(err, myErrors.ErrUserNotFound):
 		w.WriteHeader(http.StatusNotFound)
 	case errors.Is(err, myErrors.ErrIncorrectPassword):
 		w.WriteHeader(http.StatusNotFound)
@@ -74,11 +96,11 @@ func JsonWriteUserId(w http.ResponseWriter, userID uint64) {
 		return
 	}
 
-	setHeader(w, myErrors.UserIdGiven)
+	setHeader(w, myErrors.UserGetting)
 	writeInWriter(w, jsonId)
 }
 
-func JsonWriteUser(w http.ResponseWriter, user model.User) {
+func JsonWriteUserCreated(w http.ResponseWriter, user model.User) {
 	jsonUser, err := json.Marshal(user)
 
 	if err != nil {
@@ -88,6 +110,19 @@ func JsonWriteUser(w http.ResponseWriter, user model.User) {
 	}
 
 	setHeader(w, myErrors.UserCreated)
+	writeInWriter(w, jsonUser)
+}
+
+func JsonWriteUserLogin(w http.ResponseWriter, user model.User) {
+	jsonUser, err := json.Marshal(user)
+
+	if err != nil {
+		setHeader(w, err)
+		log.Error(err)
+		return
+	}
+
+	setHeader(w, myErrors.UserGetting)
 	writeInWriter(w, jsonUser)
 }
 

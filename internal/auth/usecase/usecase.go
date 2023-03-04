@@ -8,6 +8,7 @@ import (
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
 )
 
@@ -17,40 +18,6 @@ type usecase struct {
 
 func NewAuthUsecase(authRepo auth.Repository) auth.Usecase {
 	return &usecase{repo: authRepo}
-}
-
-func (u *usecase) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
-	userDB, err := u.repo.GetUserByEmail(ctx, email)
-
-	if err != nil {
-		if errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
-			log.Error(err)
-			return userDB, myErrors.ErrEmailIsAlreadyRegistred
-		}
-		if !errors.Is(err, myErrors.ErrUserNotFound) {
-			log.Error(err)
-			return userDB, myErrors.ErrInternal
-		}
-	}
-
-	return userDB, myErrors.ErrUserNotFound
-}
-
-func (u *usecase) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
-	userDB, err := u.repo.GetUserByUsername(ctx, username)
-
-	if err != nil {
-		if errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred) {
-			log.Error(err)
-			return userDB, myErrors.ErrUsernameIsAlreadyRegistred
-		}
-		if !errors.Is(err, myErrors.ErrUserNotFound) {
-			log.Error(err)
-			return userDB, myErrors.ErrInternal
-		}
-	}
-
-	return userDB, myErrors.ErrUserNotFound
 }
 
 func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []error) {
@@ -82,7 +49,7 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 	validateErrors := security.ValidateSignup(user)
 	if len(validateErrors) != 0 {
 		log.Error(validateErrors)
-		return user, validateErrors
+		return user, httpUtils.ErrorsConversion(validateErrors)
 	}
 
 	userDB, err = u.repo.CreateUser(ctx, user)
@@ -91,14 +58,14 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 		return user, []error{myErrors.ErrInternal}
 	}
 
-	userDB, err = u.repo.GetUserByEmail(ctx, user.Email)
+	userDB, err = u.repo.GetUserByEmail(ctx, user.Email) // для получения нормального айдишника
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
 			log.Error(err)
 			return user, []error{myErrors.ErrInternal}
 		}
 	}
-	log.Println(userDB)
+
 	return userDB, nil
 }
 
@@ -136,38 +103,17 @@ func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error
 	return userDB, nil
 }
 
-func (u *usecase) GetSessionById(ctx context.Context, userID uint64) (model.Session, error) {
-	session, err := u.repo.GetSessionById(ctx, userID)
-
-	if err != nil {
-		if errors.Is(err, myErrors.ErrSessionIsAlreadyCrated) {
-			log.Error(err)
-			return session, myErrors.ErrSessionIsAlreadyCrated
-		}
-		if !errors.Is(err, myErrors.ErrSessionNotFound) {
-			log.Error(err)
-			return session, myErrors.ErrInternal
-		}
-	}
-
-	return session, myErrors.ErrSessionNotFound
-}
-
 func (u *usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
 	session, err := u.repo.GetSessionByCookie(ctx, cookie)
 
-	if err != nil {
-		if errors.Is(err, myErrors.ErrSessionIsAlreadyCrated) {
-			log.Error(err)
-			return session, myErrors.ErrSessionIsAlreadyCrated
-		}
-		if !errors.Is(err, myErrors.ErrSessionNotFound) {
-			log.Error(err)
-			return session, myErrors.ErrInternal
-		}
+	switch err {
+	case myErrors.ErrSessionIsAlreadyCreated:
+		return session, myErrors.ErrSessionIsAlreadyCreated
+	case myErrors.ErrSessionNotFound:
+		return session, myErrors.ErrSessionNotFound
+	default:
+		return session, myErrors.ErrInternal
 	}
-
-	return session, myErrors.ErrSessionNotFound
 }
 
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
@@ -196,7 +142,7 @@ func (u *usecase) DeleteSessionByCookie(ctx context.Context, cookie string) erro
 	session, err := u.repo.GetSessionByCookie(ctx, cookie)
 
 	if err != nil {
-		if !errors.Is(err, myErrors.ErrSessionIsAlreadyCrated) {
+		if !errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
 			log.Error(err)
 			return err
 		}

@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	UserIdGiven           = errors.New("Successful return of the user's ID")
+	UserGetting           = errors.New("Successful return of the user")
 	UserCreated           = errors.New("User created")
 	SessionSuccessDeleted = errors.New("Session success deleted")
 
@@ -14,7 +14,7 @@ var (
 	ErrInvalidName     = errors.New("Invalid name")
 	ErrInvalidPassword = errors.New("Invalid password")
 
-	ErrSessionIsAlreadyCrated     = errors.New("The session is already created")
+	ErrSessionIsAlreadyCreated    = errors.New("The session is already created")
 	ErrEmailIsAlreadyRegistred    = errors.New("The email is already registered")
 	ErrUsernameIsAlreadyRegistred = errors.New("The username is already registered")
 

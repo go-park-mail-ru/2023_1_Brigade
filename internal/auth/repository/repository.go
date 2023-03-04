@@ -4,18 +4,17 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/jmoiron/sqlx"
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 )
 
-func NewAuthMemoryRepository(db *sqlx.DB) auth.Repository {
+func NewAuthMemoryRepository(db *sql.DB) auth.Repository {
 	return &repository{db: db}
 }
 
 type repository struct {
-	db *sqlx.DB
+	db *sql.DB
 }
 
 func (r *repository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
@@ -85,7 +84,7 @@ func (r *repository) GetSessionById(ctx context.Context, userId uint64) (model.S
 		}
 	}
 
-	return session, myErrors.ErrSessionIsAlreadyCrated
+	return session, myErrors.ErrSessionIsAlreadyCreated
 }
 
 func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
@@ -101,7 +100,7 @@ func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (mod
 		}
 	}
 
-	return session, myErrors.ErrSessionIsAlreadyCrated
+	return session, myErrors.ErrSessionIsAlreadyCreated
 }
 
 func (r *repository) CreateSession(ctx context.Context, session model.Session) (model.Session, error) {

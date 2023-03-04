@@ -25,6 +25,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserId'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
         "404":
           description: Username, email, nickname, password validity check
           content:
@@ -81,14 +88,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         "400":
-          description: Username, email, nickname, password validity check
+          description: Email, nick, password validity check
           content:
             application/json:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/ErrInvalidUsername'
                   - $ref: '#/components/schemas/ErrInvalidEmail'
-                  - $ref: '#/components/schemas/ErrInvalidNickname'
+                  - $ref: '#/components/schemas/ErrInvalidNick'
                   - $ref: '#/components/schemas/ErrInvalidPassword'
         "409":
           description: Checking whether such an email and username is registered
@@ -124,6 +131,13 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/ErrUserEmailNotFound'
                   - $ref: '#/components/schemas/ErrIncorrectPassword'
+        "409":
+          description: Checking whether such an session is created
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ErrSessionIsAlreadyRegistred'
         "500":
           description: Internal error
           content:
@@ -234,11 +248,11 @@ components:
         error:
           example: 'Invalid email'
           type: string
-    ErrInvalidNickname:
+    ErrInvalidNick:
       type: object
       properties:
         error:
-          example: 'Invalid nickname'
+          example: 'Invalid nick'
           type: string
     ErrInvalidPassword:
       type: object
@@ -257,6 +271,12 @@ components:
       properties:
         error:
           example: 'The username is already registered'
+          type: string
+    ErrSessionIsAlreadyRegistred:
+      type: object
+      properties:
+        error:
+          example: 'The session is already registered'
           type: string
     ErrUserEmailNotFound:
       type: object

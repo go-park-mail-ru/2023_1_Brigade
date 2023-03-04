@@ -101,8 +101,7 @@ func (r *repository) GetUserByUsername(ctx context.Context, username string) (mo
 			&user.Username,
 			&user.Name,
 			&user.Email,
-			&user.Status,
-			&user.Password)
+			&user.Status)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

@@ -43,5 +43,5 @@ func main() {
 	httpauth.NewAuthHandler(r, usecaseAuth)
 	httpuser.NewUserHandler(r, usecaseUser)
 
-	http.ListenAndServe(":8081", r)
+	http.ListenAndServe(":80", r)
 }

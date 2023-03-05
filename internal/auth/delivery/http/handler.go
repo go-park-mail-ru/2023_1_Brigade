@@ -8,6 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/auth"
+	"project/internal/middleware"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
@@ -45,6 +46,7 @@ func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	middleware.SetupCorsResponse(&w, r)
 	user := model.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Error(err)
@@ -127,6 +129,6 @@ func NewAuthHandler(r *mux.Router, us auth.Usecase) authHandler {
 	r.HandleFunc(signupUrl, handler.SignupHandler).
 		Methods("POST")
 	r.HandleFunc(loginUrl, handler.LoginHandler).
-		Methods("POST")
+		Methods("POST", "OPTIONS")
 	return handler
 }

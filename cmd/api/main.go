@@ -38,10 +38,19 @@ func main() {
 
 	r := mux.NewRouter()
 	r.Use(middleware.RequestResponseMiddleware)
-	r.Use(middleware.Cors)
+	//r.Use(middleware.Cors)
 
 	httpauth.NewAuthHandler(r, usecaseAuth)
 	httpuser.NewUserHandler(r, usecaseUser)
+
+	//r.Handle()
+	//corsRouter := middleware.Cors()
+
+	//server := http.Server{
+	//	Addr: ":" + config.Port,
+	//	middleware.Cors(ht),
+	//	Handler: corsRouter,
+	//}
 
 	http.ListenAndServe(":8081", r)
 }

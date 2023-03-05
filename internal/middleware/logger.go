@@ -38,11 +38,11 @@ func RequestResponseMiddleware(next http.Handler) http.Handler {
 //	//return c.Handler(next)
 //}
 
-func SetupCorsResponse(w *http.ResponseWriter, req *http.Request) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
-}
+//func SetupCorsResponse(w *http.ResponseWriter, req *http.Request) {
+//	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+//	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+//	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
+//}
 
 //func Cors(h http.Handler) http.Handler {
 //	c := cors.New(cors.Options{
@@ -55,14 +55,14 @@ func SetupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 //	return c.Handler(h)
 //}
 
-//func Cors(next http.Handler) http.Handler {
-//	//handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-//	//	log.Info(r.Header, r.Host, r.Body)
-//	//	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-//	//	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,access-control-allow-origin, access-control-allow-headers, Content-Length, User-Agent, X-CSRF-Token")
-//	//	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-//	//	w.Header().Set("Access-Control-Allow-Credentials", "true")
-//	//})
-//
-//	//return handler
-//}
+func Cors(next http.Handler) http.Handler {
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Info(r.Header, r.Host, r.Body)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+	})
+
+	return handler
+}

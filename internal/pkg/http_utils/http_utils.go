@@ -17,10 +17,6 @@ type jsonErrors struct {
 	Err error
 }
 
-type jsonUserId struct {
-	userID uint64 `json:"user_id"`
-}
-
 func (j jsonErrors) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
@@ -87,19 +83,6 @@ func writeInWriter(w http.ResponseWriter, data []byte) {
 	}
 }
 
-func JsonWriteUserId(w http.ResponseWriter, userID uint64) {
-	jsonId, err := json.Marshal(jsonUserId{userID: userID})
-
-	if err != nil {
-		setHeader(w, err)
-		log.Error(err)
-		return
-	}
-
-	setHeader(w, myErrors.UserGetting)
-	writeInWriter(w, jsonId)
-}
-
 func JsonWriteUserCreated(w http.ResponseWriter, user model.User) {
 	jsonUser, err := json.Marshal(user)
 
@@ -113,7 +96,7 @@ func JsonWriteUserCreated(w http.ResponseWriter, user model.User) {
 	writeInWriter(w, jsonUser)
 }
 
-func JsonWriteUserLogin(w http.ResponseWriter, user model.User) {
+func JsonWriteUserGet(w http.ResponseWriter, user model.User) {
 	jsonUser, err := json.Marshal(user)
 
 	if err != nil {

@@ -62,7 +62,7 @@ func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		httpUtils.SetCookie(w, session)
-		httpUtils.JsonWriteUserLogin(w, user)
+		httpUtils.JsonWriteUserGet(w, user)
 	} else {
 		log.Error(err)
 		httpUtils.JsonWriteErrors(w, []error{err})
@@ -79,7 +79,14 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 	authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
 	if err != nil {
 		if errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
-			httpUtils.JsonWriteUserId(w, authSession.UserId)
+			user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
+
+			if err != nil {
+				log.Error(err)
+				httpUtils.JsonWriteErrors(w, []error{err})
+				return
+			}
+			httpUtils.JsonWriteUserGet(w, user)
 		} else {
 			log.Error(err)
 			httpUtils.JsonWriteErrors(w, []error{err})

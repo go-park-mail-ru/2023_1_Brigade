@@ -10,6 +10,7 @@ type Repository interface {
 	CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error)
 	GetUserByEmail(ctx context.Context, email string) (model.User, error)
 	GetUserByUsername(ctx context.Context, username string) (model.User, error)
+	GetUserById(ctx context.Context, userID uint64) (model.User, error)
 
 	GetSessionById(ctx context.Context, userId uint64) (model.Session, error)
 	GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error)

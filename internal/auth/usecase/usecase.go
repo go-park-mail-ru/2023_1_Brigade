@@ -116,6 +116,19 @@ func (u *usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.
 	}
 }
 
+func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+	userDB, err := u.repo.GetUserById(ctx, userID)
+
+	switch err {
+	case myErrors.ErrUserIsAlreadyCreated:
+		return userDB, myErrors.ErrUserIsAlreadyCreated
+	case myErrors.ErrUserNotFound:
+		return userDB, myErrors.ErrUserNotFound
+	default:
+		return userDB, myErrors.ErrInternal
+	}
+}
+
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
 	session, err := u.repo.GetSessionById(ctx, userID)
 

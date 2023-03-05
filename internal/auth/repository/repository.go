@@ -71,6 +71,22 @@ func (r *repository) GetUserByUsername(ctx context.Context, username string) (mo
 	return user, myErrors.ErrUsernameIsAlreadyRegistred
 }
 
+func (r *repository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+	user := model.User{}
+	err := r.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
+		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return user, myErrors.ErrUserNotFound
+		} else {
+			return user, err
+		}
+	}
+
+	return user, myErrors.ErrUserIsAlreadyCreated
+}
+
 func (r *repository) GetSessionById(ctx context.Context, userId uint64) (model.Session, error) {
 	session := model.Session{}
 	err := r.db.QueryRow("SELECT * FROM session WHERE user_id=$1", userId).

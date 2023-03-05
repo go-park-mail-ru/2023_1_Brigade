@@ -25,7 +25,7 @@ func (u *userHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := u.usecase.GetUserById(context.Background(), userID)
 
 	if err == nil {
-		httpUtils.JsonWriteUserLogin(w, user)
+		httpUtils.JsonWriteUserGet(w, user)
 	} else {
 		httpUtils.JsonWriteErrors(w, []error{err})
 	}

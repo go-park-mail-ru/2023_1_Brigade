@@ -14,6 +14,7 @@ var (
 	ErrInvalidName     = errors.New("Invalid name")
 	ErrInvalidPassword = errors.New("Invalid password")
 
+	ErrUserIsAlreadyCreated       = errors.New("The user is already created")
 	ErrSessionIsAlreadyCreated    = errors.New("The session is already created")
 	ErrEmailIsAlreadyRegistred    = errors.New("The email is already registered")
 	ErrUsernameIsAlreadyRegistred = errors.New("The username is already registered")

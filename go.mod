@@ -14,6 +14,7 @@ require (
 	github.com/jub0bs/fcors v0.3.0 // indirect
 	github.com/lib/pq v1.10.7 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/rs/cors v1.8.3 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/stretchr/testify v1.8.2 // indirect
 	golang.org/x/exp v0.0.0-20230213192124-5e25df0256eb // indirect

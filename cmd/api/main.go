@@ -23,7 +23,7 @@ func main() {
 	})
 	log.SetReportCaller(true)
 
-	connStr := "user=golang password=golang dbname=golang sslmode=disable"
+	connStr := "user=brigade password=123 dbname=brigade sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {

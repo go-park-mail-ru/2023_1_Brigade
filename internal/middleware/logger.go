@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -22,14 +21,20 @@ func RequestResponseMiddleware(next http.Handler) http.Handler {
 //}
 
 func Cors(next http.Handler) http.Handler {
-	c := cors.New(cors.Options{
-		AllowedMethods:   []string{"POST", "GET", "DELETE"},
-		AllowedOrigins:   []string{"*"},
-		AllowCredentials: true,
-		AllowedHeaders:   []string{"*"},
-		Debug:            true,
-	})
-	return c.Handler(next)
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization,X-CSRF-Token")
+		w.Header().Set("Access-Control-Expose-Headers", "Authorization")
+	}
+	//c := cors.New(cors.Options{
+	//	AllowedMethods:   []string{"POST", "GET", "DELETE"},
+	//	AllowedOrigins:   []string{"*"},
+	//	AllowCredentials: true,
+	//	AllowedHeaders:   []string{"*"},
+	//	Debug:            true,
+	//})
+	//return c.Handler(next)
 }
 
 //func Cors(next http.Handler) http.Handler {

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -56,13 +57,21 @@ func RequestResponseMiddleware(next http.Handler) http.Handler {
 //}
 
 func Cors(next http.Handler) http.Handler {
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Info(r.Header, r.Host, r.Body)
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Headers", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "*")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
+	//handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//	log.Info(r.Header, r.Host, r.Body)
+	//	w.Header().Set("Access-Control-Allow-Origin", "*")
+	//	w.Header().Set("Access-Control-Allow-Headers", "*")
+	//	w.Header().Set("Access-Control-Allow-Methods", "*")
+	//	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	//})
+	//
+	//return handler
+	c := cors.New(cors.Options{
+		AllowedMethods:   []string{"*"},
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		AllowedHeaders:   []string{"*"},
+		Debug:            true,
 	})
-
-	return handler
+	return c.Handler(next)
 }

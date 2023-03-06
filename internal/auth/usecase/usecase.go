@@ -130,18 +130,18 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 }
 
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
-	session, err := u.repo.GetSessionById(ctx, userID)
-
-	if err != nil {
-		if !errors.Is(err, myErrors.ErrSessionNotFound) {
-			log.Error(err)
-			return session, err
-		}
-	}
-
-	session.UserId = userID
-	session.Cookie = uuid.New().String()
-	session, err = u.repo.CreateSession(ctx, session)
+	//session, err := u.repo.GetSessionById(ctx, userID)
+	//
+	//if err != nil {
+	//	if !errors.Is(err, myErrors.ErrSessionNotFound) {
+	//		log.Error(err)
+	//		return session, err
+	//	}
+	//}
+	session := model.Session{userID, uuid.New().String()}
+	//session.UserId = userID
+	//session.Cookie = uuid.New().String()
+	session, err := u.repo.CreateSession(ctx, session)
 
 	if err != nil {
 		log.Error(err)

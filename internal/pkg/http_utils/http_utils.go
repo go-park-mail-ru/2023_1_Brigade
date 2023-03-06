@@ -155,9 +155,10 @@ func ParsingIdUrl(r *http.Request, param string) (uint64, error) {
 
 func SetCookie(w http.ResponseWriter, session model.Session) {
 	cookie := &http.Cookie{
-		Name:    "session_id",
-		Value:   session.Cookie,
-		Expires: time.Now().Add(10 * time.Hour),
+		Name:     "session_id",
+		SameSite: http.SameSiteNoneMode,
+		Value:    session.Cookie,
+		Expires:  time.Now().Add(10 * time.Hour),
 	}
 	http.SetCookie(w, cookie)
 }

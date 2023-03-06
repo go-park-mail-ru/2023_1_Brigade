@@ -85,10 +85,10 @@ func Cors(next http.Handler) http.Handler {
 	//
 	//return handler
 	c := cors.New(cors.Options{
-		AllowedMethods:   []string{"*"},
+		AllowedMethods:   []string{"POST", "GET", "OPTIONS", "DELETE"},
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
-		AllowedHeaders:   []string{"*"},
+		AllowedHeaders:   []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "X-CSRF-Token"},
 		Debug:            true,
 	})
 	return c.Handler(next)

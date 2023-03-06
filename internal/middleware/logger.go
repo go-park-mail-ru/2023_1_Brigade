@@ -88,7 +88,7 @@ func Cors(next http.Handler) http.Handler {
 		AllowedMethods:   []string{"*"},
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
-		AllowedHeaders:   []string{"*"},
+		AllowedHeaders:   []string{"*", "SameSite=None"},
 		Debug:            true,
 	})
 	return c.Handler(next)

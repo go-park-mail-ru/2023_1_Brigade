@@ -2,22 +2,21 @@ package middleware
 
 import (
 	"github.com/rs/cors"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
-func RequestResponseMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Info(r.Method, r.Header, r.Body)
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
-		next.ServeHTTP(w, r)
-		//r.Header.Get()
-	})
-}
+//func RequestResponseMiddleware(next http.Handler) http.Handler {
+//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+//		log.Info(r.Method, r.Header, r.Body)
+//		w.Header().Set("Content-Type", "application/json")
+//		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+//		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+//		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE")
+//		w.Header().Set("Access-Control-Allow-Credentials", "true")
+//		next.ServeHTTP(w, r)
+//		//r.Header.Get()
+//	})
+//}
 
 //func RequestResponseMiddleware(next http.Handler) http.Handler {
 //	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -85,10 +84,10 @@ func Cors(next http.Handler) http.Handler {
 	//
 	//return handler
 	c := cors.New(cors.Options{
-		AllowedMethods:   []string{"*"},
-		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"POST", "GET", "DELETE", "OPTIONS"},
+		AllowedOrigins:   []string{"http://localhost:5500"},
 		AllowCredentials: true,
-		AllowedHeaders:   []string{"*"},
+		AllowedHeaders:   []string{"Content-Type", "Content-Length", "X-Csrf-Token"},
 		Debug:            true,
 	})
 	return c.Handler(next)

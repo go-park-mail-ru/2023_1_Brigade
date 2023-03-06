@@ -37,11 +37,24 @@ func main() {
 	usecaseUser := userusecase.NewUserUsecase(repositoryUser)
 
 	r := mux.NewRouter()
-	r.Use(middleware.RequestResponseMiddleware)
-	r.Use(middleware.Cors)
+	//r.Use(middleware.RequestResponseMiddleware)
+	//r.Use(middleware.Cors)
+
+	corsRouter := middleware.Cors(r)
+
+	server := http.Server{
+		Addr:    ":8081",
+		Handler: corsRouter,
+	}
 
 	httpauth.NewAuthHandler(r, usecaseAuth)
 	httpuser.NewUserHandler(r, usecaseUser)
+
+	log.Info("server started")
+	err = server.ListenAndServe()
+	if err != nil {
+		log.Error("server stopped %v", err)
+	}
 
 	//r.Handle()
 	//corsRouter := middleware.Cors()
@@ -52,5 +65,5 @@ func main() {
 	//	Handler: corsRouter,
 	//}
 
-	http.ListenAndServe(":8081", r)
+	//server.ListenAndServe(":8081", r)
 }

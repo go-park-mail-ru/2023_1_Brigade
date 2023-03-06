@@ -74,20 +74,11 @@ import (
 //}
 
 func Cors(next http.Handler) http.Handler {
-	//handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//	log.Info(r.Header, r.Host, r.Body)
-	//	w.Header().Set("Access-Control-Allow-Origin", "*")
-	//	w.Header().Set("Access-Control-Allow-Headers", "*")
-	//	w.Header().Set("Access-Control-Allow-Methods", "*")
-	//	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	//})
-	//
-	//return handler
 	c := cors.New(cors.Options{
 		AllowedMethods:   []string{"POST", "GET", "DELETE", "OPTIONS"},
-		AllowedOrigins:   []string{"http://127.0.0.1", "http://95.163.249.116"},
+		AllowedOrigins:   []string{"http://127.0.0.1", "http://95.163.249.116", "http://127.0.0.1:5500", "http://95.163.249.116:8081/logout/", "http://95.163.249.116:8081/auth/", "http://95.163.249.116:8081/signup/", "http://95.163.249.116:8081/login/"},
 		AllowCredentials: true,
-		AllowedHeaders:   []string{"Content-Type", "Content-Length", "X-Csrf-Token"},
+		AllowedHeaders:   []string{"Content-Type", "Content-Length", "X-Csrf-Token", "SameSite=None"},
 		Debug:            true,
 	})
 	return c.Handler(next)

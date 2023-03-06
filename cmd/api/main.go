@@ -38,7 +38,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.Use(middleware.RequestResponseMiddleware)
-	//r.Use(middleware.Cors)
+	r.Use(middleware.Cors)
 
 	httpauth.NewAuthHandler(r, usecaseAuth)
 	httpuser.NewUserHandler(r, usecaseUser)

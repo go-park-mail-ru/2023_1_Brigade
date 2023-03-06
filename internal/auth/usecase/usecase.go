@@ -30,14 +30,14 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 		}
 	}
 
-	userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
-
-	if err != nil {
-		if !errors.Is(err, myErrors.ErrUserNotFound) {
-			log.Error(err)
-			return userDB, []error{err}
-		}
-	}
+	//userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
+	//
+	//if err != nil {
+	//	if !errors.Is(err, myErrors.ErrUserNotFound) {
+	//		log.Error(err)
+	//		return userDB, []error{err}
+	//	}
+	//}
 
 	hashedPassword, err := security.Hash(user.Password)
 	if err != nil {

@@ -43,7 +43,7 @@ func main() {
 	corsRouter := middleware.Cors(r)
 
 	server := http.Server{
-		Addr:    ":8081",
+		Addr:    ":8082",
 		Handler: corsRouter,
 	}
 

@@ -45,7 +45,6 @@ func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
-	//middleware.SetupCorsResponse(&w, r)
 	user := model.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Error(err)
@@ -82,12 +81,13 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
 			user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
 
-			if err != nil {
-				log.Error(err)
-				httpUtils.JsonWriteErrors(w, []error{err})
+			if errors.Is(err, myErrors.ErrUserIsAlreadyCreated) {
+				httpUtils.JsonWriteUserGet(w, user)
 				return
 			}
-			httpUtils.JsonWriteUserGet(w, user)
+
+			log.Error(err)
+			httpUtils.JsonWriteErrors(w, []error{err})
 		} else {
 			log.Error(err)
 			httpUtils.JsonWriteErrors(w, []error{err})
@@ -96,13 +96,6 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	//http.SetCookie(w, &http.Cookie{
-	//	Name:     "session_id",
-	//	SameSite: http.SameSiteNoneMode,
-	//	Value:    "",
-	//	Expires:  time.Now().AddDate(0, 0, -1),
-	//})
-
 	session, err := r.Cookie("session_id")
 	if errors.Is(err, http.ErrNoCookie) {
 		log.Error(err)
@@ -112,8 +105,15 @@ func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = u.usecase.DeleteSessionByCookie(context.Background(), session.Value)
 	if err == nil {
-		session.Expires = time.Now().AddDate(0, 0, -1)
-		http.SetCookie(w, session)
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session_id",
+			Value:    "",
+			HttpOnly: true,
+			Secure:   true,
+			SameSite: http.SameSiteNoneMode,
+			Expires:  time.Now().AddDate(0, 0, -1),
+			Path:     "/",
+		})
 		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
 	} else {
 		log.Error(err)

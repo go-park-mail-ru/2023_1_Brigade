@@ -158,7 +158,10 @@ func SetCookie(w http.ResponseWriter, session model.Session) {
 		Name:     "session_id",
 		Value:    session.Cookie,
 		HttpOnly: true,
-		Expires:  time.Now().Add(10000 * time.Hour),
+		Secure:   true,
+		Path:     "/",
+		SameSite: http.SameSiteNoneMode,
+		Expires:  time.Now().Add(10 * time.Hour),
 	}
 	http.SetCookie(w, cookie)
 }

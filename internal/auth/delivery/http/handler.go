@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/auth"
 	"project/internal/model"
@@ -21,8 +20,7 @@ type authHandler struct {
 func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		log.Error(err)
-		httpUtils.JsonWriteInternalError(w)
+		httpUtils.JsonWriteErrors(w, []error{err})
 		return
 	}
 
@@ -32,14 +30,12 @@ func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 
 		if err != nil {
-			log.Error(err)
 			httpUtils.JsonWriteErrors(w, []error{err})
 		}
 
 		httpUtils.SetCookie(w, session)
 		httpUtils.JsonWriteUserCreated(w, user)
 	} else {
-		log.Error(errors)
 		httpUtils.JsonWriteErrors(w, errors)
 	}
 }
@@ -47,8 +43,7 @@ func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		log.Error(err)
-		httpUtils.JsonWriteInternalError(w)
+		httpUtils.JsonWriteErrors(w, []error{err})
 		return
 	}
 
@@ -64,7 +59,6 @@ func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		httpUtils.SetCookie(w, session)
 		httpUtils.JsonWriteUserGet(w, user)
 	} else {
-		log.Error(err)
 		httpUtils.JsonWriteErrors(w, []error{err})
 	}
 }
@@ -86,10 +80,8 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			log.Error(err)
 			httpUtils.JsonWriteErrors(w, []error{err})
 		} else {
-			log.Error(err)
 			httpUtils.JsonWriteErrors(w, []error{err})
 		}
 	}
@@ -98,7 +90,6 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := r.Cookie("session_id")
 	if errors.Is(err, http.ErrNoCookie) {
-		log.Error(err)
 		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNotFound})
 		return
 	}
@@ -109,36 +100,14 @@ func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 			Name:     "session_id",
 			Value:    "",
 			HttpOnly: true,
-			Secure:   true,
-			SameSite: http.SameSiteNoneMode,
 			Expires:  time.Now().AddDate(0, 0, -1),
 			Path:     "/",
 		})
 		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
 	} else {
-		log.Error(err)
 		httpUtils.JsonWriteErrors(w, []error{err})
 	}
 }
-
-//func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
-//	session, err := r.Cookie("session_id")
-//	if errors.Is(err, http.ErrNoCookie) {
-//		log.Error(err)
-//		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNotFound})
-//		return
-//	}
-//
-//	err = u.usecase.DeleteSessionByCookie(context.Background(), session.Value)
-//	if err == nil {
-//		session.Expires = time.Now().AddDate(0, 0, -1)
-//		http.SetCookie(w, session)
-//		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
-//	} else {
-//		log.Error(err)
-//		httpUtils.JsonWriteErrors(w, []error{err})
-//	}
-//}
 
 func NewAuthHandler(r *mux.Router, us auth.Usecase) authHandler {
 	handler := authHandler{usecase: us}

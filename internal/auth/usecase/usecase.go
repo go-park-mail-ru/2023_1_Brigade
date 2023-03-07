@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
-	log "github.com/sirupsen/logrus"
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -25,44 +24,30 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrUserNotFound) {
-			log.Error(err)
 			return userDB, []error{err}
 		}
 	}
 
-	//userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
-	//
-	//if err != nil {
-	//	if !errors.Is(err, myErrors.ErrUserNotFound) {
-	//		log.Error(err)
-	//		return userDB, []error{err}
-	//	}
-	//}
-
 	hashedPassword, err := security.Hash(user.Password)
 	if err != nil {
-		log.Error(err)
-		return user, []error{myErrors.ErrInternal}
+		return user, []error{err}
 	}
 	user.Password = hashedPassword
 
 	validateErrors := security.ValidateSignup(user)
 	if len(validateErrors) != 0 {
-		log.Error(validateErrors)
 		return user, httpUtils.ErrorsConversion(validateErrors)
 	}
 
 	userDB, err = u.repo.CreateUser(ctx, user)
 	if err != nil {
-		log.Error(err)
-		return user, []error{myErrors.ErrInternal}
+		return user, []error{err}
 	}
 
 	userDB, err = u.repo.GetUserByEmail(ctx, user.Email) // для получения нормального айдишника
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
-			log.Error(err)
-			return user, []error{myErrors.ErrInternal}
+			return user, []error{err}
 		}
 	}
 
@@ -74,29 +59,24 @@ func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error
 
 	if err != nil {
 		if errors.Is(err, myErrors.ErrUserNotFound) {
-			log.Error(err)
 			return user, myErrors.ErrUserNotFound
 		}
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
-			log.Error(err)
-			return user, myErrors.ErrInternal
+			return user, err
 		}
 	}
 
 	hashedPassword, err := security.Hash(user.Password)
 	if err != nil {
-		log.Error(err)
-		return user, myErrors.ErrInternal
+		return user, err
 	}
 
 	isCorrectPassword, err := u.repo.CheckCorrectPassword(ctx, hashedPassword)
 	if err != nil {
-		log.Error(err)
-		return user, myErrors.ErrInternal
+		return user, err
 	}
 
 	if !isCorrectPassword {
-		log.Error(myErrors.ErrIncorrectPassword)
 		return user, myErrors.ErrIncorrectPassword
 	}
 
@@ -112,7 +92,7 @@ func (u *usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.
 	case myErrors.ErrSessionNotFound:
 		return session, myErrors.ErrSessionNotFound
 	default:
-		return session, myErrors.ErrInternal
+		return session, err
 	}
 }
 
@@ -125,27 +105,16 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 	case myErrors.ErrUserNotFound:
 		return userDB, myErrors.ErrUserNotFound
 	default:
-		return userDB, myErrors.ErrInternal
+		return userDB, err
 	}
 }
 
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
-	//session, err := u.repo.GetSessionById(ctx, userID)
-	//
-	//if err != nil {
-	//	if !errors.Is(err, myErrors.ErrSessionNotFound) {
-	//		log.Error(err)
-	//		return session, err
-	//	}
-	//}
 	session := model.Session{userID, uuid.New().String()}
-	//session.UserId = userID
-	//session.Cookie = uuid.New().String()
 	session, err := u.repo.CreateSession(ctx, session)
 
 	if err != nil {
-		log.Error(err)
-		return session, myErrors.ErrInternal
+		return session, err
 	}
 
 	return session, nil
@@ -156,15 +125,13 @@ func (u *usecase) DeleteSessionByCookie(ctx context.Context, cookie string) erro
 
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
-			log.Error(err)
 			return err
 		}
 	}
 
 	err = u.repo.DeleteSession(ctx, session)
 	if err != nil {
-		log.Error(err)
-		return myErrors.ErrInternal
+		return err
 	}
 
 	return nil

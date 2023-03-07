@@ -25,12 +25,9 @@ func ErrorsConversion(validateErrors []error) []error {
 	var errors []error
 	for _, err := range validateErrors {
 		words := strings.Split(err.Error(), " ")
-		log.Println(words[0])
 		switch words[0] {
 		case "username:":
 			errors = append(errors, myErrors.ErrInvalidUsername)
-		case "name:":
-			errors = append(errors, myErrors.ErrInvalidName)
 		case "email:":
 			errors = append(errors, myErrors.ErrInvalidEmail)
 		case "password:":
@@ -51,8 +48,6 @@ func setHeader(w http.ResponseWriter, err error) {
 	case errors.Is(err, myErrors.ErrInvalidUsername):
 		w.WriteHeader(http.StatusBadRequest)
 	case errors.Is(err, myErrors.ErrInvalidEmail):
-		w.WriteHeader(http.StatusBadRequest)
-	case errors.Is(err, myErrors.ErrInvalidName):
 		w.WriteHeader(http.StatusBadRequest)
 	case errors.Is(err, myErrors.ErrInvalidPassword):
 		w.WriteHeader(http.StatusBadRequest)
@@ -111,15 +106,19 @@ func JsonWriteUserGet(w http.ResponseWriter, user model.User) {
 
 func JsonWriteErrors(w http.ResponseWriter, errors []error) {
 
-	var validateErrors []jsonErrors
 	for _, err := range errors {
-		validateErrors = append(validateErrors, jsonErrors{Err: err})
+		log.Error(err)
 	}
 
-	jsonValidateErrors, err := json.Marshal(validateErrors)
+	var JsonErrors []jsonErrors
+	for _, err := range errors {
+		JsonErrors = append(JsonErrors, jsonErrors{Err: err}) // если ошибка валидации выдаст сразу несколько
+	}
+
+	jsonValidateErrors, err := json.Marshal(JsonErrors)
 
 	if err != nil {
-		setHeader(w, myErrors.ErrInternal)
+		setHeader(w, err)
 		log.Error(err)
 		return
 	}
@@ -128,19 +127,20 @@ func JsonWriteErrors(w http.ResponseWriter, errors []error) {
 	writeInWriter(w, jsonValidateErrors)
 }
 
-func JsonWriteInternalError(w http.ResponseWriter) {
-	setHeader(w, myErrors.ErrInternal)
-
-	internalError := jsonErrors{Err: myErrors.ErrInternal}
-	jsonInternalError, err := json.Marshal(internalError)
-
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	writeInWriter(w, jsonInternalError)
-}
+//func JsonWriteInternalError(w http.ResponseWriter) {
+//	setHeader(w, myErrors.ErrInternal)
+//
+//	internalError := jsonErrors{Err: myErrors.ErrInternal}
+//	jsonInternalError, err := json.Marshal(internalError)
+//
+//	if err != nil {
+//		log.Error(err)
+//		return
+//	}
+//
+//	log.Error(myErrors.ErrInternal)
+//	writeInWriter(w, jsonInternalError)
+//}
 
 func ParsingIdUrl(r *http.Request, param string) (uint64, error) {
 	vars := mux.Vars(r)
@@ -158,9 +158,7 @@ func SetCookie(w http.ResponseWriter, session model.Session) {
 		Name:     "session_id",
 		Value:    session.Cookie,
 		HttpOnly: true,
-		Secure:   true,
 		Path:     "/",
-		SameSite: http.SameSiteNoneMode,
 		Expires:  time.Now().Add(10 * time.Hour),
 	}
 	http.SetCookie(w, cookie)

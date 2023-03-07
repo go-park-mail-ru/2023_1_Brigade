@@ -27,7 +27,7 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 		}
 		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
 			log.Error(err)
-			return user, myErrors.ErrInternal
+			return user, err
 		}
 	}
 

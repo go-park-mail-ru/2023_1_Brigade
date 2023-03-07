@@ -24,10 +24,6 @@ func setUserValidators() {
 		return i.(string) != ""
 	})
 
-	govalidator.CustomTypeTagMap.Set("nameValidator", func(i interface{}, context interface{}) bool {
-		return i.(string) != ""
-	})
-
 	govalidator.CustomTypeTagMap.Set("emailValidator", func(i interface{}, context interface{}) bool {
 		return govalidator.IsEmail(i.(string))
 	})

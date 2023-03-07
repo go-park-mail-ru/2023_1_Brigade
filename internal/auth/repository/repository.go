@@ -19,8 +19,8 @@ type repository struct {
 
 func (r *repository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
 	_, err := r.db.Exec(
-		"INSERT INTO profile (username, name, email, status, password) VALUES ($1, $2, $3, $4, $5)",
-		user.Username, user.Name, user.Email, user.Status, user.Password)
+		"INSERT INTO profile (username, email, status, password) VALUES ($1, $2, $3, $4)",
+		user.Username, user.Email, user.Status, user.Password)
 
 	if err != nil {
 		return user, err
@@ -42,7 +42,7 @@ func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword st
 func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
 	user := model.User{}
 	err := r.db.QueryRow("SELECT * FROM profile WHERE email=$1", email).
-		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
+		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -58,7 +58,7 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.Us
 func (r *repository) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
 	user := model.User{}
 	err := r.db.QueryRow("SELECT * FROM profile WHERE username=$1", username).
-		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
+		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -74,7 +74,7 @@ func (r *repository) GetUserByUsername(ctx context.Context, username string) (mo
 func (r *repository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	user := model.User{}
 	err := r.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
-		Scan(&user.Id, &user.Username, &user.Name, &user.Email, &user.Status, &user.Password)
+		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

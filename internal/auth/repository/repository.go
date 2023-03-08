@@ -27,101 +27,63 @@ func (r *repository) CreateUser(ctx context.Context, user model.User) (model.Use
 	}
 
 	user, err = r.GetUserByEmail(ctx, user.Email) // для получения нормального айдишника
-	if err != nil {
-		return user, err
-	}
-
-	return user, nil
+	return user, err
 }
 
 func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
 	err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
 
+	return err == nil, nil
+}
+
+func (r *repository) GetUserByEmail(ctx context.Context, email string) (user model.User, err error) {
+	err = r.db.QueryRow("SELECT * FROM profile WHERE email=$1", email).
+		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
+
 	if errors.Is(err, sql.ErrNoRows) {
-		return false, nil
+		err = myErrors.ErrUserNotFound
 	}
-
-	return true, nil
+	return
 }
 
-func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
-	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE email=$1", email).
+func (r *repository) GetUserByUsername(ctx context.Context, username string) (user model.User, err error) {
+	err = r.db.QueryRow("SELECT * FROM profile WHERE username=$1", username).
 		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return user, myErrors.ErrUserNotFound
-		} else {
-			return user, err
-		}
+	if errors.Is(err, sql.ErrNoRows) {
+		err = myErrors.ErrUserNotFound
 	}
-
-	return user, myErrors.ErrEmailIsAlreadyRegistred
+	return
 }
 
-func (r *repository) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
-	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE username=$1", username).
+func (r *repository) GetUserById(ctx context.Context, userID uint64) (user model.User, err error) {
+	err = r.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
 		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return user, myErrors.ErrUserNotFound
-		} else {
-			return user, err
-		}
+	if errors.Is(err, sql.ErrNoRows) {
+		err = myErrors.ErrUserNotFound
 	}
-
-	return user, myErrors.ErrUsernameIsAlreadyRegistred
+	return
 }
 
-func (r *repository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
-	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
-		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
-
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return user, myErrors.ErrUserNotFound
-		} else {
-			return user, err
-		}
-	}
-
-	return user, myErrors.ErrUserIsAlreadyCreated
-}
-
-func (r *repository) GetSessionById(ctx context.Context, userId uint64) (model.Session, error) {
-	session := model.Session{}
-	err := r.db.QueryRow("SELECT * FROM session WHERE user_id=$1", userId).
+func (r *repository) GetSessionById(ctx context.Context, userId uint64) (session model.Session, err error) {
+	err = r.db.QueryRow("SELECT * FROM session WHERE user_id=$1", userId).
 		Scan(&session.UserId, &session.Cookie)
 
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return session, myErrors.ErrSessionNotFound
-		} else {
-			return session, err
-		}
+	if errors.Is(err, sql.ErrNoRows) {
+		err = myErrors.ErrSessionNotFound
 	}
-
-	return session, myErrors.ErrSessionIsAlreadyCreated
+	return
 }
 
-func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
-	session := model.Session{}
-	err := r.db.QueryRow("SELECT * FROM session WHERE cookie=$1", cookie).
+func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (session model.Session, err error) {
+	err = r.db.QueryRow("SELECT * FROM session WHERE cookie=$1", cookie).
 		Scan(&session.UserId, &session.Cookie)
 
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return session, myErrors.ErrSessionNotFound
-		} else {
-			return session, err
-		}
+	if errors.Is(err, sql.ErrNoRows) {
+		err = myErrors.ErrSessionNotFound
 	}
-
-	return session, myErrors.ErrSessionIsAlreadyCreated
+	return
 }
 
 func (r *repository) CreateSession(ctx context.Context, session model.Session) error {
@@ -129,11 +91,7 @@ func (r *repository) CreateSession(ctx context.Context, session model.Session) e
 		"INSERT INTO session (user_id, cookie) VALUES ($1, $2)",
 		session.UserId, session.Cookie)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (r *repository) DeleteSession(ctx context.Context, session model.Session) error {
@@ -141,9 +99,5 @@ func (r *repository) DeleteSession(ctx context.Context, session model.Session) e
 		"DELETE FROM session WHERE cookie=$1",
 		session.Cookie)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

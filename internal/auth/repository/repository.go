@@ -18,8 +18,8 @@ type repository struct {
 }
 
 func (r *repository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
-	_, err := r.db.Exec(
-		"INSERT INTO profile (username, email, status, password) VALUES ($1, $2, $3, $4)",
+	_, err := r.db.ExecContext(
+		ctx, "INSERT INTO profile (username, email, status, password) VALUES ($1, $2, $3, $4)",
 		user.Username, user.Email, user.Status, user.Password)
 
 	if err != nil {
@@ -35,7 +35,7 @@ func (r *repository) CreateUser(ctx context.Context, user model.User) (model.Use
 }
 
 func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
-	err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return false, nil
@@ -46,7 +46,7 @@ func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword st
 
 func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
 	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE email=$1", email).
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM profile WHERE email=$1", email).
 		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
@@ -62,7 +62,7 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (model.Us
 
 func (r *repository) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
 	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE username=$1", username).
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM profile WHERE username=$1", username).
 		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
@@ -78,7 +78,7 @@ func (r *repository) GetUserByUsername(ctx context.Context, username string) (mo
 
 func (r *repository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	user := model.User{}
-	err := r.db.QueryRow("SELECT * FROM profile WHERE id=$1", userID).
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM profile WHERE id=$1", userID).
 		Scan(&user.Id, &user.Username, &user.Email, &user.Status, &user.Password)
 
 	if err != nil {
@@ -94,7 +94,7 @@ func (r *repository) GetUserById(ctx context.Context, userID uint64) (model.User
 
 func (r *repository) GetSessionById(ctx context.Context, userId uint64) (model.Session, error) {
 	session := model.Session{}
-	err := r.db.QueryRow("SELECT * FROM session WHERE user_id=$1", userId).
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM session WHERE user_id=$1", userId).
 		Scan(&session.UserId, &session.Cookie)
 
 	if err != nil {
@@ -110,7 +110,7 @@ func (r *repository) GetSessionById(ctx context.Context, userId uint64) (model.S
 
 func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
 	session := model.Session{}
-	err := r.db.QueryRow("SELECT * FROM session WHERE cookie=$1", cookie).
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM session WHERE cookie=$1", cookie).
 		Scan(&session.UserId, &session.Cookie)
 
 	if err != nil {
@@ -125,8 +125,8 @@ func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (mod
 }
 
 func (r *repository) CreateSession(ctx context.Context, session model.Session) error {
-	_, err := r.db.Exec(
-		"INSERT INTO session (user_id, cookie) VALUES ($1, $2)",
+	_, err := r.db.ExecContext(
+		ctx, "INSERT INTO session (user_id, cookie) VALUES ($1, $2)",
 		session.UserId, session.Cookie)
 
 	if err != nil {
@@ -137,8 +137,8 @@ func (r *repository) CreateSession(ctx context.Context, session model.Session) e
 }
 
 func (r *repository) DeleteSession(ctx context.Context, session model.Session) error {
-	_, err := r.db.Exec(
-		"DELETE FROM session WHERE cookie=$1",
+	_, err := r.db.ExecContext(
+		ctx, "DELETE FROM session WHERE cookie=$1",
 		session.Cookie)
 
 	if err != nil {

@@ -129,13 +129,7 @@ func JsonWriteErrors(w http.ResponseWriter, errors []error) {
 
 func ParsingIdUrl(r *http.Request, param string) (uint64, error) {
 	vars := mux.Vars(r)
-	entitiesID, err := strconv.ParseUint(vars[param], 10, 64)
-
-	if err != nil {
-		return 0, err
-	}
-
-	return entitiesID, nil
+	return strconv.ParseUint(vars[param], 10, 64)
 }
 
 func SetCookie(w http.ResponseWriter, session model.Session) {

@@ -3,12 +3,13 @@ package usecase
 import (
 	"context"
 	"errors"
-	"github.com/google/uuid"
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
+
+	"github.com/google/uuid"
 )
 
 type usecase struct {
@@ -21,17 +22,19 @@ func NewAuthUsecase(authRepo auth.Repository) auth.Usecase {
 
 func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
-	if err != nil {
-		if !errors.Is(err, myErrors.ErrUserNotFound) {
-			return userDB, []error{err}
-		}
+	if err == nil {
+		return userDB, []error{myErrors.ErrEmailIsAlreadyRegistred}
+	}
+	if !errors.Is(err, myErrors.ErrUserNotFound) {
+		return userDB, []error{err}
 	}
 
 	userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
-	if err != nil {
-		if !errors.Is(err, myErrors.ErrUserNotFound) {
-			return userDB, []error{err}
-		}
+	if err == nil {
+		return userDB, []error{myErrors.ErrUsernameIsAlreadyRegistred}
+	}
+	if !errors.Is(err, myErrors.ErrUserNotFound) {
+		return userDB, []error{err}
 	}
 
 	hashedPassword, err := security.Hash(user.Password)
@@ -55,13 +58,11 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 
 func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
-	if err != nil {
-		if errors.Is(err, myErrors.ErrUserNotFound) {
-			return user, myErrors.ErrUserNotFound
-		}
-		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
-			return user, err
-		}
+	if err == nil {
+		return userDB, myErrors.ErrEmailIsAlreadyRegistred
+	}
+	if !errors.Is(err, myErrors.ErrUserNotFound) {
+		return userDB, err
 	}
 
 	hashedPassword, err := security.Hash(user.Password)
@@ -107,15 +108,10 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 	}
 }
 
-func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
-	session := model.Session{userID, uuid.New().String()}
-	err := u.repo.CreateSession(ctx, session)
-
-	if err != nil {
-		return session, err
-	}
-
-	return session, nil
+func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (session model.Session, err error) {
+	session = model.Session{userID, uuid.New().String()}
+	err = u.repo.CreateSession(ctx, session)
+	return
 }
 
 func (u *usecase) DeleteSessionByCookie(ctx context.Context, cookie string) error {
@@ -127,10 +123,5 @@ func (u *usecase) DeleteSessionByCookie(ctx context.Context, cookie string) erro
 		}
 	}
 
-	err = u.repo.DeleteSession(ctx, session)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return u.repo.DeleteSession(ctx, session)
 }

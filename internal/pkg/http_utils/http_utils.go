@@ -129,6 +129,7 @@ func JsonWriteErrors(w http.ResponseWriter, errors []error) {
 
 func ParsingIdUrl(r *http.Request, param string) (uint64, error) {
 	vars := mux.Vars(r)
+	log.Fatal(vars[param])
 	return strconv.ParseUint(vars[param], 10, 64)
 }
 

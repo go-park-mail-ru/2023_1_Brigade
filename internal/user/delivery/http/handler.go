@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/user"
@@ -17,13 +16,11 @@ func (u *userHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	userID, err := httpUtils.ParsingIdUrl(r, "userID")
 
 	if err != nil {
-		log.Error(err)
-		//httpUtils.JsonWriteInternalError(w)
+		httpUtils.JsonWriteErrors(w, []error{err})
 		return
 	}
 
 	user, err := u.usecase.GetUserById(context.Background(), userID)
-
 	if err == nil {
 		httpUtils.JsonWriteUserGet(w, user)
 	} else {
@@ -37,5 +34,6 @@ func NewUserHandler(r *mux.Router, us user.Usecase) userHandler {
 
 	r.HandleFunc(userUrl, handler.GetUserHandler).
 		Methods("GET")
+
 	return handler
 }

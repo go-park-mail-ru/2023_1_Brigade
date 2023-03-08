@@ -43,6 +43,7 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (user mod
 	if errors.Is(err, sql.ErrNoRows) {
 		err = myErrors.ErrUserNotFound
 	}
+
 	return
 }
 

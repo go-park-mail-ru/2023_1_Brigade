@@ -21,7 +21,7 @@ func Hash(password string) (string, error) {
 
 func setUserValidators() {
 	govalidator.CustomTypeTagMap.Set("usernameValidator", func(i interface{}, context interface{}) bool {
-		return i.(string) != ""
+		return len(i.(string)) > 1
 	})
 
 	govalidator.CustomTypeTagMap.Set("emailValidator", func(i interface{}, context interface{}) bool {
@@ -29,7 +29,7 @@ func setUserValidators() {
 	})
 
 	govalidator.CustomTypeTagMap.Set("passwordValidator", func(i interface{}, context interface{}) bool {
-		return i.(string) != ""
+		return len(i.(string)) > 8
 	})
 }
 

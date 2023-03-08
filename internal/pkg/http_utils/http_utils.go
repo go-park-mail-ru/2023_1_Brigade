@@ -127,21 +127,6 @@ func JsonWriteErrors(w http.ResponseWriter, errors []error) {
 	writeInWriter(w, jsonValidateErrors)
 }
 
-//func JsonWriteInternalError(w http.ResponseWriter) {
-//	setHeader(w, myErrors.ErrInternal)
-//
-//	internalError := jsonErrors{Err: myErrors.ErrInternal}
-//	jsonInternalError, err := json.Marshal(internalError)
-//
-//	if err != nil {
-//		log.Error(err)
-//		return
-//	}
-//
-//	log.Error(myErrors.ErrInternal)
-//	writeInWriter(w, jsonInternalError)
-//}
-
 func ParsingIdUrl(r *http.Request, param string) (uint64, error) {
 	vars := mux.Vars(r)
 	entitiesID, err := strconv.ParseUint(vars[param], 10, 64)
@@ -159,7 +144,21 @@ func SetCookie(w http.ResponseWriter, session model.Session) {
 		Value:    session.Cookie,
 		HttpOnly: true,
 		Path:     "/",
+		Secure:   true,                  // local
+		SameSite: http.SameSiteNoneMode, // local
 		Expires:  time.Now().Add(10 * time.Hour),
 	}
 	http.SetCookie(w, cookie)
+}
+
+func DeleteCookie(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_id",
+		Value:    "",
+		HttpOnly: true,
+		Secure:   true,                  // local
+		SameSite: http.SameSiteNoneMode, // local
+		Expires:  time.Now().AddDate(0, 0, -1),
+		Path:     "/",
+	})
 }

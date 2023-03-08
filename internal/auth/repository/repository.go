@@ -26,6 +26,11 @@ func (r *repository) CreateUser(ctx context.Context, user model.User) (model.Use
 		return user, err
 	}
 
+	user, err = r.GetUserByEmail(ctx, user.Email) // для получения нормального айдишника
+	if err != nil {
+		return user, err
+	}
+
 	return user, nil
 }
 
@@ -119,16 +124,16 @@ func (r *repository) GetSessionByCookie(ctx context.Context, cookie string) (mod
 	return session, myErrors.ErrSessionIsAlreadyCreated
 }
 
-func (r *repository) CreateSession(ctx context.Context, session model.Session) (model.Session, error) {
+func (r *repository) CreateSession(ctx context.Context, session model.Session) error {
 	_, err := r.db.Exec(
 		"INSERT INTO session (user_id, cookie) VALUES ($1, $2)",
 		session.UserId, session.Cookie)
 
 	if err != nil {
-		return session, err
+		return err
 	}
 
-	return session, nil
+	return nil
 }
 
 func (r *repository) DeleteSession(ctx context.Context, session model.Session) error {

@@ -10,7 +10,6 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
-	"time"
 )
 
 type authHandler struct {
@@ -25,10 +24,9 @@ func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, errors := u.usecase.Signup(context.Background(), user)
-
 	if len(errors) == 0 {
-		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 
+		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 		if err != nil {
 			httpUtils.JsonWriteErrors(w, []error{err})
 		}
@@ -48,10 +46,9 @@ func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := u.usecase.Login(context.Background(), user)
-
 	if err == nil {
-		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 
+		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 		if err != nil {
 			httpUtils.JsonWriteErrors(w, []error{err})
 		}
@@ -73,8 +70,8 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 	authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
 	if err != nil {
 		if errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
-			user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
 
+			user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
 			if errors.Is(err, myErrors.ErrUserIsAlreadyCreated) {
 				httpUtils.JsonWriteUserGet(w, user)
 				return
@@ -96,13 +93,7 @@ func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = u.usecase.DeleteSessionByCookie(context.Background(), session.Value)
 	if err == nil {
-		http.SetCookie(w, &http.Cookie{
-			Name:     "session_id",
-			Value:    "",
-			HttpOnly: true,
-			Expires:  time.Now().AddDate(0, 0, -1),
-			Path:     "/",
-		})
+		httpUtils.DeleteCookie(w)
 		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
 	} else {
 		httpUtils.JsonWriteErrors(w, []error{err})
@@ -124,5 +115,6 @@ func NewAuthHandler(r *mux.Router, us auth.Usecase) authHandler {
 		Methods("POST")
 	r.HandleFunc(loginUrl, handler.LoginHandler).
 		Methods("POST", "OPTIONS")
+
 	return handler
 }

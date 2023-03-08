@@ -25,5 +25,5 @@ var (
 	ErrUserNotFound      = errors.New("User not found")
 	ErrIncorrectPassword = errors.New("Incorrect password")
 
-	//ErrInternal = errors.New("Internal error")
+	ErrInternal = errors.New("Internal error")
 )

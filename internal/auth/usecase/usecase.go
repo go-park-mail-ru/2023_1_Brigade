@@ -21,7 +21,13 @@ func NewAuthUsecase(authRepo auth.Repository) auth.Usecase {
 
 func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
+	if err != nil {
+		if !errors.Is(err, myErrors.ErrUserNotFound) {
+			return userDB, []error{err}
+		}
+	}
 
+	userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			return userDB, []error{err}
@@ -44,19 +50,11 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 		return user, []error{err}
 	}
 
-	userDB, err = u.repo.GetUserByEmail(ctx, user.Email) // для получения нормального айдишника
-	if err != nil {
-		if !errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred) {
-			return user, []error{err}
-		}
-	}
-
 	return userDB, nil
 }
 
 func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
-
 	if err != nil {
 		if errors.Is(err, myErrors.ErrUserNotFound) {
 			return user, myErrors.ErrUserNotFound
@@ -111,7 +109,7 @@ func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, e
 
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
 	session := model.Session{userID, uuid.New().String()}
-	session, err := u.repo.CreateSession(ctx, session)
+	err := u.repo.CreateSession(ctx, session)
 
 	if err != nil {
 		return session, err

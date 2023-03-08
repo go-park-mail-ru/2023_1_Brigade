@@ -14,6 +14,6 @@ type Repository interface {
 
 	GetSessionById(ctx context.Context, userId uint64) (model.Session, error)
 	GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error)
-	CreateSession(ctx context.Context, session model.Session) (model.Session, error)
+	CreateSession(ctx context.Context, session model.Session) error
 	DeleteSession(ctx context.Context, session model.Session) error
 }

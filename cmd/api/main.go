@@ -17,6 +17,24 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var schema = `
+-- DROP TABLE Profile;
+-- DROP TABLE Session;
+-- 
+-- CREATE TABLE Profile (
+--     id       serial,
+--     username varchar(255),
+--     email    varchar(255),
+--     status   varchar(255),
+--     password varchar(255)
+-- );
+-- 
+-- CREATE TABLE Session (
+--     user_id integer,
+--     cookie  varchar(255)
+-- );
+`
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
@@ -25,7 +43,7 @@ func main() {
 
 	connStr := "user=brigade password=123 dbname=brigade sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
-
+	_, err = db.Exec(schema)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,9 +70,9 @@ func main() {
 
 	log.Info("server started")
 	err = server.ListenAndServe()
-	if err != nil {
-		log.Error("server stopped %v", err)
-	}
+	//if err != nil {
+	//	log.Error("server stopped %v", err)
+	//}
 
 	//r.Handle()
 	//corsRouter := middleware.Cors()

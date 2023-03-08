@@ -18,7 +18,7 @@ func (u *userHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Error(err)
-		httpUtils.JsonWriteInternalError(w)
+		//httpUtils.JsonWriteInternalError(w)
 		return
 	}
 

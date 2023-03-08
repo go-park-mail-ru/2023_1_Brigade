@@ -3,353 +3,488 @@ package http
 import (
 	"bytes"
 	"context"
-	"database/sql"
+	"encoding/json"
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	authrepository "project/internal/auth/repository"
-	authusecase "project/internal/auth/usecase"
+	"project/internal/auth/usecase/mocks"
+	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"testing"
 )
 
-var schema = `
-DROP TABLE Profile;	
-DROP TABLE Session;
-
-CREATE TABLE Profile (
-    id       serial,
-    username varchar(255),
-    name     varchar(255),
-    email    varchar(255),
-    status   varchar(255),
-    password varchar(255)
-);
-
-CREATE TABLE Session (
-    user_id integer,
-    cookie  varchar(255)
-);
-`
-
-var schema2 = `
-DROP TABLE Session;
-
-CREATE TABLE Session (
-    user_id integer,
-    cookie  varchar(255)
-);
-`
-
-func TestHandlers_Signup(t *testing.T) {
-	type testCase struct {
-		body   []byte
-		status int
-		name   string
-	}
-
-	testCases := []testCase{
-		{
-			[]byte(`{"email":"marcussss1@mail.ru",
-						  "username":"marcussss1",
-						  "name":"Mark",
-						  "password":"baumanka"}`),
-			http.StatusCreated,
-			"Successful registration",
-		},
-		{
-			[]byte(`{"email":"marcussss1@mail.ru",
-						  "username":"marcussss2",
-						  "name":"Mark",
-						  "password":"baumanka"}`),
-			http.StatusConflict,
-			"This email is already in the database",
-		},
-		{
-			[]byte(`{"email":"marcussss2@mail.ru",
-						  "username":"marcussss1",
-						  "name":"Mark",
-						  "password":"baumanka"}`),
-			http.StatusConflict,
-			"This username is already in the database",
-		},
-		{
-			[]byte(`{"email":"marcussss1",
-						  "username":"marcussss2",
-						  "name":"Mark",
-						  "password":"baumanka"}`),
-			http.StatusBadRequest,
-			"Invalid email",
-		},
-		//{ 	// TODO придумать валидацию юзернейма с фронтом
-		//	[]byte(`{"email":"marcussss1",
-		//				  "username":"marcussss2",
-		//				  "name":"Mark",
-		//				  "password":"baumanka"}`),
-		//	http.StatusBadRequest,
-		//	"Invalid username",
-		//},
-		//{	// TODO придумать валидацию нейма с фронтом
-		//	[]byte(`{"email":"marcussss1",
-		//				  "username":"marcussss2",
-		//				  "name":"Mark",
-		//				  "password":"baumanka"}`),
-		//	http.StatusBadRequest,
-		//	"Invalid name",
-		//},
-		//{ 	// TODO придумать валидацию пароля с фронтом
-		//	[]byte(`{"email":"marcussss1",
-		//				  "username":"marcussss2",
-		//				  "name":"Mark",
-		//				  "password":"baumanka"}`),
-		//	http.StatusBadRequest,
-		//	"Invalid password",
-		//},
-
-	}
-	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp: true,
-	})
-	log.SetReportCaller(true)
-	connStr := "user=golang password=golang dbname=golang sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-
-	db.Exec(schema)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	r := mux.NewRouter()
-
-	authRepo := authrepository.NewAuthMemoryRepository(db)
-	authUsecase := authusecase.NewAuthUsecase(authRepo)
-	authHandl := NewAuthHandler(r, authUsecase)
-
-	for _, test := range testCases {
-		r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-		w := httptest.NewRecorder()
-
-		authHandl.SignupHandler(w, r)
-
-		require.Equal(t, test.status, w.Code, test.name)
-	}
+type testCase struct {
+	body   []byte
+	status int
+	name   string
 }
 
-func TestHandlers_Login(t *testing.T) {
-	type testCase struct {
-		body   []byte
-		status int
-		name   string
-	}
-
-	testCases := []testCase{
-		{
-			[]byte(`{"email":"marcussss1@mail.ru",
+func TestHandlers_Signup_Created(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+						  "username":"marcussss1",
 						  "password":"baumanka"}`),
-			http.StatusOK,
-			"Successful login",
-		},
-		{
-			[]byte(`{"email":"marcussss2@mail.ru",
-						  "password":"baumanka"}`),
-			http.StatusNotFound,
-			"Wrong email",
-		},
-		{
-			[]byte(`{"email":"marcussss1@mail.ru",
-						  "password":"baumanka1"}`),
-			http.StatusNotFound,
-			"Wrong password",
-		},
-		{
-			[]byte(`{"email":"marcussss1@mail.ru",
-						  "password":"baumanka"}`),
-			http.StatusConflict,
-			"The user is already logged in",
-		},
-	}
-	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp: true,
-	})
-	log.SetReportCaller(true)
-	connStr := "user=golang password=golang dbname=golang sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+		http.StatusCreated,
+		"Successful registration"}
 
-	db.Exec(schema2)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	r := mux.NewRouter()
-
-	authRepo := authrepository.NewAuthMemoryRepository(db)
-	authUsecase := authusecase.NewAuthUsecase(authRepo)
-	authHandl := NewAuthHandler(r, authUsecase)
-
-	for _, test := range testCases {
-		r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
-		w := httptest.NewRecorder()
-
-		authHandl.LoginHandler(w, r)
-
-		require.Equal(t, test.status, w.Code, test.name)
-	}
-}
-
-func TestHandlers_Logout(t *testing.T) {
-	type testCase struct {
-		status int
-		name   string
-	}
-
-	notExistingCookieTest := testCase{
-		http.StatusUnauthorized,
-		"Not existing cookie",
-	}
-
-	incorrectCookieTest := testCase{
-		http.StatusNotFound,
-		"Existing but incorrect cookie",
-	}
-
-	successLogoutTest := testCase{
-		http.StatusNoContent,
-		"Successful logout",
-	}
-
-	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp: true,
-	})
-	log.SetReportCaller(true)
-	connStr := "user=golang password=golang dbname=golang sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
 
 	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
 
-	authRepo := authrepository.NewAuthMemoryRepository(db)
-	authUsecase := authusecase.NewAuthUsecase(authRepo)
-	authHandl := NewAuthHandler(router, authUsecase)
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
 
-	r := httptest.NewRequest("POST", "/logout/", bytes.NewReader([]byte("{}")))
+	usecase.EXPECT().Signup(ctx, user).Return(user, nil).Times(1)
+	usecase.EXPECT().CreateSessionById(ctx, user.Id).Times(1)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
 	w := httptest.NewRecorder()
 
-	authHandl.LogoutHandler(w, r)
-	require.Equal(t, notExistingCookieTest.status, w.Code, notExistingCookieTest.name)
+	handler.SignupHandler(w, r)
 
-	///////////////////////////////////////////////////////////////////////////////////////////
-
-	r = httptest.NewRequest("POST", "/logout/", bytes.NewReader([]byte("{}")))
-	w = httptest.NewRecorder()
-
-	r.AddCookie(&http.Cookie{
-		Name:  "session_id",
-		Value: "abcdefgh",
-	})
-	authHandl.LogoutHandler(w, r)
-	require.Equal(t, incorrectCookieTest.status, w.Code, incorrectCookieTest.name)
-
-	///////////////////////////////////////////////////////////////////////////////////////////
-
-	r = httptest.NewRequest("POST", "/logout/", bytes.NewReader([]byte("{}")))
-	w = httptest.NewRecorder()
-
-	session, err := authRepo.GetSessionById(context.Background(), 1) // т.к. всего 1 пользователь
-	require.Error(t, err, myErrors.ErrSessionIsAlreadyCreated)
-
-	r.AddCookie(&http.Cookie{
-		Name:  "session_id",
-		Value: session.Cookie,
-	})
-	authHandl.LogoutHandler(w, r)
-
-	require.Equal(t, successLogoutTest.status, w.Code, successLogoutTest.name)
+	require.Equal(t, test.status, w.Code, test.name)
 }
 
-func TestHandlers_Auth(t *testing.T) {
-	type testCase struct {
-		status int
-		name   string
-	}
+func TestHandlers_Signup_EmailRegistered(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+						  "username":"marcussss1",
+						  "password":"baumanka"}`),
+		http.StatusConflict,
+		"This email is already in the database"}
 
-	successAuthTest := testCase{
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
+
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
+
+	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrEmailIsAlreadyRegistred}).Times(1)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.SignupHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+						  "username":"marcussss1",
+						  "password":"baumanka"}`),
+		http.StatusConflict,
+		"This username is already in the database"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
+
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
+
+	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrUsernameIsAlreadyRegistred}).Times(1)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.SignupHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Signup_InvalidEmail(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+						  "username":"marcussss1",
+						  "password":"baumanka"}`),
+		http.StatusBadRequest,
+		"Invalid email"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
+
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
+
+	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrInvalidEmail}).Times(1)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.SignupHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Signup_InvalidUsername(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+						  "username":"marcussss1",
+						  "password":"baumanka"}`),
+		http.StatusBadRequest,
+		"Invalid username"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
+
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
+
+	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrInvalidUsername}).Times(1)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.SignupHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Signup_InvalidPassword(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+						  "username":"marcussss1",
+						  "password":"baumanka"}`),
+		http.StatusBadRequest,
+		"Invalid password"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
+
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
+
+	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrInvalidPassword}).Times(1)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.SignupHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Signup_InternalError(t *testing.T) {
+	test := testCase{[]byte(``),
+		http.StatusInternalServerError,
+		"Empty body json error"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.SignupHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Login_OK(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+								   "password":"baumanka"}`),
 		http.StatusOK,
-		"The user is logged in",
-	}
+		"Successfull login"}
 
-	notExistingCookieTest := testCase{
-		http.StatusUnauthorized,
-		"Not existing cookie",
-	}
-
-	incorrectCookieTest := testCase{
-		http.StatusNotFound,
-		"Existing but incorrect cookie",
-	}
-
-	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp: true,
-	})
-	log.SetReportCaller(true)
-	connStr := "user=golang password=golang dbname=golang sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
 
 	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
 
-	authRepo := authrepository.NewAuthMemoryRepository(db)
-	authUsecase := authusecase.NewAuthUsecase(authRepo)
-	authHandl := NewAuthHandler(router, authUsecase)
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
 
-	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader([]byte("{}")))
+	usecase.EXPECT().Login(ctx, user).Return(user, nil).Times(1)
+	usecase.EXPECT().CreateSessionById(ctx, user.Id).Return(model.Session{}, nil).Times(1)
+
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
 	w := httptest.NewRecorder()
 
-	authHandl.AuthHandler(w, r)
-	require.Equal(t, notExistingCookieTest.status, w.Code, notExistingCookieTest.name)
+	handler.LoginHandler(w, r)
 
-	/////////////////////////////////////////////////////////////////////////////////////////////
+	require.Equal(t, test.status, w.Code, test.name)
+}
 
-	r = httptest.NewRequest("POST", "/login/", bytes.NewReader([]byte(`{"email":"marcussss1@mail.ru","password":"baumanka"}`)))
-	w = httptest.NewRecorder()
+func TestHandlers_Login_UserNotFound(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+								   "password":"baumanka"}`),
+		http.StatusNotFound,
+		"User not found"}
 
-	authHandl.LoginHandler(w, r)
-	require.Equal(t, http.StatusOK, w.Code, "Login")
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
 
-	/////////////////////////////////////////////////////////////////////////////////////////////
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
 
-	r = httptest.NewRequest("GET", "/auth/", bytes.NewReader([]byte("{}")))
-	w = httptest.NewRecorder()
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
 
-	r.AddCookie(&http.Cookie{
-		Name:  "session_id",
-		Value: "abcdefgh",
-	})
+	usecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrUserNotFound).Times(1)
 
-	authHandl.AuthHandler(w, r)
-	require.Equal(t, incorrectCookieTest.status, w.Code, incorrectCookieTest.name)
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
 
-	/////////////////////////////////////////////////////////////////////////////////////////////
+	handler.LoginHandler(w, r)
 
-	r = httptest.NewRequest("GET", "/auth/", bytes.NewReader([]byte("{}")))
-	w = httptest.NewRecorder()
+	require.Equal(t, test.status, w.Code, test.name)
+}
 
-	session, err := authRepo.GetSessionById(context.Background(), 1) // т.к. всего 1 пользователь
-	require.Error(t, err, myErrors.ErrSessionIsAlreadyCreated)
+func TestHandlers_Login_IncorrectPassword(t *testing.T) {
+	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
+								   "password":"baumanka"}`),
+		http.StatusNotFound,
+		"Incorrect password"}
 
-	r.AddCookie(&http.Cookie{
-		Name:  "session_id",
-		Value: session.Cookie,
-	})
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
 
-	authHandl.AuthHandler(w, r)
-	require.Equal(t, successAuthTest.status, w.Code, successAuthTest.name)
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	user := model.User{}
+
+	err := json.Unmarshal(test.body, &user)
+	require.NoError(t, err)
+
+	usecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrIncorrectPassword).Times(1)
+
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.LoginHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Login_InternalError(t *testing.T) {
+	test := testCase{[]byte(``),
+		http.StatusInternalServerError,
+		"Empty body json error"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.LoginHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Auth_UserOK(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusOK,
+		"User is authorizated"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	cookie := uuid.New().String()
+
+	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, myErrors.ErrSessionIsAlreadyCreated).Times(1)
+	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserIsAlreadyCreated).Times(1)
+
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
+	w := httptest.NewRecorder()
+
+	handler.AuthHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Auth_SessionOK(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusNotFound,
+		"Session is exist, user not exist"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	cookie := uuid.New().String()
+
+	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, myErrors.ErrSessionIsAlreadyCreated).Times(1)
+	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
+
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
+	w := httptest.NewRecorder()
+
+	handler.AuthHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Auth_CookieNotExist(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusUnauthorized,
+		"Cookie not exist"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.AuthHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Auth_SessionNotFound(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusNotFound,
+		"Session not found"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	cookie := uuid.New().String()
+
+	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{}, myErrors.ErrSessionNotFound).Times(1)
+
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
+	w := httptest.NewRecorder()
+
+	handler.AuthHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Logout_Delete(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusNoContent,
+		"User successfull logout"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	cookie := uuid.New().String()
+
+	usecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Times(1)
+
+	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
+	w := httptest.NewRecorder()
+
+	handler.LogoutHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Logout_CookieNotExist(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusUnauthorized,
+		"Cookie not exist"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+
+	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
+	w := httptest.NewRecorder()
+
+	handler.LogoutHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
+}
+
+func TestHandlers_Logout_SessionNotFound(t *testing.T) {
+	test := testCase{[]byte(""),
+		http.StatusNotFound,
+		"Session not found"}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	router := mux.NewRouter()
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(router, usecase)
+	ctx := context.Background()
+	cookie := uuid.New().String()
+
+	usecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Return(myErrors.ErrSessionNotFound).Times(1)
+
+	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
+	w := httptest.NewRecorder()
+
+	handler.LogoutHandler(w, r)
+
+	require.Equal(t, test.status, w.Code, test.name)
 }

@@ -68,19 +68,16 @@ func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
-	if err != nil {
-		if errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
-
-			user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
-			if errors.Is(err, myErrors.ErrUserIsAlreadyCreated) {
-				httpUtils.JsonWriteUserGet(w, user)
-				return
-			}
-
+	if err == nil {
+		user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
+		if err != nil {
 			httpUtils.JsonWriteErrors(w, []error{err})
-		} else {
-			httpUtils.JsonWriteErrors(w, []error{err})
+			return
 		}
+
+		httpUtils.JsonWriteUserGet(w, user)
+	} else {
+		httpUtils.JsonWriteErrors(w, []error{err})
 	}
 }
 

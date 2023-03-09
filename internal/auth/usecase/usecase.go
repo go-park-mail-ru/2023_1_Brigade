@@ -49,7 +49,7 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 	}
 
 	userDB, err = u.repo.CreateUser(ctx, user)
-	if err != myErrors.ErrUserNotFound {
+	if err != nil {
 		return user, []error{err}
 	}
 

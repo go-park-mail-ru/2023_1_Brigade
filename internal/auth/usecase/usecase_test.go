@@ -2,14 +2,15 @@ package usecase
 
 import (
 	"context"
-	"github.com/golang/mock/gomock"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/require"
 	"project/internal/auth/repository/mocks"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/security"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/require"
 )
 
 type testSessionCase struct {
@@ -69,7 +70,7 @@ func Test_Signup_OK(t *testing.T) {
 
 	myUser, errors := usecase.Signup(ctx, user)
 
-	require.Equal(t, len(errors), 0)
+	require.Equal(t, errors, []error{})
 	require.Equal(t, myUser, test.expectedUser, test.name)
 }
 

@@ -336,8 +336,8 @@ func TestHandlers_Auth_UserOK(t *testing.T) {
 	ctx := context.Background()
 	cookie := uuid.New().String()
 
-	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, myErrors.ErrSessionIsAlreadyCreated).Times(1)
-	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserIsAlreadyCreated).Times(1)
+	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
+	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, nil).Times(1)
 
 	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
@@ -362,7 +362,7 @@ func TestHandlers_Auth_SessionOK(t *testing.T) {
 	ctx := context.Background()
 	cookie := uuid.New().String()
 
-	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, myErrors.ErrSessionIsAlreadyCreated).Times(1)
+	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
 	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
 
 	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))

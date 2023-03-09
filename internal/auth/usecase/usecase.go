@@ -49,7 +49,7 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 	}
 
 	userDB, err = u.repo.CreateUser(ctx, user)
-	if err != nil {
+	if err != myErrors.ErrUserNotFound {
 		return user, []error{err}
 	}
 
@@ -84,28 +84,12 @@ func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error
 
 func (u *usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
 	session, err := u.repo.GetSessionByCookie(ctx, cookie)
-
-	switch err {
-	case myErrors.ErrSessionIsAlreadyCreated:
-		return session, myErrors.ErrSessionIsAlreadyCreated
-	case myErrors.ErrSessionNotFound:
-		return session, myErrors.ErrSessionNotFound
-	default:
-		return session, err
-	}
+	return session, err
 }
 
 func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	userDB, err := u.repo.GetUserById(ctx, userID)
-
-	switch err {
-	case myErrors.ErrUserIsAlreadyCreated:
-		return userDB, myErrors.ErrUserIsAlreadyCreated
-	case myErrors.ErrUserNotFound:
-		return userDB, myErrors.ErrUserNotFound
-	default:
-		return userDB, err
-	}
+	return userDB, err
 }
 
 func (u *usecase) CreateSessionById(ctx context.Context, userID uint64) (session model.Session, err error) {

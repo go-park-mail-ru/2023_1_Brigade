@@ -1,0 +1,310 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANILAKALASH60/rk-1/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANILAKALASH60/231/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANILAKALASH60/Sample/1.0.0
+info:
+  version: "1.0.0"
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
+paths:
+  /api/v1/auth:
+    get:
+      tags:
+        - auth
+      responses:
+        "200":
+          description: The user is logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserId'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: Username, email, nickname, password validity check
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/logout:
+    delete:
+      tags:
+        - auth
+      responses:
+        "204":
+          description: The user successfully logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSuccessDeleted'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/signup:
+    post:
+      tags:
+        - auth
+      responses:
+        "201":
+          description: Successfully signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Email, nick, password validity check
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ErrInvalidUsername'
+                  - $ref: '#/components/schemas/ErrInvalidEmail'
+                  - $ref: '#/components/schemas/ErrInvalidNick'
+                  - $ref: '#/components/schemas/ErrInvalidPassword'
+        "409":
+          description: Checking whether such an email and username is registered
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ErrEmailIsAlreadyRegistred'
+                  - $ref: '#/components/schemas/ErrUsernameIsAlreadyRegistred'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationForm'
+  /api/v1/login:
+    post:
+      tags:
+        - auth
+      responses:
+        "200":
+          description: Successfully login
+        "404":
+          description: Сhecking the correctness of the data and logging in to the account
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrUserEmailNotFound'
+                  - $ref: '#/components/schemas/ErrIncorrectPassword'
+        "409":
+          description: Checking whether such an session is created
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ErrSessionIsAlreadyRegistred'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+  /api/v1/users/{userID}:
+    get:
+      description: Getting user info and info for changes.
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - user
+      responses:
+        "200":
+          description: Successfully getting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: No such cookie or user
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrUserNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        nickname:
+          type: string
+        status:
+          type: string
+        password:
+          type: string
+      description: User model
+    LoginForm:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      description: Login form
+    RegistrationForm:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        nickname:
+          type: string
+        password:
+          type: string
+      description: Registration form
+    UserId:
+      type: object
+      properties:
+        id:
+          type: integer
+      description: User id
+    SessionSuccessDeleted:
+      type: object
+      properties:
+        error:
+          example: 'Session success deleted'
+          type: string
+    ErrCookieNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Cookie not found'
+          type: string
+    ErrInvalidUsername:
+      type: object
+      properties:
+        error:
+          example: 'Invalid username'
+          type: string
+    ErrInvalidEmail:
+      type: object
+      properties:
+        error:
+          example: 'Invalid email'
+          type: string
+    ErrInvalidNick:
+      type: object
+      properties:
+        error:
+          example: 'Invalid nick'
+          type: string
+    ErrInvalidPassword:
+      type: object
+      properties:
+        error:
+          example: 'Invalid password'
+          type: string
+    ErrEmailIsAlreadyRegistred:
+      type: object
+      properties:
+        error:
+          example: 'The email is already registered'
+          type: string
+    ErrUsernameIsAlreadyRegistred:
+      type: object
+      properties:
+        error:
+          example: 'The username is already registered'
+          type: string
+    ErrSessionIsAlreadyRegistred:
+      type: object
+      properties:
+        error:
+          example: 'The session is already registered'
+          type: string
+    ErrUserEmailNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Incorrect email'
+          type: string
+    ErrIncorrectPassword:
+      type: object
+      properties:
+        error:
+          example: 'Incorrect password'
+          type: string
+    ErrSessionNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Session not found'
+          type: string
+    ErrUserNotFound:
+      type: object
+      properties:
+        error:
+          example: 'User not found'
+          type: string
+    ErrInternal:
+      type: object
+      properties:
+        error:
+          example: 'Internal error'
+          type: string

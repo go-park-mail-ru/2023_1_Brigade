@@ -58,9 +58,6 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 
 func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
-	if err == nil {
-		return userDB, myErrors.ErrEmailIsAlreadyRegistred
-	}
 	if !errors.Is(err, myErrors.ErrUserNotFound) {
 		return userDB, err
 	}

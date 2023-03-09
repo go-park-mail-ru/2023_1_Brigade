@@ -105,11 +105,11 @@ func NewAuthHandler(r *mux.Router, us auth.Usecase) authHandler {
 	authUrl := "/auth/"
 
 	r.HandleFunc(logoutUrl, handler.LogoutHandler).
-		Methods("DELETE")
+		Methods("DELETE", "OPTIONS")
 	r.HandleFunc(authUrl, handler.AuthHandler).
-		Methods("GET")
+		Methods("GET", "OPTIONS")
 	r.HandleFunc(signupUrl, handler.SignupHandler).
-		Methods("POST")
+		Methods("POST", "OPTIONS")
 	r.HandleFunc(loginUrl, handler.LoginHandler).
 		Methods("POST", "OPTIONS")
 

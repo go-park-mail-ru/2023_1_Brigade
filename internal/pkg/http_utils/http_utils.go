@@ -139,9 +139,7 @@ func SetCookie(w http.ResponseWriter, session model.Session) {
 		Value:    session.Cookie,
 		HttpOnly: true,
 		Path:     "/",
-		//		Secure:   true,                  // local
-		//		SameSite: http.SameSiteNoneMode, // local
-		Expires: time.Now().Add(10 * time.Hour),
+		Expires:  time.Now().Add(10 * time.Hour),
 	}
 	http.SetCookie(w, cookie)
 }
@@ -151,9 +149,7 @@ func DeleteCookie(w http.ResponseWriter) {
 		Name:     "session_id",
 		Value:    "",
 		HttpOnly: true,
-		//		Secure:   true,                  // local
-		//		SameSite: http.SameSiteNoneMode, // local
-		Expires: time.Now().AddDate(0, 0, -1),
-		Path:    "/",
+		Expires:  time.Now().AddDate(0, 0, -1),
+		Path:     "/",
 	})
 }

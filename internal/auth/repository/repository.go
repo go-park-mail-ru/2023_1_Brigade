@@ -32,7 +32,14 @@ func (r *repository) CreateUser(ctx context.Context, user model.User) (model.Use
 
 func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
 	err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
-	return err == nil, nil
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return false, nil
+	}
+
+	return true, nil
+	//err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
+	//return err == nil, nil
 }
 
 func (r *repository) GetUserByEmail(ctx context.Context, email string) (user model.User, err error) {

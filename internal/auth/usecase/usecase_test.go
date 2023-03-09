@@ -46,7 +46,7 @@ func Test_Signup_OK(t *testing.T) {
 
 	test := testUserCase{
 		expectedUser: model.User{
-			Id:       1,
+			Id:       0,
 			Username: "marcussss",
 			Email:    "marcussss@gmail.com",
 			Status:   "cool",
@@ -69,8 +69,9 @@ func Test_Signup_OK(t *testing.T) {
 
 	myUser, errors := usecase.Signup(ctx, user)
 
-	require.Equal(t, len(errors), 0)
-	require.Equal(t, myUser, test.expectedUser, test.name)
+	require.Equal(t, len(errors), 1)
+	require.Equal(t, errors[0], myErrors.ErrUserNotFound)
+	require.Equal(t, test.expectedUser, myUser, test.name)
 }
 
 func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {

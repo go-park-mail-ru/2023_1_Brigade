@@ -38,8 +38,6 @@ func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword st
 	}
 
 	return true, nil
-	//err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
-	//return err == nil, nil
 }
 
 func (r *repository) GetUserByEmail(ctx context.Context, email string) (user model.User, err error) {

@@ -1,0 +1,15 @@
+db: "postgres"
+port: ":8082"
+connectionToDB: "user=brigade password=123 dbname=brigade host=db port=5432 sslmode=disable"
+allowMethods:
+  - "POST"
+  - "GET"
+  - "DELETE"
+  - "OPTIONS"
+allowOrigins:
+  - "http://95.163.249.116"
+  - "http://localhost:63343"
+allowCredentials: true
+allowHeaders:
+  - "Content-Type"
+  - "Content-Length"

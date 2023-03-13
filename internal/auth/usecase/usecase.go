@@ -6,7 +6,6 @@ import (
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
 
 	"github.com/google/uuid"
@@ -20,37 +19,37 @@ func NewAuthUsecase(authRepo auth.Repository) auth.Usecase {
 	return &usecase{repo: authRepo}
 }
 
-func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []error) {
+func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
 	if err == nil {
-		return userDB, []error{myErrors.ErrEmailIsAlreadyRegistred}
+		return userDB, myErrors.ErrEmailIsAlreadyRegistred
 	}
 	if !errors.Is(err, myErrors.ErrUserNotFound) {
-		return userDB, []error{err}
+		return userDB, err
 	}
 
 	userDB, err = u.repo.GetUserByUsername(ctx, user.Username)
 	if err == nil {
-		return userDB, []error{myErrors.ErrUsernameIsAlreadyRegistred}
+		return userDB, myErrors.ErrUsernameIsAlreadyRegistred
 	}
 	if !errors.Is(err, myErrors.ErrUserNotFound) {
-		return userDB, []error{err}
+		return userDB, err
 	}
 
 	hashedPassword, err := security.Hash(user.Password)
 	if err != nil {
-		return user, []error{err}
+		return user, err
 	}
 	user.Password = hashedPassword
 
 	validateErrors := security.ValidateSignup(user)
 	if len(validateErrors) != 0 {
-		return user, httpUtils.ErrorsConversion(validateErrors)
+		return user, validateErrors[0]
 	}
 
 	userDB, err = u.repo.CreateUser(ctx, user)
 	if err != nil {
-		return user, []error{err}
+		return user, err
 	}
 
 	return userDB, nil
@@ -58,7 +57,7 @@ func (u *usecase) Signup(ctx context.Context, user model.User) (model.User, []er
 
 func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error) {
 	userDB, err := u.repo.GetUserByEmail(ctx, user.Email)
-	if !errors.Is(err, myErrors.ErrUserNotFound) {
+	if err != nil {
 		return userDB, err
 	}
 

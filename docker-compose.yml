@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8082:8082"
+    networks:
+      - db-network
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_DB: "brigade"
+      POSTGRES_USER: "brigade"
+      POSTGRES_PASSWORD: "123"
+    networks:
+      - db-network
+    ports:
+      - "54321:5432"
+    volumes:
+      - ./db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  db-network:
+    name: "db-network"
+    driver: bridge

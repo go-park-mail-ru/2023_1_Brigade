@@ -61,11 +61,10 @@ func (u *usecase) Login(ctx context.Context, user model.User) (model.User, error
 		return userDB, err
 	}
 
-	hashedPassword, err := security.Hash(user.Password)
+	userDB.Password, err = security.Hash(user.Password)
 	if err != nil {
 		return user, err
 	}
-	userDB.Password = hashedPassword
 
 	isCorrectPassword, err := u.repo.CheckCorrectPassword(ctx, userDB)
 	if err != nil {

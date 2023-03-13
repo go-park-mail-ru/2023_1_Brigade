@@ -1,5 +1,5 @@
 .PHONY: run
-test: ## Run project
+run: ## Run project
 	docker compose up
 	docker rm -vf $(docker ps -aq)
 	docker rmi -f $(docker images -aq)

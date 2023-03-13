@@ -1,2 +1,2 @@
-DROP TABLE Profile;
-DROP TABLE Session;
+DROP TABLE IF EXISTS Profile;
+DROP TABLE IF EXISTS Session;

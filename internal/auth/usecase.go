@@ -6,7 +6,7 @@ import (
 )
 
 type Usecase interface {
-	Signup(ctx context.Context, user model.User) (model.User, []error)
+	Signup(ctx context.Context, user model.User) (model.User, error)
 	Login(ctx context.Context, user model.User) (model.User, error)
 
 	GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error)

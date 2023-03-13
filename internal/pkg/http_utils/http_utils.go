@@ -3,137 +3,88 @@ package http_utils
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	"strconv"
-	"strings"
 	"time"
 )
 
-type jsonErrors struct {
+type jsonError struct {
 	Err error
 }
 
-func (j jsonErrors) MarshalJSON() ([]byte, error) {
+func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
-func ErrorsConversion(validateErrors []error) []error {
-	var errors []error
-	for _, err := range validateErrors {
-		words := strings.Split(err.Error(), " ")
-		switch words[0] {
-		case "username:":
-			errors = append(errors, myErrors.ErrInvalidUsername)
-		case "email:":
-			errors = append(errors, myErrors.ErrInvalidEmail)
-		case "password:":
-			errors = append(errors, myErrors.ErrInvalidPassword)
-		}
-	}
-	return errors
-}
-
-func setHeader(w http.ResponseWriter, err error) {
+func statusCode(err error) int {
 	switch {
 	case errors.Is(err, myErrors.UserGetting):
-		w.WriteHeader(http.StatusOK)
+		return http.StatusOK
 	case errors.Is(err, myErrors.UserCreated):
-		w.WriteHeader(http.StatusCreated)
+		return http.StatusCreated
 	case errors.Is(err, myErrors.SessionSuccessDeleted):
-		w.WriteHeader(http.StatusNoContent)
+		return http.StatusNoContent
 	case errors.Is(err, myErrors.ErrInvalidUsername):
-		w.WriteHeader(http.StatusBadRequest)
+		return http.StatusBadRequest
 	case errors.Is(err, myErrors.ErrInvalidEmail):
-		w.WriteHeader(http.StatusBadRequest)
+		return http.StatusBadRequest
 	case errors.Is(err, myErrors.ErrInvalidPassword):
-		w.WriteHeader(http.StatusBadRequest)
+		return http.StatusBadRequest
 	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred):
-		w.WriteHeader(http.StatusConflict)
+		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
-		w.WriteHeader(http.StatusConflict)
+		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrSessionIsAlreadyCreated):
-		w.WriteHeader(http.StatusConflict)
+		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrCookieNotFound):
-		w.WriteHeader(http.StatusUnauthorized)
+		return http.StatusUnauthorized
 	case errors.Is(err, myErrors.ErrSessionNotFound):
-		w.WriteHeader(http.StatusNotFound)
+		return http.StatusNotFound
 	case errors.Is(err, myErrors.ErrUserNotFound):
-		w.WriteHeader(http.StatusNotFound)
+		return http.StatusNotFound
 	case errors.Is(err, myErrors.ErrIncorrectPassword):
-		w.WriteHeader(http.StatusNotFound)
+		return http.StatusNotFound
 	default:
-		w.WriteHeader(http.StatusInternalServerError)
+		return http.StatusInternalServerError
 	}
 }
 
-func writeInWriter(w http.ResponseWriter, data []byte) {
-	_, err := w.Write(data)
+func SendJsonError(ctx echo.Context, err error) error {
+	response := jsonError{Err: err}
+	jsonResponse, marshalError := json.Marshal(&response)
 
-	if err != nil {
-		log.Error(err)
+	if marshalError != nil {
+		log.Error(marshalError.Error())
+		return ctx.NoContent(statusCode(myErrors.ErrInternal))
 	}
+
+	log.Error(string(jsonResponse))
+	return ctx.JSONBlob(statusCode(err), jsonResponse)
 }
 
-func JsonWriteUserCreated(w http.ResponseWriter, user model.User) {
-	jsonUser, err := json.Marshal(user)
-
-	if err != nil {
-		setHeader(w, err)
-		log.Error(err)
-		return
+func SendJsonUser(ctx echo.Context, user model.User, status error) error {
+	jsonResponse, marshalError := json.Marshal(&user)
+	if marshalError != nil {
+		log.Error(marshalError.Error())
+		return ctx.NoContent(statusCode(myErrors.ErrInternal))
 	}
 
-	setHeader(w, myErrors.UserCreated)
-	writeInWriter(w, jsonUser)
+	return ctx.JSONBlob(statusCode(status), jsonResponse)
 }
 
-func JsonWriteUserGet(w http.ResponseWriter, user model.User) {
-	jsonUser, err := json.Marshal(user)
+func ParsingIdUrl(ctx echo.Context, param string) (uint64, error) {
+	log.Error(ctx.Get("userID"))
 
-	if err != nil {
-		setHeader(w, err)
-		log.Error(err)
-		return
-	}
-
-	setHeader(w, myErrors.UserGetting)
-	writeInWriter(w, jsonUser)
+	return 0, nil
+	//vars := mux.Vars(r)
+	//log.Fatal(vars[param])
+	//return strconv.ParseUint(vars[param], 10, 64)
 }
 
-func JsonWriteErrors(w http.ResponseWriter, errors []error) {
-
-	for _, err := range errors {
-		log.Error(err)
-	}
-
-	var JsonErrors []jsonErrors
-	for _, err := range errors {
-		JsonErrors = append(JsonErrors, jsonErrors{Err: err}) // если ошибка валидации выдаст сразу несколько
-	}
-
-	jsonValidateErrors, err := json.Marshal(JsonErrors)
-
-	if err != nil {
-		setHeader(w, err)
-		log.Error(err)
-		return
-	}
-
-	setHeader(w, errors[0])
-	writeInWriter(w, jsonValidateErrors)
-}
-
-func ParsingIdUrl(r *http.Request, param string) (uint64, error) {
-	vars := mux.Vars(r)
-	log.Fatal(vars[param])
-	return strconv.ParseUint(vars[param], 10, 64)
-}
-
-func SetCookie(w http.ResponseWriter, session model.Session) {
+func SetCookie(ctx echo.Context, session model.Session) {
 	cookie := &http.Cookie{
 		Name:     "session_id",
 		Value:    session.Cookie,
@@ -141,15 +92,16 @@ func SetCookie(w http.ResponseWriter, session model.Session) {
 		Path:     "/",
 		Expires:  time.Now().Add(10 * time.Hour),
 	}
-	http.SetCookie(w, cookie)
+	ctx.SetCookie(cookie)
 }
 
-func DeleteCookie(w http.ResponseWriter) {
-	http.SetCookie(w, &http.Cookie{
+func DeleteCookie(ctx echo.Context) {
+	cookie := &http.Cookie{
 		Name:     "session_id",
 		Value:    "",
 		HttpOnly: true,
 		Expires:  time.Now().AddDate(0, 0, -1),
 		Path:     "/",
-	})
+	}
+	ctx.SetCookie(cookie)
 }

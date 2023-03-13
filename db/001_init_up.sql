@@ -1,4 +1,4 @@
-CREATE TABLE Profile (
+CREATE TABLE IF NOT EXISTS Profile (
     id       serial,
     username varchar(255),
     email    varchar(255),
@@ -6,7 +6,7 @@ CREATE TABLE Profile (
     password varchar(255)
 );
 
-CREATE TABLE Session (
+CREATE TABLE IF NOT EXISTS Session (
     user_id integer,
     cookie  varchar(255)
 );

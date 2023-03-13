@@ -2,9 +2,7 @@ package http
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/auth"
 	"project/internal/model"
@@ -16,102 +14,109 @@ type authHandler struct {
 	usecase auth.Usecase
 }
 
-func (u *authHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
-	user := model.User{}
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		httpUtils.JsonWriteErrors(w, []error{err})
-		return
-	}
+func (u *authHandler) SignupHandler() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		user := model.User{}
+		err := ctx.Bind(&user)
 
-	user, errors := u.usecase.Signup(context.Background(), user)
-	if len(errors) == 0 {
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, err)
+		}
+
+		user, err = u.usecase.Signup(context.Background(), user)
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, err)
+		}
 
 		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 		if err != nil {
-			httpUtils.JsonWriteErrors(w, []error{err})
+			return httpUtils.SendJsonError(ctx, err)
 		}
 
-		httpUtils.SetCookie(w, session)
-		httpUtils.JsonWriteUserCreated(w, user)
-	} else {
-		httpUtils.JsonWriteErrors(w, errors)
+		httpUtils.SetCookie(ctx, session)
+		return httpUtils.SendJsonUser(ctx, user, myErrors.UserCreated)
 	}
 }
 
-func (u *authHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
-	user := model.User{}
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		httpUtils.JsonWriteErrors(w, []error{err})
-		return
-	}
+func (u *authHandler) LoginHandler() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		user := model.User{}
+		err := ctx.Bind(&user)
 
-	user, err := u.usecase.Login(context.Background(), user)
-	if err == nil {
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, err)
+		}
+
+		user, err = u.usecase.Login(context.Background(), user)
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, err)
+		}
 
 		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
 		if err != nil {
-			httpUtils.JsonWriteErrors(w, []error{err})
+			return httpUtils.SendJsonError(ctx, err)
 		}
 
-		httpUtils.SetCookie(w, session)
-		httpUtils.JsonWriteUserGet(w, user)
-	} else {
-		httpUtils.JsonWriteErrors(w, []error{err})
+		httpUtils.SetCookie(ctx, session)
+		return httpUtils.SendJsonUser(ctx, user, myErrors.UserGetting)
 	}
 }
 
-func (u *authHandler) AuthHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := r.Cookie("session_id")
-	if errors.Is(err, http.ErrNoCookie) {
-		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNotFound})
-		return
-	}
+func (u *authHandler) AuthHandler() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		session, err := ctx.Cookie("session_id")
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, myErrors.ErrCookieNotFound)
+		}
 
-	authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
-	if err == nil {
+		authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, err)
+		}
+
 		user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
 		if err != nil {
-			httpUtils.JsonWriteErrors(w, []error{err})
-			return
+			return httpUtils.SendJsonError(ctx, err)
 		}
 
-		httpUtils.JsonWriteUserGet(w, user)
-	} else {
-		httpUtils.JsonWriteErrors(w, []error{err})
+		httpUtils.SetCookie(ctx, authSession)
+		return httpUtils.SendJsonUser(ctx, user, myErrors.UserGetting)
 	}
 }
 
-func (u *authHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := r.Cookie("session_id")
-	if errors.Is(err, http.ErrNoCookie) {
-		httpUtils.JsonWriteErrors(w, []error{myErrors.ErrCookieNotFound})
-		return
-	}
+func (u *authHandler) LogoutHandler() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		session, err := ctx.Cookie("session_id")
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, myErrors.ErrCookieNotFound)
+		}
 
-	err = u.usecase.DeleteSessionByCookie(context.Background(), session.Value)
-	if err == nil {
-		httpUtils.DeleteCookie(w)
-		httpUtils.JsonWriteErrors(w, []error{myErrors.SessionSuccessDeleted})
-	} else {
-		httpUtils.JsonWriteErrors(w, []error{err})
+		err = u.usecase.DeleteSessionByCookie(context.Background(), session.Value)
+		if err != nil {
+			return httpUtils.SendJsonError(ctx, err)
+		}
+
+		httpUtils.DeleteCookie(ctx)
+		return ctx.NoContent(http.StatusNoContent)
 	}
 }
 
-func NewAuthHandler(r *mux.Router, us auth.Usecase) authHandler {
+func NewAuthHandler(e *echo.Echo, us auth.Usecase) authHandler {
 	handler := authHandler{usecase: us}
 	signupUrl := "/signup/"
 	loginUrl := "/login/"
 	logoutUrl := "/logout/"
 	authUrl := "/auth/"
 
-	r.HandleFunc(logoutUrl, handler.LogoutHandler).
-		Methods("DELETE", "OPTIONS")
-	r.HandleFunc(authUrl, handler.AuthHandler).
-		Methods("GET", "OPTIONS")
-	r.HandleFunc(signupUrl, handler.SignupHandler).
-		Methods("POST", "OPTIONS")
-	r.HandleFunc(loginUrl, handler.LoginHandler).
-		Methods("POST", "OPTIONS")
+	e.OPTIONS(signupUrl, handler.SignupHandler())
+	e.OPTIONS(loginUrl, handler.LoginHandler())
+	e.OPTIONS(authUrl, handler.AuthHandler())
+	e.OPTIONS(logoutUrl, handler.LogoutHandler())
+
+	e.POST(signupUrl, handler.SignupHandler())
+	e.POST(loginUrl, handler.LoginHandler())
+	e.GET(authUrl, handler.AuthHandler())
+	e.DELETE(logoutUrl, handler.LogoutHandler())
 
 	return handler
 }

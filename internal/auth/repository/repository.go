@@ -30,8 +30,8 @@ func (r *repository) CreateUser(ctx context.Context, user model.User) (model.Use
 	return user, err
 }
 
-func (r *repository) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
-	err := r.db.QueryRow("SELECT * FROM profile WHERE password=$1", hashedPassword).Scan()
+func (r *repository) CheckCorrectPassword(ctx context.Context, user model.User) (bool, error) {
+	err := r.db.QueryRow("SELECT * FROM profile WHERE email=$1 AND password=$2", user.Email, user.Password).Scan()
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return false, nil

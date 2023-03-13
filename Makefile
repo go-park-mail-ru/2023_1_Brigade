@@ -1,3 +1,9 @@
+.PHONY: run
+test: ## Run project
+	docker compose up
+	docker rm -vf $(docker ps -aq)
+	docker rmi -f $(docker images -aq)
+
 .PHONY: test
 test: ## Run all the tests
 	go test ./...

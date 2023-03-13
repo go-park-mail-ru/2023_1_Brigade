@@ -5,5 +5,5 @@ COPY . .
 COPY cmd/configs/config.yaml /app
 RUN go build cmd/api/main.go
 
-EXPOSE 8082
+EXPOSE 8081
 CMD ["./main"]

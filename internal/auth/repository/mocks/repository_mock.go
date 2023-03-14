@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	context "context"
+	"github.com/labstack/echo/v4"
 	"project/internal/model"
 	reflect "reflect"
 	gomock "github.com/golang/mock/gomock"
@@ -35,7 +35,7 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // CreateUser mocks base method.
-func (m *MockRepository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
+func (m *MockRepository) CreateUser(ctx echo.Context, user model.User) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUser", ctx, user)
 	ret0, _ := ret[0].(model.User)
@@ -44,28 +44,28 @@ func (m *MockRepository) CreateUser(ctx context.Context, user model.User) (model
 }
 
 // CreateUser indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) CreateUser(ctx context.Context, user model.User) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) CreateUser(ctx echo.Context, user model.User) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockRepository)(nil).CreateUser), ctx, user)
 }
 
 // CheckCorrectPassword mocks base method.
-func (m *MockRepository) CheckCorrectPassword(ctx context.Context, hashedPassword string) (bool, error) {
+func (m *MockRepository) CheckCorrectPassword(ctx echo.Context, user model.User) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CheckCorrectPassword", ctx, hashedPassword)
+	ret := m.ctrl.Call(m, "CheckCorrectPassword", ctx, user)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CheckCorrectPassword indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) CheckCorrectPassword(ctx context.Context, hashedPassword string) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) CheckCorrectPassword(ctx echo.Context, user model.User) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckCorrectPassword", reflect.TypeOf((*MockRepository)(nil).CheckCorrectPassword), ctx, hashedPassword)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckCorrectPassword", reflect.TypeOf((*MockRepository)(nil).CheckCorrectPassword), ctx, user)
 }
 
 // GetUserByEmail mocks base method.
-func (m *MockRepository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
+func (m *MockRepository) GetUserByEmail(ctx echo.Context, email string) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserByEmail", ctx, email)
 	ret0, _ := ret[0].(model.User)
@@ -74,13 +74,13 @@ func (m *MockRepository) GetUserByEmail(ctx context.Context, email string) (mode
 }
 
 // GetUserByEmail indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetUserByEmail(ctx context.Context, email string) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetUserByEmail(ctx echo.Context, email string) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByEmail", reflect.TypeOf((*MockRepository)(nil).GetUserByEmail), ctx, email)
 }
 
 // GetUserByUsername mocks base method.
-func (m *MockRepository) GetUserByUsername(ctx context.Context, username string) (model.User, error) {
+func (m *MockRepository) GetUserByUsername(ctx echo.Context, username string) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserByUsername", ctx, username)
 	ret0, _ := ret[0].(model.User)
@@ -89,13 +89,13 @@ func (m *MockRepository) GetUserByUsername(ctx context.Context, username string)
 }
 
 // GetUserByUsername indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetUserByUsername(ctx context.Context, username string) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetUserByUsername(ctx echo.Context, username string) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockRepository)(nil).GetUserByUsername), ctx, username)
 }
 
 // GetUserById mocks base method.
-func (m *MockRepository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+func (m *MockRepository) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserById", ctx, userID)
 	ret0, _ := ret[0].(model.User)
@@ -104,13 +104,13 @@ func (m *MockRepository) GetUserById(ctx context.Context, userID uint64) (model.
 }
 
 // GetUserById indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetUserById(ctx context.Context, userID uint64) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetUserById(ctx echo.Context, userID uint64) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserById", reflect.TypeOf((*MockRepository)(nil).GetUserById), ctx, userID)
 }
 
 // GetSessionById mocks base method.
-func (m *MockRepository) GetSessionById(ctx context.Context, userID uint64) (model.Session, error) {
+func (m *MockRepository) GetSessionById(ctx echo.Context, userID uint64) (model.Session, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSessionById", ctx, userID)
 	ret0, _ := ret[0].(model.Session)
@@ -119,13 +119,13 @@ func (m *MockRepository) GetSessionById(ctx context.Context, userID uint64) (mod
 }
 
 // GetSessionById indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetSessionById(ctx context.Context, userID uint64) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetSessionById(ctx echo.Context, userID uint64) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionById", reflect.TypeOf((*MockRepository)(nil).GetSessionById), ctx, userID)
 }
 
 // GetSessionByCookie mocks base method.
-func (m *MockRepository) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
+func (m *MockRepository) GetSessionByCookie(ctx echo.Context, cookie string) (model.Session, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSessionByCookie", ctx, cookie)
 	ret0, _ := ret[0].(model.Session)
@@ -134,13 +134,13 @@ func (m *MockRepository) GetSessionByCookie(ctx context.Context, cookie string) 
 }
 
 // GetSessionByCookie indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetSessionByCookie(ctx context.Context, cookie string) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetSessionByCookie(ctx echo.Context, cookie string) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionByCookie", reflect.TypeOf((*MockRepository)(nil).GetSessionByCookie), ctx, cookie)
 }
 
 // CreateSession mocks base method.
-func (m *MockRepository) CreateSession(ctx context.Context, session model.Session) error {
+func (m *MockRepository) CreateSession(ctx echo.Context, session model.Session) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateSession", ctx, session)
 	ret0, _ := ret[0].(error)
@@ -148,13 +148,13 @@ func (m *MockRepository) CreateSession(ctx context.Context, session model.Sessio
 }
 
 // CreateSession indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) CreateSession(ctx context.Context, session model.Session) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) CreateSession(ctx echo.Context, session model.Session) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSession", reflect.TypeOf((*MockRepository)(nil).CreateSession), ctx, session)
 }
 
 // DeleteSession mocks base method.
-func (m *MockRepository) DeleteSession(ctx context.Context, session model.Session) error {
+func (m *MockRepository) DeleteSession(ctx echo.Context, session model.Session) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteSession", ctx, session)
 	ret0, _ := ret[0].(error)
@@ -162,7 +162,7 @@ func (m *MockRepository) DeleteSession(ctx context.Context, session model.Sessio
 }
 
 // DeleteSession indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) DeleteSession(ctx context.Context, session model.Session) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) DeleteSession(ctx echo.Context, session model.Session) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSession", reflect.TypeOf((*MockRepository)(nil).DeleteSession), ctx, session)
 }

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/auth"
@@ -14,91 +13,83 @@ type authHandler struct {
 	usecase auth.Usecase
 }
 
-func (u *authHandler) SignupHandler() echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		user := model.User{}
-		err := ctx.Bind(&user)
+func (u *authHandler) SignupHandler(ctx echo.Context) error {
+	var user model.User
+	err := ctx.Bind(&user)
 
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		user, err = u.usecase.Signup(context.Background(), user)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		httpUtils.SetCookie(ctx, session)
-		return httpUtils.SendJsonUser(ctx, user, myErrors.UserCreated)
+	if err != nil {
+		return err
 	}
+
+	user, err = u.usecase.Signup(ctx, user)
+	if err != nil {
+		return err
+	}
+
+	session, err := u.usecase.CreateSessionById(ctx, user.Id)
+	if err != nil {
+		return err
+	}
+
+	httpUtils.SetCookie(ctx, session)
+	return ctx.JSON(http.StatusCreated, user)
 }
 
-func (u *authHandler) LoginHandler() echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		user := model.User{}
-		err := ctx.Bind(&user)
+func (u *authHandler) LoginHandler(ctx echo.Context) error {
+	user := model.User{}
+	err := ctx.Bind(&user)
 
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		user, err = u.usecase.Login(context.Background(), user)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		session, err := u.usecase.CreateSessionById(context.Background(), user.Id)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		httpUtils.SetCookie(ctx, session)
-		return httpUtils.SendJsonUser(ctx, user, myErrors.UserGetting)
+	if err != nil {
+		return err
 	}
+
+	user, err = u.usecase.Login(ctx, user)
+	if err != nil {
+		return err
+	}
+
+	session, err := u.usecase.CreateSessionById(ctx, user.Id)
+	if err != nil {
+		return err
+	}
+
+	httpUtils.SetCookie(ctx, session)
+	return ctx.JSON(http.StatusOK, user)
 }
 
-func (u *authHandler) AuthHandler() echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		session, err := ctx.Cookie("session_id")
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, myErrors.ErrCookieNotFound)
-		}
-
-		authSession, err := u.usecase.GetSessionByCookie(context.Background(), session.Value)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		user, err := u.usecase.GetUserById(context.Background(), authSession.UserId)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		httpUtils.SetCookie(ctx, authSession)
-		return httpUtils.SendJsonUser(ctx, user, myErrors.UserGetting)
+func (u *authHandler) AuthHandler(ctx echo.Context) error {
+	session, err := ctx.Cookie("session_id")
+	if err != nil {
+		return myErrors.ErrCookieNotFound
 	}
+
+	authSession, err := u.usecase.GetSessionByCookie(ctx, session.Value)
+	if err != nil {
+		return err
+	}
+
+	user, err := u.usecase.GetUserById(ctx, authSession.UserId)
+	if err != nil {
+		return err
+	}
+
+	httpUtils.SetCookie(ctx, authSession)
+	return ctx.JSON(http.StatusOK, user)
 }
 
-func (u *authHandler) LogoutHandler() echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		session, err := ctx.Cookie("session_id")
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, myErrors.ErrCookieNotFound)
-		}
-
-		err = u.usecase.DeleteSessionByCookie(context.Background(), session.Value)
-		if err != nil {
-			return httpUtils.SendJsonError(ctx, err)
-		}
-
-		httpUtils.DeleteCookie(ctx)
-		return ctx.NoContent(http.StatusNoContent)
+func (u *authHandler) LogoutHandler(ctx echo.Context) error {
+	session, err := ctx.Cookie("session_id")
+	if err != nil {
+		return myErrors.ErrCookieNotFound
 	}
+
+	err = u.usecase.DeleteSessionByCookie(ctx, session.Value)
+	if err != nil {
+		return err
+	}
+
+	httpUtils.DeleteCookie(ctx)
+	return ctx.NoContent(http.StatusNoContent)
 }
 
 func NewAuthHandler(e *echo.Echo, us auth.Usecase) authHandler {
@@ -108,15 +99,15 @@ func NewAuthHandler(e *echo.Echo, us auth.Usecase) authHandler {
 	logoutUrl := "/logout/"
 	authUrl := "/auth/"
 
-	e.OPTIONS(signupUrl, handler.SignupHandler())
-	e.OPTIONS(loginUrl, handler.LoginHandler())
-	e.OPTIONS(authUrl, handler.AuthHandler())
-	e.OPTIONS(logoutUrl, handler.LogoutHandler())
+	e.OPTIONS(signupUrl, handler.SignupHandler)
+	e.OPTIONS(loginUrl, handler.LoginHandler)
+	e.OPTIONS(authUrl, handler.AuthHandler)
+	e.OPTIONS(logoutUrl, handler.LogoutHandler)
 
-	e.POST(signupUrl, handler.SignupHandler())
-	e.POST(loginUrl, handler.LoginHandler())
-	e.GET(authUrl, handler.AuthHandler())
-	e.DELETE(logoutUrl, handler.LogoutHandler())
+	e.POST(signupUrl, handler.SignupHandler)
+	e.POST(loginUrl, handler.LoginHandler)
+	e.GET(authUrl, handler.AuthHandler)
+	e.DELETE(logoutUrl, handler.LogoutHandler)
 
 	return handler
 }

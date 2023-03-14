@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 	"project/internal/auth/repository/mocks"
 	"project/internal/model"
@@ -61,16 +61,15 @@ func Test_Signup_OK(t *testing.T) {
 
 	repository := mocks.NewMockRepository(ctl)
 	usecase := NewAuthUsecase(repository)
-	ctx := context.Background()
+	var ctx echo.Context
 
 	repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(user, myErrors.ErrUserNotFound).Times(1)
 	repository.EXPECT().GetUserByUsername(ctx, user.Username).Return(user, myErrors.ErrUserNotFound).Times(1)
 	repository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, myErrors.ErrUserNotFound).Times(1)
 
-	myUser, errors := usecase.Signup(ctx, user)
+	myUser, err := usecase.Signup(ctx, user)
 
-	require.Equal(t, len(errors), 1)
-	require.Equal(t, errors[0], myErrors.ErrUserNotFound)
+	require.Equal(t, err, myErrors.ErrUserNotFound)
 	require.Equal(t, test.expectedUser, myUser, test.name)
 }
 
@@ -113,23 +112,22 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 
 	repository := mocks.NewMockRepository(ctl)
 	usecase := NewAuthUsecase(repository)
-	ctx := context.Background()
+	var ctx echo.Context
 
 	for i, test := range tests {
 		var myUser model.User
-		var errors []error
+		var err error
 
 		if i == 0 {
 			repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(user, test.expectedError).Times(1)
-			myUser, errors = usecase.Signup(ctx, user)
+			myUser, err = usecase.Signup(ctx, user)
 		} else {
 			repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(user, myErrors.ErrUserNotFound).Times(1)
 			repository.EXPECT().GetUserByUsername(ctx, user.Username).Return(user, test.expectedError).Times(1)
-			myUser, errors = usecase.Signup(ctx, user)
+			myUser, err = usecase.Signup(ctx, user)
 		}
 
-		require.Equal(t, len(errors), 1)
-		require.Error(t, errors[0], test.expectedError)
+		require.Error(t, err, test.expectedError)
 		require.Equal(t, myUser, test.expectedUser, test.name)
 	}
 }
@@ -163,10 +161,10 @@ func Test_Login_OK(t *testing.T) {
 
 	repository := mocks.NewMockRepository(ctl)
 	usecase := NewAuthUsecase(repository)
-	ctx := context.Background()
+	var ctx echo.Context
 
-	repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, myErrors.ErrUserNotFound).Times(1)
-	repository.EXPECT().CheckCorrectPassword(ctx, test.expectedUser.Password).Return(true, nil).Times(1)
+	repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, nil).Times(1)
+	repository.EXPECT().CheckCorrectPassword(ctx, test.expectedUser).Return(true, nil).Times(1)
 
 	myUser, err := usecase.Login(ctx, user)
 	require.NoError(t, err)
@@ -206,7 +204,7 @@ func Test_GetSessionByCookie(t *testing.T) {
 
 	repository := mocks.NewMockRepository(ctl)
 	usecase := NewAuthUsecase(repository)
-	ctx := context.Background()
+	var ctx echo.Context
 
 	for _, test := range tests {
 		repository.EXPECT().GetSessionByCookie(ctx, "").Return(test.expectedSession, test.expectedError).Times(1)
@@ -259,7 +257,7 @@ func Test_GetUserById(t *testing.T) {
 
 	repository := mocks.NewMockRepository(ctl)
 	usecase := NewAuthUsecase(repository)
-	ctx := context.Background()
+	var ctx echo.Context
 
 	for _, test := range tests {
 		repository.EXPECT().GetUserById(ctx, 1).Return(test.expectedUser, test.expectedError).Times(1)

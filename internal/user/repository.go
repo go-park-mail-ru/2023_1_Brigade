@@ -1,10 +1,10 @@
 package user
 
 import (
-	"context"
+	"github.com/labstack/echo/v4"
 	"project/internal/model"
 )
 
 type Repository interface {
-	GetUserById(ctx context.Context, userID uint64) (model.User, error)
+	GetUserById(ctx echo.Context, userID uint64) (model.User, error)
 }

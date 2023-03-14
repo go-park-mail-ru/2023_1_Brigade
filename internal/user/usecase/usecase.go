@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"context"
 	"errors"
+	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -17,7 +17,7 @@ func NewUserUsecase(userRepo user.Repository) user.Usecase {
 	return &usecase{repo: userRepo}
 }
 
-func (u *usecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+func (u *usecase) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
 	user, err := u.repo.GetUserById(ctx, userID)
 
 	if err != nil {

@@ -2,11 +2,10 @@ package http
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
@@ -32,10 +31,14 @@ func TestHandlers_Signup_Created(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
@@ -44,10 +47,8 @@ func TestHandlers_Signup_Created(t *testing.T) {
 	usecase.EXPECT().Signup(ctx, user).Return(user, nil).Times(1)
 	usecase.EXPECT().CreateSessionById(ctx, user.Id).Times(1)
 
-	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.SignupHandler(w, r)
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -62,21 +63,23 @@ func TestHandlers_Signup_EmailRegistered(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrEmailIsAlreadyRegistred}).Times(1)
+	usecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrEmailIsAlreadyRegistred).Times(1)
 
-	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.SignupHandler(w, r)
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -91,21 +94,23 @@ func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrUsernameIsAlreadyRegistred}).Times(1)
+	usecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrUsernameIsAlreadyRegistred).Times(1)
 
-	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.SignupHandler(w, r)
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -120,21 +125,23 @@ func TestHandlers_Signup_InvalidEmail(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrInvalidEmail}).Times(1)
+	usecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidEmail).Times(1)
 
-	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.SignupHandler(w, r)
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -149,21 +156,23 @@ func TestHandlers_Signup_InvalidUsername(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrInvalidUsername}).Times(1)
+	usecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidUsername).Times(1)
 
-	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.SignupHandler(w, r)
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -178,41 +187,46 @@ func TestHandlers_Signup_InvalidPassword(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	usecase.EXPECT().Signup(ctx, user).Return(user, []error{myErrors.ErrInvalidPassword}).Times(1)
+	usecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidPassword).Times(1)
 
-	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.SignupHandler(w, r)
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
 
 func TestHandlers_Signup_InternalError(t *testing.T) {
-	test := testCase{[]byte(``),
+	test := testCase{[]byte(`{sfadfad{f`),
 		http.StatusInternalServerError,
 		"Empty body json error"}
 
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-
+	e := echo.New()
 	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 
-	handler.SignupHandler(w, r)
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+
+	handle := handler.SignupHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -226,10 +240,14 @@ func TestHandlers_Login_OK(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
@@ -238,10 +256,8 @@ func TestHandlers_Login_OK(t *testing.T) {
 	usecase.EXPECT().Login(ctx, user).Return(user, nil).Times(1)
 	usecase.EXPECT().CreateSessionById(ctx, user.Id).Return(model.Session{}, nil).Times(1)
 
-	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.LoginHandler(w, r)
+	handle := handler.LoginHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -255,10 +271,14 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
@@ -266,10 +286,8 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 
 	usecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrUserNotFound).Times(1)
 
-	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.LoginHandler(w, r)
+	handle := handler.LoginHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -283,10 +301,14 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
+
 	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	handler := NewAuthHandler(e, usecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
@@ -294,56 +316,59 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 
 	usecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrIncorrectPassword).Times(1)
 
-	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
-	w := httptest.NewRecorder()
-
-	handler.LoginHandler(w, r)
+	handle := handler.LoginHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
 
 func TestHandlers_Login_InternalError(t *testing.T) {
-	test := testCase{[]byte(``),
+	test := testCase{[]byte(`{adgadgadg{`),
 		http.StatusInternalServerError,
 		"Empty body json error"}
 
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-
-	r := httptest.NewRequest("POST", "/login/", bytes.NewReader(test.body))
+	e := echo.New()
+	r := httptest.NewRequest("POST", "/signup/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 
-	handler.LoginHandler(w, r)
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+
+	handle := handler.LoginHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
 
 func TestHandlers_Auth_UserOK(t *testing.T) {
-	test := testCase{[]byte(""),
+	test := testCase{[]byte(``),
 		http.StatusOK,
 		"User is authorizated"}
 
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	e := echo.New()
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
+
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
 	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, nil).Times(1)
 
-	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
-	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
-	w := httptest.NewRecorder()
-
-	handler.AuthHandler(w, r)
+	handle := handler.AuthHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -356,20 +381,22 @@ func TestHandlers_Auth_SessionOK(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	e := echo.New()
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
+
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
 	usecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
 
-	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
-	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
-	w := httptest.NewRecorder()
-
-	handler.AuthHandler(w, r)
+	handle := handler.AuthHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -382,14 +409,17 @@ func TestHandlers_Auth_CookieNotExist(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-
+	e := echo.New()
 	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 
-	handler.AuthHandler(w, r)
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+
+	handle := handler.AuthHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -402,19 +432,21 @@ func TestHandlers_Auth_SessionNotFound(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	e := echo.New()
+	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
+
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	usecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{}, myErrors.ErrSessionNotFound).Times(1)
 
-	r := httptest.NewRequest("GET", "/auth/", bytes.NewReader(test.body))
-	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
-	w := httptest.NewRecorder()
-
-	handler.AuthHandler(w, r)
+	handle := handler.AuthHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -427,19 +459,21 @@ func TestHandlers_Logout_Delete(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	e := echo.New()
+	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
+
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	usecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Times(1)
 
-	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
-	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
-	w := httptest.NewRecorder()
-
-	handler.LogoutHandler(w, r)
+	handle := handler.LogoutHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -452,14 +486,17 @@ func TestHandlers_Logout_CookieNotExist(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-
+	e := echo.New()
 	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 
-	handler.LogoutHandler(w, r)
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+
+	handle := handler.LogoutHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }
@@ -472,19 +509,21 @@ func TestHandlers_Logout_SessionNotFound(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	router := mux.NewRouter()
-	usecase := mocks.NewMockUsecase(ctl)
-	handler := NewAuthHandler(router, usecase)
-	ctx := context.Background()
+	e := echo.New()
+	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
+	r.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	w := httptest.NewRecorder()
+	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
+
+	usecase := mocks.NewMockUsecase(ctl)
+	handler := NewAuthHandler(e, usecase)
+	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	usecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Return(myErrors.ErrSessionNotFound).Times(1)
 
-	r := httptest.NewRequest("DELETE", "/logout/", bytes.NewReader(test.body))
-	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
-	w := httptest.NewRecorder()
-
-	handler.LogoutHandler(w, r)
+	handle := handler.LogoutHandler()
+	handle(ctx)
 
 	require.Equal(t, test.status, w.Code, test.name)
 }

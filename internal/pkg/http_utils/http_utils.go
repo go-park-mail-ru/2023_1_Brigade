@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -19,14 +18,8 @@ func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
-func statusCode(err error) int {
+func StatusCode(err error) int {
 	switch {
-	case errors.Is(err, myErrors.UserGetting):
-		return http.StatusOK
-	case errors.Is(err, myErrors.UserCreated):
-		return http.StatusCreated
-	case errors.Is(err, myErrors.SessionSuccessDeleted):
-		return http.StatusNoContent
 	case errors.Is(err, myErrors.ErrInvalidUsername):
 		return http.StatusBadRequest
 	case errors.Is(err, myErrors.ErrInvalidEmail):
@@ -52,36 +45,31 @@ func statusCode(err error) int {
 	}
 }
 
-func SendJsonError(ctx echo.Context, err error) error {
-	response := jsonError{Err: err}
-	jsonResponse, marshalError := json.Marshal(&response)
-
-	if marshalError != nil {
-		log.Error(marshalError.Error())
-		return ctx.NoContent(statusCode(myErrors.ErrInternal))
-	}
-
-	log.Error(string(jsonResponse))
-	return ctx.JSONBlob(statusCode(err), jsonResponse)
-}
-
-func SendJsonUser(ctx echo.Context, user model.User, status error) error {
-	jsonResponse, marshalError := json.Marshal(&user)
-	if marshalError != nil {
-		log.Error(marshalError.Error())
-		return ctx.NoContent(statusCode(myErrors.ErrInternal))
-	}
-
-	return ctx.JSONBlob(statusCode(status), jsonResponse)
-}
+//func SendJsonError(ctx echo.Context, err error) error {
+//	response := jsonError{Err: err}
+//	jsonResponse, marshalError := json.Marshal(&response)
+//
+//	if marshalError != nil {
+//		log.Error(marshalError.Error())
+//		return ctx.NoContent(statusCode(myErrors.ErrInternal))
+//	}
+//
+//	log.Error(err.Error())
+//	return ctx.JSONBlob(statusCode(err), jsonResponse)
+//}
+//
+//func SendJsonUser(ctx echo.Context, user model.User, status error) error {
+//	jsonResponse, marshalError := json.Marshal(&user)
+//	if marshalError != nil {
+//		log.Error(marshalError.Error())
+//		return ctx.NoContent(statusCode(myErrors.ErrInternal))
+//	}
+//
+//	return ctx.JSONBlob(statusCode(status), jsonResponse)
+//}
 
 func ParsingIdUrl(ctx echo.Context, param string) (uint64, error) {
-	log.Error(ctx.Get("userID"))
-
 	return 0, nil
-	//vars := mux.Vars(r)
-	//log.Fatal(vars[param])
-	//return strconv.ParseUint(vars[param], 10, 64)
 }
 
 func SetCookie(ctx echo.Context, session model.Session) {
@@ -91,6 +79,8 @@ func SetCookie(ctx echo.Context, session model.Session) {
 		HttpOnly: true,
 		Path:     "/",
 		Expires:  time.Now().Add(10 * time.Hour),
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
 	}
 	ctx.SetCookie(cookie)
 }
@@ -102,6 +92,8 @@ func DeleteCookie(ctx echo.Context) {
 		HttpOnly: true,
 		Expires:  time.Now().AddDate(0, 0, -1),
 		Path:     "/",
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
 	}
 	ctx.SetCookie(cookie)
 }

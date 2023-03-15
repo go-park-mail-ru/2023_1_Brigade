@@ -1,19 +1,20 @@
 package auth
 
 import (
-	"context"
+	"github.com/labstack/echo/v4"
 	"project/internal/model"
 )
 
 type Repository interface {
-	CreateUser(ctx context.Context, user model.User) (model.User, error)
-	CheckCorrectPassword(ctx context.Context, user model.User) (bool, error)
-	GetUserByEmail(ctx context.Context, email string) (model.User, error)
-	GetUserByUsername(ctx context.Context, username string) (model.User, error)
-	GetUserById(ctx context.Context, userID uint64) (model.User, error)
+	CreateUser(ctx echo.Context, user model.User) (model.User, error)
+	CheckCorrectPassword(ctx echo.Context, user model.User) (bool, error)
+	CheckExistEmail(ctx echo.Context, email string) (bool, error)
+	CheckExistUsername(ctx echo.Context, username string) (bool, error)
+	GetUserByEmail(ctx echo.Context, email string) (model.User, error)
+	GetUserById(ctx echo.Context, userID uint64) (model.User, error)
 
-	GetSessionById(ctx context.Context, userId uint64) (model.Session, error)
-	GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error)
-	CreateSession(ctx context.Context, session model.Session) error
-	DeleteSession(ctx context.Context, session model.Session) error
+	GetSessionById(ctx echo.Context, userID uint64) (model.Session, error)
+	GetSessionByCookie(ctx echo.Context, cookie string) (model.Session, error)
+	CreateSession(ctx echo.Context, session model.Session) error
+	DeleteSession(ctx echo.Context, session model.Session) error
 }

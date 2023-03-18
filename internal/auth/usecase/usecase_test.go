@@ -5,10 +5,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
-	"project/internal/auth/repository/mocks"
+	authMock "project/internal/auth/repository/mocks"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/security"
+	userMock "project/internal/user/repository/mocks"
 	"testing"
 )
 
@@ -59,13 +60,14 @@ func Test_Signup_OK(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	repository := mocks.NewMockRepository(ctl)
-	usecase := NewAuthUsecase(repository)
+	authRepository := authMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewAuthUsecase(authRepository, userRepository)
 	var ctx echo.Context
 
-	repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(user, myErrors.ErrUserNotFound).Times(1)
-	repository.EXPECT().GetUserByUsername(ctx, user.Username).Return(user, myErrors.ErrUserNotFound).Times(1)
-	repository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, myErrors.ErrUserNotFound).Times(1)
+	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(false, nil).Times(1)
+	authRepository.EXPECT().CheckExistUsername(ctx, user.Username).Return(false, nil).Times(1)
+	authRepository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, myErrors.ErrUserNotFound).Times(1)
 
 	myUser, err := usecase.Signup(ctx, user)
 
@@ -110,8 +112,9 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	repository := mocks.NewMockRepository(ctl)
-	usecase := NewAuthUsecase(repository)
+	authRepository := authMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewAuthUsecase(authRepository, userRepository)
 	var ctx echo.Context
 
 	for i, test := range tests {
@@ -119,11 +122,11 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 		var err error
 
 		if i == 0 {
-			repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(user, test.expectedError).Times(1)
+			authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(true, test.expectedError).Times(1)
 			myUser, err = usecase.Signup(ctx, user)
 		} else {
-			repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(user, myErrors.ErrUserNotFound).Times(1)
-			repository.EXPECT().GetUserByUsername(ctx, user.Username).Return(user, test.expectedError).Times(1)
+			authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(false, nil).Times(1)
+			authRepository.EXPECT().CheckExistUsername(ctx, user.Username).Return(true, test.expectedError).Times(1)
 			myUser, err = usecase.Signup(ctx, user)
 		}
 
@@ -144,6 +147,14 @@ func Test_Login_OK(t *testing.T) {
 		Password: "password",
 	}
 
+	hashedPasswordUser := model.User{
+		Id:       0,
+		Username: "",
+		Email:    "marcussss@gmail.com",
+		Status:   "",
+		Password: hashedPassword,
+	}
+
 	test := testUserCase{
 		expectedUser: model.User{
 			Id:       1,
@@ -159,12 +170,16 @@ func Test_Login_OK(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	repository := mocks.NewMockRepository(ctl)
-	usecase := NewAuthUsecase(repository)
+	authRepository := authMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewAuthUsecase(authRepository, userRepository)
 	var ctx echo.Context
 
-	repository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, nil).Times(1)
-	repository.EXPECT().CheckCorrectPassword(ctx, test.expectedUser).Return(true, nil).Times(1)
+	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(true, nil).Times(1)
+	authRepository.EXPECT().CheckCorrectPassword(ctx, hashedPasswordUser).Return(true, nil).Times(1)
+	userRepository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, test.expectedError).Times(1)
+	//userRepository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, nil).Times(1)
+	//userRepository.EXPECT().GetUserById(ctx, test.expectedUser.Id).Return(test.expectedUser, nil).Times(1)
 
 	myUser, err := usecase.Login(ctx, user)
 	require.NoError(t, err)
@@ -202,68 +217,16 @@ func Test_GetSessionByCookie(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	repository := mocks.NewMockRepository(ctl)
-	usecase := NewAuthUsecase(repository)
+	authRepository := authMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewAuthUsecase(authRepository, userRepository)
 	var ctx echo.Context
 
 	for _, test := range tests {
-		repository.EXPECT().GetSessionByCookie(ctx, "").Return(test.expectedSession, test.expectedError).Times(1)
+		authRepository.EXPECT().GetSessionByCookie(ctx, "").Return(test.expectedSession, test.expectedError).Times(1)
 		session, err := usecase.GetSessionByCookie(ctx, "")
 
 		require.Error(t, err, test.expectedError)
 		require.Equal(t, session, test.expectedSession, test.name)
-	}
-}
-
-func Test_GetUserById(t *testing.T) {
-	tests := []testUserCase{
-		{
-			expectedUser: model.User{
-				Id:       1,
-				Username: "marcussss",
-				Email:    "marcussss@gmail.com",
-				Status:   "cool",
-				Password: "password",
-			},
-			expectedError: myErrors.ErrUserIsAlreadyCreated,
-			name:          "Successfull getting user",
-		},
-		{
-			expectedUser: model.User{
-				Id:       1,
-				Username: "marcussss",
-				Email:    "marcussss@gmail.com",
-				Status:   "cool",
-				Password: "password",
-			},
-			expectedError: myErrors.ErrUserNotFound,
-			name:          "User not found",
-		},
-		{
-			expectedUser: model.User{
-				Id:       1,
-				Username: "marcussss",
-				Email:    "marcussss@gmail.com",
-				Status:   "cool",
-				Password: "password",
-			},
-			expectedError: myErrors.ErrInternal,
-			name:          "Internal error",
-		},
-	}
-
-	ctl := gomock.NewController(t)
-	defer ctl.Finish()
-
-	repository := mocks.NewMockRepository(ctl)
-	usecase := NewAuthUsecase(repository)
-	var ctx echo.Context
-
-	for _, test := range tests {
-		repository.EXPECT().GetUserById(ctx, 1).Return(test.expectedUser, test.expectedError).Times(1)
-		user, err := usecase.GetUserById(ctx, 1)
-
-		require.Error(t, err, test.expectedError)
-		require.Equal(t, user, test.expectedUser, test.name)
 	}
 }

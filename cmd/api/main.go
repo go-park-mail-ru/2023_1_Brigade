@@ -1,36 +1,31 @@
 package main
 
 import (
-	httpAuth "project/internal/auth/delivery/http"
-	httpChat "project/internal/chat/delivery/http"
-	myMiddleware "project/internal/middleware"
-	httpUser "project/internal/user/delivery/http"
-
-	usecaseAuth "project/internal/auth/usecase"
-	usecaseChat "project/internal/chat/usecase"
-	usecaseUser "project/internal/user/usecase"
-
-	repositoryAuth "project/internal/auth/repository"
-	repositoryChat "project/internal/chat/repository"
-	repositoryUser "project/internal/user/repository"
-
-	log "github.com/sirupsen/logrus"
-	"project/internal/configs"
-
 	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/lib/pq"
-
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"gopkg.in/yaml.v3"
+	_ "github.com/lib/pq"
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+	httpAuth "project/internal/auth/delivery/http"
+	repositoryAuth "project/internal/auth/repository"
+	usecaseAuth "project/internal/auth/usecase"
+	httpChat "project/internal/chat/delivery/http"
+	repositoryChat "project/internal/chat/repository"
+	usecaseChat "project/internal/chat/usecase"
+	"project/internal/configs"
+	myMiddleware "project/internal/middleware"
+	httpUser "project/internal/user/delivery/http"
+	repositoryUser "project/internal/user/repository"
+	usecaseUser "project/internal/user/usecase"
 )
 
 func init() {
-	if err := godotenv.Load("../../.env"); err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
 }
@@ -77,6 +72,19 @@ func main() {
 		AllowCredentials: config.AllowCredentials,
 		AllowHeaders:     config.AllowHeaders,
 	}))
+
+	//e.Use(middleware.CSRF())
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	TokenLookup: "header:X-XSRF-TOKEN",
+	//}))
+	//e.Use(middleware.SecureWithConfig(middleware.SecureConfig{
+	//	XSSProtection:         "",
+	//	ContentTypeNosniff:    "",
+	//	XFrameOptions:         "",
+	//	HSTSMaxAge:            3600,
+	//	ContentSecurityPolicy: "default-src 'self'",
+	//}))
+
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authUsecase))
 
@@ -85,4 +93,5 @@ func main() {
 	httpChat.NewChatHandler(e, chatUsecase, authUsecase)
 
 	e.Logger.Fatal(e.Start(config.Port))
+	e.Logger.Fatal(e.Start(":8081"))
 }

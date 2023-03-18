@@ -5,8 +5,7 @@
 package mocks
 
 import (
-	context "context"
-	"net/http"
+	"github.com/labstack/echo/v4"
 	"project/internal/model"
 	reflect "reflect"
 	gomock "github.com/golang/mock/gomock"
@@ -36,7 +35,7 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 }
 
 // GetUserById mocks base method.
-func (m *MockUsecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+func (m *MockUsecase) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserById", ctx, userID)
 	ret0, _ := ret[0].(model.User)
@@ -45,21 +44,7 @@ func (m *MockUsecase) GetUserById(ctx context.Context, userID uint64) (model.Use
 }
 
 // GetUserById indicates an expected call of Auth.
-func (mr *MockUsecaseMockRecorder) GetUserById(ctx context.Context, userID uint64) *gomock.Call {
+func (mr *MockUsecaseMockRecorder) GetUserById(ctx echo.Context, userID uint64) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserById", reflect.TypeOf((*MockUsecase)(nil).GetUserById), ctx, userID)
-}
-
-// ParsingIdUrl mocks base method.
-func (m *MockUsecase) ParsingIdUrl(r *http.Request, param string) uint64 {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ParsingIdUrl", r, param)
-	ret0, _ := ret[0].(uint64)
-	return ret0
-}
-
-// ParsingIdUrl indicates an expected call of Auth.
-func (mr *MockUsecaseMockRecorder) ParsingIdUrl(r *http.Request, param string) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParsingIdUrl", reflect.TypeOf((*MockUsecase)(nil).ParsingIdUrl), r, param)
 }

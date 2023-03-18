@@ -6,21 +6,24 @@ import (
 	"project/internal/auth"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
+	"project/internal/user"
 
 	"github.com/google/uuid"
 )
 
 type usecase struct {
-	repo auth.Repository
+	authRepo auth.Repository
+	userRepo user.Repository
 }
 
-func NewAuthUsecase(authRepo auth.Repository) auth.Usecase {
-	return &usecase{repo: authRepo}
+func NewAuthUsecase(authRepo auth.Repository, userRepo user.Repository) auth.Usecase {
+	return &usecase{authRepo: authRepo, userRepo: userRepo}
 }
 
 func (u *usecase) Signup(ctx echo.Context, user model.User) (model.User, error) {
-	exist, err := u.repo.CheckExistEmail(ctx, user.Email)
+	exist, err := u.authRepo.CheckExistEmail(ctx, user.Email)
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			return user, err
@@ -30,7 +33,7 @@ func (u *usecase) Signup(ctx echo.Context, user model.User) (model.User, error) 
 		return user, myErrors.ErrEmailIsAlreadyRegistred
 	}
 
-	exist, err = u.repo.CheckExistUsername(ctx, user.Username)
+	exist, err = u.authRepo.CheckExistUsername(ctx, user.Username)
 	if err != nil {
 		if !errors.Is(err, myErrors.ErrUserNotFound) {
 			return user, err
@@ -46,12 +49,12 @@ func (u *usecase) Signup(ctx echo.Context, user model.User) (model.User, error) 
 	}
 	user.Password = hashedPassword
 
-	validateErrors := security.ValidateSignup(user)
-	if len(validateErrors) != 0 {
-		return user, validateErrors[0]
+	validateError := security.ValidateSignup(user)
+	if validateError != nil {
+		return user, httpUtils.ErrorConversion(validateError[0])
 	}
 
-	userDB, err := u.repo.CreateUser(ctx, user)
+	userDB, err := u.authRepo.CreateUser(ctx, user)
 	if err != nil {
 		return userDB, err
 	}
@@ -60,7 +63,7 @@ func (u *usecase) Signup(ctx echo.Context, user model.User) (model.User, error) 
 }
 
 func (u *usecase) Login(ctx echo.Context, user model.User) (model.User, error) {
-	exist, err := u.repo.CheckExistEmail(ctx, user.Email)
+	exist, err := u.authRepo.CheckExistEmail(ctx, user.Email)
 	if !exist {
 		return user, myErrors.ErrUserNotFound
 	}
@@ -73,7 +76,7 @@ func (u *usecase) Login(ctx echo.Context, user model.User) (model.User, error) {
 		return user, err
 	}
 
-	isCorrectPassword, err := u.repo.CheckCorrectPassword(ctx, user)
+	isCorrectPassword, err := u.authRepo.CheckCorrectPassword(ctx, user)
 	if !isCorrectPassword {
 		return user, myErrors.ErrIncorrectPassword
 	}
@@ -81,33 +84,22 @@ func (u *usecase) Login(ctx echo.Context, user model.User) (model.User, error) {
 		return user, err
 	}
 
-	user, err = u.repo.GetUserByEmail(ctx, user.Email)
+	user, err = u.userRepo.GetUserByEmail(ctx, user.Email)
 	return user, err
 }
 
 func (u *usecase) GetSessionByCookie(ctx echo.Context, cookie string) (model.Session, error) {
-	session, err := u.repo.GetSessionByCookie(ctx, cookie)
+	session, err := u.authRepo.GetSessionByCookie(ctx, cookie)
 	return session, err
-}
-
-func (u *usecase) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
-	user, err := u.repo.GetUserById(ctx, userID)
-	return user, err
 }
 
 func (u *usecase) CreateSessionById(ctx echo.Context, userID uint64) (model.Session, error) {
 	session := model.Session{userID, uuid.New().String()}
-	err := u.repo.CreateSession(ctx, session)
+	err := u.authRepo.CreateSession(ctx, session)
 	return session, err
 }
 
 func (u *usecase) DeleteSessionByCookie(ctx echo.Context, cookie string) error {
-	session, err := u.repo.GetSessionByCookie(ctx, cookie)
-	if err != nil {
-		if !errors.Is(err, myErrors.ErrSessionIsAlreadyCreated) {
-			return err
-		}
-	}
-
-	return u.repo.DeleteSession(ctx, session)
+	err := u.authRepo.DeleteSession(ctx, cookie)
+	return err
 }

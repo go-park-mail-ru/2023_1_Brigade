@@ -79,21 +79,6 @@ func (mr *MockUsecaseMockRecorder) GetSessionByCookie(ctx echo.Context, cookie s
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionByCookie", reflect.TypeOf((*MockUsecase)(nil).GetSessionByCookie), ctx, cookie)
 }
 
-// GetUserById mocks base method.
-func (m *MockUsecase) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserById", ctx, userID)
-	ret0, _ := ret[0].(model.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetUserById indicates an expected call of Auth.
-func (mr *MockUsecaseMockRecorder) GetUserById(ctx echo.Context, userID uint64) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserById", reflect.TypeOf((*MockUsecase)(nil).GetUserById), ctx, userID)
-}
-
 // CreateSessionById mocks base method.
 func (m *MockUsecase) CreateSessionById(ctx echo.Context, userID uint64) (model.Session, error) {
 	m.ctrl.T.Helper()

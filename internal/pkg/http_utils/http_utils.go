@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"strings"
 	"time"
 )
 
@@ -18,6 +19,20 @@ func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
+func ErrorConversion(err error) error {
+	words := strings.Split(err.Error(), " ")
+	switch words[0] {
+	case "username:":
+		return myErrors.ErrInvalidUsername
+	case "email:":
+		return myErrors.ErrInvalidEmail
+	case "password:":
+		return myErrors.ErrInvalidPassword
+	default:
+		return myErrors.ErrInternal
+	}
+}
+
 func StatusCode(err error) int {
 	switch {
 	case errors.Is(err, myErrors.ErrInvalidUsername):
@@ -26,50 +41,27 @@ func StatusCode(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, myErrors.ErrInvalidPassword):
 		return http.StatusBadRequest
+	case errors.Is(err, myErrors.ErrCookieNotFound):
+		return http.StatusUnauthorized
+	case errors.Is(err, myErrors.ErrNotChatAccess):
+		return http.StatusForbidden
+	case errors.Is(err, myErrors.ErrSessionNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, myErrors.ErrUserNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, myErrors.ErrChatNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, myErrors.ErrIncorrectPassword):
+		return http.StatusNotFound
 	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred):
 		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
 		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrSessionIsAlreadyCreated):
 		return http.StatusConflict
-	case errors.Is(err, myErrors.ErrCookieNotFound):
-		return http.StatusUnauthorized
-	case errors.Is(err, myErrors.ErrSessionNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, myErrors.ErrUserNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, myErrors.ErrIncorrectPassword):
-		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError
 	}
-}
-
-//func SendJsonError(ctx echo.Context, err error) error {
-//	response := jsonError{Err: err}
-//	jsonResponse, marshalError := json.Marshal(&response)
-//
-//	if marshalError != nil {
-//		log.Error(marshalError.Error())
-//		return ctx.NoContent(statusCode(myErrors.ErrInternal))
-//	}
-//
-//	log.Error(err.Error())
-//	return ctx.JSONBlob(statusCode(err), jsonResponse)
-//}
-//
-//func SendJsonUser(ctx echo.Context, user model.User, status error) error {
-//	jsonResponse, marshalError := json.Marshal(&user)
-//	if marshalError != nil {
-//		log.Error(marshalError.Error())
-//		return ctx.NoContent(statusCode(myErrors.ErrInternal))
-//	}
-//
-//	return ctx.JSONBlob(statusCode(status), jsonResponse)
-//}
-
-func ParsingIdUrl(ctx echo.Context, param string) (uint64, error) {
-	return 0, nil
 }
 
 func SetCookie(ctx echo.Context, session model.Session) {

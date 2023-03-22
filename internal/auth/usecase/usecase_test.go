@@ -178,8 +178,6 @@ func Test_Login_OK(t *testing.T) {
 	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(true, nil).Times(1)
 	authRepository.EXPECT().CheckCorrectPassword(ctx, hashedPasswordUser).Return(true, nil).Times(1)
 	userRepository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, test.expectedError).Times(1)
-	//userRepository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, nil).Times(1)
-	//userRepository.EXPECT().GetUserById(ctx, test.expectedUser.Id).Return(test.expectedUser, nil).Times(1)
 
 	myUser, err := usecase.Login(ctx, user)
 	require.NoError(t, err)

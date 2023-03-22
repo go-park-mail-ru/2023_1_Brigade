@@ -6,6 +6,7 @@ import (
 	"project/internal/auth"
 	"project/internal/chat"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 	"strconv"
 )
 
@@ -16,6 +17,7 @@ type chatHandler struct {
 
 func (u *chatHandler) GetChatHandler(ctx echo.Context) error {
 	chatID, err := strconv.ParseUint(ctx.Param("chatID"), 10, 64)
+
 	if err != nil {
 		return err
 	}
@@ -26,29 +28,28 @@ func (u *chatHandler) GetChatHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
-	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-
-	if err != nil {
-		return err
+	userInChat := u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
+	if !userInChat {
+		return myErrors.ErrNotChatAccess
 	}
 
 	return ctx.JSON(http.StatusOK, chat)
 }
 
 func (u *chatHandler) CreateChatHandler(ctx echo.Context) error {
-	chat := model.Chat{}
+	var chat model.CreateChat
 	err := ctx.Bind(&chat)
 
 	if err != nil {
 		return err
 	}
 
-	chat, err = u.chatUsecase.CreateChat(ctx, chat)
+	dbChat, err := u.chatUsecase.CreateChat(ctx, chat)
 	if err != nil {
 		return err
 	}
 
-	return ctx.JSON(http.StatusOK, chat)
+	return ctx.JSON(http.StatusCreated, dbChat)
 }
 
 func (u *chatHandler) DeleteChatHandler(ctx echo.Context) error {
@@ -63,10 +64,9 @@ func (u *chatHandler) DeleteChatHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
-	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-
-	if err != nil {
-		return err
+	userInChat := u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
+	if !userInChat {
+		return myErrors.ErrNotChatAccess
 	}
 
 	err = u.chatUsecase.DeleteChatById(ctx, chatID)

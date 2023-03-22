@@ -18,6 +18,9 @@ import (
 	repositoryChat "project/internal/chat/repository"
 	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
+	wsMessages "project/internal/messages/delivery/ws"
+	repositoryMessages "project/internal/messages/repository"
+	usecaseMessages "project/internal/messages/usecase"
 	myMiddleware "project/internal/middleware"
 	httpUser "project/internal/user/delivery/http"
 	repositoryUser "project/internal/user/repository"
@@ -25,8 +28,20 @@ import (
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
+	// убрать не забывать
+	if err := godotenv.Load("../../.env"); err != nil {
 		log.Println("No .env file found")
+	}
+}
+
+func errorHandler() middleware.LogErrorFunc {
+	return func(c echo.Context, err error, stack []byte) error {
+		//err := c.Render(http.StatusInternalServerError, "500.html", nil)
+		//if err != nil {
+		//	return err
+		//}
+		c.Logger().Error(err)
+		return nil
 	}
 }
 
@@ -59,13 +74,24 @@ func main() {
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	authRepository := repositoryAuth.NewAuthMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
+	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 
 	userUsecase := usecaseUser.NewUserUsecase(userRepository)
 	authUsecase := usecaseAuth.NewAuthUsecase(authRepository, userRepository)
-	chatUsecase := usecaseChat.NewChatUsecase(chatRepository)
+	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository)
 
 	e := echo.New()
 	e.Use(middleware.Recover())
+	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
+		//ErrorHandler: errorHandler()
+		//Skipper:           middleware.DefaultSkipper,
+		//StackSize:         4 << 10, // 4 KB
+		//DisableStackAll:   false,
+		//DisablePrintStack: false,
+		//LogLevel:          0,
+		LogErrorFunc: errorHandler(),
+	}))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowMethods:     config.AllowMethods,
 		AllowOrigins:     config.AllowOrigins,
@@ -86,11 +112,12 @@ func main() {
 	//}))
 
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(myMiddleware.AuthMiddleware(authUsecase))
+	//e.Use(myMiddleware.AuthMiddleware(authUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuth.NewAuthHandler(e, authUsecase, userUsecase)
 	httpChat.NewChatHandler(e, chatUsecase, authUsecase)
+	wsMessages.NewMessagesHandler(e, messagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Port))
 	e.Logger.Fatal(e.Start(":8081"))

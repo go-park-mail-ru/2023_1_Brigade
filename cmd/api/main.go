@@ -8,14 +8,20 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
-	httpauth "project/internal/auth/delivery/http"
-	authrepository "project/internal/auth/repository"
-	authusecase "project/internal/auth/usecase"
+	httpAuth "project/internal/auth/delivery/http"
+	repositoryAuth "project/internal/auth/repository"
+	usecaseAuth "project/internal/auth/usecase"
+	httpChat "project/internal/chat/delivery/http"
+	repositoryChat "project/internal/chat/repository"
+	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
 	myMiddleware "project/internal/middleware"
+	httpUser "project/internal/user/delivery/http"
+	repositoryUser "project/internal/user/repository"
+	usecaseUser "project/internal/user/usecase"
 )
 
 func init() {
@@ -50,12 +56,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	repositoryAuth := authrepository.NewAuthMemoryRepository(db)
-	usecaseAuth := authusecase.NewAuthUsecase(repositoryAuth)
+	userRepository := repositoryUser.NewUserMemoryRepository(db)
+	authRepository := repositoryAuth.NewAuthMemoryRepository(db)
+	chatRepository := repositoryChat.NewChatMemoryRepository(db)
+
+	userUsecase := usecaseUser.NewUserUsecase(userRepository)
+	authUsecase := usecaseAuth.NewAuthUsecase(authRepository, userRepository)
+	chatUsecase := usecaseChat.NewChatUsecase(chatRepository)
 
 	e := echo.New()
 	e.Use(middleware.Recover())
-	e.Use(myMiddleware.HandlerMiddleware)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowMethods:     config.AllowMethods,
 		AllowOrigins:     config.AllowOrigins,
@@ -63,7 +73,25 @@ func main() {
 		AllowHeaders:     config.AllowHeaders,
 	}))
 
-	httpauth.NewAuthHandler(e, usecaseAuth)
+	//e.Use(middleware.CSRF())
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	TokenLookup: "header:X-XSRF-TOKEN",
+	//}))
+	//e.Use(middleware.SecureWithConfig(middleware.SecureConfig{
+	//	XSSProtection:         "",
+	//	ContentTypeNosniff:    "",
+	//	XFrameOptions:         "",
+	//	HSTSMaxAge:            3600,
+	//	ContentSecurityPolicy: "default-src 'self'",
+	//}))
+
+	e.Use(myMiddleware.LoggerMiddleware)
+	e.Use(myMiddleware.AuthMiddleware(authUsecase))
+
+	httpUser.NewUserHandler(e, userUsecase)
+	httpAuth.NewAuthHandler(e, authUsecase, userUsecase)
+	httpChat.NewChatHandler(e, chatUsecase, authUsecase)
 
 	e.Logger.Fatal(e.Start(config.Port))
+	e.Logger.Fatal(e.Start(":8081"))
 }

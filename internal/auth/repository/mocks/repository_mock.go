@@ -64,64 +64,34 @@ func (mr *MockRepositoryMockRecorder) CheckCorrectPassword(ctx echo.Context, use
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckCorrectPassword", reflect.TypeOf((*MockRepository)(nil).CheckCorrectPassword), ctx, user)
 }
 
-// GetUserByEmail mocks base method.
-func (m *MockRepository) GetUserByEmail(ctx echo.Context, email string) (model.User, error) {
+// CheckExistEmail mocks base method.
+func (m *MockRepository) CheckExistEmail(ctx echo.Context, email string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByEmail", ctx, email)
-	ret0, _ := ret[0].(model.User)
+	ret := m.ctrl.Call(m, "CheckExistEmail", ctx, email)
+	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetUserByEmail indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetUserByEmail(ctx echo.Context, email string) *gomock.Call {
+// CheckExistEmail indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) CheckExistEmail(ctx echo.Context, email string) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByEmail", reflect.TypeOf((*MockRepository)(nil).GetUserByEmail), ctx, email)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckExistEmail", reflect.TypeOf((*MockRepository)(nil).CheckExistEmail), ctx, email)
 }
 
-// GetUserByUsername mocks base method.
-func (m *MockRepository) GetUserByUsername(ctx echo.Context, username string) (model.User, error) {
+// CheckExistUsername mocks base method.
+func (m *MockRepository) CheckExistUsername(ctx echo.Context, username string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByUsername", ctx, username)
-	ret0, _ := ret[0].(model.User)
+	ret := m.ctrl.Call(m, "CheckExistUsername", ctx, username)
+	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetUserByUsername indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetUserByUsername(ctx echo.Context, username string) *gomock.Call {
+// CheckExistUsername indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) CheckExistUsername(ctx echo.Context, username string) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockRepository)(nil).GetUserByUsername), ctx, username)
-}
-
-// GetUserById mocks base method.
-func (m *MockRepository) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserById", ctx, userID)
-	ret0, _ := ret[0].(model.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetUserById indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetUserById(ctx echo.Context, userID uint64) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserById", reflect.TypeOf((*MockRepository)(nil).GetUserById), ctx, userID)
-}
-
-// GetSessionById mocks base method.
-func (m *MockRepository) GetSessionById(ctx echo.Context, userID uint64) (model.Session, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetSessionById", ctx, userID)
-	ret0, _ := ret[0].(model.Session)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetSessionById indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) GetSessionById(ctx echo.Context, userID uint64) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionById", reflect.TypeOf((*MockRepository)(nil).GetSessionById), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckExistUsername", reflect.TypeOf((*MockRepository)(nil).CheckExistUsername), ctx, username)
 }
 
 // GetSessionByCookie mocks base method.
@@ -154,15 +124,15 @@ func (mr *MockRepositoryMockRecorder) CreateSession(ctx echo.Context, session mo
 }
 
 // DeleteSession mocks base method.
-func (m *MockRepository) DeleteSession(ctx echo.Context, session model.Session) error {
+func (m *MockRepository) DeleteSession(ctx echo.Context, cookie string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteSession", ctx, session)
+	ret := m.ctrl.Call(m, "DeleteSession", ctx, cookie)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteSession indicates an expected call of Auth.
-func (mr *MockRepositoryMockRecorder) DeleteSession(ctx echo.Context, session model.Session) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) DeleteSession(ctx echo.Context, cookie string) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSession", reflect.TypeOf((*MockRepository)(nil).DeleteSession), ctx, session)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSession", reflect.TypeOf((*MockRepository)(nil).DeleteSession), ctx, cookie)
 }

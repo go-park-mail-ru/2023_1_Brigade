@@ -17,7 +17,10 @@ var (
 
 	ErrCookieNotFound = errors.New("Cookie not found")
 
+	ErrNotChatAccess = errors.New("This user dont have access to this chat")
+
 	ErrSessionNotFound   = errors.New("Session not found")
+	ErrChatNotFound      = errors.New("Chat not found")
 	ErrUserNotFound      = errors.New("User not found")
 	ErrIncorrectPassword = errors.New("Incorrect password")
 

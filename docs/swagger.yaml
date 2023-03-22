@@ -14,7 +14,7 @@ info:
   title: home-iot-api
   description: The API for the EatBacon IOT project
 paths:
-  /api/v1/auth:
+  /auth:
     get:
       tags:
         - auth
@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserId'
+                $ref: '#/components/schemas/User'
         "401":
           description: Cookie not found
           content:
@@ -45,7 +45,7 @@ paths:
             error:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
-  /api/v1/logout:
+  /logout:
     delete:
       tags:
         - auth
@@ -76,7 +76,7 @@ paths:
             error:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
-  /api/v1/signup:
+  /signup:
     post:
       tags:
         - auth
@@ -116,13 +116,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegistrationForm'
-  /api/v1/login:
+  /login:
     post:
       tags:
         - auth
       responses:
         "200":
           description: Successfully login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         "404":
           description: Сhecking the correctness of the data and logging in to the account
           content:
@@ -149,20 +153,20 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginForm'
-  /api/v1/users/{userID}:
+  /users/{userID}:
+    parameters:
+      - name: userID
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       description: Getting user info and info for changes.
-      parameters:
-        - name: userID
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - user
       responses:
         "200":
-          description: Successfully getting
+          description: Successfully getting user
           content:
             application/json:
               schema:
@@ -180,8 +184,234 @@ paths:
             error:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
+  /chats/{chatID}:
+    parameters:
+      - name: chatID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      description: Getting chat info and info for changes.
+      tags:
+        - chats
+      responses:
+        "200":
+          description: Successfully getting chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "403":
+          description: The user does not have access to this chat
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNotChatAccess'
+        "404":
+          description: Chat not found
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrChatNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /chats:
+    post:
+      tags:
+        - chats
+      responses:
+        "201":
+          description: Successfully creating chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatingChatForm'
+    delete:
+      tags:
+        - chats
+      responses:
+        "204":
+          description: The chat successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatSuccessDeleted'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /groups/{groupID}:
+    parameters:
+      - name: groupID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      description: Getting group info and info for changes.
+      tags:
+        - groups
+      responses:
+        "200":
+          description: Successfully getting group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "403":
+          description: The user does not have access to this group
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNotGroupAccess'
+        "404":
+          description: Group not found
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrGroupNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /groups:
+    post:
+      tags:
+        - groups
+      responses:
+        "201":
+          description: Successfully creating group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatingChatForm'
+    delete:
+      tags:
+        - groups
+      responses:
+        "204":
+          description: The group successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupSuccessDeleted'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
 components:
   schemas:
+    CreatingChatForm:
+      type: object
+      properties:
+        name:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    Chat:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
     User:
       type: object
       properties:
@@ -218,12 +448,18 @@ components:
         password:
           type: string
       description: Registration form
-    UserId:
+    GroupSuccessDeleted:
       type: object
       properties:
-        id:
-          type: integer
-      description: User id
+        error:
+          example: 'Group success deleted'
+          type: string
+    ChatSuccessDeleted:
+      type: object
+      properties:
+        error:
+          example: 'Chat success deleted'
+          type: string
     SessionSuccessDeleted:
       type: object
       properties:
@@ -290,6 +526,18 @@ components:
         error:
           example: 'Incorrect password'
           type: string
+    ErrNotGroupAccess:
+      type: object
+      properties:
+        error:
+          example: 'You dont have access to this group'
+          type: string
+    ErrNotChatAccess:
+      type: object
+      properties:
+        error:
+          example: 'You dont have access to this chat'
+          type: string
     ErrSessionNotFound:
       type: object
       properties:
@@ -301,6 +549,18 @@ components:
       properties:
         error:
           example: 'User not found'
+          type: string
+    ErrGroupNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Group not found'
+          type: string
+    ErrChatNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Chat not found'
           type: string
     ErrInternal:
       type: object

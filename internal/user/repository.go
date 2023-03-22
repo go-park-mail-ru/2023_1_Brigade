@@ -7,4 +7,5 @@ import (
 
 type Repository interface {
 	GetUserById(ctx echo.Context, userID uint64) (model.User, error)
+	GetUserByEmail(ctx echo.Context, email string) (model.User, error)
 }

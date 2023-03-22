@@ -56,6 +56,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	
+
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	authRepository := repositoryAuth.NewAuthMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)

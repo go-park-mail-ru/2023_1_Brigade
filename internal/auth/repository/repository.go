@@ -19,7 +19,7 @@ type repository struct {
 }
 
 func (r *repository) CreateUser(ctx echo.Context, user model.User) (model.User, error) {
-	rows, err := r.db.NamedQuery("INSERT INTO profile (username, email, status, password) "+
+	rows, err := r.db.NamedQuery("INSERT INTO profile (username, email, status, password)"+
 		"VALUES (:username, :email, :status, :password) RETURNING id", user)
 
 	if err != nil {

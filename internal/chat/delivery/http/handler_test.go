@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	authMock "project/internal/auth/usecase/mocks"
 	chatMock "project/internal/chat/usecase/mocks"
+	myMiddleware "project/internal/middleware"
 	"project/internal/model"
 	"testing"
 )
@@ -46,10 +47,14 @@ func TestHandlers_CreateChat_OK(t *testing.T) {
 
 	chatUsecase.EXPECT().CreateChat(ctx, chat).Return(dbChat, nil).Times(1)
 
-	err = handler.CreateChatHandler(ctx)
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+		err = handler.CreateChatHandler(ctx)
 
-	require.NoError(t, err)
-	require.Equal(t, test.status, w.Code)
+		require.NoError(t, err)
+		require.Equal(t, test.status, w.Code)
+
+		return err
+	})(ctx)
 }
 
 func TestHandlers_GetChat_OK(t *testing.T) {

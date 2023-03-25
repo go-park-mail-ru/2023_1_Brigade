@@ -34,21 +34,27 @@ func init() {
 	}
 }
 
-func errorHandler() middleware.LogErrorFunc {
-	return func(c echo.Context, err error, stack []byte) error {
-		//err := c.Render(http.StatusInternalServerError, "500.html", nil)
-		//if err != nil {
-		//	return err
-		//}
-		c.Logger().Error(err)
-		return nil
-	}
-}
+//func errorHandler() middleware.LogErrorFunc {
+//	return func(c echo.Context, err error, stack []byte) error {
+//		//err := c.Render(http.StatusInternalServerError, "500.html", nil)
+//		//if err != nil {
+//		//	return err
+//		//}
+//		c.Logger().Error(err)
+//		return nil
+//	}
+//}
 
 func main() {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})
+
+	defer func() {
+		if err := recover(); err != nil {
+			log.WithField("error", err).Error("Panic occurred")
+		}
+	}()
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
@@ -66,7 +72,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db, err := sqlx.Open(config.DB, config.ConnectionToDB)
+	db, err := sqlx.Open(config.DB, config.ConnectionToDB) // ping
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -76,22 +82,22 @@ func main() {
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
 	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 
-	userUsecase := usecaseUser.NewUserUsecase(userRepository)
+	userUsecase := usecaseUser.NewUserUsecase(userRepository, authRepository)
 	authUsecase := usecaseAuth.NewAuthUsecase(authRepository, userRepository)
 	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository)
 	messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository)
 
 	e := echo.New()
-	e.Use(middleware.Recover())
-	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
-		//ErrorHandler: errorHandler()
-		//Skipper:           middleware.DefaultSkipper,
-		//StackSize:         4 << 10, // 4 KB
-		//DisableStackAll:   false,
-		//DisablePrintStack: false,
-		//LogLevel:          0,
-		LogErrorFunc: errorHandler(),
-	}))
+	//e.Use(middleware.Recover())
+	//e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
+	//	//ErrorHandler: errorHandler()
+	//	//Skipper:           middleware.DefaultSkipper,
+	//	//StackSize:         4 << 10, // 4 KB
+	//	//DisableStackAll:   false,
+	//	//DisablePrintStack: false,
+	//	//LogLevel:          0,
+	//	LogErrorFunc: errorHandler(),
+	//}))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowMethods:     config.AllowMethods,
 		AllowOrigins:     config.AllowOrigins,

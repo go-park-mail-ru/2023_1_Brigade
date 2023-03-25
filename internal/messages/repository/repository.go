@@ -1,9 +1,12 @@
 package repository
 
 import (
+	"database/sql"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"project/internal/messages"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 )
 
 type repository struct {
@@ -22,8 +25,15 @@ func (r *repository) MarkMessageReading(messageID uint64) error {
 	return nil
 }
 
-func (r *repository) GetChatById(chatID uint64) (model.Chat, error) {
-	return model.Chat{Members: []model.User{model.User{}}}, nil
+func (r *repository) GetChatById(chatID uint64) ([]model.ChatMembers, error) {
+	var chat []model.ChatMembers
+	err := r.db.Select(&chat, "SELECT * FROM chat_members WHERE id_chat=$1", chatID)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return chat, myErrors.ErrChatNotFound
+	}
+
+	return chat, err
 }
 
 func (r *repository) InsertMessageReceiveInDB(message model.ProducerMessage) error {

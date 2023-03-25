@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/auth"
@@ -17,8 +18,9 @@ type authHandler struct {
 
 func (u *authHandler) SignupHandler(ctx echo.Context) error {
 	var user model.User
-	err := ctx.Bind(&user)
+	body := ctx.Get("body").([]byte)
 
+	err := json.Unmarshal(body, &user)
 	if err != nil {
 		return err
 	}
@@ -38,9 +40,10 @@ func (u *authHandler) SignupHandler(ctx echo.Context) error {
 }
 
 func (u *authHandler) LoginHandler(ctx echo.Context) error {
-	user := model.User{}
-	err := ctx.Bind(&user)
+	var user model.User
+	body := ctx.Get("body").([]byte)
 
+	err := json.Unmarshal(body, &user)
 	if err != nil {
 		return err
 	}

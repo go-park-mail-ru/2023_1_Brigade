@@ -5,6 +5,6 @@ import (
 )
 
 type Usecase interface {
-	SendMessage(ctx echo.Context, jsonSentMessage []byte) error
+	SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error
 	ReceiveMessage(ctx echo.Context) ([]byte, error)
 }

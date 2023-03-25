@@ -63,3 +63,76 @@ func (mr *MockRepositoryMockRecorder) GetUserByEmail(ctx echo.Context, email str
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByEmail", reflect.TypeOf((*MockRepository)(nil).GetUserByEmail), ctx, email)
 }
+
+// DeleteUserById mocks base method.
+func (m *MockRepository) DeleteUserById(ctx echo.Context, userID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUserById", ctx, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteUserById indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) DeleteUserById(ctx echo.Context, userID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserById", reflect.TypeOf((*MockRepository)(nil).DeleteUserById), ctx, userID)
+}
+
+// AddUserInContact mocks base method.
+func (m *MockRepository) AddUserInContact(ctx echo.Context, contact model.UserContact) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUserInContact", ctx, contact)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddUserInContact indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) AddUserInContact(ctx echo.Context, contact model.UserContact) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserInContact", reflect.TypeOf((*MockRepository)(nil).AddUserInContact), ctx, contact)
+}
+
+// UpdateUserById mocks base method.
+func (m *MockRepository) UpdateUserById(ctx echo.Context, user model.User) (model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserById", ctx, user)
+	ret0, _ := ret[0].(model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateUserById indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) UpdateUserById(ctx echo.Context, user model.User) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserById", reflect.TypeOf((*MockRepository)(nil).UpdateUserById), ctx, user)
+}
+
+// GetUserContacts mocks base method.
+func (m *MockRepository) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserContacts", ctx, userID)
+	ret0, _ := ret[0].([]model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserContacts indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) GetUserContacts(ctx echo.Context, userID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserContacts", reflect.TypeOf((*MockRepository)(nil).GetUserContacts), ctx, userID)
+}
+
+// CheckUserIsContact mocks base method.
+func (m *MockRepository) CheckUserIsContact(ctx echo.Context, contact model.UserContact) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckUserIsContact", ctx, contact)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckUserIsContact indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) CheckUserIsContact(ctx echo.Context, contact model.UserContact) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckUserIsContact", reflect.TypeOf((*MockRepository)(nil).CheckUserIsContact), ctx, contact)
+}

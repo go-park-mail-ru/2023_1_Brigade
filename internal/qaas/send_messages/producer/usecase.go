@@ -1,7 +1,6 @@
 package producer
 
 import (
-	"fmt"
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
 	"os"
@@ -10,6 +9,7 @@ import (
 
 type Usecase struct {
 	producer sarama.AsyncProducer
+	closed   bool
 }
 
 func NewProducer(brokerList []string) (Usecase, error) {
@@ -41,12 +41,12 @@ func (u *Usecase) ProduceMessage(message []byte) error {
 			select {
 			case err := <-u.producer.Errors():
 				log.Error(err)
-				u.producer.Input() <- &sarama.ProducerMessage{
-					Topic: "message",
-					Value: sarama.ByteEncoder(message),
-				}
+				u.producer.Input() <- msg
 			case <-signals:
-				u.producer.AsyncClose()
+				if !u.closed {
+					u.closed = true
+					u.producer.AsyncClose()
+				}
 				log.Fatal()
 			}
 		}
@@ -54,6 +54,6 @@ func (u *Usecase) ProduceMessage(message []byte) error {
 
 	u.producer.Input() <- msg
 	success := <-u.producer.Successes()
-	fmt.Printf("Sent message %s to partition %d\n", success.Value, success.Partition)
+	log.Printf("Sent message %s to partition %d\n", success.Value, success.Partition)
 	return nil
 }

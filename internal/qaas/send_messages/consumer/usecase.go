@@ -2,7 +2,6 @@ package consumer
 
 import (
 	"context"
-	"fmt"
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
 	"os"
@@ -29,7 +28,7 @@ func (h *messageHandler) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (h *messageHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for msg := range claim.Messages() {
-		fmt.Printf("Message claimed: value = %s, topic = %s, partition = %d, offset = %d\n",
+		log.Printf("Message claimed: value = %s, topic = %s, partition = %d, offset = %d\n",
 			string(msg.Value), msg.Topic, msg.Partition, msg.Offset)
 		session.MarkMessage(msg, "")
 		h.messagesChan <- msg.Value
@@ -46,7 +45,7 @@ func NewConsumer(brokerList []string, groupID string) (Usecase, error) {
 
 	consumer, err := sarama.NewConsumerGroup(brokerList, groupID, config)
 	if err != nil {
-		log.Error("Failed to create consumer group: ", err)
+		log.Info("Failed to create consumer group: ", err)
 		return Usecase{consumer: consumer, messagesChan: messagesChan}, err
 	}
 
@@ -67,25 +66,26 @@ func (u *Usecase) StartConsumeMessages() {
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
-		for err := range u.consumer.Errors() {
-			log.Println(err)
+		select {
+		case <-signals:
+			u.consumer.Close()
+			log.Fatal()
 		}
 	}()
 
 	go func() {
 		for {
-			go func() {
-				err := u.consumer.Consume(ctx, topic, &handler)
-				if err != nil {
-					log.Error(err)
-				}
-			}()
+			for err := range u.consumer.Errors() {
+				log.Error(err)
+			}
+		}
+	}()
 
-			select {
-			case <-signals:
-				u.consumer.Close()
-				log.Fatal()
-				return
+	go func() {
+		for {
+			err := u.consumer.Consume(ctx, topic, &handler)
+			if err != nil {
+				log.Error(err)
 			}
 		}
 	}()

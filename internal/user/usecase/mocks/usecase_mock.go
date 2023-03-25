@@ -48,3 +48,62 @@ func (mr *MockUsecaseMockRecorder) GetUserById(ctx echo.Context, userID uint64) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserById", reflect.TypeOf((*MockUsecase)(nil).GetUserById), ctx, userID)
 }
+
+// DeleteUserById mocks base method.
+func (m *MockUsecase) DeleteUserById(ctx echo.Context, userID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUserById", ctx, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddUserContact indicates an expected call of Auth.
+func (mr *MockUsecaseMockRecorder) DeleteUserById(ctx echo.Context, userID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserById", reflect.TypeOf((*MockUsecase)(nil).DeleteUserById), ctx, userID)
+}
+
+// AddUserContact mocks base method.
+func (m *MockUsecase) AddUserContact(ctx echo.Context, userID uint64, contactID uint64) (model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUserContact", ctx, userID, contactID)
+	ret0, _ := ret[0].(model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddUserContact indicates an expected call of Auth.
+func (mr *MockUsecaseMockRecorder) AddUserContact(ctx echo.Context, userID uint64, contactID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserContact", reflect.TypeOf((*MockUsecase)(nil).AddUserContact), ctx, userID, contactID)
+}
+
+// GetUserContacts mocks base method.
+func (m *MockUsecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserContacts", ctx, userID)
+	ret0, _ := ret[0].([]model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserContacts indicates an expected call of Auth.
+func (mr *MockUsecaseMockRecorder) GetUserContacts(ctx echo.Context, userID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserContacts", reflect.TypeOf((*MockUsecase)(nil).GetUserContacts), ctx, userID)
+}
+
+// PutUserById mocks base method.
+func (m *MockUsecase) PutUserById(ctx echo.Context, user model.UpdateUser, userID uint64) (model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PutUserById", ctx, user, userID)
+	ret0, _ := ret[0].(model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// PutUserById indicates an expected call of Auth.
+func (mr *MockUsecaseMockRecorder) PutUserById(ctx echo.Context, user model.UpdateUser, userID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PutUserById", reflect.TypeOf((*MockUsecase)(nil).PutUserById), ctx, user, userID)
+}

@@ -47,22 +47,31 @@ func (u *usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) err
 		return err
 	}
 
-	message := model.Message{
-		Id:       0,
-		Body:     webSocketMessage.Body,
-		AuthorId: webSocketMessage.AuthorID,
-		ChatId:   webSocketMessage.ChatID,
-		IsRead:   false,
-	}
-	message, err = u.repo.InsertMessageInDB(message)
-	if err != nil {
-		return err
-	}
+	go func() {
+		message := model.Message{
+			Id:       0,
+			Body:     webSocketMessage.Body,
+			AuthorId: webSocketMessage.AuthorID,
+			ChatId:   webSocketMessage.ChatID,
+			IsRead:   false,
+		}
 
-	for _, member := range chat.Members {
+		_, err = u.repo.InsertMessageInDB(message)
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	for _, member := range chat {
+		if member.MemberId == webSocketMessage.AuthorID {
+			continue
+		}
+
 		producerMessage := model.ProducerMessage{
-			Message:    message,
-			ReceiverID: member.Id,
+			Body:       webSocketMessage.Body,
+			AuthorId:   webSocketMessage.AuthorID,
+			ChatID:     webSocketMessage.ChatID,
+			ReceiverID: member.MemberId,
 		}
 		jsonProducerMessage, err := json.Marshal(producerMessage)
 		if err != nil {
@@ -87,11 +96,17 @@ func (u *usecase) ReceiveMessage(ctx echo.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	err = u.repo.InsertMessageReceiveInDB(message)
-	if err != nil {
-		return nil, err
-	}
+	go func() {
+		err = u.repo.InsertMessageReceiveInDB(message)
+		if err != nil {
+			log.Error(err)
+		}
 
-	err = u.repo.MarkMessageReading(message.Message.Id)
-	return jsonMessage, err
+		//err = u.repo.MarkMessageReading(message.)
+		//if err != nil {
+		//	log.Error(err)
+		//}
+	}()
+
+	return jsonMessage, nil
 }

@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/auth"
@@ -38,8 +39,9 @@ func (u *chatHandler) GetChatHandler(ctx echo.Context) error {
 
 func (u *chatHandler) CreateChatHandler(ctx echo.Context) error {
 	var chat model.CreateChat
-	err := ctx.Bind(&chat)
+	body := ctx.Get("body").([]byte)
 
+	err := json.Unmarshal(body, &chat)
 	if err != nil {
 		return err
 	}

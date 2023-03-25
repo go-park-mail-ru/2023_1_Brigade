@@ -55,11 +55,7 @@ func (u *usecase) Signup(ctx echo.Context, user model.User) (model.User, error) 
 	}
 
 	userDB, err := u.authRepo.CreateUser(ctx, user)
-	if err != nil {
-		return userDB, err
-	}
-
-	return userDB, nil
+	return userDB, err
 }
 
 func (u *usecase) Login(ctx echo.Context, user model.User) (model.User, error) {

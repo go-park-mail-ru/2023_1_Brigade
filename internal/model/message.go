@@ -1,9 +1,23 @@
 package model
 
 type Message struct {
-	Id        string `json:"id"         db:"id"`
+	Id        uint64 `json:"id"         db:"id"`
 	Body      string `json:"body"       db:"body"`
-	AuthorID  string `json:"author_id"  db:"author_id"`
+	AuthorId  uint64 `json:"author_id"  db:"author_id"`
+	ChatId    uint64 `json:"chat_id"    db:"chat_id"`
 	IsRead    bool   `json:"is_read"    db:"is_read"`
-	CreatedAt int64  `json:"created_at" db:"created_at"`
+	CreatedAt string `json:"created_at" db:"created_at"`
+}
+
+type WebSocketMessage struct {
+	Body     string `json:"body"      db:"body"`
+	AuthorID uint64 `json:"author_id" db:"author_id"`
+	ChatID   uint64 `json:"chat_id"   db:"chat_id"`
+}
+
+type ProducerMessage struct {
+	Body       string `json:"body"        db:"body"`
+	AuthorId   uint64 `json:"author_id"   db:"author_id"`
+	ChatID     uint64 `json:"chat_id"     db:"chat_id"`
+	ReceiverID uint64 `json:"receiver_id" db:"receiver_id"`
 }

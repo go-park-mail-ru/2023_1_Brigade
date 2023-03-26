@@ -3,11 +3,14 @@ package middleware
 import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
+	"github.com/microcosm-cc/bluemonday"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"math/rand"
-	"project/internal/auth"
+	authSession "project/internal/auth/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
+	"regexp"
 )
 
 type jsonError struct {
@@ -18,10 +21,35 @@ func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
+func XSSMidlleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		p := bluemonday.UGCPolicy()
+		body, err := ioutil.ReadAll(ctx.Request().Body)
+		if err != nil {
+			return err
+		}
+
+		if body != nil {
+			stringBody := string(body)
+			stringBody = p.Sanitize(stringBody)
+			re := regexp.MustCompile("&#34;")
+			stringBody = re.ReplaceAllString(stringBody, `"`)
+			re = regexp.MustCompile("&#39;")
+			stringBody = re.ReplaceAllString(stringBody, `'`)
+			ctx.Set("body", []byte(stringBody))
+		}
+
+		return next(ctx)
+	}
+}
+
 func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		requestId := rand.Int63()
 		log.Info("Incoming request: ", ctx.Request().URL, ", ip: ", ctx.RealIP(), ", method: ", ctx.Request().Method, ", request_id: ", requestId)
+
+		//curl -X 'POST' 'http://localhost:8081/api/v1/signup/' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "username": "<a onblur="alert(secret)" href="http://www.google.com">Google</a>", "email": "danssssddsila22om", "name": "string", "password": "tests", "status":"i am star" }'
+
 		if err := next(ctx); err != nil {
 			statusCode := httpUtils.StatusCode(err)
 			log.Error("HTTP code: ", statusCode, ", Error: ", err, ", request_id: ", requestId)
@@ -37,7 +65,7 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func AuthMiddleware(authUsecase auth.Usecase) echo.MiddlewareFunc {
+func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			signupUrl := "/api/v1/signup/"
@@ -55,7 +83,7 @@ func AuthMiddleware(authUsecase auth.Usecase) echo.MiddlewareFunc {
 				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonError{Err: myErrors.ErrCookieNotFound})
 			}
 
-			authSession, err := authUsecase.GetSessionByCookie(ctx, session.Value)
+			authSession, err := authSessionUsecase.GetSessionByCookie(ctx, session.Value)
 			if err != nil {
 				return ctx.JSON(httpUtils.StatusCode(err), jsonError{Err: err})
 			}

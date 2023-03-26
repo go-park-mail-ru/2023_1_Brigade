@@ -1,9 +1,12 @@
 package http
 
 import (
+	"encoding/json"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
-	"project/internal/auth"
+	authSession "project/internal/auth/session"
+	authUser "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
@@ -11,24 +14,26 @@ import (
 )
 
 type authHandler struct {
-	authUsecase auth.Usecase
-	userUsecase user.Usecase
+	authUserUsecase    authUser.Usecase
+	authSessionUsecase authSession.Usecase
+	userUsecase        user.Usecase
 }
 
 func (u *authHandler) SignupHandler(ctx echo.Context) error {
 	var user model.User
-	err := ctx.Bind(&user)
+	body := ctx.Get("body").([]byte)
 
+	err := json.Unmarshal(body, &user)
 	if err != nil {
 		return err
 	}
 
-	user, err = u.authUsecase.Signup(ctx, user)
+	user, err = u.authUserUsecase.Signup(ctx, user)
 	if err != nil {
 		return err
 	}
 
-	session, err := u.authUsecase.CreateSessionById(ctx, user.Id)
+	session, err := u.authSessionUsecase.CreateSessionById(ctx, user.Id)
 	if err != nil {
 		return err
 	}
@@ -38,22 +43,25 @@ func (u *authHandler) SignupHandler(ctx echo.Context) error {
 }
 
 func (u *authHandler) LoginHandler(ctx echo.Context) error {
-	user := model.User{}
-	err := ctx.Bind(&user)
+	var user model.User
+	body := ctx.Get("body").([]byte)
 
+	err := json.Unmarshal(body, &user)
 	if err != nil {
 		return err
 	}
 
-	user, err = u.authUsecase.Login(ctx, user)
+	user, err = u.authUserUsecase.Login(ctx, user)
 	if err != nil {
 		return err
 	}
 
-	session, err := u.authUsecase.CreateSessionById(ctx, user.Id)
+	session, err := u.authSessionUsecase.CreateSessionById(ctx, user.Id)
 	if err != nil {
 		return err
 	}
+
+	log.Warn("session created : ", session)
 
 	httpUtils.SetCookie(ctx, session)
 	return ctx.JSON(http.StatusOK, user)
@@ -65,10 +73,12 @@ func (u *authHandler) AuthHandler(ctx echo.Context) error {
 		return myErrors.ErrCookieNotFound
 	}
 
-	authSession, err := u.authUsecase.GetSessionByCookie(ctx, session.Value)
+	authSession, err := u.authSessionUsecase.GetSessionByCookie(ctx, session.Value)
 	if err != nil {
 		return err
 	}
+
+	log.Warn("session getted : ", session)
 
 	user, err := u.userUsecase.GetUserById(ctx, authSession.UserId)
 	if err != nil {
@@ -85,7 +95,7 @@ func (u *authHandler) LogoutHandler(ctx echo.Context) error {
 		return myErrors.ErrCookieNotFound
 	}
 
-	err = u.authUsecase.DeleteSessionByCookie(ctx, session.Value)
+	err = u.authSessionUsecase.DeleteSessionByCookie(ctx, session.Value)
 	if err != nil {
 		return err
 	}
@@ -94,8 +104,8 @@ func (u *authHandler) LogoutHandler(ctx echo.Context) error {
 	return ctx.NoContent(http.StatusNoContent)
 }
 
-func NewAuthHandler(e *echo.Echo, authUsecase auth.Usecase, userUsecase user.Usecase) authHandler {
-	handler := authHandler{authUsecase: authUsecase, userUsecase: userUsecase}
+func NewAuthHandler(e *echo.Echo, authUserUsecase authUser.Usecase, authSessionUsecase authSession.Usecase, userUsecase user.Usecase) authHandler {
+	handler := authHandler{authUserUsecase: authUserUsecase, authSessionUsecase: authSessionUsecase, userUsecase: userUsecase}
 	signupUrl := "/signup/"
 	loginUrl := "/login/"
 	logoutUrl := "/logout/"

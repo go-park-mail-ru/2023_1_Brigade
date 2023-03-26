@@ -7,13 +7,15 @@ import (
 var (
 	ErrInvalidUsername = errors.New("Invalid username")
 	ErrInvalidEmail    = errors.New("Invalid email")
-	ErrInvalidName     = errors.New("Invalid name")
+	//ErrInvalidName     = errors.New("Invalid name")
 	ErrInvalidPassword = errors.New("Invalid password")
 
+	ErrUserIsAlreadyContact       = errors.New("The contact is already friend")
 	ErrUserIsAlreadyCreated       = errors.New("The user is already created")
 	ErrSessionIsAlreadyCreated    = errors.New("The session is already created")
 	ErrEmailIsAlreadyRegistred    = errors.New("The email is already registered")
 	ErrUsernameIsAlreadyRegistred = errors.New("The username is already registered")
+	ErrUserIsAlreadyInChat        = errors.New("User is already in chat")
 
 	ErrCookieNotFound = errors.New("Cookie not found")
 

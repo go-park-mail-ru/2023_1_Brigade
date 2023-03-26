@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"math/rand"
-	"project/internal/auth"
+	authSession "project/internal/auth/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	"regexp"
@@ -65,7 +65,7 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func AuthMiddleware(authUsecase auth.Usecase) echo.MiddlewareFunc {
+func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			signupUrl := "/api/v1/signup/"
@@ -83,7 +83,7 @@ func AuthMiddleware(authUsecase auth.Usecase) echo.MiddlewareFunc {
 				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonError{Err: myErrors.ErrCookieNotFound})
 			}
 
-			authSession, err := authUsecase.GetSessionByCookie(ctx, session.Value)
+			authSession, err := authSessionUsecase.GetSessionByCookie(ctx, session.Value)
 			if err != nil {
 				return ctx.JSON(httpUtils.StatusCode(err), jsonError{Err: err})
 			}

@@ -12,5 +12,6 @@ type Repository interface {
 	AddUserInContact(ctx echo.Context, contact model.UserContact) error
 	UpdateUserById(ctx echo.Context, user model.User) (model.User, error)
 	GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error)
-	CheckUserIsContact(ctx echo.Context, contact model.UserContact) (bool, error)
+	CheckUserIsContact(ctx echo.Context, contact model.UserContact) error
+	CheckExistUserById(ctx echo.Context, userID uint64) error
 }

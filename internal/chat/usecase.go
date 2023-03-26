@@ -9,5 +9,6 @@ type Usecase interface {
 	GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error)
 	CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error)
 	DeleteChatById(ctx echo.Context, chatID uint64) error
-	CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) bool
+	AddUserInChat(ctx echo.Context, chatID uint64, memberID uint64) error
+	CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error
 }

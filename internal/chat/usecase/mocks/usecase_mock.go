@@ -79,10 +79,10 @@ func (mr *MockUsecaseMockRecorder) DeleteChatById(ctx echo.Context, chatID uint6
 }
 
 // CheckExistUserInChat mocks base method.
-func (m *MockUsecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) bool {
+func (m *MockUsecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CheckExistUserInChat", ctx, chat, userID)
-	ret0, _ := ret[0].(bool)
+	ret0, _ := ret[0].(error)
 	return ret0
 }
 
@@ -90,4 +90,18 @@ func (m *MockUsecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, us
 func (mr *MockUsecaseMockRecorder) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckExistUserInChat", reflect.TypeOf((*MockUsecase)(nil).CheckExistUserInChat), ctx, chat, userID)
+}
+
+// AddUserInChat mocks base method.
+func (m *MockUsecase) AddUserInChat(ctx echo.Context, chatID uint64, memberID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUserInChat", ctx, chatID, memberID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddUserInChat indicates an expected call of Auth.
+func (mr *MockUsecaseMockRecorder) AddUserInChat(ctx echo.Context, chatID uint64, memberID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserInChat", reflect.TypeOf((*MockUsecase)(nil).AddUserInChat), ctx, chatID, memberID)
 }

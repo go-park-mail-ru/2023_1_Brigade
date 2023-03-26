@@ -15,6 +15,7 @@ var (
 	ErrSessionIsAlreadyCreated    = errors.New("The session is already created")
 	ErrEmailIsAlreadyRegistred    = errors.New("The email is already registered")
 	ErrUsernameIsAlreadyRegistred = errors.New("The username is already registered")
+	ErrUserIsAlreadyInChat        = errors.New("User is already in chat")
 
 	ErrCookieNotFound = errors.New("Cookie not found")
 

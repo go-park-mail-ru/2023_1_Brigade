@@ -4,7 +4,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
-	authMock "project/internal/auth/repository/mocks"
+	authUserMock "project/internal/auth/user/repository/mocks"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	userMock "project/internal/user/repository/mocks"
@@ -57,7 +57,7 @@ func Test_GetUserById(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	authRepository := authMock.NewMockRepository(ctl)
+	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	usecase := NewUserUsecase(userRepository, authRepository)
 	var ctx echo.Context

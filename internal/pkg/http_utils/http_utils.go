@@ -61,6 +61,8 @@ func StatusCode(err error) int {
 		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrSessionIsAlreadyCreated):
 		return http.StatusConflict
+	case errors.Is(err, myErrors.ErrUserIsAlreadyInChat):
+		return http.StatusConflict
 	default:
 		return http.StatusInternalServerError
 	}

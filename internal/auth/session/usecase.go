@@ -1,4 +1,4 @@
-package auth
+package session
 
 import (
 	"github.com/labstack/echo/v4"
@@ -6,9 +6,6 @@ import (
 )
 
 type Usecase interface {
-	Signup(ctx echo.Context, user model.User) (model.User, error)
-	Login(ctx echo.Context, user model.User) (model.User, error)
-
 	GetSessionByCookie(ctx echo.Context, cookie string) (model.Session, error)
 	CreateSessionById(ctx echo.Context, userID uint64) (model.Session, error)
 	DeleteSessionByCookie(ctx echo.Context, cookie string) error

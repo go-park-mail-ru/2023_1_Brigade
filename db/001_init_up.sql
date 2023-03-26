@@ -6,10 +6,10 @@ CREATE TABLE IF NOT EXISTS profile (
     password VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS session (
-    profile_id INTEGER PRIMARY KEY,
-    cookie  VARCHAR(255)
-);
+-- CREATE TABLE IF NOT EXISTS session (
+--     profile_id INTEGER PRIMARY KEY,
+--     cookie  VARCHAR(255)
+-- );
 
 CREATE TABLE IF NOT EXISTS chat (
     id    SERIAL UNIQUE PRIMARY KEY,

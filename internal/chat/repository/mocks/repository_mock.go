@@ -77,3 +77,19 @@ func (mr *MockRepositoryMockRecorder) DeleteChatById(ctx echo.Context, chatID ui
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChatById", reflect.TypeOf((*MockRepository)(nil).DeleteChatById), ctx, chatID)
 }
+
+// AddUserInChatDB mocks base method.
+func (m *MockRepository) AddUserInChatDB(ctx echo.Context, chatID uint64, memberID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUserInChatDB", chatID, memberID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddUserInChatDB indicates an expected call of Auth.
+func (mr *MockRepositoryMockRecorder) AddUserInChatDB(ctx echo.Context, chatID uint64, memberID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserInChatDB", reflect.TypeOf((*MockRepository)(nil).AddUserInChatDB), ctx, chatID, memberID)
+}
+
+//AddUserInChatDB(ctx echo.Context, chatID uint64, memberID uint64) error

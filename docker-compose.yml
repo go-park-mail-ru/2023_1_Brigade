@@ -24,6 +24,17 @@ services:
     volumes:
       - ./db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
 
+  rdb:
+    image: redis
+    ports:
+      - "63791:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
+    driver: local
+
 networks:
   db-network:
     name: "db-network"

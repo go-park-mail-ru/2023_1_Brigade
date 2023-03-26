@@ -9,7 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	authMock "project/internal/auth/usecase/mocks"
+	authSessionMock "project/internal/auth/session/usecase/mocks"
+	authUserMock "project/internal/auth/user/usecase/mocks"
 	myMiddleware "project/internal/middleware"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -40,16 +41,17 @@ func TestHandlers_Signup_Created(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Signup(ctx, user).Return(user, nil).Times(1)
-	authUsecase.EXPECT().CreateSessionById(ctx, user.Id).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, nil).Times(1)
+	authSessionUsecase.EXPECT().CreateSessionById(ctx, user.Id).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err = handler.SignupHandler(ctx)
@@ -75,15 +77,16 @@ func TestHandlers_Signup_EmailRegistered(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrEmailIsAlreadyRegistred).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrEmailIsAlreadyRegistred).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
@@ -108,15 +111,16 @@ func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrUsernameIsAlreadyRegistred).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrUsernameIsAlreadyRegistred).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
@@ -141,15 +145,16 @@ func TestHandlers_Signup_InvalidEmail(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidEmail).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidEmail).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
@@ -174,15 +179,16 @@ func TestHandlers_Signup_InvalidUsername(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidUsername).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidUsername).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
@@ -207,15 +213,16 @@ func TestHandlers_Signup_InvalidPassword(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidPassword).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidPassword).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
@@ -238,9 +245,10 @@ func TestHandlers_Signup_InternalError(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 
 	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
@@ -264,16 +272,17 @@ func TestHandlers_Login_OK(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Login(ctx, user).Return(user, nil).Times(1)
-	authUsecase.EXPECT().CreateSessionById(ctx, user.Id).Return(model.Session{}, nil).Times(1)
+	authUserUsecase.EXPECT().Login(ctx, user).Return(user, nil).Times(1)
+	authSessionUsecase.EXPECT().CreateSessionById(ctx, user.Id).Return(model.Session{}, nil).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err = handler.LoginHandler(ctx)
@@ -298,15 +307,16 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrUserNotFound).Times(1)
+	authUserUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrUserNotFound).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.LoginHandler(ctx)
@@ -330,15 +340,16 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	user := model.User{}
 
 	err := json.Unmarshal(test.body, &user)
 	require.NoError(t, err)
 
-	authUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrIncorrectPassword).Times(1)
+	authUserUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrIncorrectPassword).Times(1)
 
 	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.LoginHandler(ctx)
@@ -361,9 +372,10 @@ func TestHandlers_Login_InternalError(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 
 	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.LoginHandler(ctx)
@@ -387,12 +399,13 @@ func TestHandlers_Auth_UserOK(t *testing.T) {
 	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
+	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
 	userUsecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, nil).Times(1)
 
 	err := handler.AuthHandler(ctx)
@@ -415,12 +428,13 @@ func TestHandlers_Auth_SessionOK(t *testing.T) {
 	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
+	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
 	userUsecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
 
 	err := handler.AuthHandler(ctx)
@@ -442,9 +456,10 @@ func TestHandlers_Auth_CookieNotExist(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 
 	err := handler.AuthHandler(ctx)
 
@@ -466,12 +481,13 @@ func TestHandlers_Auth_SessionNotFound(t *testing.T) {
 	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{}, myErrors.ErrSessionNotFound).Times(1)
+	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{}, myErrors.ErrSessionNotFound).Times(1)
 
 	err := handler.AuthHandler(ctx)
 
@@ -493,12 +509,13 @@ func TestHandlers_Logout_Delete(t *testing.T) {
 	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authUsecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Times(1)
+	authSessionUsecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Times(1)
 
 	err := handler.LogoutHandler(ctx)
 
@@ -519,9 +536,10 @@ func TestHandlers_Logout_CookieNotExist(t *testing.T) {
 	w := httptest.NewRecorder()
 	ctx := e.NewContext(r, w)
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 
 	err := handler.LogoutHandler(ctx)
 
@@ -543,12 +561,13 @@ func TestHandlers_Logout_SessionNotFound(t *testing.T) {
 	ctx := e.NewContext(r, w)
 	cookie := uuid.New().String()
 
-	authUsecase := authMock.NewMockUsecase(ctl)
+	authUserUsecase := authUserMock.NewMockUsecase(ctl)
+	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
-	handler := NewAuthHandler(e, authUsecase, userUsecase)
+	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authUsecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Return(myErrors.ErrSessionNotFound).Times(1)
+	authSessionUsecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Return(myErrors.ErrSessionNotFound).Times(1)
 
 	err := handler.LogoutHandler(ctx)
 

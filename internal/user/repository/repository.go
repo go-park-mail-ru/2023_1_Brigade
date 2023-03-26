@@ -73,23 +73,36 @@ func (r *repository) UpdateUserById(ctx echo.Context, user model.User) (model.Us
 	return user, nil
 }
 
-func (r *repository) CheckUserIsContact(ctx echo.Context, contact model.UserContact) (bool, error) {
+func (r *repository) CheckUserIsContact(ctx echo.Context, contact model.UserContact) error {
 	rows, err := r.db.NamedQuery("SELECT * FROM user_contacts WHERE id_user=:id_user, id_contact:=id_contact", contact)
 
 	if err != nil {
-		return false, err
+		return err
 	}
 	if !rows.Next() {
-		return false, myErrors.ErrUserNotFound
+		return myErrors.ErrUserNotFound
 	}
 
-	return true, nil
+	return nil
 }
 
 func (r *repository) AddUserInContact(ctx echo.Context, contact model.UserContact) error {
 	_, err := r.db.NamedQuery("INSERT INTO user_contacts (id_user, id_contact) VALUES (:id_user, :id_contact)", contact)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (r *repository) CheckExistUserById(ctx echo.Context, userID uint64) error {
+	rows, err := r.db.Query("SELECT * FROM profile WHERE id=$1", userID)
+
+	if err != nil {
+		return err
+	}
+	if !rows.Next() {
+		return myErrors.ErrUserNotFound
 	}
 
 	return nil

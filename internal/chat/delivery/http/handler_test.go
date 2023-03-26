@@ -8,10 +8,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	authMock "project/internal/auth/usecase/mocks"
 	chatMock "project/internal/chat/usecase/mocks"
 	myMiddleware "project/internal/middleware"
 	"project/internal/model"
+	userMock "project/internal/user/usecase/mocks"
 	"testing"
 )
 
@@ -39,8 +39,8 @@ func TestHandlers_CreateChat_OK(t *testing.T) {
 	var chat model.CreateChat
 	var dbChat model.Chat
 	chatUsecase := chatMock.NewMockUsecase(ctl)
-	authUsecase := authMock.NewMockUsecase(ctl)
-	handler := NewChatHandler(e, chatUsecase, authUsecase)
+	userUsecase := userMock.NewMockUsecase(ctl)
+	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
 	err := json.Unmarshal(test.body, &chat)
 	require.NoError(t, err)
@@ -77,11 +77,11 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 
 	var chat model.Chat
 	chatUsecase := chatMock.NewMockUsecase(ctl)
-	authUsecase := authMock.NewMockUsecase(ctl)
-	handler := NewChatHandler(e, chatUsecase, authUsecase)
+	userUsecase := userMock.NewMockUsecase(ctl)
+	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
 	chatUsecase.EXPECT().GetChatById(ctx, 1).Return(chat, nil).Times(1)
-	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, 0).Return(true).Times(1)
+	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, 0).Return(nil).Times(1)
 
 	err := handler.GetChatHandler(ctx)
 
@@ -109,11 +109,11 @@ func TestHandlers_DeleteChat_OK(t *testing.T) {
 
 	var chat model.Chat
 	chatUsecase := chatMock.NewMockUsecase(ctl)
-	authUsecase := authMock.NewMockUsecase(ctl)
-	handler := NewChatHandler(e, chatUsecase, authUsecase)
+	userUsecase := userMock.NewMockUsecase(ctl)
+	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
 	chatUsecase.EXPECT().GetChatById(ctx, 1).Return(chat, nil).Times(1)
-	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, 0).Return(true).Times(1)
+	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, 0).Return(nil).Times(1)
 	chatUsecase.EXPECT().DeleteChatById(ctx, 1).Return(nil).Times(1)
 
 	err := handler.DeleteChatHandler(ctx)

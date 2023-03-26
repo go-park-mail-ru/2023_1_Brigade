@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"project/internal/chat"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
 )
 
@@ -16,17 +17,15 @@ func NewChatUsecase(chatRepo chat.Repository, userRepo user.Repository) chat.Use
 	return &usecase{chatRepo: chatRepo, userRepo: userRepo}
 }
 
-func (u *usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) bool {
+func (u *usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
 	members := chat.Members
-	userInChat := false
 	for _, member := range members {
 		if member.Id == userID {
-			userInChat = true
-			break
+			return myErrors.ErrUserIsAlreadyInChat
 		}
 	}
 
-	return userInChat
+	return nil
 }
 
 func (u *usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
@@ -60,5 +59,10 @@ func (u *usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Cha
 
 func (u *usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
 	err := u.chatRepo.DeleteChatById(ctx, chatID)
+	return err
+}
+
+func (u *usecase) AddUserInChat(ctx echo.Context, chatID uint64, userID uint64) error {
+	err := u.chatRepo.AddUserInChatDB(ctx, chatID, userID)
 	return err
 }

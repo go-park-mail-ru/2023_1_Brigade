@@ -1,21 +1,19 @@
 package usecase
 
 import (
-	"errors"
 	"github.com/labstack/echo/v4"
-	"project/internal/auth"
+	authUser "project/internal/auth/user"
 	"project/internal/model"
-	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/security"
 	"project/internal/user"
 )
 
 type usecase struct {
 	userRepo user.Repository
-	authRepo auth.Repository
+	authRepo authUser.Repository
 }
 
-func NewUserUsecase(userRepo user.Repository, authRepo auth.Repository) user.Usecase {
+func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user.Usecase {
 	return &usecase{userRepo: userRepo, authRepo: authRepo}
 }
 
@@ -44,10 +42,7 @@ func (u *usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, use
 		return oldUser, err
 	}
 
-	isCorrectPassword, err := u.authRepo.CheckCorrectPassword(ctx, oldUser)
-	if !isCorrectPassword {
-		return oldUser, myErrors.ErrIncorrectPassword
-	}
+	err = u.authRepo.CheckCorrectPassword(ctx, oldUser)
 	if err != nil {
 		return oldUser, err
 	}
@@ -66,11 +61,8 @@ func (u *usecase) AddUserContact(ctx echo.Context, userID uint64, contactID uint
 		IdUser:    userID,
 		IdContact: contactID,
 	}
-	userIsContact, err := u.userRepo.CheckUserIsContact(ctx, userContact)
-	if userIsContact {
-		return model.User{}, myErrors.ErrUserIsAlreadyContact
-	}
-	if !errors.Is(err, myErrors.ErrUserNotFound) {
+	err := u.userRepo.CheckUserIsContact(ctx, userContact)
+	if err != nil {
 		return model.User{}, err
 	}
 
@@ -81,4 +73,9 @@ func (u *usecase) AddUserContact(ctx echo.Context, userID uint64, contactID uint
 
 	contact, err := u.userRepo.GetUserById(ctx, contactID)
 	return contact, err
+}
+
+func (u *usecase) CheckExistUserById(ctx echo.Context, userID uint64) error {
+	err := u.userRepo.CheckExistUserById(ctx, userID)
+	return err
 }

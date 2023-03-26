@@ -107,3 +107,18 @@ func (mr *MockUsecaseMockRecorder) PutUserById(ctx echo.Context, user model.Upda
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PutUserById", reflect.TypeOf((*MockUsecase)(nil).PutUserById), ctx, user, userID)
 }
+
+// CheckExistUserById mocks base method.
+func (m *MockUsecase) CheckExistUserById(ctx echo.Context, userID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckExistUserById", ctx, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CheckExistUserById indicates an expected call of Auth.
+func (mr *MockUsecaseMockRecorder) CheckExistUserById(ctx echo.Context, userID uint64) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckExistUserById", reflect.TypeOf((*MockUsecase)(nil).CheckExistUserById), ctx, userID)
+}
+

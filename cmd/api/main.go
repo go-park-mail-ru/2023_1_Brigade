@@ -22,6 +22,7 @@ import (
 	httpUser "project/internal/user/delivery/http"
 	repositoryUser "project/internal/user/repository"
 	usecaseUser "project/internal/user/usecase"
+	"project/internal/s3"
 )
 
 func init() {
@@ -56,7 +57,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	
+	imageStorage := s3.NewImageStorage(config.ImagesBucket)
 
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	authRepository := repositoryAuth.NewAuthMemoryRepository(db)

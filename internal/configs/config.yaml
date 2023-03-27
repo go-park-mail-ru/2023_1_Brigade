@@ -1,6 +1,7 @@
 db: "postgres"
 port: ":8081"
 connectionToDB: "user=brigade password=123 dbname=brigade host=db port=5432 sslmode=disable" #postgres host=db
+imagesBucket: "images"
 allowMethods:
   - "POST"
   - "GET"

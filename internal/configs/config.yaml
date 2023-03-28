@@ -1,15 +1,34 @@
-db: "postgres"
-port: ":8081"
-connectionToDB: "user=brigade password=123 dbname=brigade port=5432 sslmode=disable" #postgres host=db
-allowMethods:
-  - "POST"
-  - "GET"
-  - "DELETE"
-  - "OPTIONS"
-allowOrigins:
-  - "http://95.163.249.116"
-  - "http://localhost:63343"
-allowCredentials: true
-allowHeaders:
-  - "Content-Type"
-  - "Content-Length"
+Server:
+  port: ":8081"
+
+Postgres:
+  db: "postgres"
+  connectionToDB: "user=brigade password=123 dbname=brigade port=5432 sslmode=disable" #postgres host=db
+
+Cors:
+  allowMethods:
+    - "POST"
+    - "GET"
+    - "DELETE"
+    - "OPTIONS"
+  allowOrigins:
+    - "http://95.163.249.116"
+    - "http://localhost:63343"
+  allowHeaders:
+    - "Content-Type"
+    - "Content-Length"
+  allowCredentials: true
+
+Redis:
+  addr: "localhost:6379"
+
+Minio:
+  endpoint: "172.20.0.1:9000"
+  username: "minio"
+  password: "minio123"
+  token: ""
+
+Kafka:
+  brokerList:
+    - "kafka:9092"
+  groupID: "group-message"

@@ -37,7 +37,10 @@ func (r *repository) CreateChat(ctx echo.Context, chat model.Chat) (model.Chat, 
 		return chat, err
 	}
 	if rows.Next() {
-		rows.Scan(&chat.Id)
+		err = rows.Scan(&chat.Id)
+		if err != nil {
+			return model.Chat{}, err
+		}
 	}
 
 	return chat, nil

@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/microcosm-cc/bluemonday"
 	log "github.com/sirupsen/logrus"
-	"io/ioutil"
+	"io"
 	"math/rand"
 	authSession "project/internal/auth/session"
 	myErrors "project/internal/pkg/errors"
@@ -23,8 +23,13 @@ func (j jsonError) MarshalJSON() ([]byte, error) {
 
 func XSSMidlleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
+		contentType := ctx.Request().Header.Get("Content-Type")
+		if contentType == "multipart/form-data" {
+			return next(ctx)
+		}
+
 		p := bluemonday.UGCPolicy()
-		body, err := ioutil.ReadAll(ctx.Request().Body)
+		body, err := io.ReadAll(ctx.Request().Body)
 		if err != nil {
 			return err
 		}

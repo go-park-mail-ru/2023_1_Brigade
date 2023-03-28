@@ -88,7 +88,7 @@ func TestHandlers_Signup_EmailRegistered(t *testing.T) {
 
 	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrEmailIsAlreadyRegistred).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err
@@ -122,7 +122,7 @@ func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
 
 	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrUsernameIsAlreadyRegistred).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err
@@ -156,7 +156,7 @@ func TestHandlers_Signup_InvalidEmail(t *testing.T) {
 
 	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidEmail).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err
@@ -190,7 +190,7 @@ func TestHandlers_Signup_InvalidUsername(t *testing.T) {
 
 	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidUsername).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err
@@ -224,7 +224,7 @@ func TestHandlers_Signup_InvalidPassword(t *testing.T) {
 
 	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidPassword).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.SignupHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err
@@ -318,7 +318,7 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 
 	authUserUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrUserNotFound).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.LoginHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err
@@ -351,7 +351,7 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 
 	authUserUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrIncorrectPassword).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
+	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
 		err := handler.LoginHandler(ctx)
 		require.Equal(t, http_utils.StatusCode(err), test.status)
 		return err

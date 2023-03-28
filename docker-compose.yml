@@ -15,8 +15,6 @@ services:
       - redis-network
       - kafka-network
       - minio-network
-      #      - backend-network
-
 
   postgres:
     image: postgres
@@ -88,9 +86,6 @@ services:
       - minio-network
 
 networks:
-#  backend-network:
-#    name: "backend-network"
-#    driver: bridge
   postgres-network:
     name: "postgres-network"
     driver: bridge

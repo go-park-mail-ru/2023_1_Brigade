@@ -5,6 +5,7 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -18,7 +19,12 @@ func TestPostgres_CheckExistUserByEmail_True(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	rowMain := sqlmock.NewRows([]string{"email"}).
 		AddRow(inputEmail)
@@ -44,7 +50,12 @@ func TestPostgres_CheckExistUserByEmail_False(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	rowMain := sqlmock.NewRows([]string{"email"})
 
@@ -69,7 +80,12 @@ func TestPostgres_CheckExistUserByUsername_True(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	rowMain := sqlmock.NewRows([]string{"username"}).
 		AddRow(username)
@@ -95,7 +111,12 @@ func TestPostgres_CheckExistUserByUsername_False(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	rowMain := sqlmock.NewRows([]string{"username"})
 
@@ -125,7 +146,12 @@ func TestPostgres_CheckCorrectPassword_True(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	rowMain := sqlmock.NewRows([]string{"email", "password"}).
 		AddRow(email, password)
@@ -156,7 +182,12 @@ func TestPostgres_CheckCorrectPassword_False(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	rowMain := sqlmock.NewRows([]string{"email", "password"})
 

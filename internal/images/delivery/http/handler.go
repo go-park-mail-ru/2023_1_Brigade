@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/images"
 	"project/internal/pkg/security"
@@ -28,7 +29,12 @@ func (h *imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		return err
 	}
 	filename := security.GenerateFilename(userID, header.Filename)
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	_, err = h.imagesUsecase.LoadImage(ctx, file, filename)
 	if err != nil {

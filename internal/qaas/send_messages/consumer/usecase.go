@@ -65,12 +65,12 @@ func (u *Usecase) StartConsumeMessages() {
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
-		//select {
-		//case <-signals:
 		<-signals
-		u.consumer.Close()
+		err := u.consumer.Close()
+		if err != nil {
+			log.Error(err)
+		}
 		log.Fatal()
-		//}
 	}()
 
 	go func() {

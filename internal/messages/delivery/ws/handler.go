@@ -32,7 +32,12 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	u.clients[u.tmp_counter+1] = ws
 	u.tmp_counter++
 
-	defer ws.Close()
+	defer func() {
+		err := ws.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 	//{ "body": "string", "author_id": 1, "chat_id": 0 }
 	// {"message":{"id":0,"body":"hello world!","author_id":0,"chat_id":0,"is_read":false},"receiver_id":0}
 
@@ -71,7 +76,10 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 				err = client.WriteMessage(websocket.BinaryMessage, msg)
 				if err != nil {
 					log.Error(err)
-					client.Close()
+					err = client.Close()
+					if err != nil {
+						log.Error(err)
+					}
 					delete(u.clients, producerMessage.ReceiverID)
 					return
 				}

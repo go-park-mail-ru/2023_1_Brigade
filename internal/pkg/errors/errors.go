@@ -25,6 +25,7 @@ var (
 	ErrChatNotFound      = errors.New("Chat not found")
 	ErrUserNotFound      = errors.New("User not found")
 	ErrIncorrectPassword = errors.New("Incorrect password")
+	ErrAvatarNotFound    = errors.New("Avatar not found")
 
 	ErrInternal = errors.New("Internal error")
 )

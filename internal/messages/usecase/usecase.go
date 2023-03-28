@@ -17,20 +17,22 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(messagesRepo messages.Repository) messages.Usecase {
-	brokerList := []string{"localhost:9092"}
+	brokerList := []string{"host.docker.internal:9092"} //localhost - локально
 	groupID := "group-message"
 
 	producer, err := producer.NewProducer(brokerList)
 	if err != nil {
-		log.Fatal("producer:  ", err)
+		log.Error(err)
+		//log.Fatal("producer:  ", err)
 	}
 
 	consumer, err := consumer.NewConsumer(brokerList, groupID)
 	if err != nil {
-		log.Fatal("consumer:  ", err)
+		//log.Fatal("consumer:  ", err)
+		log.Error(err)
 	}
 
-	consumer.StartConsumeMessages()
+	//consumer.StartConsumeMessages()
 
 	return &usecase{repo: messagesRepo, producer: producer, consumer: consumer}
 }

@@ -67,7 +67,10 @@ func (r *repository) UpdateUserById(ctx echo.Context, user model.User) (model.Us
 		return user, err
 	}
 	if rows.Next() {
-		rows.Scan(&user)
+		err = rows.Scan(&user)
+		if err != nil {
+			return model.User{}, err
+		}
 	}
 
 	return user, nil

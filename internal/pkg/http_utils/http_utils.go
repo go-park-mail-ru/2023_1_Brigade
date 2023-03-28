@@ -1,7 +1,6 @@
 package http_utils
 
 import (
-	"encoding/json"
 	"errors"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -10,14 +9,6 @@ import (
 	"strings"
 	"time"
 )
-
-type jsonError struct {
-	Err error
-}
-
-func (j jsonError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(j.Err.Error())
-}
 
 func ErrorConversion(err error) error {
 	words := strings.Split(err.Error(), " ")

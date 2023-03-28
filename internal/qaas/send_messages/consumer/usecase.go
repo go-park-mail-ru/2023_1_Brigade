@@ -14,8 +14,7 @@ type Usecase struct {
 }
 
 type messageHandler struct {
-	handleMessage func(context.Context, *sarama.ConsumerMessage)
-	messagesChan  chan []byte
+	messagesChan chan []byte
 }
 
 func (h *messageHandler) Setup(sarama.ConsumerGroupSession) error {
@@ -53,7 +52,7 @@ func NewConsumer(brokerList []string, groupID string) (Usecase, error) {
 }
 
 func (u *Usecase) ConsumeMessage() []byte {
-	msg, _ := <-u.messagesChan
+	msg := <-u.messagesChan
 	return msg
 }
 
@@ -66,11 +65,12 @@ func (u *Usecase) StartConsumeMessages() {
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
-		select {
-		case <-signals:
-			u.consumer.Close()
-			log.Fatal()
-		}
+		//select {
+		//case <-signals:
+		<-signals
+		u.consumer.Close()
+		log.Fatal()
+		//}
 	}()
 
 	go func() {

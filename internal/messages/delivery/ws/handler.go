@@ -78,8 +78,6 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			}
 		}()
 	}
-
-	return nil
 }
 
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {

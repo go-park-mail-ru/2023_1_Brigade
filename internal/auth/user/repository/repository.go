@@ -24,7 +24,10 @@ func (r *repository) CreateUser(ctx echo.Context, user model.User) (model.User, 
 		return user, err
 	}
 	if rows.Next() {
-		rows.Scan(&user.Id)
+		err = rows.Scan(&user.Id)
+		if err != nil {
+			return model.User{}, err
+		}
 	}
 
 	return user, nil

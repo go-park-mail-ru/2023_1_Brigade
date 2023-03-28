@@ -360,10 +360,10 @@ paths:
       responses:
         "201":
           description: Successfully add user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/User'
         "401":
           description: Cookie not found
           content:
@@ -594,8 +594,8 @@ paths:
       tags:
         - chats
       responses:
-        "200":
-          description: Successfully getting user
+        "201":
+          description: Successfully added user in chat
           content:
             application/json:
               schema:
@@ -622,6 +622,12 @@ paths:
                   - $ref: '#/components/schemas/ErrUserNotFound'
                   - $ref: '#/components/schemas/ErrChatNotFound'
                   - $ref: '#/components/schemas/ErrSessionNotFound'
+        "409":
+          description: The user does not have access to this chat
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrUserIsAlreadyInChat'
         "500":
           description: Internal error
           content:
@@ -674,6 +680,45 @@ paths:
                   - $ref: '#/components/schemas/ErrSessionNotFound'
                   - $ref: '#/components/schemas/ErrChatNotFound'
                   - $ref: '#/components/schemas/ErrMessageNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/images:
+    post:
+      tags:
+        - images
+      summary: Upload an avatar current user
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: The avatar successfully uploaded
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+                  - $ref: '#/components/schemas/ErrAvatarNotFound'
         "500":
           description: Internal error
           content:
@@ -868,6 +913,12 @@ components:
         error:
           example: 'The session is already registered'
           type: string
+    ErrUserIsAlreadyInChat:
+      type: object
+      properties:
+        error:
+          example: 'The user is already in chat'
+          type: string
     ErrUserEmailNotFound:
       type: object
       properties:
@@ -920,6 +971,12 @@ components:
       properties:
         error:
           example: 'Chat not found'
+          type: string
+    ErrAvatarNotFound:
+      type: object
+      properties:
+        error:
+          example: 'Avatar not found'
           type: string
     ErrInternal:
       type: object

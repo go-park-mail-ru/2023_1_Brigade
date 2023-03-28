@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
+	"project/internal/configs"
 	"project/internal/messages"
 	"project/internal/model"
 	"project/internal/qaas/send_messages/consumer"
@@ -16,20 +17,18 @@ type usecase struct {
 	consumer consumer.Usecase
 }
 
-func NewMessagesUsecase(messagesRepo messages.Repository) messages.Usecase {
-	brokerList := []string{"host.docker.internal:9092"} //localhost - локально
-	groupID := "group-message"
+func NewMessagesUsecase(messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
+	//brokerList := []string{"host.docker.internal:9092"} //localhost - локально
+	//groupID := "group-message"
 
-	producer, err := producer.NewProducer(brokerList)
+	producer, err := producer.NewProducer(config.BrokerList)
 	if err != nil {
-		log.Error(err)
-		//log.Fatal("producer:  ", err)
+		log.Fatal("producer:  ", err) // log.Fatal
 	}
 
-	consumer, err := consumer.NewConsumer(brokerList, groupID)
+	consumer, err := consumer.NewConsumer(config.BrokerList, config.GroupID)
 	if err != nil {
-		//log.Fatal("consumer:  ", err)
-		log.Error(err)
+		log.Fatal("consumer:  ", err)
 	}
 
 	//consumer.StartConsumeMessages()

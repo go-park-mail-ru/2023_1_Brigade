@@ -27,3 +27,8 @@ Minio:
   username: "minio"
   password: "minio123"
   token: ""
+
+Kafka:
+  brokerList:
+    - "kafka:9092"
+  groupID: "group-message"

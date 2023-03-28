@@ -50,6 +50,7 @@ func main() {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})
+	log.SetReportCaller(true)
 
 	defer func() {
 		if err := recover(); err != nil {
@@ -102,7 +103,7 @@ func main() {
 	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository)
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository, config.Kafka)
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
 	e := echo.New()
@@ -113,8 +114,8 @@ func main() {
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(myMiddleware.XSSMidlleware)
-	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	//e.Use(myMiddleware.XSSMidlleware)
+	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)

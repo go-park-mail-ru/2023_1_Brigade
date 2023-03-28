@@ -6,6 +6,7 @@ type Config struct {
 	Cors     Cors     `yaml:"Cors"`
 	Redis    Redis    `yaml:"Redis"`
 	Minio    Minio    `yaml:"Minio"`
+	Kafka    Kafka    `yaml:"Kafka"`
 }
 
 type Server struct {
@@ -33,4 +34,9 @@ type Minio struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Token    string `yaml:"token"`
+}
+
+type Kafka struct {
+	BrokerList []string `yaml:"brokerList"`
+	GroupID    string   `yaml:"groupID"`
 }

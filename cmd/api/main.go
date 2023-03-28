@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-redis/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -41,7 +40,8 @@ import (
 )
 
 func init() {
-	if err := godotenv.Load("../../.env"); err != nil {
+	envPath := "../../.env"
+	if err := godotenv.Load(envPath); err != nil {
 		log.Println("No .env file found")
 	}
 }
@@ -73,22 +73,21 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db, err := sqlx.Open(config.DB, config.ConnectionToDB) // ping
+	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB) // ping
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	redis := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: config.Redis.Addr,
 	})
 
-	endpoint := "172.20.0.1:9000"
-	minioClient, err := minio.New(endpoint, &minio.Options{
-		Creds: credentials.NewStaticV4("minio", "minio123", ""),
+	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
+		Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
 	})
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 
@@ -108,20 +107,20 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowMethods:     config.AllowMethods,
-		AllowOrigins:     config.AllowOrigins,
-		AllowCredentials: config.AllowCredentials,
-		AllowHeaders:     config.AllowHeaders,
+		AllowMethods:     config.Cors.AllowMethods,
+		AllowOrigins:     config.Cors.AllowOrigins,
+		AllowCredentials: config.Cors.AllowCredentials,
+		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
-	//e.Use(myMiddleware.XSSMidlleware)
-	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
-	//curl -X POST \ -H "Content-Type: multipart/form-data" \ -F "image=@/home/marcussss1/Downloads/1avatara_ru_3D001.jpg" \ http://localhost:8081/api/v1/images
+	e.Use(myMiddleware.XSSMidlleware)
+	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	httpChat.NewChatHandler(e, chatUsecase, userUsecase)
 	wsMessages.NewMessagesHandler(e, messagesUsecase)
 	httpImages.NewImagesHandler(e, imagesUsecase)
 
-	e.Logger.Fatal(e.Start(config.Port))
+	e.Logger.Fatal(e.Start(config.Server.Port))
 }

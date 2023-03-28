@@ -22,6 +22,12 @@ jobs:
       - name: Run go vet
         run: go vet ./...
 
+      - name: Install errcheck
+        run: go install github.com/kisielk/errcheck@latest
+
+      - name: Run errcheck
+        run: errcheck ./...
+
       - name: Install golangci-lint
         run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.1
 
@@ -33,15 +39,6 @@ jobs:
 
       - name: Run staticcheck
         run: staticcheck ./...
-
-      - name: Install errcheck
-        run: go install github.com/kisielk/errcheck@latest
-
-      - name: Run errcheck
-        run: errcheck ./...
-
-      - name: Run go vet
-        run: go vet ./...
 
   test:
     runs-on: ubuntu-latest

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/go-redis/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
 	"os"
 
@@ -89,7 +89,6 @@ func main() {
 
 	if err != nil {
 		log.Fatal(err)
-		return
 	}
 
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
@@ -114,6 +113,7 @@ func main() {
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
+	e.Use(middleware.CSRF())
 	//e.Use(myMiddleware.XSSMidlleware)
 	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 

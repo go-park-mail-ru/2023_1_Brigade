@@ -9,6 +9,7 @@ import (
 	"project/internal/model"
 	"project/internal/qaas/send_messages/consumer"
 	"project/internal/qaas/send_messages/producer"
+	"time"
 )
 
 type usecase struct {
@@ -21,14 +22,16 @@ func NewMessagesUsecase(messagesRepo messages.Repository, config configs.Kafka) 
 	//brokerList := []string{"host.docker.internal:9092"} //localhost - локально
 	//groupID := "group-message"
 
-	producer, err := producer.NewProducer(config.BrokerList)
-	if err != nil {
-		log.Fatal("producer:  ", err) // log.Fatal
-	}
+	time.Sleep(time.Second * 1) // не успевает инициализироваться kafka в docker
 
 	consumer, err := consumer.NewConsumer(config.BrokerList, config.GroupID)
 	if err != nil {
-		log.Fatal("consumer:  ", err)
+		log.Error("consumer:  ", err)
+	}
+
+	producer, err := producer.NewProducer(config.BrokerList)
+	if err != nil {
+		log.Error("producer:  ", err) // log.Fatal
 	}
 
 	//consumer.StartConsumeMessages()

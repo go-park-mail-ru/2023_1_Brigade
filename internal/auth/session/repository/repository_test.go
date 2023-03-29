@@ -1,150 +1,88 @@
 package repository
 
-//func TestAddValueToRedis(t *testing.T) {
-//	rdb, mock := redismock.NewClientMock()
-//
-//	// Ожидаем, что будет вызваны методы Set и Expire
-//	mock.ExpectSet("my-key", "my-value").ExpectExpire("my-key", 3600*time.Second)
-//
-//	// Вызываем функцию добавления значения в Redis
-//	err := addValueToRedis(rdb, "my-key", "my-value")
-//
-//	// Проверяем, что добавление значения прошло успешно
-//	assert.Nil(t, err)
-//	assert.NoError(t, mock.ExpectationsWereMet())
-//
-//	// Закрываем mock-клиент
-//	err = mock.Close()
-//	assert.Nil(t, err)
-//}
-//
-//func addValueToRedis(r *redis.Client, key string, value string) error {
-//	// Добавляем значение в Redis-хранилище
-//	err := r.Set(key, value, 3600*time.Second).Err()
-//	if err != nil {
-//		return err
-//	}
-//
-//	// Устанавливаем время жизни ключа
-//	err = r.Expire(key, 3600*time.Second).Err()
-//	if err != nil {
-//		return err
-//	}
-//
-//	return nil
-//}
+import (
+	"github.com/go-redis/redismock/v9"
+	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
+	"github.com/redis/go-redis/v9"
+	"github.com/stretchr/testify/require"
+	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
+	"testing"
+)
 
-//func TestPostgres_GetSessionByCookie_True(t *testing.T) {
-//	var ctx echo.Context
-//	cookie := uuid.New().String()
-//
-//	//db, mock, err := sqlmock.New()
-//	rdb, mock := redismock.NewNiceMock()
-//	mock.E("my-key", "my-value").ExpectExpire("my-key", 3600*time.Second)
-//	//require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	//defer rdb
-//
-//	rowMain := sqlmock.NewRows([]string{"cookie"}).
-//		AddRow(cookie)
-//
-//	mock.
-//		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM session WHERE cookie=$1`)).
-//		WithArgs(cookie).
-//		WillReturnRows(rowMain)
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewAuthSessionMemoryRepository(dbx)
-//
-//	_, err = repo.GetSessionByCookie(ctx, cookie)
-//	require.NoError(t, err)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//}
+func TestRedis_GetSession_OK(t *testing.T) {
+	var ctx echo.Context
+	userID := "1"
+	cookie := uuid.New().String()
+	expectedSession := model.Session{
+		UserId: 1,
+		Cookie: cookie,
+	}
 
-//
-//func TestPostgres_GetSessionByCookie_False(t *testing.T) {
-//	var ctx echo.Context
-//	cookie := uuid.New().String()
-//
-//	db, mock, err := sqlmock.New()
-//	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	defer db.Close()
-//
-//	rowMain := sqlmock.NewRows([]string{"cookie"})
-//
-//	mock.
-//		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM session WHERE cookie=$1`)).
-//		WithArgs(cookie).
-//		WillReturnRows(rowMain)
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewAuthMemoryRepository(dbx)
-//
-//	_, err = repo.GetSessionByCookie(ctx, cookie)
-//	require.Error(t, err, myErrors.ErrSessionNotFound)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//}
-//
-//func TestPostgres_CreateUser_True(t *testing.T) {
-//	var ctx echo.Context
-//	username := "marcussss"
-//	email := "marcussss@gmail.com"
-//	status := "my status"
-//	password := "baumanka"
-//	user := model.User{
-//		Username: username,
-//		Email:    email,
-//		Status:   status,
-//		Password: password,
-//	}
-//
-//	db, mock, err := sqlmock.New()
-//	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	defer db.Close()
-//
-//	rowMain := sqlmock.NewRows([]string{"username", "email", "status", "password"}).
-//		AddRow(username, email, status, password)
-//
-//	mock.
-//		ExpectQuery(regexp.QuoteMeta(`INSERT INTO profile (username, email, status, password)`)).
-//		WithArgs(username, email, status, password).
-//		WillReturnRows(rowMain)
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewAuthMemoryRepository(dbx)
-//
-//	_, err = repo.CreateUser(ctx, user)
-//	require.NoError(t, err)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//}
-//
-//func TestPostgres_DeleteSession_True(t *testing.T) {
-//	var ctx echo.Context
-//	cookie := uuid.New().String()
-//
-//	db, mock, err := sqlmock.New()
-//	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	defer db.Close()
-//
-//	rowMain := sqlmock.NewRows([]string{"cookie"}).
-//		AddRow(cookie)
-//
-//	mock.
-//		ExpectQuery(regexp.QuoteMeta(`DELETE FROM session WHERE cookie=$1`)).
-//		WithArgs(cookie).
-//		WillReturnRows(rowMain)
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewAuthMemoryRepository(dbx)
-//
-//	err = repo.DeleteSession(ctx, cookie)
-//	require.NoError(t, err)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//}
+	mockedClient, mock := redismock.NewClientMock()
+	repo := NewAuthSessionMemoryRepository(mockedClient)
+
+	mock.ExpectGet(cookie).SetVal(userID)
+
+	session, err := repo.GetSessionByCookie(ctx, cookie)
+
+	require.NoError(t, err)
+	require.Equal(t, expectedSession, session)
+}
+
+func TestRedis_GetSession_NotFound(t *testing.T) {
+	var ctx echo.Context
+	cookie := uuid.New().String()
+	mockedClient, mock := redismock.NewClientMock()
+	repo := NewAuthSessionMemoryRepository(mockedClient)
+
+	mock.ExpectGet(cookie).SetErr(redis.Nil)
+
+	_, err := repo.GetSessionByCookie(ctx, cookie)
+
+	require.Error(t, err, myErrors.ErrSessionNotFound)
+}
+
+func TestRedis_DeleteSession_OK(t *testing.T) {
+	var ctx echo.Context
+	cookie := uuid.New().String()
+	mockedClient, mock := redismock.NewClientMock()
+	repo := NewAuthSessionMemoryRepository(mockedClient)
+
+	mock.ExpectDel(cookie).SetVal(1)
+
+	err := repo.DeleteSession(ctx, cookie)
+
+	require.NoError(t, err)
+}
+
+func TestRedis_DeleteSession_NotFound(t *testing.T) {
+	var ctx echo.Context
+	cookie := uuid.New().String()
+	mockedClient, mock := redismock.NewClientMock()
+	repo := NewAuthSessionMemoryRepository(mockedClient)
+
+	mock.ExpectDel(cookie).SetErr(redis.Nil)
+
+	err := repo.DeleteSession(ctx, cookie)
+
+	require.Error(t, err, myErrors.ErrSessionNotFound)
+}
+
+func TestRedis_CreateSession_OK(t *testing.T) {
+	var ctx echo.Context
+	session := model.Session{
+		UserId: 1,
+		Cookie: uuid.New().String(),
+	}
+
+	mockedClient, mock := redismock.NewClientMock()
+	repo := NewAuthSessionMemoryRepository(mockedClient)
+
+	mock.ExpectSet(session.Cookie, session.UserId, 0).SetVal(session.Cookie)
+
+	err := repo.CreateSession(ctx, session)
+
+	require.NoError(t, err)
+}

@@ -44,8 +44,7 @@ func NewConsumer(brokerList []string, groupID string) (Usecase, error) {
 
 	consumer, err := sarama.NewConsumerGroup(brokerList, groupID, config)
 	if err != nil {
-		log.Info("Failed to create consumer group: ", err)
-		return Usecase{consumer: consumer, messagesChan: messagesChan}, err
+		return Usecase{}, err
 	}
 
 	return Usecase{consumer: consumer, messagesChan: messagesChan}, nil

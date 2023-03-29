@@ -1,7 +1,9 @@
 package repository
 
 import (
-	"github.com/go-redis/redis"
+	"context"
+	"github.com/redis/go-redis/v9"
+	//redis "github.com/go-redis/redismock/v9"
 	"github.com/labstack/echo/v4"
 	"project/internal/auth/session"
 	"project/internal/model"
@@ -19,7 +21,7 @@ type repository struct {
 
 func (r *repository) GetSessionByCookie(ctx echo.Context, cookie string) (model.Session, error) {
 	var session model.Session
-	result, err := r.db.Get(cookie).Result()
+	result, err := r.db.Get(context.Background(), cookie).Result()
 	if err == redis.Nil {
 		return session, myErrors.ErrSessionNotFound
 	}
@@ -36,12 +38,12 @@ func (r *repository) GetSessionByCookie(ctx echo.Context, cookie string) (model.
 }
 
 func (r *repository) CreateSession(ctx echo.Context, session model.Session) error {
-	err := r.db.Set(session.Cookie, session.UserId, 0).Err()
+	err := r.db.Set(context.Background(), session.Cookie, session.UserId, 0).Err()
 	return err
 }
 
 func (r *repository) DeleteSession(ctx echo.Context, cookie string) error {
-	err := r.db.Del(cookie).Err()
+	err := r.db.Del(context.Background(), cookie).Err()
 	if err == redis.Nil {
 		return myErrors.ErrSessionNotFound
 	}

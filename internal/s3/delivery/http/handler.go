@@ -26,6 +26,11 @@ func (sh *s3Handler) GetImageHandler(ctx echo.Context) error {
 }
 
 func (sh *s3Handler) UploadImageHandler(ctx echo.Context) error {
+	image, err := ctx.FormFile("image")
+	if err != nil {
+		return err
+	}
+	
 }
 
 func NewS3Handler(e echo.Echo, s3Usecase s3.Usecase) s3Handler {

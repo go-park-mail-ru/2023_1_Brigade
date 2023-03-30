@@ -1,7 +1,6 @@
 package http_utils
 
 import (
-	"encoding/json"
 	"errors"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -10,14 +9,6 @@ import (
 	"strings"
 	"time"
 )
-
-type jsonError struct {
-	Err error
-}
-
-func (j jsonError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(j.Err.Error())
-}
 
 func ErrorConversion(err error) error {
 	words := strings.Split(err.Error(), " ")
@@ -53,11 +44,15 @@ func StatusCode(err error) int {
 		return http.StatusNotFound
 	case errors.Is(err, myErrors.ErrIncorrectPassword):
 		return http.StatusNotFound
-	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred):
+	case errors.Is(err, myErrors.ErrUserIsAlreadyContact):
 		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
 		return http.StatusConflict
+	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred):
+		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrSessionIsAlreadyCreated):
+		return http.StatusConflict
+	case errors.Is(err, myErrors.ErrUserIsAlreadyInChat):
 		return http.StatusConflict
 	default:
 		return http.StatusInternalServerError

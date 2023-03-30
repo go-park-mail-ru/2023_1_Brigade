@@ -37,7 +37,10 @@ func (r *repository) CreateChat(ctx echo.Context, chat model.Chat) (model.Chat, 
 		return chat, err
 	}
 	if rows.Next() {
-		rows.Scan(&chat.Id)
+		err = rows.Scan(&chat.Id)
+		if err != nil {
+			return model.Chat{}, err
+		}
 	}
 
 	return chat, nil
@@ -50,4 +53,13 @@ func (r *repository) DeleteChatById(ctx echo.Context, chatID uint64) error {
 	}
 
 	return err
+}
+
+func (r *repository) AddUserInChatDB(ctx echo.Context, chatID uint64, memberID uint64) error {
+	_, err := r.db.Query("INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

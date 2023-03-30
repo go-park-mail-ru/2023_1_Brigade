@@ -5,7 +5,25 @@ import (
 	"encoding/base64"
 	"github.com/asaskevich/govalidator"
 	"project/internal/model"
+	"strconv"
+	"strings"
 )
+
+func reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
+}
+
+func GenerateFilename(userID uint64, filename string) string {
+	filename = reverse(filename)
+	extensionFilename := strings.Split(filename, ".")
+	extension := reverse(extensionFilename[0])
+	generatedFilename := strconv.FormatUint(userID, 10) + "." + extension
+	return generatedFilename
+}
 
 func Hash(password string) (string, error) {
 	hasher := sha1.New()

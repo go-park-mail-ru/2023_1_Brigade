@@ -12,4 +12,6 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
-        
+        script: |
+            cd 2023_1_Brigade/
+            git pull origin dev

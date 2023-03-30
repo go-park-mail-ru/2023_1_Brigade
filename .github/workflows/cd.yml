@@ -1,3 +1,5 @@
+name: CD
+
 on:
   push:
     branches:
@@ -7,11 +9,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        script: |
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
             cd 2023_1_Brigade/
             git pull origin dev
+            

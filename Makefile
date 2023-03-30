@@ -4,11 +4,10 @@ all: run clean
 run: ## Run project
 	docker compose up
 
-.PHONY: clean
+.PHONY: stop
 clean: ## Clean containers and images
-	docker stop $(docker ps -q)
-	docker rm -vf $(docker ps -aq)
-	docker rmi -f $(docker images -aq)
+	docker compose kill
+	docker compose down
 
 .PHONY: test
 test: ## Run all the tests

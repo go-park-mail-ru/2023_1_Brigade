@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    image: technogramm/backend:latest
+    image: technogramm/backend:${GIT_COMMIT_SHA}
     depends_on:
       - postgres
       - redis

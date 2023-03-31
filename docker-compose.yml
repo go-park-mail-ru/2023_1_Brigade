@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    build: .
+    image: technogramm/backend:latest
     depends_on:
       - postgres
       - redis

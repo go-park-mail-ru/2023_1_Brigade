@@ -20,7 +20,7 @@ Cors:
   allowCredentials: true
 
 Redis:
-  addr: "localhost:6379"
+  addr: "redis:6379"
 
 Minio:
   endpoint: "172.20.0.1:9000"

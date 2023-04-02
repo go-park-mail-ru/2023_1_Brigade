@@ -5,7 +5,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/images"
-	"project/internal/pkg/security"
 )
 
 type imagesHandler struct {
@@ -28,7 +27,7 @@ func (h *imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	filename := security.GenerateFilename(userID, header.Filename)
+
 	defer func() {
 		err := file.Close()
 		if err != nil {
@@ -36,12 +35,12 @@ func (h *imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		}
 	}()
 
-	_, err = h.imagesUsecase.LoadImage(ctx, file, filename)
+	url, err := h.imagesUsecase.LoadImage(ctx, file, header.Filename, userID)
 	if err != nil {
 		return err
 	}
 
-	return ctx.JSON(http.StatusCreated, filename)
+	return ctx.JSON(http.StatusCreated, url)
 }
 
 func NewImagesHandler(e *echo.Echo, imagesUsecase images.Usecase) imagesHandler {

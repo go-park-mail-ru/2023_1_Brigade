@@ -6,5 +6,5 @@ import (
 )
 
 type Usecase interface {
-	LoadImage(ctx echo.Context, file multipart.File, filename string) (string, error)
+	LoadImage(ctx echo.Context, file multipart.File, filename string, userID uint64) (string, error)
 }

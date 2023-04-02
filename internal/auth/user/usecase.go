@@ -6,6 +6,6 @@ import (
 )
 
 type Usecase interface {
-	Signup(ctx echo.Context, user model.User) (model.User, error)
-	Login(ctx echo.Context, user model.User) (model.User, error)
+	Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error)
+	Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error)
 }

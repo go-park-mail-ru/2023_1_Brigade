@@ -14,13 +14,11 @@ func NewChatUsecase(imagesRepo images.Repostiory) images.Usecase {
 	return &usecase{imagesRepo: imagesRepo}
 }
 
-func (u *usecase) LoadImage(ctx echo.Context, file multipart.File, filename string) (string, error) {
-	err := u.imagesRepo.LoadImage(ctx, file, filename)
-	if err != nil {
+func (u *usecase) LoadImage(ctx echo.Context, file multipart.File, filename string, userID uint64) (string, error) {
+	imageUrl, err := u.imagesRepo.LoadImage(ctx, file, filename, userID)
+	if imageUrl == nil {
 		return "", err
 	}
 
-	imageUrl, err := u.imagesRepo.GetImage(ctx, filename)
-
-	return imageUrl.Path, err
+	return imageUrl.String(), err
 }

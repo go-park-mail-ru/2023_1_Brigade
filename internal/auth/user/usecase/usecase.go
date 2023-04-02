@@ -20,33 +20,39 @@ func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository) auth
 	return &usecase{authRepo: authRepo, userRepo: userRepo}
 }
 
-func (u *usecase) Signup(ctx echo.Context, user model.User) (model.User, error) {
+func (u *usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
+	user := model.User{
+		Nickname: registrationUser.Nickname,
+		Email:    registrationUser.Email,
+	}
+
 	err := u.authRepo.CheckExistEmail(ctx, user.Email)
 	if !errors.Is(err, myErrors.ErrUserNotFound) {
 		return user, err
 	}
 
-	err = u.authRepo.CheckExistUsername(ctx, user.Username)
-	if !errors.Is(err, myErrors.ErrUserNotFound) {
-		return user, err
-	}
-
-	hashedPassword, err := security.Hash(user.Password)
+	hashedPassword, err := security.Hash(registrationUser.Password)
 	if err != nil {
 		return user, err
 	}
-	user.Password = hashedPassword
+	registrationUser.Password = hashedPassword
 
-	validateError := security.ValidateSignup(user)
+	validateError := security.ValidateUser(user)
 	if validateError != nil {
 		return user, httpUtils.ErrorConversion(validateError[0])
 	}
 
 	userDB, err := u.authRepo.CreateUser(ctx, user)
+	userDB.Username = "id" + string(userDB.Id)
 	return userDB, err
 }
 
-func (u *usecase) Login(ctx echo.Context, user model.User) (model.User, error) {
+func (u *usecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error) {
+	user := model.User{
+		Email:    loginUser.Email,
+		Password: loginUser.Password,
+	}
+
 	err := u.authRepo.CheckExistEmail(ctx, user.Email)
 	if err != nil {
 		return user, err

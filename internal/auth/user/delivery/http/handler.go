@@ -3,7 +3,6 @@ package http
 import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	authSession "project/internal/auth/session"
 	authUser "project/internal/auth/user"
@@ -20,15 +19,15 @@ type authHandler struct {
 }
 
 func (u *authHandler) SignupHandler(ctx echo.Context) error {
-	var user model.User
+	var registrationUser model.RegistrationUser
 	body := ctx.Get("body").([]byte)
 
-	err := json.Unmarshal(body, &user)
+	err := json.Unmarshal(body, &registrationUser)
 	if err != nil {
 		return err
 	}
 
-	user, err = u.authUserUsecase.Signup(ctx, user)
+	user, err := u.authUserUsecase.Signup(ctx, registrationUser)
 	if err != nil {
 		return err
 	}
@@ -43,15 +42,15 @@ func (u *authHandler) SignupHandler(ctx echo.Context) error {
 }
 
 func (u *authHandler) LoginHandler(ctx echo.Context) error {
-	var user model.User
+	var loginUser model.LoginUser
 	body := ctx.Get("body").([]byte)
 
-	err := json.Unmarshal(body, &user)
+	err := json.Unmarshal(body, &loginUser)
 	if err != nil {
 		return err
 	}
 
-	user, err = u.authUserUsecase.Login(ctx, user)
+	user, err := u.authUserUsecase.Login(ctx, loginUser)
 	if err != nil {
 		return err
 	}
@@ -60,8 +59,6 @@ func (u *authHandler) LoginHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-
-	log.Warn("session created : ", session)
 
 	httpUtils.SetCookie(ctx, session)
 	return ctx.JSON(http.StatusOK, user)
@@ -77,8 +74,6 @@ func (u *authHandler) AuthHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-
-	log.Warn("session getted : ", session)
 
 	user, err := u.userUsecase.GetUserById(ctx, authSession.UserId)
 	if err != nil {

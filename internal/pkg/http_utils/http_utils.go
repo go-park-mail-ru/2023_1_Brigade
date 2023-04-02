@@ -46,9 +46,9 @@ func StatusCode(err error) int {
 		return http.StatusNotFound
 	case errors.Is(err, myErrors.ErrUserIsAlreadyContact):
 		return http.StatusConflict
-	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistred):
+	case errors.Is(err, myErrors.ErrUsernameIsAlreadyRegistered):
 		return http.StatusConflict
-	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistred):
+	case errors.Is(err, myErrors.ErrEmailIsAlreadyRegistered):
 		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrSessionIsAlreadyCreated):
 		return http.StatusConflict

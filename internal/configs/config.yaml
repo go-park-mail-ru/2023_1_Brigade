@@ -13,7 +13,7 @@ Cors:
     - "OPTIONS"
   allowOrigins:
     - "http://95.163.249.116"
-    - "http://localhost:63343"
+    - "http://localhost:10000"
   allowHeaders:
     - "Content-Type"
     - "Content-Length"

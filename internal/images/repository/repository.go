@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/minio/minio-go/v7"
 	log "github.com/sirupsen/logrus"
@@ -12,32 +13,54 @@ import (
 	"time"
 )
 
-func NewImagesMemoryRepository(minioClient *minio.Client) images.Repostiory {
+func NewImagesMemoryRepository(db *sqlx.DB, minioClient *minio.Client) images.Repostiory {
 	bucketname := "avatars"
 	err := minioClient.MakeBucket(context.Background(), bucketname, minio.MakeBucketOptions{})
 	if err != nil {
 		log.Error(err)
 	}
 
-	return &repository{minio: minioClient, bucketname: bucketname}
+	return &repository{db: db, minio: minioClient, bucketname: bucketname}
 }
 
 type repository struct {
-	minio      *minio.Client
+	db         *sqlx.DB
 	bucketname string
+	minio      *minio.Client
 }
 
-func (r *repository) GetImage(ctx echo.Context, filename string) (*url.URL, error) {
-	expires := time.Second * 60
+func (r *repository) LoadImage(ctx echo.Context, file multipart.File, filename string, userID uint64) (*url.URL, error) {
+	_, err := r.minio.PutObject(context.Background(), r.bucketname, filename, file, -1, minio.PutObjectOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	expires := time.Hour * 24 * 7 // 7 days
 	presignedURL, err := r.minio.PresignedGetObject(context.Background(), r.bucketname, filename, expires, nil)
 	if minio.ToErrorResponse(err).Code == "NoSuchKey" {
 		return nil, myErrors.ErrAvatarNotFound
 	}
 
-	return presignedURL, err
-}
+	row, err := r.db.Query("INSERT INTO images_urls (url) VALUES ($1)", presignedURL.String())
+	if err != nil {
+		log.Warn(err)
+		return nil, err
+	}
 
-func (r *repository) LoadImage(ctx echo.Context, file multipart.File, filename string) error {
-	_, err := r.minio.PutObject(context.Background(), r.bucketname, filename, file, -1, minio.PutObjectOptions{})
-	return err
+	var imageID uint64
+	if row.Next() {
+		err = row.Scan(&imageID)
+		if err != nil {
+			log.Warn(err)
+			return nil, err
+		}
+	}
+
+	_, err = r.db.Query("INSERT INTO users_avatar (id_user, id_image) VALUES ($1, $2)", userID, imageID)
+	if err != nil {
+		log.Warn(err)
+		return nil, err
+	}
+
+	return presignedURL, err
 }

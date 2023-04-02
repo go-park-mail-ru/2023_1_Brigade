@@ -93,7 +93,7 @@ func main() {
 
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(minioClient)
+	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db, minioClient)
 	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
@@ -113,7 +113,7 @@ func main() {
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(middleware.CSRF())
+	//e.Use(middleware.CSRF())
 	//e.Use(myMiddleware.XSSMidlleware)
 	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 

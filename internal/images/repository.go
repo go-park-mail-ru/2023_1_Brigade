@@ -7,6 +7,5 @@ import (
 )
 
 type Repostiory interface {
-	GetImage(ctx echo.Context, filename string) (*url.URL, error)
-	LoadImage(ctx echo.Context, file multipart.File, filename string) error
+	LoadImage(ctx echo.Context, file multipart.File, filename string, userID uint64) (*url.URL, error)
 }

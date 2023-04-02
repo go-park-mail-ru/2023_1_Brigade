@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	authUser "project/internal/auth/user"
 	"project/internal/model"
+	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
 	"project/internal/user"
 )
@@ -36,6 +37,11 @@ func (u *usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, use
 		Password: updateUser.CurrentPassword,
 	}
 
+	validateError := security.ValidateUser(oldUser)
+	if validateError != nil {
+		return oldUser, httpUtils.ErrorConversion(validateError[0])
+	}
+
 	password, err := security.Hash(oldUser.Password)
 	oldUser.Password = password
 	if err != nil {
@@ -51,8 +57,21 @@ func (u *usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, use
 	return user, err
 }
 
-func (u *usecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error) {
-	contacts, err := u.userRepo.GetUserContacts(ctx, userID)
+func (u *usecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.Contact, error) {
+	var contacts []model.Contact
+	contactsDB, err := u.userRepo.GetUserContacts(ctx, userID)
+	if err != nil {
+		return contacts, err
+	}
+
+	for _, contact := range contactsDB {
+		contacts = append(contacts, model.Contact{
+			Username: contact.Username,
+			Nickname: contact.Nickname,
+			Status:   contact.Status,
+		})
+	}
+
 	return contacts, err
 }
 

@@ -43,17 +43,17 @@ CREATE TABLE IF NOT EXISTS user_contacts (
     FOREIGN KEY (id_contact) REFERENCES profile(id)
 );
 
--- CREATE TABLE IF NOT EXISTS images_urls (
---     id_image SERIAL UNIQUE PRIMARY KEY,
---     url      VARCHAR(255)
--- );
---
--- CREATE TABLE IF NOT EXISTS users_avatar (
---     id_user  INTEGER,
---     id_image INTEGER,
---     FOREIGN KEY (id_user)  REFERENCES profile(id),
---     FOREIGN KEY (id_image) REFERENCES images_urls(id_image)
--- );
+CREATE TABLE IF NOT EXISTS images_urls (
+    id_image SERIAL UNIQUE PRIMARY KEY,
+    url      VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS users_avatar (
+    id_user  INTEGER,
+    id_image INTEGER,
+    FOREIGN KEY (id_user)  REFERENCES profile(id),
+    FOREIGN KEY (id_image) REFERENCES images_urls(id_image)
+);
 
 
 INSERT INTO profile (id, username, email, status, password)

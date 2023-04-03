@@ -1,7 +1,6 @@
 package http
 
 import (
-	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/chat"
@@ -16,7 +15,7 @@ type chatHandler struct {
 	userUsecase user.Usecase
 }
 
-func (u *chatHandler) GetChatHandler(ctx echo.Context) error {
+func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	chatID, err := strconv.ParseUint(ctx.Param("chatID"), 10, 64)
 
 	if err != nil {
@@ -37,11 +36,9 @@ func (u *chatHandler) GetChatHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, chat)
 }
 
-func (u *chatHandler) CreateChatHandler(ctx echo.Context) error {
+func (u chatHandler) CreateChatHandler(ctx echo.Context) error {
 	var chat model.CreateChat
-	body := ctx.Get("body").([]byte)
-
-	err := json.Unmarshal(body, &chat)
+	err := ctx.Bind(&chat)
 	if err != nil {
 		return err
 	}
@@ -54,7 +51,7 @@ func (u *chatHandler) CreateChatHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, dbChat)
 }
 
-func (u *chatHandler) DeleteChatHandler(ctx echo.Context) error {
+func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 	chatID, err := strconv.ParseUint(ctx.Param("chatID"), 10, 64)
 	if err != nil {
 		return err
@@ -79,28 +76,13 @@ func (u *chatHandler) DeleteChatHandler(ctx echo.Context) error {
 	return ctx.NoContent(http.StatusNoContent)
 }
 
-func (u *chatHandler) AddUserInChatHandler(ctx echo.Context) error {
+func (u chatHandler) AddUserInChatHandler(ctx echo.Context) error {
 	chatID, err := strconv.ParseUint(ctx.Param("chatID"), 10, 64)
 	if err != nil {
 		return err
 	}
 
 	userID, err := strconv.ParseUint(ctx.Param("userID"), 10, 64)
-	if err != nil {
-		return err
-	}
-
-	chat, err := u.chatUsecase.GetChatById(ctx, chatID)
-	if err != nil {
-		return err
-	}
-
-	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, userID)
-	if err != nil {
-		return err
-	}
-
-	err = u.userUsecase.CheckExistUserById(ctx, userID)
 	if err != nil {
 		return err
 	}
@@ -126,11 +108,6 @@ func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Use
 	createChat := api.Group(createChatUrl)
 	deleteChat := api.Group(deleteChatUrl)
 	addUserInChat := api.Group(addUserInChatUrl)
-
-	getChat.OPTIONS("", handler.GetChatHandler)
-	createChat.OPTIONS("", handler.CreateChatHandler)
-	deleteChat.OPTIONS("", handler.DeleteChatHandler)
-	addUserInChat.OPTIONS("", handler.AddUserInChatHandler)
 
 	getChat.GET("", handler.GetChatHandler)
 	createChat.POST("", handler.CreateChatHandler)

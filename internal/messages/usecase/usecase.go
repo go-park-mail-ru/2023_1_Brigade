@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -39,14 +40,14 @@ func NewMessagesUsecase(messagesRepo messages.Repository, config configs.Kafka) 
 	return &usecase{repo: messagesRepo, producer: producer, consumer: consumer}
 }
 
-func (u *usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error {
+func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error {
 	var webSocketMessage model.WebSocketMessage
 	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
 	if err != nil {
 		return err
 	}
 
-	chat, err := u.repo.GetChatById(webSocketMessage.ChatID)
+	chat, err := u.repo.GetChatById(context.Background(), webSocketMessage.ChatID)
 	if err != nil {
 		return err
 	}
@@ -60,7 +61,7 @@ func (u *usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) err
 			IsRead:   false,
 		}
 
-		_, err = u.repo.InsertMessageInDB(message)
+		_, err = u.repo.InsertMessageInDB(context.Background(), message)
 		if err != nil {
 			log.Error(err)
 		}
@@ -91,7 +92,7 @@ func (u *usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) err
 	return nil
 }
 
-func (u *usecase) ReceiveMessage(ctx echo.Context) ([]byte, error) {
+func (u usecase) ReceiveMessage(ctx echo.Context) ([]byte, error) {
 	var message model.ProducerMessage
 	jsonMessage := u.consumer.ConsumeMessage()
 
@@ -101,7 +102,7 @@ func (u *usecase) ReceiveMessage(ctx echo.Context) ([]byte, error) {
 	}
 
 	go func() {
-		err = u.repo.InsertMessageReceiveInDB(message)
+		err = u.repo.InsertMessageReceiveInDB(context.Background(), message)
 		if err != nil {
 			log.Error(err)
 		}

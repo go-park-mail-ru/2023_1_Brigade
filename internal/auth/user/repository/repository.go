@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"context"
 	"github.com/jmoiron/sqlx"
-	"github.com/labstack/echo/v4"
 	auth "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -16,15 +16,15 @@ type repository struct {
 	db *sqlx.DB
 }
 
-func (r *repository) CreateUser(ctx echo.Context, user model.User) (model.User, error) {
-	rows, err := r.db.NamedQuery("INSERT INTO profile (username, email, status, password)"+
-		"VALUES (:username, :email, :status, :password) RETURNING id", user)
+func (r repository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
+	row, err := r.db.NamedQuery(`INSERT INTO profile (username, nickname, email, password) `+
+		`VALUES (:username, :nickname, :email, :password) RETURNING id`, user)
 
 	if err != nil {
-		return user, err
+		return model.User{}, err
 	}
-	if rows.Next() {
-		err = rows.Scan(&user.Id)
+	if row.Next() {
+		err = row.Scan(&user.Id)
 		if err != nil {
 			return model.User{}, err
 		}
@@ -33,42 +33,43 @@ func (r *repository) CreateUser(ctx echo.Context, user model.User) (model.User, 
 	return user, nil
 }
 
-func (r *repository) CheckCorrectPassword(ctx echo.Context, user model.User) error {
-	rows, err := r.db.NamedQuery("SELECT * FROM profile WHERE email=:email AND password=:password", user)
+func (r repository) CheckCorrectPassword(ctx context.Context, email string, password string) error {
+	var exists bool
+	err := r.db.Get(&exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1 AND password=$2)", email, password)
 
 	if err != nil {
 		return err
 	}
-	if !rows.Next() {
+	if !exists {
 		return myErrors.ErrIncorrectPassword
 	}
 
 	return nil
 }
 
-func (r *repository) CheckExistEmail(ctx echo.Context, email string) error {
-	user := model.User{Email: email}
-	rows, err := r.db.NamedQuery("SELECT * FROM profile WHERE email=:email", user)
+func (r repository) CheckExistEmail(ctx context.Context, email string) error {
+	var exists bool
+	err := r.db.Get(&exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1)", email)
 
 	if err != nil {
 		return err
 	}
-	if !rows.Next() {
-		return myErrors.ErrUserNotFound
+	if !exists {
+		return myErrors.ErrEmailNotFound
 	}
 
 	return nil
 }
 
-func (r *repository) CheckExistUsername(ctx echo.Context, username string) error {
-	user := model.User{Username: username}
-	rows, err := r.db.NamedQuery("SELECT * FROM profile WHERE username=:username", user)
+func (r repository) CheckExistUsername(ctx context.Context, username string) error {
+	var exists bool
+	err := r.db.Get(&exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE username=$1)", username)
 
 	if err != nil {
 		return err
 	}
-	if !rows.Next() {
-		return myErrors.ErrUserNotFound
+	if !exists {
+		return myErrors.ErrUsernameNotFound
 	}
 
 	return nil

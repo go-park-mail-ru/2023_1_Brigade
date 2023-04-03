@@ -23,7 +23,7 @@ Redis:
   addr: "redis:6379"
 
 Minio:
-  endpoint: "172.20.0.1:9000"
+  endpoint: "minio:9000"
   username: "minio"
   password: "minio123"
   token: ""

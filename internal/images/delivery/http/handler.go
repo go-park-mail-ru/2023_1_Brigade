@@ -11,7 +11,7 @@ type imagesHandler struct {
 	imagesUsecase images.Usecase
 }
 
-func (h *imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
+func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 	//session := ctx.Get("session").(model.Session)
 	//userID := session.UserId
 
@@ -51,7 +51,6 @@ func NewImagesHandler(e *echo.Echo, imagesUsecase images.Usecase) imagesHandler 
 
 	loadImages := api.Group(loadImagesUrl)
 
-	loadImages.OPTIONS("", handler.LoadCurrentUserAvatarHandler)
 	loadImages.POST("", handler.LoadCurrentUserAvatarHandler)
 
 	return handler

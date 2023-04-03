@@ -1,7 +1,6 @@
 package http
 
 import (
-	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	authSession "project/internal/auth/session"
@@ -18,11 +17,9 @@ type authHandler struct {
 	userUsecase        user.Usecase
 }
 
-func (u *authHandler) SignupHandler(ctx echo.Context) error {
+func (u authHandler) SignupHandler(ctx echo.Context) error {
 	var registrationUser model.RegistrationUser
-	body := ctx.Get("body").([]byte)
-
-	err := json.Unmarshal(body, &registrationUser)
+	err := ctx.Bind(&registrationUser)
 	if err != nil {
 		return err
 	}
@@ -41,11 +38,9 @@ func (u *authHandler) SignupHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, user)
 }
 
-func (u *authHandler) LoginHandler(ctx echo.Context) error {
+func (u authHandler) LoginHandler(ctx echo.Context) error {
 	var loginUser model.LoginUser
-	body := ctx.Get("body").([]byte)
-
-	err := json.Unmarshal(body, &loginUser)
+	err := ctx.Bind(&loginUser)
 	if err != nil {
 		return err
 	}
@@ -64,7 +59,7 @@ func (u *authHandler) LoginHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, user)
 }
 
-func (u *authHandler) AuthHandler(ctx echo.Context) error {
+func (u authHandler) AuthHandler(ctx echo.Context) error {
 	session, err := ctx.Cookie("session_id")
 	if err != nil {
 		return myErrors.ErrCookieNotFound
@@ -84,7 +79,7 @@ func (u *authHandler) AuthHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, user)
 }
 
-func (u *authHandler) LogoutHandler(ctx echo.Context) error {
+func (u authHandler) LogoutHandler(ctx echo.Context) error {
 	session, err := ctx.Cookie("session_id")
 	if err != nil {
 		return myErrors.ErrCookieNotFound
@@ -112,11 +107,6 @@ func NewAuthHandler(e *echo.Echo, authUserUsecase authUser.Usecase, authSessionU
 	login := api.Group(loginUrl)
 	logout := api.Group(logoutUrl)
 	auth := api.Group(authUrl)
-
-	signup.OPTIONS("", handler.SignupHandler)
-	login.OPTIONS("", handler.LoginHandler)
-	logout.OPTIONS("", handler.AuthHandler)
-	auth.OPTIONS("", handler.LogoutHandler)
 
 	signup.POST("", handler.SignupHandler)
 	login.POST("", handler.LoginHandler)

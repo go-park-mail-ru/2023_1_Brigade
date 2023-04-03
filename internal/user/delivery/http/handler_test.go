@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	myMiddleware "project/internal/middleware"
 	"project/internal/model"
 	userMock "project/internal/user/usecase/mocks"
 	"testing"
@@ -39,7 +38,7 @@ func TestHandlers_GetUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{}, nil).Times(1)
 
 	err := handler.GetUserHandler(ctx)
 
@@ -66,7 +65,7 @@ func TestHandlers_GetCurrentUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().GetUserById(ctx, 1).Return(model.User{Id: 1}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{Id: 1}, nil).Times(1)
 
 	err := handler.GetCurrentUserHandler(ctx)
 
@@ -95,7 +94,7 @@ func TestHandlers_DeleteUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().DeleteUserById(ctx, 1).Return(nil).Times(1)
+	userUsecase.EXPECT().DeleteUserById(ctx, uint64(1)).Return(nil).Times(1)
 
 	err := handler.DeleteUserHandler(ctx)
 
@@ -144,16 +143,12 @@ func TestHandlers_PutUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().PutUserById(ctx, newUser, 1).Return(user, nil).Times(1)
+	userUsecase.EXPECT().PutUserById(ctx, newUser, uint64(1)).Return(user, nil).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.PutUserHandler(ctx)
+	err := handler.PutUserHandler(ctx)
 
-		require.NoError(t, err)
-		require.Equal(t, test.status, w.Code)
-
-		return err
-	})(ctx)
+	require.NoError(t, err)
+	require.Equal(t, test.status, w.Code)
 }
 
 func TestHandlers_GetUserContacts_OK(t *testing.T) {
@@ -177,7 +172,7 @@ func TestHandlers_GetUserContacts_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().GetUserContacts(ctx, 1).Return([]model.User{}, nil).Times(1)
+	userUsecase.EXPECT().GetUserContacts(ctx, uint64(1)).Return([]model.Contact{}, nil).Times(1)
 
 	err := handler.GetUserContactsHandler(ctx)
 
@@ -206,7 +201,7 @@ func TestHandlers_UserAddContact_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().AddUserContact(ctx, 1, 2).Return(model.User{Id: 2}, nil).Times(1)
+	userUsecase.EXPECT().AddUserContact(ctx, uint64(1), uint64(2)).Return(model.User{Id: 2}, nil).Times(1)
 
 	err := handler.UserAddContactHandler(ctx)
 

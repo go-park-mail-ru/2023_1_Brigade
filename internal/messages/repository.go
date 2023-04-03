@@ -1,10 +1,13 @@
 package messages
 
-import "project/internal/model"
+import (
+	"context"
+	"project/internal/model"
+)
 
 type Repository interface {
-	InsertMessageInDB(message model.Message) (model.Message, error)
-	InsertMessageReceiveInDB(message model.ProducerMessage) error
-	MarkMessageReading(messageID uint64) error
-	GetChatById(chatID uint64) ([]model.ChatMembers, error)
+	InsertMessageInDB(ctx context.Context, message model.Message) (model.Message, error)
+	InsertMessageReceiveInDB(ctx context.Context, message model.ProducerMessage) error
+	MarkMessageReading(ctx context.Context, messageID uint64) error
+	GetChatById(ctx context.Context, chatID uint64) ([]model.ChatMembers, error)
 }

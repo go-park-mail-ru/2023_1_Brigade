@@ -19,7 +19,7 @@ type messageHandler struct {
 	tmp_counter uint64
 }
 
-func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
+func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	ws, err := u.upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
 	if err != nil {
 		return err

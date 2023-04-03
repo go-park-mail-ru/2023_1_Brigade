@@ -1,17 +1,19 @@
 package user
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"project/internal/model"
 )
 
 type Repository interface {
-	DeleteUserById(ctx echo.Context, userID uint64) error
-	GetUserById(ctx echo.Context, userID uint64) (model.User, error)
-	GetUserByEmail(ctx echo.Context, email string) (model.User, error)
-	AddUserInContact(ctx echo.Context, contact model.UserContact) error
-	UpdateUserById(ctx echo.Context, user model.User) (model.User, error)
-	GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error)
-	CheckUserIsContact(ctx echo.Context, contact model.UserContact) error
-	CheckExistUserById(ctx echo.Context, userID uint64) error
+	DeleteUserById(ctx context.Context, userID uint64) error
+	GetUserById(ctx context.Context, userID uint64) (model.User, error)
+	GetUserByEmail(ctx context.Context, email string) (model.User, error)
+	AddUserInContact(ctx context.Context, contact model.UserContact) error
+	UpdateUserById(ctx context.Context, user model.User) (model.User, error)
+	GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error)
+	CheckUserIsContact(ctx context.Context, contact model.UserContact) error
+	CheckExistUserById(ctx context.Context, userID uint64) error
+
+	GetUserAvatar(ctx context.Context, userID uint64) (string, error)
 }

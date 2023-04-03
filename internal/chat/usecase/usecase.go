@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"project/internal/chat"
 	"project/internal/model"
@@ -17,7 +18,7 @@ func NewChatUsecase(chatRepo chat.Repository, userRepo user.Repository) chat.Use
 	return &usecase{chatRepo: chatRepo, userRepo: userRepo}
 }
 
-func (u *usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
+func (u usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
 	members := chat.Members
 	for _, member := range members {
 		if member.Id == userID {
@@ -28,19 +29,19 @@ func (u *usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID
 	return nil
 }
 
-func (u *usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
-	chat, err := u.chatRepo.GetChatById(ctx, chatID)
+func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
+	chat, err := u.chatRepo.GetChatById(context.Background(), chatID)
 	if err != nil {
-		return chat, err
+		return model.Chat{}, err
 	}
 
 	return chat, err
 }
 
-func (u *usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error) {
+func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error) {
 	var members []model.User
 	for _, userID := range chat.Members {
-		user, err := u.userRepo.GetUserById(ctx, userID)
+		user, err := u.userRepo.GetUserById(context.Background(), userID)
 		if err != nil {
 			return model.Chat{}, err
 		}
@@ -52,17 +53,32 @@ func (u *usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Cha
 		Title:   chat.Title,
 		Members: members,
 	}
-	dbChat, err := u.chatRepo.CreateChat(ctx, dbChat)
+	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), dbChat)
 
-	return dbChat, err
+	return chatFromDB, err
 }
 
-func (u *usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
-	err := u.chatRepo.DeleteChatById(ctx, chatID)
+func (u usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
+	err := u.chatRepo.DeleteChatById(context.Background(), chatID)
 	return err
 }
 
-func (u *usecase) AddUserInChat(ctx echo.Context, chatID uint64, userID uint64) error {
-	err := u.chatRepo.AddUserInChatDB(ctx, chatID, userID)
+func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, userID uint64) error {
+	chat, err := u.GetChatById(ctx, chatID)
+	if err != nil {
+		return err
+	}
+
+	err = u.CheckExistUserInChat(ctx, chat, userID)
+	if err != nil {
+		return err
+	}
+
+	err = u.userRepo.CheckExistUserById(context.Background(), userID)
+	if err != nil {
+		return err
+	}
+
+	err = u.chatRepo.AddUserInChatDB(context.Background(), chatID, userID)
 	return err
 }

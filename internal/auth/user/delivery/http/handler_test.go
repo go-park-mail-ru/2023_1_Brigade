@@ -11,7 +11,6 @@ import (
 	"net/http/httptest"
 	authSessionMock "project/internal/auth/session/usecase/mocks"
 	authUserMock "project/internal/auth/user/usecase/mocks"
-	myMiddleware "project/internal/middleware"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/http_utils"
@@ -27,7 +26,7 @@ type testCase struct {
 
 func TestHandlers_Signup_Created(t *testing.T) {
 	test := testCase{[]byte(`{"email":"marcussss1@mail.ru",
-								   "username":"marcussss1", 
+								   "nickname":"marcussss1", 
                                    "password":"baumanka"}`),
 		http.StatusCreated,
 		"Successful registration"}
@@ -45,20 +44,18 @@ func TestHandlers_Signup_Created(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	user := model.User{}
+	var registrationUser model.RegistrationUser
+	var user model.User
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, nil).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, nil).Times(1)
 	authSessionUsecase.EXPECT().CreateSessionById(ctx, user.Id).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err = handler.SignupHandler(ctx)
-		require.NoError(t, err)
-		require.Equal(t, test.status, w.Code, test.name)
-		return err
-	})(ctx)
+	err = handler.SignupHandler(ctx)
+	require.NoError(t, err)
+	require.Equal(t, test.status, w.Code, test.name)
 }
 
 func TestHandlers_Signup_EmailRegistered(t *testing.T) {
@@ -81,18 +78,16 @@ func TestHandlers_Signup_EmailRegistered(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	user := model.User{}
+	var registrationUser model.RegistrationUser
+	var user model.User
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrEmailIsAlreadyRegistred).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrEmailIsAlreadyRegistered).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.SignupHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.SignupHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
@@ -115,18 +110,16 @@ func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	user := model.User{}
+	var registrationUser model.RegistrationUser
+	var user model.User
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrUsernameIsAlreadyRegistred).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrUsernameIsAlreadyRegistered).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.SignupHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.SignupHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Signup_InvalidEmail(t *testing.T) {
@@ -149,18 +142,16 @@ func TestHandlers_Signup_InvalidEmail(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	user := model.User{}
+	var registrationUser model.RegistrationUser
+	var user model.User
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidEmail).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrInvalidEmail).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.SignupHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.SignupHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Signup_InvalidUsername(t *testing.T) {
@@ -183,18 +174,16 @@ func TestHandlers_Signup_InvalidUsername(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	user := model.User{}
+	var registrationUser model.RegistrationUser
+	var user model.User
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidUsername).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrInvalidUsername).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.SignupHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.SignupHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Signup_InvalidPassword(t *testing.T) {
@@ -217,18 +206,16 @@ func TestHandlers_Signup_InvalidPassword(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	user := model.User{}
+	var registrationUser model.RegistrationUser
+	var user model.User
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, user).Return(user, myErrors.ErrInvalidPassword).Times(1)
+	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrInvalidPassword).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.SignupHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.SignupHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Signup_InternalError(t *testing.T) {
@@ -250,11 +237,8 @@ func TestHandlers_Signup_InternalError(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.SignupHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err := handler.SignupHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Login_OK(t *testing.T) {
@@ -276,20 +260,18 @@ func TestHandlers_Login_OK(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
+	loginUser := model.LoginUser{}
 	user := model.User{}
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Login(ctx, user).Return(user, nil).Times(1)
+	authUserUsecase.EXPECT().Login(ctx, loginUser).Return(user, nil).Times(1)
 	authSessionUsecase.EXPECT().CreateSessionById(ctx, user.Id).Return(model.Session{}, nil).Times(1)
 
-	err = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err = handler.LoginHandler(ctx)
-		require.NoError(t, err)
-		require.Equal(t, test.status, w.Code, test.name)
-		return err
-	})(ctx)
+	err = handler.LoginHandler(ctx)
+	require.NoError(t, err)
+	require.Equal(t, test.status, w.Code, test.name)
 }
 
 func TestHandlers_Login_UserNotFound(t *testing.T) {
@@ -311,18 +293,16 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
+	loginUser := model.LoginUser{}
 	user := model.User{}
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrUserNotFound).Times(1)
+	authUserUsecase.EXPECT().Login(ctx, loginUser).Return(user, myErrors.ErrEmailNotFound).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.LoginHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.LoginHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Login_IncorrectPassword(t *testing.T) {
@@ -344,18 +324,16 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 	authSessionUsecase := authSessionMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
+	loginUser := model.LoginUser{}
 	user := model.User{}
 
-	err := json.Unmarshal(test.body, &user)
+	err := json.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Login(ctx, user).Return(user, myErrors.ErrIncorrectPassword).Times(1)
+	authUserUsecase.EXPECT().Login(ctx, loginUser).Return(user, myErrors.ErrIncorrectPassword).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.LoginHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err = handler.LoginHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Login_InternalError(t *testing.T) {
@@ -377,11 +355,8 @@ func TestHandlers_Login_InternalError(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err := handler.LoginHandler(ctx)
-		require.Equal(t, http_utils.StatusCode(err), test.status)
-		return err
-	})(ctx)
+	err := handler.LoginHandler(ctx)
+	require.Equal(t, http_utils.StatusCode(err), test.status)
 }
 
 func TestHandlers_Auth_UserOK(t *testing.T) {
@@ -406,7 +381,7 @@ func TestHandlers_Auth_UserOK(t *testing.T) {
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
-	userUsecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{}, nil).Times(1)
 
 	err := handler.AuthHandler(ctx)
 
@@ -435,7 +410,7 @@ func TestHandlers_Auth_SessionOK(t *testing.T) {
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
 	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
-	userUsecase.EXPECT().GetUserById(ctx, 1).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
+	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
 
 	err := handler.AuthHandler(ctx)
 

@@ -1,69 +1,12 @@
 package security
 
 import (
-	"crypto/sha1"
-	"encoding/base64"
-	"github.com/asaskevich/govalidator"
-	"project/internal/model"
-	"strconv"
-	"strings"
+	"golang.org/x/crypto/argon2"
 )
 
-func reverse(s string) string {
-	runes := []rune(s)
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-	return string(runes)
-}
+var salt = []byte{0x5C, 0x72, 0x69, 0x67, 0x61, 0x64, 0x65}
 
-func GenerateFilename(userID uint64, filename string) string {
-	filename = reverse(filename)
-	extensionFilename := strings.Split(filename, ".")
-	extension := reverse(extensionFilename[0])
-	generatedFilename := strconv.FormatUint(userID, 10) + "." + extension
-	return generatedFilename
-}
-
-func Hash(password string) (string, error) {
-	hasher := sha1.New()
-	_, err := hasher.Write([]byte(password))
-
-	if err != nil {
-		return "", err
-	}
-
-	sha := base64.URLEncoding.EncodeToString(hasher.Sum(nil))
-	return sha, nil
-}
-
-func setUserValidators() {
-	govalidator.CustomTypeTagMap.Set("usernameValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 0
-	})
-
-	govalidator.CustomTypeTagMap.Set("nicknameValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 7
-	})
-
-	govalidator.CustomTypeTagMap.Set("emailValidator", func(i interface{}, context interface{}) bool {
-		return govalidator.IsEmail(i.(string))
-	})
-
-	govalidator.CustomTypeTagMap.Set("passwordValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 7
-	})
-}
-
-func ValidateUser(user model.User) []error {
-	setUserValidators()
-
-	_, err := govalidator.ValidateStruct(user)
-
-	if err != nil {
-		errors := err.(govalidator.Errors).Errors()
-		return errors
-	}
-
-	return nil
+func Hash(password []byte) string {
+	hashedPassword := string(argon2.IDKey(password, salt, 1, 64*1024, 4, 32))
+	return hashedPassword
 }

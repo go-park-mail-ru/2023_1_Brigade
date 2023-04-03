@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
@@ -63,8 +64,8 @@ func Test_GetUserById(t *testing.T) {
 	var ctx echo.Context
 
 	for _, test := range tests {
-		userRepository.EXPECT().GetUserById(ctx, 1).Return(test.expectedUser, test.expectedError).Times(1)
-		user, err := usecase.GetUserById(ctx, 1)
+		userRepository.EXPECT().GetUserById(context.Background(), uint64(1)).Return(test.expectedUser, test.expectedError).Times(1)
+		user, err := usecase.GetUserById(ctx, uint64(1))
 
 		require.Error(t, err, test.expectedError)
 		require.Equal(t, user, test.expectedUser, test.name)

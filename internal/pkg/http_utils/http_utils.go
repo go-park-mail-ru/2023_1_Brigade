@@ -6,23 +6,8 @@ import (
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	"strings"
 	"time"
 )
-
-func ErrorConversion(err error) error {
-	words := strings.Split(err.Error(), " ")
-	switch words[0] {
-	case "username:":
-		return myErrors.ErrInvalidUsername
-	case "email:":
-		return myErrors.ErrInvalidEmail
-	case "password:":
-		return myErrors.ErrInvalidPassword
-	default:
-		return myErrors.ErrInternal
-	}
-}
 
 func StatusCode(err error) int {
 	switch {
@@ -37,6 +22,10 @@ func StatusCode(err error) int {
 	case errors.Is(err, myErrors.ErrNotChatAccess):
 		return http.StatusForbidden
 	case errors.Is(err, myErrors.ErrSessionNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, myErrors.ErrEmailNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, myErrors.ErrUsernameNotFound):
 		return http.StatusNotFound
 	case errors.Is(err, myErrors.ErrUserNotFound):
 		return http.StatusNotFound

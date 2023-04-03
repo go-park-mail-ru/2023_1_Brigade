@@ -1,20 +1,18 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jmoiron/sqlx"
-	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
-	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"regexp"
 	"testing"
 )
 
 func TestPostgres_CheckExistUserByEmail_True(t *testing.T) {
-	var ctx echo.Context
 	inputEmail := "CorrectEmail@mail.ru"
 
 	db, mock, err := sqlmock.New()
@@ -26,18 +24,18 @@ func TestPostgres_CheckExistUserByEmail_True(t *testing.T) {
 		}
 	}()
 
-	rowMain := sqlmock.NewRows([]string{"email"}).
-		AddRow(inputEmail)
+	rowMain := sqlmock.NewRows([]string{"exists"}).
+		AddRow(true)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE email=?`)).
+		ExpectQuery(regexp.QuoteMeta(`SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1)`)).
 		WithArgs(inputEmail).
 		WillReturnRows(rowMain)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistEmail(ctx, inputEmail)
+	err = repo.CheckExistEmail(context.Background(), inputEmail)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -45,8 +43,7 @@ func TestPostgres_CheckExistUserByEmail_True(t *testing.T) {
 }
 
 func TestPostgres_CheckExistUserByEmail_False(t *testing.T) {
-	var ctx echo.Context
-	inputEmail := "CorrectEmail@mail.ru"
+	inputEmail := "IncorrectEmail@mail.ru"
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
@@ -57,25 +54,25 @@ func TestPostgres_CheckExistUserByEmail_False(t *testing.T) {
 		}
 	}()
 
-	rowMain := sqlmock.NewRows([]string{"email"})
+	rowMain := sqlmock.NewRows([]string{"exists"}).
+		AddRow(false)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE email=?`)).
+		ExpectQuery(regexp.QuoteMeta(`SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1)`)).
 		WithArgs(inputEmail).
 		WillReturnRows(rowMain)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistEmail(ctx, inputEmail)
-	require.Error(t, err, myErrors.ErrUserNotFound)
+	err = repo.CheckExistEmail(context.Background(), inputEmail)
+	require.Error(t, err, myErrors.ErrEmailNotFound)
 
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err)
 }
 
 func TestPostgres_CheckExistUserByUsername_True(t *testing.T) {
-	var ctx echo.Context
 	username := "marcussss"
 
 	db, mock, err := sqlmock.New()
@@ -87,18 +84,18 @@ func TestPostgres_CheckExistUserByUsername_True(t *testing.T) {
 		}
 	}()
 
-	rowMain := sqlmock.NewRows([]string{"username"}).
-		AddRow(username)
+	rowMain := sqlmock.NewRows([]string{"exists"}).
+		AddRow(true)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE username=?`)).
+		ExpectQuery(regexp.QuoteMeta(`SELECT EXISTS(SELECT 1 FROM profile WHERE username=$1)`)).
 		WithArgs(username).
 		WillReturnRows(rowMain)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistUsername(ctx, username)
+	err = repo.CheckExistUsername(context.Background(), username)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -106,7 +103,6 @@ func TestPostgres_CheckExistUserByUsername_True(t *testing.T) {
 }
 
 func TestPostgres_CheckExistUserByUsername_False(t *testing.T) {
-	var ctx echo.Context
 	username := "marcussss"
 
 	db, mock, err := sqlmock.New()
@@ -118,31 +114,27 @@ func TestPostgres_CheckExistUserByUsername_False(t *testing.T) {
 		}
 	}()
 
-	rowMain := sqlmock.NewRows([]string{"username"})
+	rowMain := sqlmock.NewRows([]string{"exists"}).
+		AddRow(false)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE username=?`)).
+		ExpectQuery(regexp.QuoteMeta(`SELECT EXISTS(SELECT 1 FROM profile WHERE username=$1)`)).
 		WithArgs(username).
 		WillReturnRows(rowMain)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistUsername(ctx, username)
-	require.Error(t, err, myErrors.ErrUserNotFound)
+	err = repo.CheckExistUsername(context.Background(), username)
+	require.Error(t, err, myErrors.ErrUsernameNotFound)
 
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err)
 }
 
 func TestPostgres_CheckCorrectPassword_True(t *testing.T) {
-	var ctx echo.Context
 	email := "marcussss@gmail.com"
 	password := "baumanka"
-	user := model.User{
-		Email:    email,
-		Password: password,
-	}
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
@@ -153,18 +145,18 @@ func TestPostgres_CheckCorrectPassword_True(t *testing.T) {
 		}
 	}()
 
-	rowMain := sqlmock.NewRows([]string{"email", "password"}).
-		AddRow(email, password)
+	rowMain := sqlmock.NewRows([]string{"exists"}).
+		AddRow(true)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE email=? AND password=?`)).
+		ExpectQuery(regexp.QuoteMeta(`SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1 AND password=$2)`)).
 		WithArgs(email, password).
 		WillReturnRows(rowMain)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckCorrectPassword(ctx, user)
+	err = repo.CheckCorrectPassword(context.Background(), email, password)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -172,13 +164,8 @@ func TestPostgres_CheckCorrectPassword_True(t *testing.T) {
 }
 
 func TestPostgres_CheckCorrectPassword_False(t *testing.T) {
-	var ctx echo.Context
 	email := "marcussss@gmail.com"
 	password := "baumanka"
-	user := model.User{
-		Email:    email,
-		Password: password,
-	}
 
 	db, mock, err := sqlmock.New()
 	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
@@ -189,17 +176,18 @@ func TestPostgres_CheckCorrectPassword_False(t *testing.T) {
 		}
 	}()
 
-	rowMain := sqlmock.NewRows([]string{"email", "password"})
+	rowMain := sqlmock.NewRows([]string{"exists"}).
+		AddRow(false)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE email=? AND password=?`)).
+		ExpectQuery(regexp.QuoteMeta(`SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1 AND password=$2)`)).
 		WithArgs(email, password).
 		WillReturnRows(rowMain)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckCorrectPassword(ctx, user)
+	err = repo.CheckCorrectPassword(context.Background(), email, password)
 	require.Error(t, err, myErrors.ErrIncorrectPassword)
 
 	err = mock.ExpectationsWereMet()

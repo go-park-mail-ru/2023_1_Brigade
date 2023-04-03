@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
-	"github.com/labstack/echo/v4"
 	"github.com/minio/minio-go/v7"
 	log "github.com/sirupsen/logrus"
 	"mime/multipart"
@@ -29,7 +28,7 @@ type repository struct {
 	minio      *minio.Client
 }
 
-func (r *repository) LoadImage(ctx echo.Context, file multipart.File, filename string, userID uint64) (*url.URL, error) {
+func (r repository) LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (*url.URL, error) {
 	_, err := r.minio.PutObject(context.Background(), r.bucketname, filename, file, -1, minio.PutObjectOptions{})
 	if err != nil {
 		return nil, err
@@ -41,7 +40,7 @@ func (r *repository) LoadImage(ctx echo.Context, file multipart.File, filename s
 		return nil, myErrors.ErrAvatarNotFound
 	}
 
-	row, err := r.db.Query("INSERT INTO images_urls (url) VALUES ($1)", presignedURL.String())
+	row, err := r.db.Query("INSERT INTO images_urls (image_url) VALUES ($1) RETURNING id_image", presignedURL.String())
 	if err != nil {
 		log.Warn(err)
 		return nil, err
@@ -51,14 +50,12 @@ func (r *repository) LoadImage(ctx echo.Context, file multipart.File, filename s
 	if row.Next() {
 		err = row.Scan(&imageID)
 		if err != nil {
-			log.Warn(err)
 			return nil, err
 		}
 	}
-
+	log.Warn(imageID)
 	_, err = r.db.Query("INSERT INTO users_avatar (id_user, id_image) VALUES ($1, $2)", userID, imageID)
 	if err != nil {
-		log.Warn(err)
 		return nil, err
 	}
 

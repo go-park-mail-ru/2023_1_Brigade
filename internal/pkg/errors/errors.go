@@ -23,9 +23,12 @@ var (
 
 	ErrSessionNotFound   = errors.New("сессия не найдена")
 	ErrChatNotFound      = errors.New("чат не найден")
+	ErrUsernameNotFound  = errors.New("username не найден")
+	ErrEmailNotFound     = errors.New("email не найден")
 	ErrUserNotFound      = errors.New("пользователь не найден")
 	ErrIncorrectPassword = errors.New("неправильный пароль")
 	ErrAvatarNotFound    = errors.New("аватар не найден")
+	ErrImageNotFound     = errors.New("изображение не найдено")
 
 	ErrInternal = errors.New("внутренняя ошибка сервера")
 )

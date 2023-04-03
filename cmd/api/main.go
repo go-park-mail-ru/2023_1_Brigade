@@ -7,6 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
 	"os"
@@ -16,20 +18,45 @@ import (
 	"project/internal/configs"
 
 	log "github.com/sirupsen/logrus"
+
 	httpAuthUser "project/internal/auth/user/delivery/http"
 	httpChat "project/internal/chat/delivery/http"
+	httpImages "project/internal/images/delivery/http"
 	httpUser "project/internal/user/delivery/http"
 
 	usecaseAuthSession "project/internal/auth/session/usecase"
 	usecaseAuthUser "project/internal/auth/user/usecase"
 	usecaseChat "project/internal/chat/usecase"
+	usecaseImages "project/internal/images/usecase"
 	usecaseUser "project/internal/user/usecase"
 
 	repositoryAuthSession "project/internal/auth/session/repository"
 	repositoryAuthUser "project/internal/auth/user/repository"
 	repositoryChat "project/internal/chat/repository"
+	repositoryImages "project/internal/images/repository"
 	repositoryUser "project/internal/user/repository"
 )
+
+//log "github.com/sirupsen/logrus"
+//httpAuthUser "project/internal/auth/user/delivery/http"
+//httpImages "project/internal/images/delivery/http"
+//httpChat "project/internal/chat/delivery/http"
+//httpUser "project/internal/user/delivery/http"
+//wsMessages "project/internal/messages/delivery/ws"
+//
+//usecaseImages "project/internal/images/usecase"
+//usecaseMessages "project/internal/messages/usecase"
+//usecaseAuthSession "project/internal/auth/session/usecase"
+//usecaseAuthUser "project/internal/auth/user/usecase"
+//usecaseChat "project/internal/chat/usecase"
+//usecaseUser "project/internal/user/usecase"
+//
+//repositoryImages "project/internal/images/repository"
+//repositoryMessages "project/internal/messages/repository"
+//repositoryAuthSession "project/internal/auth/session/repository"
+//repositoryAuthUser "project/internal/auth/user/repository"
+//repositoryChat "project/internal/chat/repository"
+//repositoryUser "project/internal/user/repository"
 
 func init() {
 	envPath := "../../.env"
@@ -75,17 +102,17 @@ func main() {
 		Addr: config.Redis.Addr,
 	})
 
-	//minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
-	//	Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
-	//})
-	//
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
+		Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
+	})
+
+	if err != nil {
+		log.Error(err)
+	}
 
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
-	//imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db, minioClient)
+	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db, minioClient)
 	//messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
@@ -95,7 +122,7 @@ func main() {
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository)
 	//messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository, config.Kafka)
-	//imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
+	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -106,14 +133,14 @@ func main() {
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
 	//e.Use(middleware.CSRF())
-	//e.Use(myMiddleware.XSSMidlleware)
-	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	//e.Use(myMiddleware.XSSMidlleware) // переделать на отдачу ПОСЛЕ
+	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	httpChat.NewChatHandler(e, chatUsecase, userUsecase)
 	//wsMessages.NewMessagesHandler(e, messagesUsecase)
-	//httpImages.NewImagesHandler(e, imagesUsecase)
+	httpImages.NewImagesHandler(e, imagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

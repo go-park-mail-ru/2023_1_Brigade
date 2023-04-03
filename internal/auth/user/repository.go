@@ -1,13 +1,13 @@
 package user
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"project/internal/model"
 )
 
 type Repository interface {
-	CreateUser(ctx echo.Context, user model.User) (model.User, error)
-	CheckCorrectPassword(ctx echo.Context, user model.User) error
-	CheckExistEmail(ctx echo.Context, email string) error
-	CheckExistUsername(ctx echo.Context, username string) error
+	CreateUser(ctx context.Context, user model.User) (model.User, error)
+	CheckCorrectPassword(ctx context.Context, email string, password string) error
+	CheckExistEmail(ctx context.Context, email string) error
+	CheckExistUsername(ctx context.Context, username string) error
 }

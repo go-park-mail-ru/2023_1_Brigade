@@ -1,13 +1,14 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"github.com/labstack/echo/v4"
 	auth "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
+	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 
@@ -20,54 +21,53 @@ func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository) auth
 	return &usecase{authRepo: authRepo, userRepo: userRepo}
 }
 
-func (u *usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
+func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
 	user := model.User{
+		Username: "id" + "_" + registrationUser.Nickname,
 		Nickname: registrationUser.Nickname,
 		Email:    registrationUser.Email,
+		Status:   "",
 	}
 
-	err := u.authRepo.CheckExistEmail(ctx, user.Email)
-	if !errors.Is(err, myErrors.ErrUserNotFound) {
-		return user, err
+	err := u.authRepo.CheckExistEmail(context.Background(), user.Email)
+	if err == nil {
+		return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
+	}
+	if !errors.Is(err, myErrors.ErrEmailNotFound) {
+		return model.User{}, err
 	}
 
-	hashedPassword, err := security.Hash(registrationUser.Password)
-	if err != nil {
-		return user, err
-	}
-	registrationUser.Password = hashedPassword
-
-	validateError := security.ValidateUser(user)
-	if validateError != nil {
-		return user, httpUtils.ErrorConversion(validateError[0])
+	validationErrors := validation.ValidateUser(user)
+	if len(validationErrors) != 0 {
+		return model.User{}, validationErrors[0]
 	}
 
-	userDB, err := u.authRepo.CreateUser(ctx, user)
-	userDB.Username = "id" + string(userDB.Id)
-	return userDB, err
+	hashedPassword := security.Hash([]byte(registrationUser.Password))
+	user.Password = hashedPassword
+
+	userFromDB, err := u.authRepo.CreateUser(context.Background(), user)
+	return userFromDB, err
 }
 
-func (u *usecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error) {
+func (u usecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error) {
 	user := model.User{
 		Email:    loginUser.Email,
 		Password: loginUser.Password,
 	}
 
-	err := u.authRepo.CheckExistEmail(ctx, user.Email)
+	err := u.authRepo.CheckExistEmail(context.Background(), user.Email)
 	if err != nil {
-		return user, err
+		return model.User{}, err
 	}
 
-	user.Password, err = security.Hash(user.Password)
+	hashedPassword := security.Hash([]byte(user.Password))
+	user.Password = hashedPassword
+
+	err = u.authRepo.CheckCorrectPassword(context.Background(), user.Email, user.Password)
 	if err != nil {
-		return user, err
+		return model.User{}, err
 	}
 
-	err = u.authRepo.CheckCorrectPassword(ctx, user)
-	if err != nil {
-		return user, err
-	}
-
-	user, err = u.userRepo.GetUserByEmail(ctx, user.Email)
+	user, err = u.userRepo.GetUserByEmail(context.Background(), user.Email)
 	return user, err
 }

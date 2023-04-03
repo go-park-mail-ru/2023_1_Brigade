@@ -1,10 +1,10 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	"github.com/labstack/echo/v4"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
@@ -18,7 +18,7 @@ type repository struct {
 	db *sqlx.DB
 }
 
-func (r *repository) DeleteUserById(ctx echo.Context, userID uint64) error {
+func (r repository) DeleteUserById(ctx context.Context, userID uint64) error {
 	_, err := r.db.Query("DELETE FROM profile WHERE id=$1", userID)
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrUserNotFound
@@ -27,44 +27,44 @@ func (r *repository) DeleteUserById(ctx echo.Context, userID uint64) error {
 	return err
 }
 
-func (r *repository) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
+func (r repository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	var user model.User
 	err := r.db.Get(&user, "SELECT * FROM profile WHERE id=$1", userID)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return user, myErrors.ErrUserNotFound
+		return model.User{}, myErrors.ErrUserNotFound
 	}
 
 	return user, err
 }
 
-func (r *repository) GetUserByEmail(ctx echo.Context, email string) (model.User, error) {
+func (r repository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
 	var user model.User
 	err := r.db.Get(&user, "SELECT * FROM profile WHERE email=$1", email)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return user, myErrors.ErrUserNotFound
+		return model.User{}, myErrors.ErrUserNotFound
 	}
 
 	return user, err
 }
 
-func (r *repository) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error) {
+func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error) {
 	var contacts []model.User
 	err := r.db.Select(&contacts, "SELECT * FROM user_friends WHERE id_user=$1", userID)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return contacts, myErrors.ErrUserNotFound
+		return []model.User{}, myErrors.ErrUserNotFound
 	}
 
 	return contacts, err
 }
 
-func (r *repository) UpdateUserById(ctx echo.Context, user model.User) (model.User, error) {
+func (r repository) UpdateUserById(ctx context.Context, user model.User) (model.User, error) {
 	rows, err := r.db.NamedQuery(`UPDATE profile SET username=:username, email=:email, status=:status, password=:password  WHERE :id = $1`, user)
 
 	if err != nil {
-		return user, err
+		return model.User{}, err
 	}
 	if rows.Next() {
 		err = rows.Scan(&user)
@@ -76,7 +76,7 @@ func (r *repository) UpdateUserById(ctx echo.Context, user model.User) (model.Us
 	return user, nil
 }
 
-func (r *repository) CheckUserIsContact(ctx echo.Context, contact model.UserContact) error {
+func (r repository) CheckUserIsContact(ctx context.Context, contact model.UserContact) error {
 	rows, err := r.db.NamedQuery("SELECT * FROM user_contacts WHERE id_user=:id_user, id_contact:=id_contact", contact)
 
 	if err != nil {
@@ -89,7 +89,7 @@ func (r *repository) CheckUserIsContact(ctx echo.Context, contact model.UserCont
 	return nil
 }
 
-func (r *repository) AddUserInContact(ctx echo.Context, contact model.UserContact) error {
+func (r repository) AddUserInContact(ctx context.Context, contact model.UserContact) error {
 	_, err := r.db.NamedQuery("INSERT INTO user_contacts (id_user, id_contact) VALUES (:id_user, :id_contact)", contact)
 	if err != nil {
 		return err
@@ -98,8 +98,8 @@ func (r *repository) AddUserInContact(ctx echo.Context, contact model.UserContac
 	return nil
 }
 
-func (r *repository) CheckExistUserById(ctx echo.Context, userID uint64) error {
-	rows, err := r.db.Query("SELECT * FROM profile WHERE id=$1", userID)
+func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error {
+	rows, err := r.db.Query("SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
 
 	if err != nil {
 		return err
@@ -109,4 +109,25 @@ func (r *repository) CheckExistUserById(ctx echo.Context, userID uint64) error {
 	}
 
 	return nil
+}
+
+func (r repository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
+	var userAvatar model.UserAvatar
+	err := r.db.Get(&userAvatar, "SELECT * FROM users_avatar WHERE id_user=$1", userID)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", myErrors.ErrAvatarNotFound
+		}
+		return "", err
+	}
+
+	var avatarUrl model.ImageUrl
+	err = r.db.Get(&avatarUrl, "SELECT * FROM images_urls WHERE id_image=$1", userAvatar.IdImage)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return "", myErrors.ErrImageNotFound
+	}
+
+	return avatarUrl.ImageUrl, err
 }

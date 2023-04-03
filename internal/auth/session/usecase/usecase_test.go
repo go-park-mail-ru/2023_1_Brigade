@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -53,7 +54,7 @@ func Test_GetSessionByCookie(t *testing.T) {
 	var ctx echo.Context
 
 	for _, test := range tests {
-		authRepository.EXPECT().GetSessionByCookie(ctx, "").Return(test.expectedSession, test.expectedError).Times(1)
+		authRepository.EXPECT().GetSessionByCookie(context.Background(), "").Return(test.expectedSession, test.expectedError).Times(1)
 		session, err := usecase.GetSessionByCookie(ctx, "")
 
 		require.Error(t, err, test.expectedError)

@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	chatMock "project/internal/chat/usecase/mocks"
-	myMiddleware "project/internal/middleware"
 	"project/internal/model"
 	userMock "project/internal/user/usecase/mocks"
 	"testing"
@@ -47,14 +46,10 @@ func TestHandlers_CreateChat_OK(t *testing.T) {
 
 	chatUsecase.EXPECT().CreateChat(ctx, chat).Return(dbChat, nil).Times(1)
 
-	_ = myMiddleware.XSSMidlleware(func(ctx echo.Context) error {
-		err = handler.CreateChatHandler(ctx)
+	err = handler.CreateChatHandler(ctx)
 
-		require.NoError(t, err)
-		require.Equal(t, test.status, w.Code)
-
-		return err
-	})(ctx)
+	require.NoError(t, err)
+	require.Equal(t, test.status, w.Code)
 }
 
 func TestHandlers_GetChat_OK(t *testing.T) {
@@ -80,8 +75,8 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
-	chatUsecase.EXPECT().GetChatById(ctx, 1).Return(chat, nil).Times(1)
-	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, 0).Return(nil).Times(1)
+	chatUsecase.EXPECT().GetChatById(ctx, uint64(1)).Return(chat, nil).Times(1)
+	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, uint64(0)).Return(nil).Times(1)
 
 	err := handler.GetChatHandler(ctx)
 
@@ -112,9 +107,9 @@ func TestHandlers_DeleteChat_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
-	chatUsecase.EXPECT().GetChatById(ctx, 1).Return(chat, nil).Times(1)
-	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, 0).Return(nil).Times(1)
-	chatUsecase.EXPECT().DeleteChatById(ctx, 1).Return(nil).Times(1)
+	chatUsecase.EXPECT().GetChatById(ctx, uint64(1)).Return(chat, nil).Times(1)
+	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, uint64(0)).Return(nil).Times(1)
+	chatUsecase.EXPECT().DeleteChatById(ctx, uint64(1)).Return(nil).Times(1)
 
 	err := handler.DeleteChatHandler(ctx)
 

@@ -1,11 +1,13 @@
 package usecase
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	authUser "project/internal/auth/user"
 	"project/internal/model"
-	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/pkg/security"
+	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 
@@ -18,17 +20,17 @@ func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user
 	return &usecase{userRepo: userRepo, authRepo: authRepo}
 }
 
-func (u *usecase) DeleteUserById(ctx echo.Context, userID uint64) error {
-	err := u.userRepo.DeleteUserById(ctx, userID)
+func (u usecase) DeleteUserById(ctx echo.Context, userID uint64) error {
+	err := u.userRepo.DeleteUserById(context.Background(), userID)
 	return err
 }
 
-func (u *usecase) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
-	user, err := u.userRepo.GetUserById(ctx, userID)
+func (u usecase) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
+	user, err := u.userRepo.GetUserById(context.Background(), userID)
 	return user, err
 }
 
-func (u *usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
+func (u usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
 	oldUser := model.User{
 		Id:       userID,
 		Username: updateUser.Username,
@@ -37,64 +39,68 @@ func (u *usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, use
 		Password: updateUser.CurrentPassword,
 	}
 
-	validateError := security.ValidateUser(oldUser)
+	validateError := validation.ValidateUser(oldUser)
 	if validateError != nil {
-		return oldUser, httpUtils.ErrorConversion(validateError[0])
+		return model.User{}, validation.ErrorConversion(validateError[0])
 	}
 
-	password, err := security.Hash(oldUser.Password)
+	password := security.Hash([]byte(oldUser.Password))
 	oldUser.Password = password
+
+	err := u.authRepo.CheckCorrectPassword(context.Background(), oldUser.Email, oldUser.Password)
 	if err != nil {
-		return oldUser, err
+		return model.User{}, err
 	}
 
-	err = u.authRepo.CheckCorrectPassword(ctx, oldUser)
-	if err != nil {
-		return oldUser, err
-	}
-
-	user, err := u.userRepo.UpdateUserById(ctx, oldUser)
+	user, err := u.userRepo.UpdateUserById(context.Background(), oldUser)
 	return user, err
 }
 
-func (u *usecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.Contact, error) {
+func (u usecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.Contact, error) {
 	var contacts []model.Contact
-	contactsDB, err := u.userRepo.GetUserContacts(ctx, userID)
+	contactsFromDB, err := u.userRepo.GetUserContacts(context.Background(), userID)
 	if err != nil {
-		return contacts, err
+		return []model.Contact{}, err
 	}
 
-	for _, contact := range contactsDB {
+	for _, contact := range contactsFromDB {
+		avatarUrl, err := u.userRepo.GetUserAvatar(context.Background(), userID)
+		if err != nil {
+			//return []model.Contact{}, err
+			log.Error(err)
+		}
+
 		contacts = append(contacts, model.Contact{
 			Username: contact.Username,
 			Nickname: contact.Nickname,
 			Status:   contact.Status,
+			Avatar:   avatarUrl,
 		})
 	}
 
 	return contacts, err
 }
 
-func (u *usecase) AddUserContact(ctx echo.Context, userID uint64, contactID uint64) (model.User, error) {
+func (u usecase) AddUserContact(ctx echo.Context, userID uint64, contactID uint64) (model.User, error) {
 	userContact := model.UserContact{
 		IdUser:    userID,
 		IdContact: contactID,
 	}
-	err := u.userRepo.CheckUserIsContact(ctx, userContact)
+	err := u.userRepo.CheckUserIsContact(context.Background(), userContact)
 	if err != nil {
 		return model.User{}, err
 	}
 
-	err = u.userRepo.AddUserInContact(ctx, userContact)
+	err = u.userRepo.AddUserInContact(context.Background(), userContact)
 	if err != nil {
 		return model.User{}, err
 	}
 
-	contact, err := u.userRepo.GetUserById(ctx, contactID)
+	contact, err := u.userRepo.GetUserById(context.Background(), contactID)
 	return contact, err
 }
 
-func (u *usecase) CheckExistUserById(ctx echo.Context, userID uint64) error {
-	err := u.userRepo.CheckExistUserById(ctx, userID)
+func (u usecase) CheckExistUserById(ctx echo.Context, userID uint64) error {
+	err := u.userRepo.CheckExistUserById(context.Background(), userID)
 	return err
 }

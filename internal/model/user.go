@@ -32,9 +32,20 @@ type Contact struct {
 	Username string `json:"username" valid:"usernameValidator" db:"username"`
 	Nickname string `json:"nickname" valid:"nicknameValidator" db:"nickname"`
 	Status   string `json:"status"   valid:"type(string)"      db:"status"`
+	Avatar   string `json:"avatar"                             db:"avatar"`
 }
 
 type UserContact struct {
 	IdUser    uint64 `json:"id_user"    db:"id_user"`
 	IdContact uint64 `json:"id_contact" db:"id_contact"`
+}
+
+type ImageUrl struct {
+	IdImage  uint64 `json:"id_image"  db:"id_image"`
+	ImageUrl string `json:"image_url" db:"image_url"`
+}
+
+type UserAvatar struct {
+	IdUser  uint64 `json:"id_user"  db:"id_user"`
+	IdImage uint64 `json:"id_image" db:"id_avatar"`
 }

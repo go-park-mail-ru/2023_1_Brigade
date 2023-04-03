@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS chat CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
 DROP TABLE IF EXISTS chat_members CASCADE;
 DROP TABLE IF EXISTS message_receiver CASCADE;
-DROP TABLE IF EXISTS user_friends CASCADE;
+DROP TABLE IF EXISTS user_contacts CASCADE;
 DROP TABLE IF EXISTS images_urls CASCADE;
 DROP TABLE IF EXISTS users_avatar CASCADE;
 
@@ -72,19 +72,19 @@ CREATE TABLE IF NOT EXISTS users_avatar (
 INSERT INTO images_urls (id_image, image_url)
 VALUES (
            1,
-           http://minio:9000/avatars/1avatara_ru_3D001.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=minio%2F20230403%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20230403T123817Z\u0026X-Amz-Expires=604800\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=734c3e423869827332ab623cf3abebe6e8ba541ca9fc805b1acf2a836c934938
+           'http://minio:9000/avatars/1avatara_ru_3D001.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=minio%2F20230403%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20230403T123817Z\u0026X-Amz-Expires=604800\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=734c3e423869827332ab623cf3abebe6e8ba541ca9fc805b1acf2a836c934938'
        );
 
 INSERT INTO images_urls (id_image, image_url)
 VALUES (
            2,
-           http://minio:9000/avatars/1avatara_ru_3D001.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=minio%2F20230403%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20230403T123817Z\u0026X-Amz-Expires=604800\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=734c3e423869827332ab623cf3abebe6e8ba541ca9fc805b1acf2a836c934938
+           'http://minio:9000/avatars/1avatara_ru_3D001.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=minio%2F20230403%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20230403T123817Z\u0026X-Amz-Expires=604800\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=734c3e423869827332ab623cf3abebe6e8ba541ca9fc805b1acf2a836c934938'
        );
 
 INSERT INTO images_urls (id_image, image_url)
 VALUES (
            3,
-           http://minio:9000/avatars/1avatara_ru_3D001.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=minio%2F20230403%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20230403T123817Z\u0026X-Amz-Expires=604800\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=734c3e423869827332ab623cf3abebe6e8ba541ca9fc805b1acf2a836c934938
+           'http://minio:9000/avatars/1avatara_ru_3D001.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=minio%2F20230403%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20230403T123817Z\u0026X-Amz-Expires=604800\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=734c3e423869827332ab623cf3abebe6e8ba541ca9fc805b1acf2a836c934938'
        );
 
 INSERT INTO users_avatar (id_user, id_image)
@@ -105,23 +105,14 @@ VALUES (
            3
        );
 
+INSERT INTO profile (username, nickname, email, status, password)
+VALUES ('', 'marcussss1', 'marcussss1@gmail.com', 'marcussss1', '123');
 
-INSERT INTO profile (id, nickname, email, status, password)
-VALUES (1, 'marcussss1', 'marcussss1@gmail.com', 'marcussss1', '123');
+INSERT INTO profile (username, nickname, email, status, password)
+VALUES ('', 'marcussss2', 'marcussss2@gmail.com', 'marcussss2', '123');
 
-INSERT INTO profile (id, nickname, email, status, password)
-VALUES (2, 'marcussss2', 'marcussss2@gmail.com', 'marcussss2', '123');
-
-INSERT INTO profile (id, nickname, email, status, password)
-VALUES (3, 'marcussss3', 'marcussss3@gmail.com', 'marcussss3', '123');
-
-INSERT INTO user_contacts (id_user, id_contact)
-VALUES (
-           (SELECT id FROM profile
-            WHERE id = 1),
-           (SELECT id FROM profile
-            WHERE id = 1)
-       );
+INSERT INTO profile (username, nickname, email, status, password)
+VALUES ('', 'marcussss3', 'marcussss3@gmail.com', 'marcussss3', '123');
 
 INSERT INTO user_contacts (id_user, id_contact)
 VALUES (

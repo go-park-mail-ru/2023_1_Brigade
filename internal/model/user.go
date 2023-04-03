@@ -47,5 +47,5 @@ type ImageUrl struct {
 
 type UserAvatar struct {
 	IdUser  uint64 `json:"id_user"  db:"id_user"`
-	IdImage uint64 `json:"id_image" db:"id_avatar"`
+	IdImage uint64 `json:"id_image" db:"id_image"`
 }

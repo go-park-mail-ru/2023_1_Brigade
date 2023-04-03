@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
@@ -50,14 +51,24 @@ func (r repository) GetUserByEmail(ctx context.Context, email string) (model.Use
 }
 
 func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error) {
-	var contacts []model.User
-	err := r.db.Select(&contacts, "SELECT * FROM user_friends WHERE id_user=$1", userID)
+	var contacts []model.UserContact
+	err := r.db.Select(&contacts, "SELECT * FROM user_contacts WHERE id_user=$1", userID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return []model.User{}, myErrors.ErrUserNotFound
 	}
 
-	return contacts, err
+	var contactsInfo []model.User
+	for _, contact := range contacts {
+		contactInfo, err := r.GetUserById(ctx, contact.IdContact)
+		if err != nil {
+			log.Error(err)
+		}
+
+		contactsInfo = append(contactsInfo, contactInfo)
+	}
+
+	return contactsInfo, nil
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.User) (model.User, error) {

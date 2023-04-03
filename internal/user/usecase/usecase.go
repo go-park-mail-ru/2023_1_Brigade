@@ -66,7 +66,6 @@ func (u usecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.Conta
 	for _, contact := range contactsFromDB {
 		avatarUrl, err := u.userRepo.GetUserAvatar(context.Background(), userID)
 		if err != nil {
-			//return []model.Contact{}, err
 			log.Error(err)
 		}
 

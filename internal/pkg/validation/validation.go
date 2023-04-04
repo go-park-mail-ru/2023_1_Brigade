@@ -24,12 +24,8 @@ func ErrorConversion(err error) error {
 }
 
 func setUserValidators() {
-	govalidator.CustomTypeTagMap.Set("usernameValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 7
-	})
-
 	govalidator.CustomTypeTagMap.Set("nicknameValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 7
+		return len(i.(string)) > 1
 	})
 
 	govalidator.CustomTypeTagMap.Set("emailValidator", func(i interface{}, context interface{}) bool {

@@ -54,7 +54,7 @@ func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUse
 	if err != nil {
 		return model.User{}, err
 	}
-	sessionUser.Username = "id_" + strconv.Itoa(int(sessionUser.Id))
+	sessionUser.Username = strconv.Itoa(int(sessionUser.Id))
 
 	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -30,8 +31,8 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
-	rows, err := r.db.NamedQuery("INSERT INTO chat (type, name, created_at, members, masters) "+
-		"VALUES (:type, :name, :created_at, :members, :masters) RETURNING id", chat)
+	rows, err := r.db.NamedQuery("INSERT INTO chat (type, title, avatar) "+
+		"VALUES (:type, :title, :avatar) RETURNING id", chat)
 
 	if err != nil {
 		return model.Chat{}, err
@@ -40,6 +41,14 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 		err = rows.Scan(&chat.Id)
 		if err != nil {
 			return model.Chat{}, err
+		}
+	}
+
+	log.Warn(chat)
+	for _, members := range chat.Members {
+		err = r.AddUserInChatDB(context.Background(), chat.Id, members.Id)
+		if err != nil {
+			log.Error(err)
 		}
 	}
 
@@ -61,5 +70,33 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 		return err
 	}
 
+	//_, err = r.db.Query("INSERT INTO users_chats (id_user, id_chat) VALUES ($1, $2)", memberID, chatID)
+	//if err != nil {
+	//	return err
+	//}
+
 	return nil
+}
+
+func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.UsersChats, error) {
+	var chat []model.UsersChats
+	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_member=$1", userID)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, myErrors.ErrChatNotFound
+		}
+		return nil, err
+	}
+
+	for rows.Next() {
+		var userChat model.UsersChats
+		err := rows.Scan(&userChat.UserId, &userChat.ChatId)
+		if err != nil {
+			log.Error(err)
+		}
+		chat = append(chat, userChat)
+	}
+
+	return chat, err
 }

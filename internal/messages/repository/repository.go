@@ -22,20 +22,31 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 	return message, nil
 }
 
-func (r repository) MarkMessageReading(ctx context.Context, messageID uint64) error {
-	return nil
-}
-
-func (r repository) GetChatById(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
-	var chat []model.ChatMembers
-	err := r.db.Select(&chat, "SELECT * FROM chat_members WHERE id_chat=$1", chatID)
+func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (model.Message, error) {
+	var lastMessage model.Message
+	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat=$1`, chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return []model.ChatMembers{}, myErrors.ErrChatNotFound
+		return model.Message{}, myErrors.ErrChatNotFound
 	}
 
-	return chat, err
+	return lastMessage, err
 }
+
+//func (r repository) MarkMessageReading(ctx context.Context, messageID uint64) error {
+//	return nil
+//}
+
+//func (r repository) GetChatById(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
+//var chat []model.ChatMembers
+//err := r.db.Select(&chat, "SELECT * FROM chat_members WHERE id_chat=$1", chatID)
+//
+//if errors.Is(err, sql.ErrNoRows) {
+//	return []model.ChatMembers{}, myErrors.ErrChatNotFound
+//}
+//
+//return chat, err
+//}
 
 func (r repository) InsertMessageReceiveInDB(ctx context.Context, message model.ProducerMessage) error {
 	return nil

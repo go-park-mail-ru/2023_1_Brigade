@@ -12,9 +12,9 @@ import (
 )
 
 type authHandler struct {
+	userUsecase        user.Usecase
 	authUserUsecase    authUser.Usecase
 	authSessionUsecase authSession.Usecase
-	userUsecase        user.Usecase
 }
 
 func (u authHandler) SignupHandler(ctx echo.Context) error {

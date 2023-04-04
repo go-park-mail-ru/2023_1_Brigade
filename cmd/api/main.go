@@ -34,6 +34,7 @@ import (
 	repositoryAuthUser "project/internal/auth/user/repository"
 	repositoryChat "project/internal/chat/repository"
 	repositoryImages "project/internal/images/repository"
+	repositoryMessages "project/internal/messages/repository"
 	repositoryUser "project/internal/user/repository"
 )
 
@@ -79,23 +80,23 @@ func main() {
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
-		log.Fatal("Yaml path not found")
+		log.Error("Yaml path not found")
 	}
 
 	yamlFile, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	var config configs.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB) // ping
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	redis := redis.NewClient(&redis.Options{
@@ -113,14 +114,14 @@ func main() {
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db, minioClient)
-	//messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
+	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
 
 	userUsecase := usecaseUser.NewUserUsecase(userRepository, authUserRepository)
 	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
-	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository)
+	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository, messagesRepository)
 	//messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository, config.Kafka)
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 

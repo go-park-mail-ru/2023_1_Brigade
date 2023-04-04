@@ -27,7 +27,8 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	session := ctx.Get("session").(model.Session)
+	//session := ctx.Get("session").(model.Session)
+	session := model.Session{UserId: 1}
 	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
 	if err != nil {
 		return myErrors.ErrNotChatAccess
@@ -36,7 +37,18 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, chat)
 }
 
-func (u chatHandler) CreateChatHandler(ctx echo.Context) error {
+func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
+	//session := ctx.Get("session").(model.Session)
+	session := model.Session{UserId: 1}
+	listUserChats, err := u.chatUsecase.GetListUserChats(ctx, session.UserId)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, listUserChats)
+}
+
+func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 	var chat model.CreateChat
 	err := ctx.Bind(&chat)
 	if err != nil {
@@ -62,7 +74,8 @@ func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	session := ctx.Get("session").(model.Session)
+	//session := ctx.Get("session").(model.Session)
+	session := model.Session{UserId: 1}
 	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
 	if err != nil {
 		return err
@@ -97,7 +110,7 @@ func (u chatHandler) AddUserInChatHandler(ctx echo.Context) error {
 
 func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase) chatHandler {
 	handler := chatHandler{chatUsecase: chatUsecase, userUsecase: userUsecase}
-	createChatUrl := "/chats/"
+	currentUserChatsUrl := "/chats/"
 	getChatUrl := "/chats/:chatID"
 	deleteChatUrl := "/chats/:chatID"
 	addUserInChatUrl := "/api/v1/chats/:chatID/add/:userID"
@@ -105,14 +118,15 @@ func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Use
 	api := e.Group("api/v1")
 
 	getChat := api.Group(getChatUrl)
-	createChat := api.Group(createChatUrl)
+	currentUserChats := api.Group(currentUserChatsUrl)
 	deleteChat := api.Group(deleteChatUrl)
 	addUserInChat := api.Group(addUserInChatUrl)
 
 	getChat.GET("", handler.GetChatHandler)
-	createChat.POST("", handler.CreateChatHandler)
 	deleteChat.DELETE("", handler.DeleteChatHandler)
 	addUserInChat.POST("", handler.AddUserInChatHandler)
+	currentUserChats.GET("", handler.GetCurrentUserChatsHandler)
+	currentUserChats.POST("", handler.CreateCurrentUserChatHandler)
 
 	return handler
 }

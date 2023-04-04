@@ -16,17 +16,17 @@ type repository struct {
 	db *sqlx.DB
 }
 
-func (r repository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
+func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
 	row, err := r.db.NamedQuery(`INSERT INTO profile (username, nickname, email, password) `+
 		`VALUES (:username, :nickname, :email, :password) RETURNING id`, user)
 
 	if err != nil {
-		return model.User{}, err
+		return model.AuthorizedUser{}, err
 	}
 	if row.Next() {
 		err = row.Scan(&user.Id)
 		if err != nil {
-			return model.User{}, err
+			return model.AuthorizedUser{}, err
 		}
 	}
 

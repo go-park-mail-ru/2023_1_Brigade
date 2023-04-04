@@ -41,7 +41,7 @@ func setUserValidators() {
 	})
 }
 
-func ValidateUser(user model.User) []error {
+func ValidateUser(user model.AuthorizedUser) []error {
 	setUserValidators()
 
 	_, err := govalidator.ValidateStruct(user)

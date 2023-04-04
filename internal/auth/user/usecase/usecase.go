@@ -5,8 +5,10 @@ import (
 	"errors"
 	"github.com/labstack/echo/v4"
 	auth "project/internal/auth/user"
+	"project/internal/configs"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
 	"project/internal/pkg/validation"
 	"project/internal/user"
@@ -22,7 +24,8 @@ func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository) auth
 }
 
 func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
-	user := model.User{
+	user := model.AuthorizedUser{
+		Avatar:   configs.DefaultAvatarUrl,
 		Username: "id" + "_" + registrationUser.Nickname,
 		Nickname: registrationUser.Nickname,
 		Email:    registrationUser.Email,
@@ -45,12 +48,16 @@ func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUse
 	hashedPassword := security.Hash([]byte(registrationUser.Password))
 	user.Password = hashedPassword
 
-	userFromDB, err := u.authRepo.CreateUser(context.Background(), user)
-	return userFromDB, err
+	sessionUser, err := u.authRepo.CreateUser(context.Background(), user)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }
 
 func (u usecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error) {
-	user := model.User{
+	user := model.AuthorizedUser{
 		Email:    loginUser.Email,
 		Password: loginUser.Password,
 	}
@@ -69,5 +76,9 @@ func (u usecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User,
 	}
 
 	user, err = u.userRepo.GetUserByEmail(context.Background(), user.Email)
-	return user, err
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return model_conversion.FromAuthorizedUserToUser(user), err
 }

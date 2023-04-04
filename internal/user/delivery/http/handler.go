@@ -98,13 +98,14 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 		return err
 	}
 
-	session := ctx.Get("session").(model.Session)
-	contact, err := u.usecase.AddUserContact(ctx, session.UserId, contactID)
+	//session := ctx.Get("session").(model.Session)
+	session := model.Session{UserId: 1}
+	contacts, err := u.usecase.AddUserContact(ctx, session.UserId, contactID)
 	if err != nil {
 		return err
 	}
 
-	return ctx.JSON(http.StatusCreated, contact)
+	return ctx.JSON(http.StatusCreated, contacts)
 }
 
 func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
@@ -113,7 +114,7 @@ func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	deleteUserUrl := "/users/remove"
 	currentUserUrl := "/users/settings"
 	userContactsUrl := "/users/contacts"
-	userAddContactUrl := "/users/{userID}/add"
+	userAddContactUrl := "/users/:userID/add"
 
 	api := e.Group("api/v1")
 	user := api.Group(userUrl)

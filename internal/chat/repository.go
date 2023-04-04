@@ -6,8 +6,9 @@ import (
 )
 
 type Repository interface {
+	DeleteChatById(ctx context.Context, chatID uint64) error
 	GetChatById(ctx context.Context, chatID uint64) (model.Chat, error)
 	CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error)
-	DeleteChatById(ctx context.Context, chatID uint64) error
+	GetChatsByUserId(ctx context.Context, userID uint64) ([]model.UsersChats, error)
 	AddUserInChatDB(ctx context.Context, chatID uint64, memberID uint64) error
 }

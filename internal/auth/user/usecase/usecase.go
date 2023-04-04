@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	auth "project/internal/auth/user"
 	"project/internal/configs"
 	"project/internal/model"
@@ -12,6 +13,7 @@ import (
 	"project/internal/pkg/security"
 	"project/internal/pkg/validation"
 	"project/internal/user"
+	"strconv"
 )
 
 type usecase struct {
@@ -26,13 +28,13 @@ func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository) auth
 func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
 	user := model.AuthorizedUser{
 		Avatar:   configs.DefaultAvatarUrl,
-		Username: "id" + "_" + registrationUser.Nickname,
 		Nickname: registrationUser.Nickname,
 		Email:    registrationUser.Email,
-		Status:   "",
+		Status:   "Hello! I'm use technogramm",
 	}
 
 	err := u.authRepo.CheckExistEmail(context.Background(), user.Email)
+	log.Warn(err)
 	if err == nil {
 		return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
 	}
@@ -52,6 +54,7 @@ func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUse
 	if err != nil {
 		return model.User{}, err
 	}
+	sessionUser.Username = "id_" + strconv.Itoa(int(sessionUser.Id))
 
 	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }

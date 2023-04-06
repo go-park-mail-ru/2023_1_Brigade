@@ -27,8 +27,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	//session := ctx.Get("session").(model.Session)
-	session := model.Session{UserId: 1}
+	session := ctx.Get("session").(model.Session)
 	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
 	if err != nil {
 		return myErrors.ErrNotChatAccess
@@ -38,8 +37,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 }
 
 func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
-	//session := ctx.Get("session").(model.Session)
-	session := model.Session{UserId: 1}
+	session := ctx.Get("session").(model.Session)
 	listUserChats, err := u.chatUsecase.GetListUserChats(ctx, session.UserId)
 	if err != nil {
 		return err
@@ -74,8 +72,7 @@ func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	//session := ctx.Get("session").(model.Session)
-	session := model.Session{UserId: 1}
+	session := ctx.Get("session").(model.Session)
 	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
 	if err != nil {
 		return err
@@ -111,9 +108,9 @@ func (u chatHandler) AddUserInChatHandler(ctx echo.Context) error {
 func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase) chatHandler {
 	handler := chatHandler{chatUsecase: chatUsecase, userUsecase: userUsecase}
 	currentUserChatsUrl := "/chats/"
-	getChatUrl := "/chats/:chatID"
-	deleteChatUrl := "/chats/:chatID"
-	addUserInChatUrl := "/api/v1/chats/:chatID/add/:userID"
+	getChatUrl := "/chats/:chatID/"
+	deleteChatUrl := "/chats/:chatID/"
+	addUserInChatUrl := "/api/v1/chats/:chatID/add/:userID/"
 
 	api := e.Group("api/v1")
 

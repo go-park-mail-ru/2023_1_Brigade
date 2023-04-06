@@ -64,8 +64,8 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 }
 
 func (u userHandler) GetUserContactsHandler(ctx echo.Context) error {
-	//session := ctx.Get("session").(model.Session)
-	contacts, err := u.usecase.GetUserContacts(ctx, uint64(1))
+	session := ctx.Get("session").(model.Session)
+	contacts, err := u.usecase.GetUserContacts(ctx, session.UserId)
 	if err != nil {
 		return err
 	}
@@ -110,11 +110,11 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 
 func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	handler := userHandler{usecase: us}
-	userUrl := "/users/:userID"
-	deleteUserUrl := "/users/remove"
-	currentUserUrl := "/users/settings"
-	userContactsUrl := "/users/contacts"
-	userAddContactUrl := "/users/:userID/add"
+	userUrl := "/users/:userID/"
+	deleteUserUrl := "/users/remove/"
+	currentUserUrl := "/users/settings/"
+	userContactsUrl := "/users/contacts/"
+	userAddContactUrl := "/users/:userID/add/"
 
 	api := e.Group("api/v1")
 	user := api.Group(userUrl)

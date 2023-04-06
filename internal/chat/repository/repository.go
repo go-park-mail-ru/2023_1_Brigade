@@ -19,8 +19,8 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 	return &repository{db: db}
 }
 
-func (r repository) GetMembersByChatId(ctx context.Context, chatID uint64) ([]model.User, error) {
-	var members []model.User
+func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
+	var chatMembers []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_chat=$1", chatID)
 	//
 	if err != nil {
@@ -34,15 +34,16 @@ func (r repository) GetMembersByChatId(ctx context.Context, chatID uint64) ([]mo
 	}
 
 	for rows.Next() {
-		var member model.User
-		err := rows.Scan(&member.Id, &member.Username, &member.Nickname, &member.Email, &member.Status, &member.Avatar)
+		var chatMember model.ChatMembers
+		err := rows.Scan(&chatMember.ChatId, &chatMember.MemberId)
 		if err != nil {
 			log.Error(err)
 		}
-		members = append(members, member)
+
+		chatMembers = append(chatMembers, chatMember)
 	}
 
-	return members, err
+	return chatMembers, err
 }
 
 func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {

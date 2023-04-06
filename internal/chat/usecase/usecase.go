@@ -41,10 +41,20 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 		return model.Chat{}, err
 	}
 
-	members, err := u.chatRepo.GetMembersByChatId(context.Background(), chatID)
+	chatMembers, err := u.chatRepo.GetChatMembersByChatId(context.Background(), chatID)
 	if err != nil {
 		log.Error(err)
 		return model.Chat{}, err
+	}
+
+	var members []model.User
+	for _, chatMember := range chatMembers {
+		user, err := u.userRepo.GetUserById(context.Background(), chatMember.MemberId)
+		if err != nil {
+			return model.Chat{}, err
+		}
+
+		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 	}
 
 	return model.Chat{

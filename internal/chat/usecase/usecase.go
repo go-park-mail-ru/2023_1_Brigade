@@ -36,7 +36,30 @@ func (u usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID 
 
 func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
 	chat, err := u.chatRepo.GetChatById(context.Background(), chatID)
-	return chat, err
+	if err != nil {
+		log.Error(err)
+		return model.Chat{}, err
+	}
+
+	members, err := u.chatRepo.GetMembersByChatId(context.Background(), chatID)
+	if err != nil {
+		log.Error(err)
+		return model.Chat{}, err
+	}
+
+	return model.Chat{
+		Id:       chat.Id,
+		Type:     chat.Type,
+		Title:    chat.Title,
+		Avatar:   chat.Avatar,
+		Members:  members,
+		Messages: []model.Message{},
+	}, nil
+
+	// TODO
+	//messages, err := u.messagesRepo.GetMessages()
+
+	//return chat, err
 }
 
 //func (u usecase) GetUserChats(ctx echo.Context, userID uint64) ([]model.Chat, error) {
@@ -119,11 +142,20 @@ func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.Chat
 			return nil, err
 		}
 
-		lastMessageAuthor, err := u.userRepo.GetUserById(context.Background(), lastMessage.AuthorId)
-		if err != nil {
-			log.Error(err)
-			return nil, err
+		lastMessageAuthor := model.AuthorizedUser{}
+		if lastMessage.AuthorId != 0 {
+			lastMessageAuthor, err = u.userRepo.GetUserById(context.Background(), lastMessage.AuthorId)
+			if err != nil {
+				log.Error(err)
+				return nil, err
+			}
 		}
+
+		//lastMessageAuthor, err := u.userRepo.GetUserById(context.Background(), lastMessage.AuthorId)
+		//if err != nil {
+		//	log.Error(err)
+		//	return nil, err
+		//}
 
 		chatsInListUser = append(chatsInListUser, model.ChatInListUser{
 			Id:                chat.Id,

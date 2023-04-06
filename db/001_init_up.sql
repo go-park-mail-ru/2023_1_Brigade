@@ -1,3 +1,18 @@
+-- CREATE TABLE user_id_seq;
+-- CREATE TABLE chat_id_seq;
+-- CREATE TABLE message_id_seq;
+-- CREATE TABLE profile;
+-- CREATE TABLE session;
+-- CREATE TABLE chat;
+-- CREATE TABLE message;
+-- CREATE TABLE chat_members;
+-- CREATE TABLE message_receiver;
+-- CREATE TABLE user_contacts;
+-- CREATE TABLE images_urls;
+-- CREATE TABLE users_avatar;
+
+
+
 -- curl -X 'POST' 'http://localhost:8081/api/v1/chats/' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "title": "string", "members": [1,2,3]}'
 
 -- INSERT INTO profile (avatar, username, nickname, email, status, password)
@@ -8,36 +23,63 @@
 --
 -- INSERT INTO profile (avatar, username, nickname, email, status, password)
 -- VALUES ('', '', 'marcussss3', 'marcussss3@gmail.com', 'marcussss3', '123');
---
+
 -- INSERT INTO profile (avatar, username, nickname, email, status, password)
 -- VALUES ('', '', 'marcussss4', 'marcussss4@gmail.com', 'marcussss4', '123');
 --
 -- -- INSERT INTO profile (avatar, username, nickname, email, status, password)
 -- -- VALUES ('', '', 'marcussss5', 'marcussss5@gmail.com', 'marcussss5', '123');
 --
--- INSERT INTO user_contacts (id_user, id_contact)
--- VALUES (
---            (SELECT id FROM profile
---             WHERE id = 1),
---            (SELECT id FROM profile
---             WHERE id = 2)
---        );
+-- CREATE TABLE IF NOT EXISTS chat_members (
+--                                             id_chat   INTEGER,
+--                                             id_member INTEGER,
+--                                             FOREIGN KEY (id_chat)   REFERENCES chat(id),
+--     FOREIGN KEY (id_member) REFERENCES profile(id)
+--     );
+
+INSERT INTO chat_members (id_chat, id_member)
+VALUES (
+           (SELECT id FROM chat
+            WHERE id = 1),
+           (SELECT id FROM profile
+            WHERE id = 2)
+       );
+
+
+
 --
--- INSERT INTO user_contacts (id_user, id_contact)
--- VALUES (
---            (SELECT id FROM profile
---             WHERE id = 1),
---            (SELECT id FROM profile
---             WHERE id = 3)
---        );
---
--- INSERT INTO message (body, id_author, id_chat)
--- VALUES (   'HI',
---            (SELECT id FROM profile
---             WHERE id = 1),
---            (SELECT id FROM chat
---             WHERE id = 1)
---        );
+INSERT INTO user_contacts (id_user, id_contact)
+VALUES (
+           (SELECT id FROM profile
+            WHERE id = 1),
+           (SELECT id FROM profile
+            WHERE id = 2)
+       );
+
+INSERT INTO user_contacts (id_user, id_contact)
+VALUES (
+           (SELECT id FROM profile
+            WHERE id = 1),
+           (SELECT id FROM profile
+            WHERE id = 3)
+       );
+
+INSERT INTO user_contacts (id_user, id_contact)
+VALUES (
+           (SELECT id FROM profile
+            WHERE id = 1),
+           (SELECT id FROM profile
+            WHERE id = 4)
+       );
+
+INSERT INTO message (body, id_author, id_chat)
+VALUES (   'HI',
+           (SELECT id FROM profile
+            WHERE id = 1),
+           (SELECT id FROM chat
+            WHERE id = 3)
+       );
+
 
 -- CREATE TABLE IF NOT EXISTS images_urls (
 --     id_image SERIAL UNIQUE PRIMARY KEY,

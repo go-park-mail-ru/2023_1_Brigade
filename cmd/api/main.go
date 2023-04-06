@@ -135,7 +135,7 @@ func main() {
 	e.Use(myMiddleware.LoggerMiddleware)
 	//e.Use(middleware.CSRF())
 	//e.Use(myMiddleware.XSSMidlleware) // переделать на отдачу ПОСЛЕ
-	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)

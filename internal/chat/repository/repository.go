@@ -78,8 +78,8 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 	return nil
 }
 
-func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.UsersChats, error) {
-	var chat []model.UsersChats
+func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error) {
+	var chat []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_member=$1", userID)
 
 	if err != nil {
@@ -90,12 +90,12 @@ func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]mode
 	}
 
 	for rows.Next() {
-		var userChat model.UsersChats
-		err := rows.Scan(&userChat.UserId, &userChat.ChatId)
+		var memberChat model.ChatMembers
+		err := rows.Scan(&memberChat.ChatId, &memberChat.MemberId)
 		if err != nil {
 			log.Error(err)
 		}
-		chat = append(chat, userChat)
+		chat = append(chat, memberChat)
 	}
 
 	return chat, err

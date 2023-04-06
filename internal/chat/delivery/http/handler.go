@@ -27,6 +27,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		return err
 	}
 
+	//session := model.Session{UserId: 1}
 	session := ctx.Get("session").(model.Session)
 	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
 	if err != nil {
@@ -37,6 +38,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 }
 
 func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
+	//session := model.Session{UserId: 1}
 	session := ctx.Get("session").(model.Session)
 	listUserChats, err := u.chatUsecase.GetListUserChats(ctx, session.UserId)
 	if err != nil {

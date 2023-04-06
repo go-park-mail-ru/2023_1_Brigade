@@ -7,7 +7,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"project/internal/messages"
 	"project/internal/model"
-	myErrors "project/internal/pkg/errors"
 )
 
 type repository struct {
@@ -27,7 +26,7 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat=$1`, chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return model.Message{}, myErrors.ErrChatNotFound
+		return model.Message{}, nil
 	}
 
 	return lastMessage, err

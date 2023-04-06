@@ -29,6 +29,7 @@ var (
 	ErrIncorrectPassword = errors.New("неправильный пароль")
 	ErrAvatarNotFound    = errors.New("аватар не найден")
 	ErrImageNotFound     = errors.New("изображение не найдено")
+	ErrMessageNotFound   = errors.New("сообщение не найдено")
 
 	ErrInternal = errors.New("внутренняя ошибка сервера")
 )

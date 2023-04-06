@@ -95,6 +95,11 @@ func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, userID uint64) e
 func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
 	userChats, err := u.chatRepo.GetChatsByUserId(context.Background(), userID)
+	//[{1 1} {2 1}]
+	//type ChatMembers struct {
+	//	ChatId   uint64 `json:"id_chat"   db:"id_chat"`
+	//	MemberId uint64 `json:"id_member" db:"id_member"`
+	//}
 	log.Warn(userChats)
 	if err != nil {
 		log.Error(err)

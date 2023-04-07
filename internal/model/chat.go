@@ -20,6 +20,7 @@ type ChatInListUser struct {
 	Type              uint64  `json:"type"                db:"type"`
 	Title             string  `json:"title"               db:"title"`
 	Avatar            string  `json:"avatar"              db:"avatar"`
+	Members           []User  `json:"members"             db:"members"`
 	LastMessage       Message `json:"last_message"        db:"last_message"`
 	LastMessageAuthor User    `json:"last_message_author" db:"last_message_author"`
 }
@@ -35,7 +36,7 @@ type ChatMembers struct {
 	MemberId uint64 `json:"id_member" db:"id_member"`
 }
 
-type UsersChats struct {
-	UserId uint64 `json:"id_user" db:"id_user"`
-	ChatId uint64 `json:"id_chat" db:"id_chat"`
+type ChatMessages struct {
+	ChatId    uint64 `json:"id_chat"    db:"id_chat"`
+	MessageId uint64 `json:"id_message" db:"id_message"`
 }

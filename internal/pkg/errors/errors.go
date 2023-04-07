@@ -30,6 +30,7 @@ var (
 	ErrAvatarNotFound    = errors.New("аватар не найден")
 	ErrImageNotFound     = errors.New("изображение не найдено")
 	ErrMessageNotFound   = errors.New("сообщение не найдено")
+	ErrMembersNotFound   = errors.New("участники не найдены")
 
 	ErrInternal = errors.New("внутренняя ошибка сервера")
 )

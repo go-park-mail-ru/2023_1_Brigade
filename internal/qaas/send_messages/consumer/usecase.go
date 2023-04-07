@@ -73,19 +73,19 @@ func (u *Usecase) StartConsumeMessages() {
 	}()
 
 	go func() {
-		for {
-			for err := range u.consumer.Errors() {
-				log.Error(err)
-			}
+		//for {
+		for err := range u.consumer.Errors() {
+			log.Error(err)
 		}
+		//}
 	}()
 
 	go func() {
-		for {
-			err := u.consumer.Consume(ctx, topic, &handler)
-			if err != nil {
-				log.Error(err)
-			}
+		//for {
+		err := u.consumer.Consume(ctx, topic, &handler)
+		if err != nil {
+			log.Error(err)
 		}
+		//}
 	}()
 }

@@ -22,12 +22,14 @@ import (
 	httpAuthUser "project/internal/auth/user/delivery/http"
 	httpChat "project/internal/chat/delivery/http"
 	httpImages "project/internal/images/delivery/http"
+	wsMessages "project/internal/messages/delivery/ws"
 	httpUser "project/internal/user/delivery/http"
 
 	usecaseAuthSession "project/internal/auth/session/usecase"
 	usecaseAuthUser "project/internal/auth/user/usecase"
 	usecaseChat "project/internal/chat/usecase"
 	usecaseImages "project/internal/images/usecase"
+	usecaseMessages "project/internal/messages/usecase"
 	usecaseUser "project/internal/user/usecase"
 
 	repositoryAuthSession "project/internal/auth/session/repository"
@@ -122,7 +124,7 @@ func main() {
 	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository, messagesRepository)
-	//messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository, config.Kafka)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepository, messagesRepository, config.Kafka)
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
 	e := echo.New()
@@ -135,12 +137,12 @@ func main() {
 	e.Use(myMiddleware.LoggerMiddleware)
 	//e.Use(middleware.CSRF())
 	//e.Use(myMiddleware.XSSMidlleware) // переделать на отдачу ПОСЛЕ
-	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	httpChat.NewChatHandler(e, chatUsecase, userUsecase)
-	//wsMessages.NewMessagesHandler(e, messagesUsecase)
+	wsMessages.NewMessagesHandler(e, messagesUsecase)
 	httpImages.NewImagesHandler(e, imagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))

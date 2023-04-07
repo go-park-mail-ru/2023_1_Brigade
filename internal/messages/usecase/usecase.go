@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
+	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/messages"
 	"project/internal/model"
@@ -14,14 +15,13 @@ import (
 )
 
 type usecase struct {
-	repo     messages.Repository
-	producer producer.Usecase
-	consumer consumer.Usecase
+	chatRepo     chat.Repository
+	messagesRepo messages.Repository
+	producer     producer.Usecase
+	consumer     consumer.Usecase
 }
 
-func NewMessagesUsecase(messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
-	//brokerList := []string{"host.docker.internal:9092"} //localhost - локально
-	//groupID := "group-message"
+func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
 
 	time.Sleep(time.Second * 1) // не успевает инициализироваться kafka в docker
 
@@ -35,9 +35,9 @@ func NewMessagesUsecase(messagesRepo messages.Repository, config configs.Kafka) 
 		log.Error("producer:  ", err) // log.Fatal
 	}
 
-	//consumer.StartConsumeMessages()
+	consumer.StartConsumeMessages()
 
-	return &usecase{repo: messagesRepo, producer: producer, consumer: consumer}
+	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer}
 }
 
 func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error {
@@ -47,7 +47,7 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 		return err
 	}
 
-	chat, err := u.repo.GetChatById(context.Background(), webSocketMessage.ChatID)
+	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), webSocketMessage.ChatID)
 	if err != nil {
 		return err
 	}
@@ -58,16 +58,15 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 			Body:     webSocketMessage.Body,
 			AuthorId: webSocketMessage.AuthorID,
 			ChatId:   webSocketMessage.ChatID,
-			IsRead:   false,
 		}
 
-		_, err = u.repo.InsertMessageInDB(context.Background(), message)
+		_, err = u.messagesRepo.InsertMessageInDB(context.Background(), message)
 		if err != nil {
 			log.Error(err)
 		}
 	}()
 
-	for _, member := range chat {
+	for _, member := range members {
 		if member.MemberId == webSocketMessage.AuthorID {
 			continue
 		}
@@ -100,18 +99,6 @@ func (u usecase) ReceiveMessage(ctx echo.Context) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	go func() {
-		err = u.repo.InsertMessageReceiveInDB(context.Background(), message)
-		if err != nil {
-			log.Error(err)
-		}
-
-		//err = u.repo.MarkMessageReading(message.)
-		//if err != nil {
-		//	log.Error(err)
-		//}
-	}()
 
 	return jsonMessage, nil
 }

@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -22,13 +21,10 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
 	var chatMembers []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_chat=$1", chatID)
-	//
+
 	if err != nil {
-		// TODO
 		if errors.Is(err, sql.ErrNoRows) {
-			log.Error(err)
-			return nil, nil
-			//return nil, myErrors.ErrChatNotFound
+			return nil, myErrors.ErrMembersNotFound
 		}
 		return nil, err
 	}
@@ -37,7 +33,7 @@ func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) (
 		var chatMember model.ChatMembers
 		err := rows.Scan(&chatMember.ChatId, &chatMember.MemberId)
 		if err != nil {
-			log.Error(err)
+			return nil, err
 		}
 
 		chatMembers = append(chatMembers, chatMember)
@@ -71,11 +67,10 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 		}
 	}
 
-	log.Warn(chat)
 	for _, members := range chat.Members {
 		err = r.AddUserInChatDB(context.Background(), chat.Id, members.Id)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 	}
 
@@ -97,11 +92,6 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 		return err
 	}
 
-	//_, err = r.db.Query("INSERT INTO users_chats (id_user, id_chat) VALUES ($1, $2)", memberID, chatID)
-	//if err != nil {
-	//	return err
-	//}
-
 	return nil
 }
 
@@ -120,7 +110,7 @@ func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]mode
 		var memberChat model.ChatMembers
 		err := rows.Scan(&memberChat.ChatId, &memberChat.MemberId)
 		if err != nil {
-			log.Error(err)
+			return nil, err
 		}
 		chat = append(chat, memberChat)
 	}

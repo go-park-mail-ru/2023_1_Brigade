@@ -40,24 +40,7 @@ func (r repository) LoadImage(ctx context.Context, file multipart.File, filename
 		return nil, myErrors.ErrAvatarNotFound
 	}
 
-	row, err := r.db.Query("INSERT INTO images_urls (image_url) VALUES ($1) RETURNING id_image", presignedURL.String())
-	if err != nil {
-		log.Warn(err)
-		return nil, err
-	}
-
-	var imageID uint64
-	if row.Next() {
-		err = row.Scan(&imageID)
-		if err != nil {
-			return nil, err
-		}
-	}
-	log.Warn(imageID)
-	_, err = r.db.Query("INSERT INTO users_avatar (id_user, id_image) VALUES ($1, $2)", userID, imageID)
-	if err != nil {
-		return nil, err
-	}
+	_, err = r.db.Exec("UPDATE profile SET avatar = $1 WHERE id = $2", presignedURL, userID)
 
 	return presignedURL, err
 }

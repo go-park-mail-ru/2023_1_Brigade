@@ -5,6 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/images"
+	"project/internal/model"
 )
 
 type imagesHandler struct {
@@ -12,10 +13,8 @@ type imagesHandler struct {
 }
 
 func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
-	//session := ctx.Get("session").(model.Session)
-	//userID := session.UserId
-
-	userID := uint64(1) // заглушка
+	session := ctx.Get("session").(model.Session)
+	userID := session.UserId
 
 	maxSize := int64(64 << 20)
 	err := ctx.Request().ParseMultipartForm(maxSize)

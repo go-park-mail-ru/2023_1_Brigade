@@ -1,11 +1,12 @@
 package http
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/chat"
 	"project/internal/model"
-	myErrors "project/internal/pkg/errors"
+//	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
 	"strconv"
 )
@@ -28,11 +29,11 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	}
 
 	//session := model.Session{UserId: 1}
-	session := ctx.Get("session").(model.Session)
-	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-	if err != nil {
-		return myErrors.ErrNotChatAccess
-	}
+//	session := ctx.Get("session").(model.Session)
+//	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
+//	if err != nil {
+//		return myErrors.ErrNotChatAccess
+//	}
 
 	return ctx.JSON(http.StatusOK, chat)
 }
@@ -59,6 +60,8 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+	
+	log.Warn(dbChat)
 
 	return ctx.JSON(http.StatusCreated, dbChat)
 }

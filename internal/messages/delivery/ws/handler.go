@@ -14,17 +14,20 @@ type messageHandler struct {
 	messageUsecase messages.Usecase
 	upgrader       websocket.Upgrader
 	clients        map[uint64]*websocket.Conn
-	tmp_counter    uint64
 }
 
 func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
+//	log.Warn(ctx.Request().Header)
 	ws, err := u.upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 
-	//session := ctx.Get("session").(model.Session)
-	//u.clients[session.UserId] = ws
+//	log.Warn("OK")
+
+	session := ctx.Get("session").(model.Session)
+	u.clients[session.UserId] = ws
 
 	//заглушка
 	//u.clients[u.tmp_counter+1] = ws

@@ -83,6 +83,11 @@ func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
 		return myErrors.ErrChatNotFound
 	}
 
+	_, err = r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return myErrors.ErrChatNotFound
+	}
+
 	return err
 }
 

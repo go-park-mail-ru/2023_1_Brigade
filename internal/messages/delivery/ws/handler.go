@@ -17,23 +17,14 @@ type messageHandler struct {
 }
 
 func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
-//	log.Warn(ctx.Request().Header)
 	ws, err := u.upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
 	if err != nil {
 		log.Error(err)
 		return err
 	}
 
-//	log.Warn("OK")
-
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
-
-	//заглушка
-	//u.clients[u.tmp_counter+1] = ws
-	//u.tmp_counter++
-	//
-	//log.Warn(u.tmp_counter)
 
 	defer func() {
 		err := ws.Close()
@@ -43,23 +34,6 @@ func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	}()
 
 	//'{ "body": "string", "author_id": 1, "chat_id": 1 }'
-	//ws.rEA
-	//for {
-	//go func() {
-	//	_, message, err := ws.ReadMessage() // блокирующая
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//
-	//	err = u.messageUsecase.SendMessage(ctx, message)
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//}()
-	//}
-	//log.Warn("ОТПРАВИЛ")
-	//}
-	//}()
 
 	go func() {
 		for {

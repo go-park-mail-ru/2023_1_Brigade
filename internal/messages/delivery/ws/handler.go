@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"project/internal/messages"
 	"project/internal/model"
+	"time"
 )
 
 type messageHandler struct {
@@ -47,23 +48,26 @@ func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 			var producerMessage model.ProducerMessage
 			err = json.Unmarshal(msg, &producerMessage)
+			log.Warn(producerMessage)
 			if err != nil {
-				log.Warn(producerMessage)
 				log.Error(err)
 				//return
 			}
 
-			//client := u.clients[producerMessage.ReceiverID]
-			client := u.clients[producerMessage.AuthorId]
+			client := u.clients[producerMessage.ReceiverID]
+			//client := u.clients[producerMessage.AuthorId]
 			log.Warn(producerMessage.ReceiverID)
 			if client == nil {
 				log.Error("nil client")
+				continue
 				//return
 			}
 
 			err = client.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
 				log.Error(err)
+				continue
+				//log.Error(err)
 				//err = client.Close()
 				//if err != nil {
 				//	log.Error(err)
@@ -104,6 +108,7 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHa
 			CheckOrigin: func(r *http.Request) bool {
 				return true
 			},
+			HandshakeTimeout: time.Second * 3600,
 		},
 		clients: make(map[uint64]*websocket.Conn),
 	}

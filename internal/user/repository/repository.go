@@ -142,9 +142,9 @@ func (r repository) GetUserAvatar(ctx context.Context, userID uint64) (string, e
 	//return avatarUrl.ImageUrl, err
 }
 
-func (r repository) GetAllUsers(ctx context.Context) ([]model.AuthorizedUser, error) {
+func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	var users []model.AuthorizedUser
-	rows, err := r.db.Query("SELECT * FROM profile")
+	rows, err := r.db.Query("SELECT * FROM profile WHERE id != $1", userID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -155,7 +155,7 @@ func (r repository) GetAllUsers(ctx context.Context) ([]model.AuthorizedUser, er
 
 	for rows.Next() {
 		var user model.AuthorizedUser
-		err := rows.Scan(&user)
+		err := rows.Scan(&user.Id, &user.Avatar, &user.Username, &user.Nickname, &user.Email, &user.Status, &user.Password)
 		if err != nil {
 			return nil, err
 		}

@@ -101,7 +101,7 @@ func (u usecase) CheckExistUserById(ctx echo.Context, userID uint64) error {
 	return err
 }
 
-func (u usecase) GetAllUsers(ctx echo.Context) ([]model.User, error) {
-	users, err := u.userRepo.GetAllUsers(context.Background())
+func (u usecase) GetAllUsersExceptCurrentUser(ctx echo.Context, userID uint64) ([]model.User, error) {
+	users, err := u.userRepo.GetAllUsersExceptCurrentUser(context.Background(), userID)
 	return model_conversion.FromAuthorizedUserArrayToUserArray(users), err
 }

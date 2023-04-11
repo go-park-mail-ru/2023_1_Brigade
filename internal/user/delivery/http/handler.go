@@ -64,13 +64,13 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 }
 
 func (u userHandler) GetUserContactsHandler(ctx echo.Context) error {
-	//session := ctx.Get("session").(model.Session)
+	session := ctx.Get("session").(model.Session)
 	//contacts, err := u.usecase.GetUserContacts(ctx, session.UserId)
 	//if err != nil {
 	//	return err
 	//}
 
-	contacts, err := u.usecase.GetAllUsers(ctx)
+	contacts, err := u.usecase.GetAllUsersExceptCurrentUser(ctx, session.UserId)
 	if err != nil {
 		return err
 	}

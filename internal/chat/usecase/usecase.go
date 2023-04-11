@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	log "github.com/sirupsen/logrus"
 	"context"
 	"github.com/labstack/echo/v4"
 	"project/internal/chat"
@@ -58,6 +59,7 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 	if err != nil {
 		return model.Chat{}, err
 	}
+	log.Warn(chatMessages)
 
 	var messages []model.Message
 	for _, chatMessage := range chatMessages {
@@ -68,6 +70,8 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 
 		messages = append(messages, message)
 	}
+
+	log.Warn(messages)
 
 	return model.Chat{
 		Id:       chat.Id,

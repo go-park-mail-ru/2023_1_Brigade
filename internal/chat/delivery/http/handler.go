@@ -1,6 +1,7 @@
 package http
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/chat"
@@ -34,7 +35,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	if err == nil {
 		return myErrors.ErrNotChatAccess
 	}
-
+	log.Warn(chat.Id)
 	return ctx.JSON(http.StatusOK, chat)
 }
 

@@ -3,7 +3,7 @@ package model
 type Message struct {
 	Id       uint64 `json:"id"        db:"id"`
 	Body     string `json:"body"      db:"body"`
-	AuthorId uint64 `json:"id_author" db:"id_author"`
+	AuthorId uint64 `json:"author_id" db:"author_id"`
 	ChatId   uint64 `json:"id_chat"   db:"id_chat"`
 }
 

@@ -65,9 +65,9 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 	}()
 
 	for _, member := range members {
-		//if member.MemberId == webSocketMessage.AuthorID {
-		//	continue
-		//}
+		if member.MemberId == webSocketMessage.AuthorID {
+			continue
+		}
 
 		producerMessage := model.ProducerMessage{
 			Body:       webSocketMessage.Body,

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	log "github.com/sirupsen/logrus"
 	"context"
 	"database/sql"
 	"errors"
@@ -54,6 +55,28 @@ func (r repository) GetChatMessages(ctx context.Context, chatID uint64) ([]model
 }
 
 func (r repository) InsertMessageInDB(ctx context.Context, message model.Message) (model.Message, error) {
+	row, err := r.db.NamedQuery(`INSERT INTO message (body, id_chat, author_id) `+
+		`VALUES (:body, :id_chat, :author_id) RETURNING id`, message)
+
+	if err != nil {
+		return model.Message{}, err
+	}
+	if row.Next() {
+		err = row.Scan(&message.Id)
+		if err != nil {
+			return model.Message{}, err
+		}
+	}
+	log.Warn(message)
+	_, err = r.db.NamedQuery("INSERT INTO chat_messages (id_chat, id_message) VALUES (:id_chat, :id_message)", model.ChatMessages{
+		ChatId:    message.ChatId,
+		MessageId: message.Id,
+	})
+
+	if err != nil {
+		return model.Message{}, err
+	}
+
 	return message, nil
 }
 

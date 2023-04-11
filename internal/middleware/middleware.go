@@ -53,7 +53,7 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		requestId := rand.Int63()
 		log.Info("Incoming request: ", ctx.Request().URL, ", ip: ", ctx.RealIP(), ", method: ", ctx.Request().Method, ", request_id: ", requestId)
 
-		log.Warn(ctx.Request().Header)
+		//log.Warn(ctx.Request().Header)
 		//curl -X 'POST' 'http://localhost:8081/api/v1/signup/' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "username": "<a onblur="alert(secret)" href="http://www.google.com">Google</a>", "email": "danssssddsila22om", "name": "string", "password": "tests", "status":"i am star" }'
 
 		if err := next(ctx); err != nil {

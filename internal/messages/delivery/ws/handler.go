@@ -15,18 +15,20 @@ type messageHandler struct {
 	messageUsecase messages.Usecase
 	upgrader       websocket.Upgrader
 	clients        map[uint64]*websocket.Conn
+	temp_counter   uint64
 }
 
-func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
-	log.Warn("aaaaaaaaaaaaaaaaa")
+func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	ws, err := u.upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
 	if err != nil {
 		log.Error(err)
 		return err
 	}
 
-	session := ctx.Get("session").(model.Session)
-	u.clients[session.UserId] = ws
+	//session := ctx.Get("session").(model.Session)
+	u.clients[u.temp_counter+1] = ws
+	u.temp_counter++
+	log.Warn(u.temp_counter)
 
 	defer func() {
 		err := ws.Close()
@@ -99,7 +101,6 @@ func (u messageHandler) SendMessagesHandler(ctx echo.Context) error {
 }
 
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {
-	log.Warn("messages зашел")
 	handler := messageHandler{
 		messageUsecase: messageUsecase,
 		upgrader: websocket.Upgrader{
@@ -117,8 +118,6 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHa
 	api := e.Group("api/v1")
 	sendMessages := api.Group(sendMessagesUrl)
 	sendMessages.GET("", handler.SendMessagesHandler)
-
-	log.Warn("okkkk navesil")
 
 	return handler
 }

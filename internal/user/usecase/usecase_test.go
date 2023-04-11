@@ -8,12 +8,13 @@ import (
 	authUserMock "project/internal/auth/user/repository/mocks"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"project/internal/pkg/model_conversion"
 	userMock "project/internal/user/repository/mocks"
 	"testing"
 )
 
 type testUserCase struct {
-	expectedUser  model.User
+	expectedUser  model.AuthorizedUser
 	expectedError error
 	name          string
 }
@@ -21,7 +22,7 @@ type testUserCase struct {
 func Test_GetUserById(t *testing.T) {
 	tests := []testUserCase{
 		{
-			expectedUser: model.User{
+			expectedUser: model.AuthorizedUser{
 				Id:       1,
 				Username: "marcussss",
 				Email:    "marcussss@gmail.com",
@@ -32,7 +33,7 @@ func Test_GetUserById(t *testing.T) {
 			name:          "Successfull getting user",
 		},
 		{
-			expectedUser: model.User{
+			expectedUser: model.AuthorizedUser{
 				Id:       1,
 				Username: "marcussss",
 				Email:    "marcussss@gmail.com",
@@ -43,7 +44,7 @@ func Test_GetUserById(t *testing.T) {
 			name:          "User not found",
 		},
 		{
-			expectedUser: model.User{
+			expectedUser: model.AuthorizedUser{
 				Id:       1,
 				Username: "marcussss",
 				Email:    "marcussss@gmail.com",
@@ -68,6 +69,25 @@ func Test_GetUserById(t *testing.T) {
 		user, err := usecase.GetUserById(ctx, uint64(1))
 
 		require.Error(t, err, test.expectedError)
-		require.Equal(t, user, test.expectedUser, test.name)
+		require.Equal(t, user, model_conversion.FromAuthorizedUserToUser(test.expectedUser), test.name)
 	}
+}
+
+func Test_GetUserContacts_OK(t *testing.T) {
+	var expectedUsers []model.User
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+	var ctx echo.Context
+
+	userRepository.EXPECT().GetUserContacts(context.Background(), uint64(1)).Return([]model.AuthorizedUser{}, nil).Times(1)
+
+	users, err := usecase.GetUserContacts(ctx, uint64(1))
+
+	require.NoError(t, err)
+	require.Equal(t, expectedUsers, users)
 }

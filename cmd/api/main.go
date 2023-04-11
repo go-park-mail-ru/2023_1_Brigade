@@ -12,6 +12,8 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
 	"os"
+	wsMessages "project/internal/messages/delivery/ws"
+	usecaseMessages "project/internal/messages/usecase"
 
 	myMiddleware "project/internal/middleware"
 
@@ -22,14 +24,12 @@ import (
 	httpAuthUser "project/internal/auth/user/delivery/http"
 	httpChat "project/internal/chat/delivery/http"
 	httpImages "project/internal/images/delivery/http"
-	wsMessages "project/internal/messages/delivery/ws"
 	httpUser "project/internal/user/delivery/http"
 
 	usecaseAuthSession "project/internal/auth/session/usecase"
 	usecaseAuthUser "project/internal/auth/user/usecase"
 	usecaseChat "project/internal/chat/usecase"
 	usecaseImages "project/internal/images/usecase"
-	usecaseMessages "project/internal/messages/usecase"
 	usecaseUser "project/internal/user/usecase"
 
 	repositoryAuthSession "project/internal/auth/session/repository"
@@ -100,10 +100,12 @@ func main() {
 	if err != nil {
 		log.Error(err)
 	}
+	defer db.Close()
 
 	redis := redis.NewClient(&redis.Options{
 		Addr: config.Redis.Addr,
 	})
+	defer redis.Close()
 
 	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
 		Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
@@ -137,7 +139,7 @@ func main() {
 	e.Use(myMiddleware.LoggerMiddleware)
 	//e.Use(middleware.CSRF())
 	//e.Use(myMiddleware.XSSMidlleware) // переделать на отдачу ПОСЛЕ
-	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)

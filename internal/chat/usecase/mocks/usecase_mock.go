@@ -106,3 +106,18 @@ func (mr *MockUsecaseMockRecorder) GetChatById(ctx, chatID interface{}) *gomock.
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatById", reflect.TypeOf((*MockUsecase)(nil).GetChatById), ctx, chatID)
 }
+
+// GetListUserChats mocks base method.
+func (m *MockUsecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetListUserChats", ctx, userID)
+	ret0, _ := ret[0].([]model.ChatInListUser)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetListUserChats indicates an expected call of GetListUserChats.
+func (mr *MockUsecaseMockRecorder) GetListUserChats(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetListUserChats", reflect.TypeOf((*MockUsecase)(nil).GetListUserChats), ctx, userID)
+}

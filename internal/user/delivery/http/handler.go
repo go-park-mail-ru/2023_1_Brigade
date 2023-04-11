@@ -1,7 +1,6 @@
 package http
 
 import (
-	log "github.com/sirupsen/logrus"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/model"
@@ -110,7 +109,6 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 }
 
 func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
-	log.Warn("user навесил")
 	handler := userHandler{usecase: us}
 	userUrl := "/users/:userID/"
 	deleteUserUrl := "/users/remove/"

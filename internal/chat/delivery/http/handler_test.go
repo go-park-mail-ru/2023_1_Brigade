@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	chatMock "project/internal/chat/usecase/mocks"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 	userMock "project/internal/user/usecase/mocks"
 	"testing"
 )
@@ -46,7 +47,7 @@ func TestHandlers_CreateChat_OK(t *testing.T) {
 
 	chatUsecase.EXPECT().CreateChat(ctx, chat).Return(dbChat, nil).Times(1)
 
-	err = handler.CreateChatHandler(ctx)
+	err = handler.CreateCurrentUserChatHandler(ctx)
 
 	require.NoError(t, err)
 	require.Equal(t, test.status, w.Code)
@@ -76,7 +77,7 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
 	chatUsecase.EXPECT().GetChatById(ctx, uint64(1)).Return(chat, nil).Times(1)
-	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, uint64(0)).Return(nil).Times(1)
+	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, uint64(0)).Return(myErrors.ErrUserIsAlreadyInChat).Times(1)
 
 	err := handler.GetChatHandler(ctx)
 

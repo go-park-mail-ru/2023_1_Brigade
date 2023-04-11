@@ -36,10 +36,10 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 }
 
 // AddUserContact mocks base method.
-func (m *MockUsecase) AddUserContact(ctx echo.Context, userID, contactID uint64) (model.User, error) {
+func (m *MockUsecase) AddUserContact(ctx echo.Context, userID, contactID uint64) ([]model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddUserContact", ctx, userID, contactID)
-	ret0, _ := ret[0].(model.User)
+	ret0, _ := ret[0].([]model.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -94,10 +94,10 @@ func (mr *MockUsecaseMockRecorder) GetUserById(ctx, userID interface{}) *gomock.
 }
 
 // GetUserContacts mocks base method.
-func (m *MockUsecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.Contact, error) {
+func (m *MockUsecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserContacts", ctx, userID)
-	ret0, _ := ret[0].([]model.Contact)
+	ret0, _ := ret[0].([]model.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

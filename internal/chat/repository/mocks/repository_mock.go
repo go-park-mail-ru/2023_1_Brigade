@@ -92,3 +92,33 @@ func (mr *MockRepositoryMockRecorder) GetChatById(ctx, chatID interface{}) *gomo
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatById", reflect.TypeOf((*MockRepository)(nil).GetChatById), ctx, chatID)
 }
+
+// GetChatMembersByChatId mocks base method.
+func (m *MockRepository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetChatMembersByChatId", ctx, chatID)
+	ret0, _ := ret[0].([]model.ChatMembers)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetChatMembersByChatId indicates an expected call of GetChatMembersByChatId.
+func (mr *MockRepositoryMockRecorder) GetChatMembersByChatId(ctx, chatID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatMembersByChatId", reflect.TypeOf((*MockRepository)(nil).GetChatMembersByChatId), ctx, chatID)
+}
+
+// GetChatsByUserId mocks base method.
+func (m *MockRepository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetChatsByUserId", ctx, userID)
+	ret0, _ := ret[0].([]model.ChatMembers)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetChatsByUserId indicates an expected call of GetChatsByUserId.
+func (mr *MockRepositoryMockRecorder) GetChatsByUserId(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatsByUserId", reflect.TypeOf((*MockRepository)(nil).GetChatsByUserId), ctx, userID)
+}

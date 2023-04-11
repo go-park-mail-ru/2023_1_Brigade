@@ -78,10 +78,10 @@ func (mr *MockRepositoryMockRecorder) CheckExistUsername(ctx, username interface
 }
 
 // CreateUser mocks base method.
-func (m *MockRepository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
+func (m *MockRepository) CreateUser(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUser", ctx, user)
-	ret0, _ := ret[0].(model.User)
+	ret0, _ := ret[0].(model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

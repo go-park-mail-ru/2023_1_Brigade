@@ -91,11 +91,26 @@ func (mr *MockRepositoryMockRecorder) DeleteUserById(ctx, userID interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserById", reflect.TypeOf((*MockRepository)(nil).DeleteUserById), ctx, userID)
 }
 
+// GetUserAvatar mocks base method.
+func (m *MockRepository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserAvatar", ctx, userID)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserAvatar indicates an expected call of GetUserAvatar.
+func (mr *MockRepositoryMockRecorder) GetUserAvatar(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserAvatar", reflect.TypeOf((*MockRepository)(nil).GetUserAvatar), ctx, userID)
+}
+
 // GetUserByEmail mocks base method.
-func (m *MockRepository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
+func (m *MockRepository) GetUserByEmail(ctx context.Context, email string) (model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserByEmail", ctx, email)
-	ret0, _ := ret[0].(model.User)
+	ret0, _ := ret[0].(model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -107,10 +122,10 @@ func (mr *MockRepositoryMockRecorder) GetUserByEmail(ctx, email interface{}) *go
 }
 
 // GetUserById mocks base method.
-func (m *MockRepository) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+func (m *MockRepository) GetUserById(ctx context.Context, userID uint64) (model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserById", ctx, userID)
-	ret0, _ := ret[0].(model.User)
+	ret0, _ := ret[0].(model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -122,10 +137,10 @@ func (mr *MockRepositoryMockRecorder) GetUserById(ctx, userID interface{}) *gomo
 }
 
 // GetUserContacts mocks base method.
-func (m *MockRepository) GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error) {
+func (m *MockRepository) GetUserContacts(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserContacts", ctx, userID)
-	ret0, _ := ret[0].([]model.User)
+	ret0, _ := ret[0].([]model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -137,10 +152,10 @@ func (mr *MockRepositoryMockRecorder) GetUserContacts(ctx, userID interface{}) *
 }
 
 // UpdateUserById mocks base method.
-func (m *MockRepository) UpdateUserById(ctx context.Context, user model.User) (model.User, error) {
+func (m *MockRepository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateUserById", ctx, user)
-	ret0, _ := ret[0].(model.User)
+	ret0, _ := ret[0].(model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

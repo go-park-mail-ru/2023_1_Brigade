@@ -11,7 +11,6 @@ import (
 	"project/internal/model"
 	"project/internal/qaas/send_messages/consumer"
 	"project/internal/qaas/send_messages/producer"
-	"time"
 )
 
 type usecase struct {
@@ -22,9 +21,6 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
-
-	time.Sleep(time.Second * 1) // не успевает инициализироваться kafka в docker
-
 	consumer, err := consumer.NewConsumer(config.BrokerList, config.GroupID)
 	if err != nil {
 		log.Error("consumer:  ", err)
@@ -32,7 +28,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 
 	producer, err := producer.NewProducer(config.BrokerList)
 	if err != nil {
-		log.Error("producer:  ", err) // log.Fatal
+		log.Error("producer:  ", err)
 	}
 
 	consumer.StartConsumeMessages()

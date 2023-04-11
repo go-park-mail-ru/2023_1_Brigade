@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	log "github.com/sirupsen/logrus"
 	"context"
 	"github.com/labstack/echo/v4"
 	authUser "project/internal/auth/user"
@@ -63,8 +62,7 @@ func (u usecase) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User,
 	if err != nil {
 		return []model.User{}, err
 	}
-	
-	log.Warn(contactsFromDB)
+
 	contacts := model_conversion.FromAuthorizedUserArrayToUserArray(contactsFromDB)
 	return contacts, err
 }

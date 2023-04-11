@@ -6,15 +6,17 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 	authUserMock "project/internal/auth/user/repository/mocks"
+	"project/internal/configs"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
 	userMock "project/internal/user/repository/mocks"
 	"testing"
 )
 
 type testUserCase struct {
-	expectedUser  model.User
+	expectedUser  model.AuthorizedUser
 	expectedError error
 	name          string
 }
@@ -28,20 +30,22 @@ func Test_Signup_OK(t *testing.T) {
 		Password: "password",
 	}
 
-	hashedUser := model.User{
+	hashedUser := model.AuthorizedUser{
 		Id:       0,
-		Username: "id_marcussss",
+		Avatar:   configs.DefaultAvatarUrl,
 		Nickname: "marcussss",
 		Email:    "marcussss@gmail.com",
+		Status:   "Hello! I'm use technogramm",
 		Password: hashedPassword,
 	}
 
 	test := testUserCase{
-		expectedUser: model.User{
+		expectedUser: model.AuthorizedUser{
 			Id:       1,
-			Username: "id_marcussss",
+			Avatar:   configs.DefaultAvatarUrl,
 			Nickname: "marcussss",
 			Email:    "marcussss@gmail.com",
+			Status:   "Hello! I'm use technogramm",
 			Password: hashedPassword,
 		},
 		expectedError: myErrors.ErrEmailNotFound,
@@ -62,7 +66,7 @@ func Test_Signup_OK(t *testing.T) {
 	myUser, err := usecase.Signup(ctx, user)
 
 	require.NoError(t, err)
-	require.Equal(t, test.expectedUser, myUser, test.name)
+	require.Equal(t, model_conversion.FromAuthorizedUserToUser(test.expectedUser), myUser, test.name)
 }
 
 func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
@@ -83,7 +87,7 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 	//}
 
 	test := testUserCase{
-		expectedUser: model.User{
+		expectedUser: model.AuthorizedUser{
 			Id:       1,
 			Username: "id_marcussss",
 			Nickname: "marcussss",
@@ -116,7 +120,7 @@ func Test_Login_OK(t *testing.T) {
 	}
 
 	test := testUserCase{
-		expectedUser: model.User{
+		expectedUser: model.AuthorizedUser{
 			Id:       1,
 			Username: "marcussss",
 			Email:    "marcussss@gmail.com",
@@ -141,5 +145,5 @@ func Test_Login_OK(t *testing.T) {
 
 	myUser, err := usecase.Login(ctx, user)
 	require.NoError(t, err)
-	require.Equal(t, myUser, test.expectedUser, test.name)
+	require.Equal(t, myUser, model_conversion.FromAuthorizedUserToUser(test.expectedUser), test.name)
 }

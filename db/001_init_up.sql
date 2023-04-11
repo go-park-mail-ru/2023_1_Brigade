@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS profile (
 
 CREATE TABLE IF NOT EXISTS chat (
                                     id    SERIAL UNIQUE PRIMARY KEY,
-                                    type VARCHAR(255),
+                                    type INTEGER,
                                     avatar VARCHAR(255),
                                     title VARCHAR(255)
     );

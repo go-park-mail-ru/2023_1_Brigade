@@ -16,4 +16,5 @@ type Repository interface {
 	CheckExistUserById(ctx context.Context, userID uint64) error
 
 	GetUserAvatar(ctx context.Context, userID uint64) (string, error)
+	GetAllUsers(ctx context.Context) ([]model.AuthorizedUser, error)
 }

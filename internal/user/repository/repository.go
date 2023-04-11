@@ -141,3 +141,26 @@ func (r repository) GetUserAvatar(ctx context.Context, userID uint64) (string, e
 	//
 	//return avatarUrl.ImageUrl, err
 }
+
+func (r repository) GetAllUsers(ctx context.Context) ([]model.AuthorizedUser, error) {
+	var users []model.AuthorizedUser
+	rows, err := r.db.Query("SELECT * FROM profile")
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, myErrors.ErrUserNotFound
+		}
+		return nil, err
+	}
+
+	for rows.Next() {
+		var user model.AuthorizedUser
+		err := rows.Scan(&user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, err
+}

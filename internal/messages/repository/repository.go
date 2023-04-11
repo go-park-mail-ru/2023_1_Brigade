@@ -1,11 +1,11 @@
 package repository
 
 import (
-	log "github.com/sirupsen/logrus"
 	"context"
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -82,7 +82,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 
 func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (model.Message, error) {
 	var lastMessage model.Message
-	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat=$1`, chatID)
+	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND id = (SELECT MAX(id) FROM message WHERE id_chat = $1)`, chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return model.Message{}, nil

@@ -1,10 +1,10 @@
 package http
 
 import (
-	log "github.com/sirupsen/logrus"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/chat"
+	"project/internal/configs"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 
@@ -35,7 +35,15 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	if err == nil {
 		return myErrors.ErrNotChatAccess
 	}
-	log.Warn(chat.Id)
+
+	if chat.Type == configs.Chat {
+		if chat.Members[0].Id == session.UserId {
+			chat.Title = chat.Members[1].Nickname
+		} else {
+			chat.Title = chat.Members[0].Nickname
+		}
+	}
+
 	return ctx.JSON(http.StatusOK, chat)
 }
 
@@ -44,6 +52,16 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	listUserChats, err := u.chatUsecase.GetListUserChats(ctx, session.UserId)
 	if err != nil {
 		return err
+	}
+
+	for ind := range listUserChats {
+		if listUserChats[ind].Type == configs.Chat {
+			if listUserChats[ind].Members[0].Id == session.UserId {
+				listUserChats[ind].Title = listUserChats[ind].Members[1].Nickname
+			} else {
+				listUserChats[ind].Title = listUserChats[ind].Members[0].Nickname
+			}
+		}
 	}
 
 	return ctx.JSON(http.StatusOK, listUserChats)
@@ -59,6 +77,16 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 	dbChat, err := u.chatUsecase.CreateChat(ctx, chat)
 	if err != nil {
 		return err
+	}
+
+	session := ctx.Get("session").(model.Session)
+
+	if chat.Type == configs.Chat {
+		if dbChat.Members[0].Id == session.UserId {
+			dbChat.Title = dbChat.Members[1].Nickname
+		} else {
+			dbChat.Title = dbChat.Members[0].Nickname
+		}
 	}
 
 	return ctx.JSON(http.StatusCreated, dbChat)

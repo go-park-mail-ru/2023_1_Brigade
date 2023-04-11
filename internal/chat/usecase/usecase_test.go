@@ -6,49 +6,47 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 	chatMock "project/internal/chat/repository/mocks"
+	"project/internal/configs"
 	messageMock "project/internal/messages/repository/mocks"
 	"project/internal/model"
 	userMock "project/internal/user/repository/mocks"
 	"testing"
 )
 
-//func Test_CreateChat_OK(t *testing.T) {
-//	newChat := model.CreateChat{
-//		Title:   "new_chat",
-//		Members: []uint64{0},
-//	}
-//
-//	dbChat := model.Chat{
-//		Id:      0,
-//		Title:   "new_chat",
-//		Avatar:  configs.DefaultAvatarUrl,
-//		Members: []model.User{{}},
-//	}
-//
-//	expectedChat := model.Chat{
-//		Id:      1,
-//		Title:   "new_chat",
-//		Avatar:  configs.DefaultAvatarUrl,
-//		Members: []model.User{{}},
-//	}
-//
-//	ctl := gomock.NewController(t)
-//	defer ctl.Finish()
-//
-//	var ctx echo.Context
-//	chatRepository := chatMock.NewMockRepository(ctl)
-//	userRepository := userMock.NewMockRepository(ctl)
-//	messagesRepository := messageMock.NewMockRepository(ctl)
-//	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
-//
-//	userRepository.EXPECT().GetUserById(context.Background(), uint64(0)).Return(model.AuthorizedUser{}, nil).Times(1)
-//	chatRepository.EXPECT().CreateChat(context.Background(), dbChat).Return(expectedChat, nil).Times(1)
-//
-//	chat, err := usecase.CreateChat(ctx, newChat)
-//
-//	require.NoError(t, err)
-//	require.Equal(t, chat, expectedChat)
-//}
+func Test_CreateChat_OK(t *testing.T) {
+	var members []model.User
+
+	newChat := model.CreateChat{}
+
+	createdChat := model.Chat{
+		Avatar:   configs.DefaultAvatarUrl,
+		Messages: []model.Message{},
+		Members:  members,
+	}
+
+	expectedChat := model.Chat{
+		Id:       1,
+		Avatar:   configs.DefaultAvatarUrl,
+		Messages: []model.Message{},
+		Members:  members,
+	}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	var ctx echo.Context
+	chatRepository := chatMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	messagesRepository := messageMock.NewMockRepository(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+
+	chatRepository.EXPECT().CreateChat(context.Background(), createdChat).Return(expectedChat, nil).Times(1)
+
+	chat, err := usecase.CreateChat(ctx, newChat)
+
+	require.NoError(t, err)
+	require.Equal(t, chat, expectedChat)
+}
 
 func Test_DeleteChat_OK(t *testing.T) {
 	ctl := gomock.NewController(t)
@@ -92,8 +90,52 @@ func Test_GetChat_OK(t *testing.T) {
 	require.Equal(t, chat, expectedChat)
 }
 
+//func Test_GetListUserChats_OK(t *testing.T) {
+//	var expectedChat []model.ChatInListUser
+//
+//	ctl := gomock.NewController(t)
+//	defer ctl.Finish()
+//
+//	var ctx echo.Context
+//	chatRepository := chatMock.NewMockRepository(ctl)
+//	userRepository := userMock.NewMockRepository(ctl)
+//	messagesRepository := messageMock.NewMockRepository(ctl)
+//	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+//
+//	chatRepository.EXPECT().GetChatsByUserId(context.Background(), uint64(1)).Return([]model.ChatMembers{}, nil).Times(1)
+//
+//	chat, err := usecase.GetListUserChats(ctx, uint64(1))
+//
+//	require.NoError(t, err)
+//	require.Equal(t, chat, expectedChat)
+//}
+
 func Test_GetListUserChats_OK(t *testing.T) {
-	var expectedChat []model.ChatInListUser
+	userChats := []model.ChatMembers{
+		{
+			ChatId:   1,
+			MemberId: 1,
+		},
+	}
+	chat := model.Chat{
+		Id: 1,
+	}
+	chatMembers := []model.ChatMembers{
+		{
+			ChatId:   1,
+			MemberId: 1,
+		},
+	}
+	expectedChat := []model.ChatInListUser{
+		{
+			Id: 1,
+			Members: []model.User{
+				{
+					Id: 1,
+				},
+			},
+		},
+	}
 
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
@@ -104,10 +146,14 @@ func Test_GetListUserChats_OK(t *testing.T) {
 	messagesRepository := messageMock.NewMockRepository(ctl)
 	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
 
-	chatRepository.EXPECT().GetChatsByUserId(context.Background(), uint64(1)).Return([]model.ChatMembers{}, nil).Times(1)
+	chatRepository.EXPECT().GetChatsByUserId(context.Background(), uint64(1)).Return(userChats, nil).Times(1)
+	chatRepository.EXPECT().GetChatById(context.Background(), uint64(1)).Return(chat, nil).Times(1)
+	chatRepository.EXPECT().GetChatMembersByChatId(context.Background(), uint64(1)).Return(chatMembers, nil).Times(1)
+	userRepository.EXPECT().GetUserById(context.Background(), uint64(1)).Return(model.AuthorizedUser{Id: 1}, nil).Times(1)
+	messagesRepository.EXPECT().GetLastChatMessage(context.Background(), uint64(1)).Return(model.Message{}, nil).Times(1)
 
-	chat, err := usecase.GetListUserChats(ctx, uint64(1))
+	listChats, err := usecase.GetListUserChats(ctx, uint64(1))
 
 	require.NoError(t, err)
-	require.Equal(t, chat, expectedChat)
+	require.Equal(t, expectedChat, listChats)
 }

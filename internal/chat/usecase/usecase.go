@@ -107,24 +107,34 @@ func (u usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
 	return err
 }
 
-func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, userID uint64) error {
+func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, members []uint64) error {
 	chat, err := u.GetChatById(ctx, chatID)
 	if err != nil {
 		return err
 	}
 
-	err = u.CheckExistUserInChat(ctx, chat, userID)
-	if err != nil {
-		return err
+	for _, memberId := range members {
+		err = u.CheckExistUserInChat(ctx, chat, memberId)
+		if err != nil {
+			return err
+		}
 	}
 
-	err = u.userRepo.CheckExistUserById(context.Background(), userID)
-	if err != nil {
-		return err
+	for _, memberId := range members {
+		err = u.userRepo.CheckExistUserById(context.Background(), memberId)
+		if err != nil {
+			return err
+		}
 	}
 
-	err = u.chatRepo.AddUserInChatDB(context.Background(), chatID, userID)
-	return err
+	for _, memberId := range members {
+		err = u.chatRepo.AddUserInChatDB(context.Background(), chatID, memberId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {

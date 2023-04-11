@@ -40,3 +40,8 @@ type ChatMessages struct {
 	ChatId    uint64 `json:"id_chat"    db:"id_chat"`
 	MessageId uint64 `json:"id_message" db:"id_message"`
 }
+
+type ChatUsersInGroup struct {
+	Type    uint64   `json:"type"    db:"type"`
+	Members []uint64 `json:"members" db:"members"`
+}

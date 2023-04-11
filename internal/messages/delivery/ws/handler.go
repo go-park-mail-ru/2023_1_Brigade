@@ -15,7 +15,6 @@ type messageHandler struct {
 	messageUsecase messages.Usecase
 	upgrader       websocket.Upgrader
 	clients        map[uint64]*websocket.Conn
-	temp_counter   uint64
 }
 
 func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
@@ -25,10 +24,9 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 		return err
 	}
 
-	//session := ctx.Get("session").(model.Session)
-	u.clients[u.temp_counter+1] = ws
-	u.temp_counter++
-	log.Warn(u.temp_counter)
+	session := ctx.Get("session").(model.Session)
+	u.clients[session.UserId] = ws
+	log.Warn(session.UserId)
 
 	defer func() {
 		err := ws.Close()

@@ -16,11 +16,28 @@ VALUES (1, 'avatarka', 'title');
 
 INSERT INTO user_contacts (id_user, id_contact)
 VALUES (
-   (SELECT id FROM chat
+   (SELECT id FROM profile
     WHERE id = 1),
    (SELECT id FROM profile
-    WHERE id = 5)
+    WHERE id = 2)
 );
+
+INSERT INTO user_contacts (id_user, id_contact)
+VALUES (
+           (SELECT id FROM profile
+            WHERE id = 1),
+           (SELECT id FROM profile
+            WHERE id = 3)
+       );
+
+INSERT INTO user_contacts (id_user, id_contact)
+VALUES (
+           (SELECT id FROM profile
+            WHERE id = 1),
+           (SELECT id FROM profile
+            WHERE id = 4)
+       );
+
 
 INSERT INTO user_contacts (id_user, id_contact)
 VALUES (

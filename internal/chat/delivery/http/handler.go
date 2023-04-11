@@ -94,12 +94,13 @@ func (u chatHandler) AddUserInChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	userID, err := strconv.ParseUint(ctx.Param("userID"), 10, 64)
+	var chat model.ChatUsersInGroup
+	err = ctx.Bind(&chat)
 	if err != nil {
 		return err
 	}
 
-	err = u.chatUsecase.AddUserInChat(ctx, chatID, userID)
+	err = u.chatUsecase.AddUserInChat(ctx, chatID, chat.Members)
 	if err != nil {
 		return err
 	}

@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS profile (
 
 CREATE TABLE IF NOT EXISTS chat (
                                     id    SERIAL UNIQUE PRIMARY KEY,
+                                    type VARCHAR(255),
+                                    avatar VARCHAR(255),
                                     title VARCHAR(255)
     );
 
@@ -49,9 +51,10 @@ CREATE TABLE IF NOT EXISTS user_contacts (
     FOREIGN KEY (id_contact) REFERENCES profile(id)
     );
 
-CREATE TABLE IF NOT EXISTS chat_members (
+CREATE TABLE IF NOT EXISTS chat_messages (
                                             id_chat    INTEGER,
                                             id_message INTEGER,
                                             FOREIGN KEY (id_chat)   REFERENCES chat(id),
-    FOREIGN KEY (id_member) REFERENCES message(id)
+    FOREIGN KEY (id_message) REFERENCES message(id)
     );
+

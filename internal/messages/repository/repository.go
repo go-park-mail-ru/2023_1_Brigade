@@ -31,7 +31,7 @@ func (r repository) GetMessageById(ctx context.Context, messageID uint64) (model
 
 func (r repository) GetChatMessages(ctx context.Context, chatID uint64) ([]model.ChatMessages, error) {
 	var chatMessages []model.ChatMessages
-	rows, err := r.db.Query("SELECT * FROM chat_messsages WHERE id_chat", chatID)
+	rows, err := r.db.Query("SELECT * FROM chat_messages WHERE id_chat=$1", chatID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

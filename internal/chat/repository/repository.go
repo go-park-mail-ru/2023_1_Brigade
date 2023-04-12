@@ -18,6 +18,23 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 	return &repository{db: db}
 }
 
+func (r repository) UpdateChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
+	var chat model.Chat
+	rows, err := r.db.NamedQuery(`UPDATE chat SET title=:title WHERE :id = $1`, chatID)
+
+	if err != nil {
+		return model.Chat{}, err
+	}
+	if rows.Next() {
+		err = rows.Scan(&chat)
+		if err != nil {
+			return model.Chat{}, err
+		}
+	}
+
+	return chat, nil
+}
+
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
 	var chatMembers []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_chat=$1", chatID)
@@ -82,7 +99,7 @@ func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound
 	}
-	
+
 	_, err = r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound

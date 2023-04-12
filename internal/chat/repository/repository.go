@@ -27,9 +27,9 @@ func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error 
 	return err
 }
 
-func (r repository) UpdateChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
+func (r repository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.Chat, error) {
 	var chat model.Chat
-	rows, err := r.db.NamedQuery(`UPDATE chat SET title=:title WHERE :id = $1`, chatID)
+	rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
 
 	if err != nil {
 		return model.Chat{}, err

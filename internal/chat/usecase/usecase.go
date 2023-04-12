@@ -196,7 +196,7 @@ func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.Chat
 }
 
 func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
-	chat, err := u.chatRepo.UpdateChatById(context.Background(), editChat.Id)
+	chat, err := u.chatRepo.UpdateChatById(context.Background(), editChat.Title, editChat.Id)
 	if err != nil {
 		return model.Chat{}, err
 	}

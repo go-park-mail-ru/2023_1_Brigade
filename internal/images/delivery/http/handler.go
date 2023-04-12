@@ -1,19 +1,20 @@
 package http
 
 import (
-	"net/http"
-	"project/internal/model"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
+	"net/http"
 	"project/internal/images"
+	"project/internal/model"
+	"project/internal/user"
 )
 
 type imagesHandler struct {
+	userUsecase   user.Usecase
 	imagesUsecase images.Usecase
 }
 
 func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
-
 
 	session := ctx.Get("session").(model.Session)
 	userID := session.UserId
@@ -41,35 +42,41 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		return err
 	}
 
-	return ctx.JSON(http.StatusCreated, url)
+	user, err := h.userUsecase.GetUserById(ctx, session.UserId)
+	if err != nil {
+		return err
+	}
+	user.Avatar = url
 
-//	file, err := ctx.FormFile("image")
-//	if err != nil {
-//		log.Warn(err)
-//	}
-//	
-//	log.Warn(file, 12131313)
+	return ctx.JSON(http.StatusCreated, user)
 
-//	log.Warn(ctx.Request())
-//	maxSize := int64(64 << 20)
-//	err := ctx.Request().ParseMultipartForm(maxSize)
-//	if err != nil {
-//		return err
-//	}
+	//	file, err := ctx.FormFile("image")
+	//	if err != nil {
+	//		log.Warn(err)
+	//	}
+	//
+	//	log.Warn(file, 12131313)
 
-//	file, _, err := ctx.Request().FormFile("image")
-//	if err != nil {
-//		return err
-//	}
+	//	log.Warn(ctx.Request())
+	//	maxSize := int64(64 << 20)
+	//	err := ctx.Request().ParseMultipartForm(maxSize)
+	//	if err != nil {
+	//		return err
+	//	}
 
-//	defer func() {
-//		err := file.Close()
-//		if err != nil {
-//			log.Error(err)
-//		}
-//	}()
+	//	file, _, err := ctx.Request().FormFile("image")
+	//	if err != nil {
+	//		return err
+	//	}
 
-//	return nil
+	//	defer func() {
+	//		err := file.Close()
+	//		if err != nil {
+	//			log.Error(err)
+	//		}
+	//	}()
+
+	//	return nil
 
 	//defer func() {
 	//	err := file.
@@ -87,7 +94,7 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 	//}
 
 	//return ctx.JSON(http.StatusCreated, url)
-	
+
 	//err := ctx.Request().ParseMultipartForm(32 << 20) // максимальный размер файла 32 МБ
 	//if err != nil {
 	//	//http.Error(ctx.Response().Writer, err.Error(), http.StatusBadRequest)
@@ -164,4 +171,3 @@ func NewImagesHandler(e *echo.Echo, imagesUsecase images.Usecase) imagesHandler 
 
 	return handler
 }
-

@@ -91,6 +91,21 @@ func (mr *MockRepositoryMockRecorder) DeleteUserById(ctx, userID interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserById", reflect.TypeOf((*MockRepository)(nil).DeleteUserById), ctx, userID)
 }
 
+// GetAllUsersExceptCurrentUser mocks base method.
+func (m *MockRepository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllUsersExceptCurrentUser", ctx, userID)
+	ret0, _ := ret[0].([]model.AuthorizedUser)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllUsersExceptCurrentUser indicates an expected call of GetAllUsersExceptCurrentUser.
+func (mr *MockRepositoryMockRecorder) GetAllUsersExceptCurrentUser(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsersExceptCurrentUser", reflect.TypeOf((*MockRepository)(nil).GetAllUsersExceptCurrentUser), ctx, userID)
+}
+
 // GetUserAvatar mocks base method.
 func (m *MockRepository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
 	m.ctrl.T.Helper()

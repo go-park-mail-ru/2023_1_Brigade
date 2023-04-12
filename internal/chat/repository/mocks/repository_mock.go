@@ -78,6 +78,20 @@ func (mr *MockRepositoryMockRecorder) DeleteChatById(ctx, chatID interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChatById", reflect.TypeOf((*MockRepository)(nil).DeleteChatById), ctx, chatID)
 }
 
+// DeleteChatMembers mocks base method.
+func (m *MockRepository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteChatMembers", ctx, chatID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteChatMembers indicates an expected call of DeleteChatMembers.
+func (mr *MockRepositoryMockRecorder) DeleteChatMembers(ctx, chatID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChatMembers", reflect.TypeOf((*MockRepository)(nil).DeleteChatMembers), ctx, chatID)
+}
+
 // GetChatById mocks base method.
 func (m *MockRepository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	m.ctrl.T.Helper()
@@ -121,4 +135,19 @@ func (m *MockRepository) GetChatsByUserId(ctx context.Context, userID uint64) ([
 func (mr *MockRepositoryMockRecorder) GetChatsByUserId(ctx, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatsByUserId", reflect.TypeOf((*MockRepository)(nil).GetChatsByUserId), ctx, userID)
+}
+
+// UpdateChatById mocks base method.
+func (m *MockRepository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.Chat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateChatById", ctx, title, chatID)
+	ret0, _ := ret[0].(model.Chat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateChatById indicates an expected call of UpdateChatById.
+func (mr *MockRepositoryMockRecorder) UpdateChatById(ctx, title, chatID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateChatById", reflect.TypeOf((*MockRepository)(nil).UpdateChatById), ctx, title, chatID)
 }

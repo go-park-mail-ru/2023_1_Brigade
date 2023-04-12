@@ -35,20 +35,6 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 	return m.recorder
 }
 
-// AddUserInChat mocks base method.
-func (m *MockUsecase) AddUserInChat(ctx echo.Context, chatID, memberID uint64) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddUserInChat", ctx, chatID, memberID)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// AddUserInChat indicates an expected call of AddUserInChat.
-func (mr *MockUsecaseMockRecorder) AddUserInChat(ctx, chatID, memberID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserInChat", reflect.TypeOf((*MockUsecase)(nil).AddUserInChat), ctx, chatID, memberID)
-}
-
 // CheckExistUserInChat mocks base method.
 func (m *MockUsecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
 	m.ctrl.T.Helper()
@@ -90,6 +76,21 @@ func (m *MockUsecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
 func (mr *MockUsecaseMockRecorder) DeleteChatById(ctx, chatID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChatById", reflect.TypeOf((*MockUsecase)(nil).DeleteChatById), ctx, chatID)
+}
+
+// EditChat mocks base method.
+func (m *MockUsecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EditChat", ctx, editChat)
+	ret0, _ := ret[0].(model.Chat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EditChat indicates an expected call of EditChat.
+func (mr *MockUsecaseMockRecorder) EditChat(ctx, editChat interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditChat", reflect.TypeOf((*MockUsecase)(nil).EditChat), ctx, editChat)
 }
 
 // GetChatById mocks base method.

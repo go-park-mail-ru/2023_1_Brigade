@@ -228,6 +228,7 @@ func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat
 	}
 	chat.Members = members
 	chat.Title = editChat.Title
+	chat.Avatar = configs.DefaultAvatarUrl
 
 	return chat, nil
 

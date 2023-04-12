@@ -37,10 +37,12 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	//	}
 
 	if chat.Type == configs.Chat {
-		if chat.Members[0].Id == session.UserId {
-			chat.Title = chat.Members[1].Nickname
-		} else {
-			chat.Title = chat.Members[0].Nickname
+		if len(chat.Members) > 0 {
+			if chat.Members[0].Id == session.UserId {
+				chat.Title = chat.Members[1].Nickname
+			} else {
+				chat.Title = chat.Members[0].Nickname
+			}
 		}
 	}
 
@@ -82,10 +84,12 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
 
 	if chat.Type == configs.Chat {
-		if dbChat.Members[0].Id == session.UserId {
-			dbChat.Title = dbChat.Members[1].Nickname
-		} else {
-			dbChat.Title = dbChat.Members[0].Nickname
+		if len(dbChat.Members) > 0 {
+			if dbChat.Members[0].Id == session.UserId {
+				dbChat.Title = dbChat.Members[1].Nickname
+			} else {
+				dbChat.Title = dbChat.Members[0].Nickname
+			}
 		}
 	}
 

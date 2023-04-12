@@ -90,26 +90,6 @@ func Test_GetChat_OK(t *testing.T) {
 	require.Equal(t, chat, expectedChat)
 }
 
-//func Test_GetListUserChats_OK(t *testing.T) {
-//	var expectedChat []model.ChatInListUser
-//
-//	ctl := gomock.NewController(t)
-//	defer ctl.Finish()
-//
-//	var ctx echo.Context
-//	chatRepository := chatMock.NewMockRepository(ctl)
-//	userRepository := userMock.NewMockRepository(ctl)
-//	messagesRepository := messageMock.NewMockRepository(ctl)
-//	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
-//
-//	chatRepository.EXPECT().GetChatsByUserId(context.Background(), uint64(1)).Return([]model.ChatMembers{}, nil).Times(1)
-//
-//	chat, err := usecase.GetListUserChats(ctx, uint64(1))
-//
-//	require.NoError(t, err)
-//	require.Equal(t, chat, expectedChat)
-//}
-
 func Test_GetListUserChats_OK(t *testing.T) {
 	userChats := []model.ChatMembers{
 		{

@@ -30,7 +30,7 @@ type repository struct {
 
 func (r repository) LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (string, error) {
 	hash := uuid.New().String()
-	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash)
+	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash + ".jpg")
 	if err != nil {
 		return "", err
 	}
@@ -41,7 +41,7 @@ func (r repository) LoadImage(ctx context.Context, file multipart.File, filename
 		return "", err
 	}
 
-	url := "https://technogramm.ru/avatars/" + hash
+	url := "https://technogramm.ru/avatars/" + hash + ".jpg"
 	_, err = r.db.Query("UPDATE profile SET avatar=$1 WHERE id=$2", url, userID)
 
 	return url, nil

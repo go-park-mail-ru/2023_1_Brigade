@@ -40,27 +40,6 @@ import (
 	repositoryUser "project/internal/user/repository"
 )
 
-//log "github.com/sirupsen/logrus"
-//httpAuthUser "project/internal/auth/user/delivery/http"
-//httpImages "project/internal/images/delivery/http"
-//httpChat "project/internal/chat/delivery/http"
-//httpUser "project/internal/user/delivery/http"
-//wsMessages "project/internal/messages/delivery/ws"
-//
-//usecaseImages "project/internal/images/usecase"
-//usecaseMessages "project/internal/messages/usecase"
-//usecaseAuthSession "project/internal/auth/session/usecase"
-//usecaseAuthUser "project/internal/auth/user/usecase"
-//usecaseChat "project/internal/chat/usecase"
-//usecaseUser "project/internal/user/usecase"
-//
-//repositoryImages "project/internal/images/repository"
-//repositoryMessages "project/internal/messages/repository"
-//repositoryAuthSession "project/internal/auth/session/repository"
-//repositoryAuthUser "project/internal/auth/user/repository"
-//repositoryChat "project/internal/chat/repository"
-//repositoryUser "project/internal/user/repository"
-
 func init() {
 	envPath := "../../.env"
 	if err := godotenv.Load(envPath); err != nil {
@@ -108,7 +87,7 @@ func main() {
 	defer redis.Close()
 
 	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
+		Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
 	})
 
 	if err != nil {

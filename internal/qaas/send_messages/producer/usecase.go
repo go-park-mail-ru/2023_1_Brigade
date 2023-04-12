@@ -53,7 +53,5 @@ func (u *Usecase) ProduceMessage(message []byte) error {
 	}()
 
 	u.producer.Input() <- msg
-	success := <-u.producer.Successes()
-	log.Printf("Sent message %s to partition %d\n", success.Value, success.Partition)
 	return nil
 }

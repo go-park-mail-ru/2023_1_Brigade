@@ -78,14 +78,6 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 		Password: "password",
 	}
 
-	//hashedUser := model.User{
-	//	Id:       0,
-	//	Username: "id_marcussss",
-	//	Nickname: "marcussss",
-	//	Email:    "marcussss@gmail.com",
-	//	Password: hashedPassword,
-	//}
-
 	test := testUserCase{
 		expectedUser: model.AuthorizedUser{
 			Id:       1,

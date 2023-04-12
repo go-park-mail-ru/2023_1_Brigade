@@ -109,36 +109,6 @@ func (u usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
 	return err
 }
 
-//func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, members []uint64) error {
-//	chat, err := u.GetChatById(ctx, chatID)
-//	if err != nil {
-//		return err
-//	}
-//
-//	for _, memberId := range members {
-//		err = u.CheckExistUserInChat(ctx, chat, memberId)
-//		if err != nil {
-//			return err
-//		}
-//	}
-//
-//	for _, memberId := range members {
-//		err = u.userRepo.CheckExistUserById(context.Background(), memberId)
-//		if err != nil {
-//			return err
-//		}
-//	}
-//
-//	for _, memberId := range members {
-//		err = u.chatRepo.AddUserInChatDB(context.Background(), chatID, memberId)
-//		if err != nil {
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
-
 func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
 	userChats, err := u.chatRepo.GetChatsByUserId(context.Background(), userID)
@@ -231,36 +201,4 @@ func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat
 	chat.Avatar = configs.DefaultAvatarUrl
 
 	return chat, nil
-
-	//members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), editChat.Id)
-	//if err != nil {
-	//	return model.Chat{}, err
-	//}
-	//
-	//var membersID []uint64
-	//for _, member := range members {
-	//	membersID = append(membersID, member.MemberId)
-	//}
-	//
-	//var newMembers []model.User
-	//for _, editChatMemberID := range editChat.Members {
-	//	if !validation.Contains(membersID, editChatMemberID) {
-	//		err := u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, editChatMemberID)
-	//		if err != nil {
-	//			log.Error(err)
-	//		}
-	//
-	//		user, err := u.userRepo.GetUserById(context.Background(), editChatMemberID)
-	//		if err != nil {
-	//			log.Error(err)
-	//		}
-	//
-	//		newMembers = append(newMembers, model_conversion.FromAuthorizedUserToUser(user))
-	//	}
-	//}
-	//
-	//chat.Members = newMembers
-	//chat.Title = editChat.Title
-	//
-	//return chat, nil
 }

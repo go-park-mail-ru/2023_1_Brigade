@@ -7,15 +7,6 @@ import (
 	"strings"
 )
 
-func Contains(arr []uint64, num uint64) bool {
-	for _, n := range arr {
-		if n == num {
-			return true
-		}
-	}
-	return false
-}
-
 func ErrorConversion(err error) error {
 	words := strings.Split(err.Error(), " ")
 	switch words[0] {

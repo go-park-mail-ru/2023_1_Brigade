@@ -65,11 +65,6 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 
 func (u userHandler) GetUserContactsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
-	//contacts, err := u.usecase.GetUserContacts(ctx, session.UserId)
-	//if err != nil {
-	//	return err
-	//}
-
 	contacts, err := u.usecase.GetAllUsersExceptCurrentUser(ctx, session.UserId)
 	if err != nil {
 		return err
@@ -84,8 +79,7 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 		return err
 	}
 
-	//session := ctx.Get("session").(model.Session)
-	session := model.Session{UserId: 1}
+	session := ctx.Get("session").(model.Session)
 	contacts, err := u.usecase.AddUserContact(ctx, session.UserId, contactID)
 	if err != nil {
 		return err

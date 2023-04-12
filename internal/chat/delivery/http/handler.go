@@ -31,10 +31,6 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
-	//	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-	//	if err == nil {
-	//		return myErrors.ErrNotChatAccess
-	//	}
 
 	if chat.Type == configs.Chat {
 		if len(chat.Members) > 0 {

@@ -35,55 +35,34 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 		}
 	}()
 
-	//'{ "body": "string", "author_id": 1, "chat_id": 1 }'
-
 	go func() {
 		for {
 			msg, err := u.messageUsecase.ReceiveMessage(ctx)
 			if err != nil {
 				log.Error(err)
-				//return
 			}
-			log.Warn("ПРИНЯЛ СООБЩЕНИЕ")
 
 			var producerMessage model.ProducerMessage
 			err = json.Unmarshal(msg, &producerMessage)
-			log.Warn(producerMessage)
 			if err != nil {
 				log.Error(err)
-				//return
 			}
 
 			client := u.clients[producerMessage.ReceiverID]
-			//client := u.clients[producerMessage.AuthorId]
-			log.Warn(producerMessage.ReceiverID)
 			if client == nil {
-				log.Error("nil client")
 				continue
-				//return
 			}
 
 			err = client.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
 				log.Error(err)
-				continue
-				//log.Error(err)
-				//err = client.Close()
-				//if err != nil {
-				//	log.Error(err)
-				//}
-				//delete(u.clients, producerMessage.ReceiverID)
-				//return
 			}
-			log.Warn("ОТПРАВИЛ КЛИЕНТАМ")
 		}
 	}()
 
-	//go func() {
 	for {
-		_, message, err := ws.ReadMessage() // блокирующая
+		_, message, err := ws.ReadMessage()
 		if err != nil {
-			log.Error(err)
 			continue
 		}
 
@@ -92,10 +71,6 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			log.Error(err)
 		}
 	}
-	//}()
-	//}
-	//{ "body": "string", "author_id": 1, "chat_id": 1 }
-	//return nil
 }
 
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {

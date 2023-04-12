@@ -122,24 +122,6 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 
 func (r repository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
 	return "", nil
-	//var userAvatar model.User
-	//err := r.db.Get(&userAvatar, "SELECT * FROM users_avatar WHERE id_user=$1", userID)
-	//
-	//if err != nil {
-	//	if errors.Is(err, sql.ErrNoRows) {
-	//		return "", myErrors.ErrAvatarNotFound
-	//	}
-	//	return "", err
-	//}
-	//
-	//var avatarUrl model.ImageUrl
-	//err = r.db.Get(&avatarUrl, "SELECT * FROM images_urls WHERE id_image=$1", userAvatar.IdImage)
-	//
-	//if errors.Is(err, sql.ErrNoRows) {
-	//	return "", myErrors.ErrImageNotFound
-	//}
-	//
-	//return avatarUrl.ImageUrl, err
 }
 
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {

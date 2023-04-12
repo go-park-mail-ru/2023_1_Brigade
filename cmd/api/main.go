@@ -109,7 +109,6 @@ func main() {
 
 	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
-		Secure: true,
 	})
 
 	if err != nil {

@@ -1,47 +1,14 @@
 package security
 
 import (
-	"crypto/sha1"
 	"encoding/base64"
-	"github.com/asaskevich/govalidator"
-	"project/internal/model"
+	"golang.org/x/crypto/argon2"
 )
 
-func Hash(password string) (string, error) {
-	hasher := sha1.New()
-	_, err := hasher.Write([]byte(password))
+var salt = []byte{0x5C, 0x72, 0x69, 0x67, 0x61, 0x64, 0x65}
 
-	if err != nil {
-		return "", err
-	}
-
-	sha := base64.URLEncoding.EncodeToString(hasher.Sum(nil))
-	return sha, nil
-}
-
-func setUserValidators() {
-	govalidator.CustomTypeTagMap.Set("usernameValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 1
-	})
-
-	govalidator.CustomTypeTagMap.Set("emailValidator", func(i interface{}, context interface{}) bool {
-		return govalidator.IsEmail(i.(string))
-	})
-
-	govalidator.CustomTypeTagMap.Set("passwordValidator", func(i interface{}, context interface{}) bool {
-		return len(i.(string)) > 8
-	})
-}
-
-func ValidateSignup(user model.User) []error {
-	setUserValidators()
-
-	_, err := govalidator.ValidateStruct(user)
-
-	if err != nil {
-		errors := err.(govalidator.Errors).Errors()
-		return errors
-	}
-
-	return nil
+func Hash(password []byte) string {
+	hashedPassword := argon2.IDKey(password, salt, 1, 64*1024, 4, 32)
+	hashString := base64.StdEncoding.EncodeToString(hashedPassword)
+	return hashString
 }

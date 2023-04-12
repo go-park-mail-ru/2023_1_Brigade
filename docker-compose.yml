@@ -32,8 +32,10 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    build: .
     volumes:
-      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
     networks:
       - backend-network
 
@@ -88,6 +90,4 @@ networks:
     driver: bridge
 
 volumes:
-  redis-data:
-    driver: local
   minio-data:

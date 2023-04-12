@@ -1,6 +1,8 @@
 package http
 
 import (
+	"net/http"
+	"project/internal/model"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"project/internal/images"
@@ -11,12 +13,10 @@ type imagesHandler struct {
 }
 
 func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
-//	file, err := ctx.FormFile("image")
-//	if err != nil {
-//		log.Warn(err)
-//	}
-//	
-//	log.Warn(file, 12131313)
+
+
+	session := ctx.Get("session").(model.Session)
+	userID := session.UserId
 
 	maxSize := int64(64 << 20)
 	err := ctx.Request().ParseMultipartForm(maxSize)
@@ -24,7 +24,7 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		return err
 	}
 
-	file, _, err := ctx.Request().FormFile("image")
+	file, header, err := ctx.Request().FormFile("image")
 	if err != nil {
 		return err
 	}
@@ -36,7 +36,40 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		}
 	}()
 
-	return nil
+	url, err := h.imagesUsecase.LoadImage(ctx, file, header.Filename, userID)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusCreated, url)
+
+//	file, err := ctx.FormFile("image")
+//	if err != nil {
+//		log.Warn(err)
+//	}
+//	
+//	log.Warn(file, 12131313)
+
+//	log.Warn(ctx.Request())
+//	maxSize := int64(64 << 20)
+//	err := ctx.Request().ParseMultipartForm(maxSize)
+//	if err != nil {
+//		return err
+//	}
+
+//	file, _, err := ctx.Request().FormFile("image")
+//	if err != nil {
+//		return err
+//	}
+
+//	defer func() {
+//		err := file.Close()
+//		if err != nil {
+//			log.Error(err)
+//		}
+//	}()
+
+//	return nil
 
 	//defer func() {
 	//	err := file.

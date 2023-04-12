@@ -110,7 +110,7 @@ func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	userAddContact := api.Group(userAddContactUrl)
 
 	user.GET("", handler.GetUserHandler)
-	currentUser.POST("", handler.PutUserHandler)
+	currentUser.PUT("", handler.PutUserHandler)
 	deleteUser.DELETE("", handler.DeleteUserHandler)
 	currentUser.GET("", handler.GetCurrentUserHandler)
 	userContacts.GET("", handler.GetUserContactsHandler)

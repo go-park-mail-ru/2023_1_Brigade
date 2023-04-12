@@ -2,14 +2,14 @@ package repository
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/minio/minio-go/v7"
 	log "github.com/sirupsen/logrus"
+	"io"
 	"mime/multipart"
-	"net/url"
+	"os"
 	"project/internal/images"
-	myErrors "project/internal/pkg/errors"
-	"time"
 )
 
 func NewImagesMemoryRepository(db *sqlx.DB, minioClient *minio.Client) images.Repostiory {
@@ -28,19 +28,36 @@ type repository struct {
 	minio      *minio.Client
 }
 
-func (r repository) LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (*url.URL, error) {
-	_, err := r.minio.PutObject(context.Background(), r.bucketname, filename, file, -1, minio.PutObjectOptions{})
+func (r repository) LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (string, error) {
+	hash := uuid.New().String()
+	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash)
 	if err != nil {
-		return nil, err
+		return "", err
+	}
+	defer file.Close()
+
+	_, err = io.Copy(fileOnDisk, file)
+	if err != nil {
+		return "", err
 	}
 
-	expires := time.Hour * 24 * 7 // 7 days
-	presignedURL, err := r.minio.PresignedGetObject(context.Background(), r.bucketname, filename, expires, nil)
-	if minio.ToErrorResponse(err).Code == "NoSuchKey" {
-		return nil, myErrors.ErrAvatarNotFound
-	}
+	url := "https://technogramm.ru/avatars/" + hash
+	_, err = r.db.Query("UPDATE profile SET avatar=$1 WHERE id=$2", url, userID)
 
-	_, err = r.db.Query("UPDATE profile SET avatar=$1 WHERE id=$2", presignedURL.String(), userID)
+	return url, nil
 
-	return presignedURL, err
+	//_, err := r.minio.PutObject(context.Background(), r.bucketname, filename, file, -1, minio.PutObjectOptions{})
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//expires := time.Hour * 24 * 7 // 7 days
+	//presignedURL, err := r.minio.PresignedGetObject(context.Background(), r.bucketname, filename, expires, nil)
+	//if minio.ToErrorResponse(err).Code == "NoSuchKey" {
+	//	return nil, myErrors.ErrAvatarNotFound
+	//}
+	//
+	//_, err = r.db.Query("UPDATE profile SET avatar=$1 WHERE id=$2", presignedURL.String(), userID)
+	//
+	//return presignedURL, err
 }

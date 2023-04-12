@@ -11,12 +11,33 @@ type imagesHandler struct {
 }
 
 func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
-	file, err := ctx.FormFile("image")
+//	file, err := ctx.FormFile("image")
+//	if err != nil {
+//		log.Warn(err)
+//	}
+//	
+//	log.Warn(file, 12131313)
+
+	maxSize := int64(64 << 20)
+	err := ctx.Request().ParseMultipartForm(maxSize)
 	if err != nil {
-		log.Warn(err)
+		return err
 	}
-	
-	log.Warn(file, 12131313)
+
+	file, _, err := ctx.Request().FormFile("image")
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	return nil
+
 	//defer func() {
 	//	err := file.
 	//	if err != nil {
@@ -34,7 +55,6 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 
 	//return ctx.JSON(http.StatusCreated, url)
 	
-	return nil
 	//err := ctx.Request().ParseMultipartForm(32 << 20) // максимальный размер файла 32 МБ
 	//if err != nil {
 	//	//http.Error(ctx.Response().Writer, err.Error(), http.StatusBadRequest)

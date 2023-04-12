@@ -213,6 +213,7 @@ func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat
 			log.Error(err)
 		}
 
+		log.Warn(editChat.Id)
 		err = u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, memberID)
 		if err != nil {
 			log.Error(err)

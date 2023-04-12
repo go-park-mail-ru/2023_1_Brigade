@@ -25,6 +25,13 @@ type ChatInListUser struct {
 	LastMessageAuthor User    `json:"last_message_author" db:"last_message_author"`
 }
 
+type EditChat struct {
+	Id      uint64   `json:"id"       db:"id"`
+	Type    uint64   `json:"type"     db:"type"`
+	Title   string   `json:"title"    db:"title"`
+	Members []uint64 `json:"members"  db:"members"`
+}
+
 type CreateChat struct {
 	Type    uint64   `json:"type"     db:"type"`
 	Title   string   `json:"title"    db:"title"`

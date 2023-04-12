@@ -10,6 +10,7 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
+	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 
@@ -109,35 +110,35 @@ func (u usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
 	return err
 }
 
-func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, members []uint64) error {
-	chat, err := u.GetChatById(ctx, chatID)
-	if err != nil {
-		return err
-	}
-
-	for _, memberId := range members {
-		err = u.CheckExistUserInChat(ctx, chat, memberId)
-		if err != nil {
-			return err
-		}
-	}
-
-	for _, memberId := range members {
-		err = u.userRepo.CheckExistUserById(context.Background(), memberId)
-		if err != nil {
-			return err
-		}
-	}
-
-	for _, memberId := range members {
-		err = u.chatRepo.AddUserInChatDB(context.Background(), chatID, memberId)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
+//func (u usecase) AddUserInChat(ctx echo.Context, chatID uint64, members []uint64) error {
+//	chat, err := u.GetChatById(ctx, chatID)
+//	if err != nil {
+//		return err
+//	}
+//
+//	for _, memberId := range members {
+//		err = u.CheckExistUserInChat(ctx, chat, memberId)
+//		if err != nil {
+//			return err
+//		}
+//	}
+//
+//	for _, memberId := range members {
+//		err = u.userRepo.CheckExistUserById(context.Background(), memberId)
+//		if err != nil {
+//			return err
+//		}
+//	}
+//
+//	for _, memberId := range members {
+//		err = u.chatRepo.AddUserInChatDB(context.Background(), chatID, memberId)
+//		if err != nil {
+//			return err
+//		}
+//	}
+//
+//	return nil
+//}
 
 func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
@@ -193,4 +194,43 @@ func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.Chat
 	}
 
 	return chatsInListUser, nil
+}
+
+func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
+	chat, err := u.chatRepo.UpdateChatById(context.Background(), editChat.Id)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), editChat.Id)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	var membersID []uint64
+	for _, member := range members {
+		membersID = append(membersID, member.MemberId)
+	}
+
+	var newMembers []model.User
+	for _, editChatMemberID := range editChat.Members {
+		if !validation.Contains(membersID, editChatMemberID) {
+			err := u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, editChatMemberID)
+			if err != nil {
+				log.Error(err)
+			}
+
+			user, err := u.userRepo.GetUserById(context.Background(), editChatMemberID)
+			if err != nil {
+				log.Error(err)
+			}
+
+			newMembers = append(newMembers, model_conversion.FromAuthorizedUserToUser(user))
+		}
+	}
+
+	chat.Members = newMembers
+	chat.Title = editChat.Title
+
+	return chat, nil
 }

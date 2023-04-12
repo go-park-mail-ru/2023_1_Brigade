@@ -116,7 +116,10 @@ func main() {
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
-	//e.Use(middleware.CSRF())
+	e.Use(middleware.CSRF())
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	TokenLookup: "header:X-XSRF-TOKEN",
+	//}))
 	//e.Use(myMiddleware.XSSMidlleware) // переделать на отдачу ПОСЛЕ
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 

@@ -6,7 +6,7 @@ import (
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/model"
-	myErrors "project/internal/pkg/errors"
+//	myErrors "project/internal/pkg/errors"
 
 	//	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
@@ -31,10 +31,10 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
-	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-	if err == nil {
-		return myErrors.ErrNotChatAccess
-	}
+//	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
+//	if err == nil {
+//		return myErrors.ErrNotChatAccess
+//	}
 
 	if chat.Type == configs.Chat {
 		if chat.Members[0].Id == session.UserId {
@@ -105,7 +105,7 @@ func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 
 	session := ctx.Get("session").(model.Session)
 	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-	if err != nil {
+	if err == nil {
 		return err
 	}
 

@@ -1,17 +1,17 @@
 version: "3.9"
 
 services:
-  backend:
-    build: .
-    depends_on:
-      - postgres
-      - redis
-      - kafka
-      - minio
-    ports:
-      - "8081:8081"
-    networks:
-      - backend-network
+#  backend:
+#    build: .
+#    depends_on:
+#      - postgres
+#      - redis
+#      - kafka
+#      - minio
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - backend-network
 
   postgres:
     image: postgres

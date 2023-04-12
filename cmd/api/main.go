@@ -145,7 +145,7 @@ func main() {
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	httpChat.NewChatHandler(e, chatUsecase, userUsecase)
 	wsMessages.NewMessagesHandler(e, messagesUsecase)
-	httpImages.NewImagesHandler(e, imagesUsecase)
+	httpImages.NewImagesHandler(e, userUsecase, imagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

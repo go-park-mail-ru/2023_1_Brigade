@@ -159,8 +159,8 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 	//return ctx.JSON(http.StatusCreated, url)
 }
 
-func NewImagesHandler(e *echo.Echo, imagesUsecase images.Usecase) imagesHandler {
-	handler := imagesHandler{imagesUsecase: imagesUsecase}
+func NewImagesHandler(e *echo.Echo, userUsecase user.Usecase, imagesUsecase images.Usecase) imagesHandler {
+	handler := imagesHandler{userUsecase: userUsecase, imagesUsecase: imagesUsecase}
 	loadImagesUrl := "/images/"
 
 	api := e.Group("api/v1")

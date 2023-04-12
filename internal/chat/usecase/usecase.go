@@ -10,7 +10,6 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
-	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 
@@ -202,35 +201,64 @@ func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat
 		return model.Chat{}, err
 	}
 
-	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), editChat.Id)
+	err = u.chatRepo.DeleteChatMembers(context.Background(), editChat.Id)
 	if err != nil {
 		return model.Chat{}, err
 	}
 
-	var membersID []uint64
-	for _, member := range members {
-		membersID = append(membersID, member.MemberId)
-	}
-
-	var newMembers []model.User
-	for _, editChatMemberID := range editChat.Members {
-		if !validation.Contains(membersID, editChatMemberID) {
-			err := u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, editChatMemberID)
-			if err != nil {
-				log.Error(err)
-			}
-
-			user, err := u.userRepo.GetUserById(context.Background(), editChatMemberID)
-			if err != nil {
-				log.Error(err)
-			}
-
-			newMembers = append(newMembers, model_conversion.FromAuthorizedUserToUser(user))
+	var members []model.User
+	for _, memberID := range editChat.Members {
+		err := u.userRepo.CheckExistUserById(context.Background(), memberID)
+		if err != nil {
+			log.Error(err)
 		}
-	}
 
-	chat.Members = newMembers
+		err = u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, memberID)
+		if err != nil {
+			log.Error(err)
+		}
+
+		user, err := u.userRepo.GetUserById(context.Background(), memberID)
+		if err != nil {
+			log.Error(err)
+		}
+
+		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
+	}
+	chat.Members = members
 	chat.Title = editChat.Title
 
 	return chat, nil
+
+	//members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), editChat.Id)
+	//if err != nil {
+	//	return model.Chat{}, err
+	//}
+	//
+	//var membersID []uint64
+	//for _, member := range members {
+	//	membersID = append(membersID, member.MemberId)
+	//}
+	//
+	//var newMembers []model.User
+	//for _, editChatMemberID := range editChat.Members {
+	//	if !validation.Contains(membersID, editChatMemberID) {
+	//		err := u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, editChatMemberID)
+	//		if err != nil {
+	//			log.Error(err)
+	//		}
+	//
+	//		user, err := u.userRepo.GetUserById(context.Background(), editChatMemberID)
+	//		if err != nil {
+	//			log.Error(err)
+	//		}
+	//
+	//		newMembers = append(newMembers, model_conversion.FromAuthorizedUserToUser(user))
+	//	}
+	//}
+	//
+	//chat.Members = newMembers
+	//chat.Title = editChat.Title
+	//
+	//return chat, nil
 }

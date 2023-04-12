@@ -18,6 +18,15 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 	return &repository{db: db}
 }
 
+func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
+	_, err := r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return myErrors.ErrUserNotFound
+	}
+
+	return err
+}
+
 func (r repository) UpdateChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	var chat model.Chat
 	rows, err := r.db.NamedQuery(`UPDATE chat SET title=:title WHERE :id = $1`, chatID)

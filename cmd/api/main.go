@@ -7,13 +7,12 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
 	"os"
 	wsMessages "project/internal/messages/delivery/ws"
 	usecaseMessages "project/internal/messages/usecase"
+	"project/internal/pkg/image_generation"
 
 	myMiddleware "project/internal/middleware"
 
@@ -48,6 +47,8 @@ func init() {
 }
 
 func main() {
+	image_generation.GenerateAvatar()
+
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})
@@ -86,17 +87,9 @@ func main() {
 	})
 	defer redis.Close()
 
-	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
-		Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
-	})
-
-	if err != nil {
-		log.Error(err)
-	}
-
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db, minioClient)
+	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
 	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
@@ -109,7 +102,6 @@ func main() {
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
 	e := echo.New()
-
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowMethods:     config.Cors.AllowMethods,
 		AllowOrigins:     config.Cors.AllowOrigins,

@@ -7,11 +7,11 @@ services:
    #   - postgres
     #  - redis
      # - kafka
-#      - minio
- #   ports:
-  #    - "8081:8081"
-  #  networks:
-   #   - backend-network
+      - minio
+    ports:
+      - "8081:8081"
+    networks:
+      - backend-network
 
   postgres:
     image: postgres

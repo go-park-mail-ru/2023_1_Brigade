@@ -5,7 +5,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/minio/minio-go/v7"
-	log "github.com/sirupsen/logrus"
 	"io"
 	"mime/multipart"
 	"os"
@@ -16,7 +15,7 @@ func NewImagesMemoryRepository(db *sqlx.DB, minioClient *minio.Client) images.Re
 	bucketname := "avatars"
 	err := minioClient.MakeBucket(context.Background(), bucketname, minio.MakeBucketOptions{})
 	if err != nil {
-		log.Error(err)
+		//log.Error(err)
 	}
 
 	return &repository{db: db, minio: minioClient, bucketname: bucketname}

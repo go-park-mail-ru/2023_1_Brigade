@@ -109,6 +109,7 @@ func main() {
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
 	e := echo.New()
+
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowMethods:     config.Cors.AllowMethods,
 		AllowOrigins:     config.Cors.AllowOrigins,
@@ -116,11 +117,6 @@ func main() {
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(middleware.CSRF())
-	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-	//	TokenLookup: "header:X-XSRF-TOKEN",
-	//}))
-	//e.Use(myMiddleware.XSSMidlleware) // переделать на отдачу ПОСЛЕ
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)

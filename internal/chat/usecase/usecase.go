@@ -59,7 +59,7 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 	if err != nil {
 		return model.Chat{}, err
 	}
-	log.Warn(chatMessages)
+//	log.Warn(chatMessages)
 
 	var messages []model.Message
 	for _, chatMessage := range chatMessages {

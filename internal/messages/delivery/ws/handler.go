@@ -26,7 +26,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
-	log.Warn(session.UserId)
+//	log.Warn(session.UserId)
 
 	defer func() {
 		err := ws.Close()
@@ -56,6 +56,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			err = client.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
 				log.Error(err)
+				continue
 			}
 		}
 	}()
@@ -63,6 +64,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	for {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
+			//continue
 			return err
 		}
 

@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -67,7 +66,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 			return model.Message{}, err
 		}
 	}
-	log.Warn(message)
+//	log.Warn(message)
 	_, err = r.db.NamedQuery("INSERT INTO chat_messages (id_chat, id_message) VALUES (:id_chat, :id_message)", model.ChatMessages{
 		ChatId:    message.ChatId,
 		MessageId: message.Id,

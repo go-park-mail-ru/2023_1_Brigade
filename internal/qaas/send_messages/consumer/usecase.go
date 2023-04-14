@@ -27,6 +27,8 @@ func (h *messageHandler) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (h *messageHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for msg := range claim.Messages() {
+//		log.Printf("Message claimed: value = %s, topic = %s, partition = %d, offset = %d\n",
+//			string(msg.Value), msg.Topic, msg.Partition, msg.Offset)
 		session.MarkMessage(msg, "")
 		h.messagesChan <- msg.Value
 	}
@@ -71,15 +73,19 @@ func (u *Usecase) StartConsumeMessages() {
 	}()
 
 	go func() {
+		//for {
 		for err := range u.consumer.Errors() {
 			log.Error(err)
 		}
+		//}
 	}()
 
 	go func() {
+		//for {
 		err := u.consumer.Consume(ctx, topic, &handler)
 		if err != nil {
 			log.Error(err)
 		}
+		//}
 	}()
 }

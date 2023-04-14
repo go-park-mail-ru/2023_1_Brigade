@@ -58,8 +58,10 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 		if listUserChats[ind].Type == configs.Chat {
 			if listUserChats[ind].Members[0].Id == session.UserId {
 				listUserChats[ind].Title = listUserChats[ind].Members[1].Nickname
+				listUserChats[ind].Avatar = listUserChats[ind].Members[1].Avatar
 			} else {
 				listUserChats[ind].Title = listUserChats[ind].Members[0].Nickname
+				listUserChats[ind].Avatar = listUserChats[ind].Members[0].Avatar
 			}
 		}
 	}
@@ -81,15 +83,15 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	if chat.Type == configs.Chat {
-		if len(dbChat.Members) > 0 {
-			if dbChat.Members[0].Id == session.UserId {
-				dbChat.Title = dbChat.Members[1].Nickname
-			} else {
-				dbChat.Title = dbChat.Members[0].Nickname
-			}
-		}
-	}
+	//if chat.Type == configs.Chat {
+	//	if len(dbChat.Members) > 0 {
+	//		if dbChat.Members[0].Id == session.UserId {
+	//			dbChat.Title = dbChat.Members[1].Nickname
+	//		} else {
+	//			dbChat.Title = dbChat.Members[0].Nickname
+	//		}
+	//	}
+	//}
 
 	return ctx.JSON(http.StatusCreated, dbChat)
 }

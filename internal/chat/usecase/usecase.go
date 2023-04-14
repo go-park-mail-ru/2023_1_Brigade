@@ -98,16 +98,6 @@ func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat, userID uint
 		Messages: []model.Message{},
 	}
 
-	if createdChat.Type == configs.Chat {
-		if len(createdChat.Members) > 0 {
-			if createdChat.Members[0].Id == userID {
-				createdChat.Avatar = createdChat.Members[1].Avatar
-			} else {
-				createdChat.Avatar = createdChat.Members[0].Avatar
-			}
-		}
-	}
-
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
 
 	return chatFromDB, err

@@ -12,7 +12,7 @@ import (
 
 func GenerateAvatar() (string, error) {
 	// Создаем новое изображение размером 400x400 пикселей
-	img := image.NewRGBA(image.Rect(0, 0, 2048, 2048))
+	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))
 
 	// Генерируем случайный цвет для фона
 	r := uint8(rand.Intn(256))
@@ -24,7 +24,7 @@ func GenerateAvatar() (string, error) {
 	draw.Draw(img, img.Bounds(), &image.Uniform{color}, image.Point{}, draw.Src)
 
 	// Загружаем изображение из файла
-	file, err := os.Open("background.png")
+	file, err := os.Open("../../background.png")
 	if err != nil {
 		return "", err
 	}
@@ -67,7 +67,7 @@ func GenerateAvatar() (string, error) {
 	//}
 
 	hash := uuid.New().String()
-	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash + ".png")
+	fileOnDisk, err := os.Create("../../avatars/" + hash + ".png")
 	if err != nil {
 		return "", err
 	}

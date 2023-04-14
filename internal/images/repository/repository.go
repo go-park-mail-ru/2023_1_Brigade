@@ -20,7 +20,7 @@ type repository struct {
 
 func (r repository) LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (string, error) {
 	hash := uuid.New().String()
-	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash + ".jpg")
+	fileOnDisk, err := os.Create("../../avatars/" + hash + ".jpg")
 	if err != nil {
 		return "", err
 	}

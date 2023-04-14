@@ -2,7 +2,7 @@ all: run clean
 
 .PHONY: run
 run: ## Run project
-	docker compose up -d
+	docker compose up
 
 .PHONY: stop
 clean: ## Clean containers and images

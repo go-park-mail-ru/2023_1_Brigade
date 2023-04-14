@@ -12,7 +12,6 @@ import (
 	"os"
 	wsMessages "project/internal/messages/delivery/ws"
 	usecaseMessages "project/internal/messages/usecase"
-	"project/internal/pkg/image_generation"
 
 	myMiddleware "project/internal/middleware"
 
@@ -47,8 +46,6 @@ func init() {
 }
 
 func main() {
-	image_generation.GenerateAvatar()
-
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})

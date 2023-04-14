@@ -13,7 +13,7 @@ COPY --from=builder /usr/local/go/src/ /
 COPY --from=builder /usr/local/go/src/internal/configs/config.yaml /
 
 CMD ["/app"]
-
-FROM redis:latest
-COPY redis.conf /usr/local/etc/redis/redis.conf
-CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+#
+#FROM redis:latest
+#COPY redis.conf /usr/local/etc/redis/redis.conf
+#CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]

@@ -6,7 +6,6 @@ import (
 	"image/color"
 	"image/draw"
 	"image/png"
-	"io"
 	"math/rand"
 	"os"
 )
@@ -55,31 +54,36 @@ func GenerateAvatar() (string, error) {
 		}
 	}
 
-	// Сохраняем изображение в файл
-	file, err = os.Create("image_with_image_centered.png")
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
+	//// Сохраняем изображение в файл
+	//file, err = os.Create("image_with_image_centered.png")
+	//if err != nil {
+	//	return "", err
+	//}
+	//defer file.Close()
 
-	err = png.Encode(file, img)
-	if err != nil {
-		return "", err
-	}
+	//err = png.Encode(file, img)
+	//if err != nil {
+	//	return "", err
+	//}
 
 	hash := uuid.New().String()
-	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash + ".jpg")
+	fileOnDisk, err := os.Create("/home/ubuntu/avatars/" + hash + ".png")
 	if err != nil {
 		return "", err
 	}
 	defer file.Close()
 
-	_, err = io.Copy(fileOnDisk, file)
+	err = png.Encode(fileOnDisk, img)
 	if err != nil {
 		return "", err
 	}
 
-	url := "https://technogramm.ru/avatars/" + hash + ".jpg"
+	//_, err = io.Copy(fileOnDisk, file)
+	//if err != nil {
+	//	return "", err
+	//}
+
+	url := "https://technogramm.ru/avatars/" + hash + ".png"
 
 	return url, nil
 }

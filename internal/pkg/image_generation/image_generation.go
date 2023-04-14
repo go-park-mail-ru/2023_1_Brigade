@@ -90,7 +90,7 @@ func GenerateAvatar() (string, error) {
 
 func GenerateGroupAvatar() string {
 
-	url := "https://technogramm.ru/avatars/group_avatar" + ".png"
+	url := "https://technogramm.ru/avatars/group_avatar.png"
 	return url
 
 	////28,28,36

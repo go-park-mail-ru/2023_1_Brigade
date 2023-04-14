@@ -8,7 +8,7 @@ import (
 type Usecase interface {
 	GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error)
 	EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error)
-	CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error)
+	CreateChat(ctx echo.Context, chat model.CreateChat, userID uint64) (model.Chat, error)
 	DeleteChatById(ctx echo.Context, chatID uint64) error
 	CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error
 	GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error)

@@ -74,12 +74,12 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	dbChat, err := u.chatUsecase.CreateChat(ctx, chat)
+	session := ctx.Get("session").(model.Session)
+
+	dbChat, err := u.chatUsecase.CreateChat(ctx, chat, session.UserId)
 	if err != nil {
 		return err
 	}
-
-	session := ctx.Get("session").(model.Session)
 
 	if chat.Type == configs.Chat {
 		if len(dbChat.Members) > 0 {

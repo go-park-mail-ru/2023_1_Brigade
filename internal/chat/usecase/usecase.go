@@ -9,7 +9,6 @@ import (
 	"project/internal/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	"project/internal/pkg/image_generation"
 	"project/internal/pkg/model_conversion"
 	"project/internal/user"
 )
@@ -81,7 +80,7 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 	}, nil
 }
 
-func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error) {
+func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
 	var members []model.User
 	for _, userID := range chat.Members {
 		user, err := u.userRepo.GetUserById(context.Background(), userID)
@@ -95,10 +94,20 @@ func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat
 	createdChat := model.Chat{
 		Type:     chat.Type,
 		Title:    chat.Title,
-		Avatar:   image_generation.GenerateGroupAvatar(),
 		Members:  members,
 		Messages: []model.Message{},
 	}
+
+	if createdChat.Type == configs.Chat {
+		if len(createdChat.Members) > 0 {
+			if createdChat.Members[0].Id == userID {
+				createdChat.Avatar = createdChat.Members[1].Avatar
+			} else {
+				createdChat.Avatar = createdChat.Members[0].Avatar
+			}
+		}
+	}
+
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
 
 	return chatFromDB, err

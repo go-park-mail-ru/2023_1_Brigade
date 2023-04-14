@@ -9,6 +9,7 @@ import (
 	"project/internal/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"project/internal/pkg/image_generation"
 	"project/internal/pkg/model_conversion"
 	"project/internal/user"
 )
@@ -59,7 +60,6 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 	if err != nil {
 		return model.Chat{}, err
 	}
-//	log.Warn(chatMessages)
 
 	var messages []model.Message
 	for _, chatMessage := range chatMessages {
@@ -95,7 +95,7 @@ func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat
 	createdChat := model.Chat{
 		Type:     chat.Type,
 		Title:    chat.Title,
-		Avatar:   configs.DefaultAvatarUrl,
+		Avatar:   image_generation.GenerateGroupAvatar(),
 		Members:  members,
 		Messages: []model.Message{},
 	}

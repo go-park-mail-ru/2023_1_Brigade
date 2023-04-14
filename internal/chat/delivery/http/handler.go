@@ -36,8 +36,10 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		if len(chat.Members) > 0 {
 			if chat.Members[0].Id == session.UserId {
 				chat.Title = chat.Members[1].Nickname
+				chat.Avatar = chat.Members[1].Avatar
 			} else {
 				chat.Title = chat.Members[0].Nickname
+				chat.Avatar = chat.Members[0].Avatar
 			}
 		}
 	}

@@ -10,12 +10,10 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
 	"os"
+	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
 	usecaseMessages "project/internal/messages/usecase"
-
 	myMiddleware "project/internal/middleware"
-
-	"project/internal/configs"
 
 	log "github.com/sirupsen/logrus"
 

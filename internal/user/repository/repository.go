@@ -72,12 +72,27 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.Get(&user, "UPDATE profile SET username=:username, nickname=:nickname, status=:status, password=:password WHERE id=:id RETURNING *", user)
+	rows, err := r.db.NamedQuery("UPDATE profile SET username=:username, nickname=:nickname, status=:status, password=:password WHERE id=:id RETURNING *", user)
+
 	if err != nil {
 		return model.AuthorizedUser{}, err
 	}
+	if rows.Next() {
+		err = rows.Scan(&user)
+		if err != nil {
+			return model.AuthorizedUser{}, err
+		}
+	}
 
 	return user, nil
+
+	//err := r.db.Get(&user, "UPDATE profile SET username=:username, nickname=:nickname, status=:status, password=:password WHERE id=:id RETURNING *", user)
+	//if err != nil {
+	//	return model.AuthorizedUser{}, err
+	//}
+	//
+	//return user, nil
+
 	//rows, err := r.db.NamedQuery(`UPDATE profile SET username=:username, email=:email, status=:status, password=:password  WHERE :id = $1`, user)
 	//if err != nil {
 	//	return model.AuthorizedUser{}, err

@@ -45,46 +45,20 @@ func (r repository) UpdateChatById(ctx context.Context, title string, chatID uin
 	//	}
 	//}
 
-	//var chat model.DBChat
-	//rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
-	//
-	//if err != nil {
-	//	return model.DBChat{}, err
-	//}
-	//if rows.Next() {
-	//	err = rows.Scan(&chat)
-	//	if err != nil {
-	//		return model.DBChat{}, err
-	//	}
-	//}
-	//
-	//return chat, nil
-
 	var chat model.DBChat
-	err := r.db.Get(&chat, "UPDATE chat SET title=$1 WHERE id=$2", title, chatID)
+	rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
+
 	if err != nil {
 		return model.DBChat{}, err
 	}
+	if rows.Next() {
+		err = rows.Scan(&chat)
+		if err != nil {
+			return model.DBChat{}, err
+		}
+	}
 
 	return chat, nil
-
-	//var chat model.DBChat
-	//result, err := r.db.Exec("UPDATE chat SET title=$1 WHERE id=$2", title, chatID)
-	//if err != nil {
-	//	return model.DBChat{}, err
-	//}
-	//rowsAffected, err := result.RowsAffected()
-	//if err != nil {
-	//	return model.DBChat{}, err
-	//}
-	//if rowsAffected == 0 {
-	//	return model.DBChat{}, err
-	//}
-	//err = r.db.Get(&chat, "SELECT * FROM chat WHERE id=$1", chatID)
-	//if err != nil {
-	//	return model.DBChat{}, err
-	//}
-	//return chat, nil
 }
 
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {

@@ -72,19 +72,42 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	rows, err := r.db.NamedQuery(`UPDATE profile SET username=:username, email=:email, status=:status, password=:password  WHERE :id = $1`, user)
-
+	err := r.db.Get(&user, "UPDATE profile SET username=:username, email=:email, status=:status, password=:password WHERE id=:id RETURNING *", user)
 	if err != nil {
 		return model.AuthorizedUser{}, err
 	}
-	if rows.Next() {
-		err = rows.Scan(&user)
-		if err != nil {
-			return model.AuthorizedUser{}, err
-		}
-	}
 
 	return user, nil
+	//rows, err := r.db.NamedQuery(`UPDATE profile SET username=:username, email=:email, status=:status, password=:password  WHERE :id = $1`, user)
+	//if err != nil {
+	//	return model.AuthorizedUser{}, err
+	//}
+	//rowsAffected, err := result.RowsAffected()
+	//if err != nil {
+	//	return model.AuthorizedUser{}, err
+	//}
+	//if rowsAffected == 0 {
+	//	return model.AuthorizedUser{}, err
+	//}
+	//err = r.db.Get(&chat, "SELECT * FROM chat WHERE id=$1", chatID)
+	//if err != nil {
+	//	return model.AuthorizedUser{}, err
+	//}
+	//return chat, nil
+	//
+	//rows, err := r.db.NamedQuery(`UPDATE profile SET username=:username, email=:email, status=:status, password=:password  WHERE :id = $1`, user)
+	//
+	//if err != nil {
+	//	return model.AuthorizedUser{}, err
+	//}
+	//if rows.Next() {
+	//	err = rows.Scan(&user)
+	//	if err != nil {
+	//		return model.AuthorizedUser{}, err
+	//	}
+	//}
+	//
+	//return user, nil
 }
 
 func (r repository) CheckUserIsContact(ctx context.Context, contact model.UserContact) error {

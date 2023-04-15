@@ -26,7 +26,6 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
-//	log.Warn(session.UserId)
 
 	defer func() {
 		err := ws.Close()

@@ -83,15 +83,17 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	//if chat.Type == configs.Chat {
-	//	if len(dbChat.Members) > 0 {
-	//		if dbChat.Members[0].Id == session.UserId {
-	//			dbChat.Title = dbChat.Members[1].Nickname
-	//		} else {
-	//			dbChat.Title = dbChat.Members[0].Nickname
-	//		}
-	//	}
-	//}
+	if chat.Type == configs.Chat {
+		if len(dbChat.Members) > 0 {
+			if dbChat.Members[0].Id == session.UserId {
+				dbChat.Title = dbChat.Members[1].Nickname
+				dbChat.Avatar = dbChat.Members[1].Avatar
+			} else {
+				dbChat.Title = dbChat.Members[0].Nickname
+				dbChat.Avatar = dbChat.Members[0].Avatar
+			}
+		}
+	}
 
 	return ctx.JSON(http.StatusCreated, dbChat)
 }

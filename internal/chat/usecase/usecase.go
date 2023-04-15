@@ -9,6 +9,7 @@ import (
 	"project/internal/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"project/internal/pkg/image_generation"
 	"project/internal/pkg/model_conversion"
 	"project/internal/user"
 )
@@ -98,6 +99,10 @@ func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat, userID uint
 		Messages: []model.Message{},
 	}
 
+	if createdChat.Type == configs.Group {
+		createdChat.Avatar = image_generation.GenerateGroupAvatar()
+	}
+
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
 
 	return chatFromDB, err
@@ -165,10 +170,17 @@ func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.Chat
 }
 
 func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
-	chat, err := u.chatRepo.UpdateChatById(context.Background(), editChat.Title, editChat.Id)
+	chatFromDB, err := u.chatRepo.UpdateChatById(context.Background(), editChat.Title, editChat.Id)
 	if err != nil {
 		return model.Chat{}, err
 	}
+	chat := model.Chat{
+		Id:     chatFromDB.Id,
+		Type:   chatFromDB.Type,
+		Title:  chatFromDB.Title,
+		Avatar: chatFromDB.Avatar,
+	}
+	log.Warn(chat)
 
 	err = u.chatRepo.DeleteChatMembers(context.Background(), editChat.Id)
 	if err != nil {
@@ -197,7 +209,6 @@ func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat
 	}
 	chat.Members = members
 	chat.Title = editChat.Title
-	chat.Avatar = configs.DefaultAvatarUrl
 
 	return chat, nil
 }

@@ -27,17 +27,17 @@ func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error 
 	return err
 }
 
-func (r repository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.Chat, error) {
-	var chat model.Chat
+func (r repository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
+	var chat model.DBChat
 	rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
 
 	if err != nil {
-		return model.Chat{}, err
+		return model.DBChat{}, err
 	}
 	if rows.Next() {
 		err = rows.Scan(&chat)
 		if err != nil {
-			return model.Chat{}, err
+			return model.DBChat{}, err
 		}
 	}
 

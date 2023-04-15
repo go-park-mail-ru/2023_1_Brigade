@@ -3,12 +3,13 @@ package usecase
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	authUser "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
-//	"project/internal/pkg/validation"
+	//	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 
@@ -40,18 +41,28 @@ func (u usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, user
 		Password: updateUser.CurrentPassword,
 	}
 
-//	validateError := validation.ValidateUser(oldUser)
-//	if validateError != nil {
-//		return model.User{}, validation.ErrorConversion(validateError[0])
-//	}
+	//	validateError := validation.ValidateUser(oldUser)
+	//	if validateError != nil {
+	//		return model.User{}, validation.ErrorConversion(validateError[0])
+	//	}
 
 	password := security.Hash([]byte(oldUser.Password))
 	oldUser.Password = password
 
-	err := u.authRepo.CheckCorrectPassword(context.Background(), oldUser.Email, oldUser.Password)
+	userFromDB, err := u.userRepo.GetUserById(context.Background(), userID)
 	if err != nil {
+		log.Warn(err)
 		return model.User{}, err
 	}
+
+	if userFromDB.Password != password {
+		log.Warn(myErrors.ErrIncorrectPassword)
+		return model.User{}, myErrors.ErrIncorrectPassword
+	}
+	//err := u.authRepo.CheckCorrectPassword(context.Background(), oldUser.Email, oldUser.Password)
+	//if err != nil {
+	//	return model.User{}, err
+	//}
 
 	user, err := u.userRepo.UpdateUserById(context.Background(), oldUser)
 	return model_conversion.FromAuthorizedUserToUser(user), err

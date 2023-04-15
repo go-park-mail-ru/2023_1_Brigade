@@ -72,7 +72,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.Get(&user, "UPDATE profile SET username=:username, email=:email, status=:status, password=:password WHERE id=:id RETURNING *", user)
+	err := r.db.Get(&user, "UPDATE profile SET username=:username, nickname=:nickname, status=:status, password=:password WHERE id=:id RETURNING *", user)
 	if err != nil {
 		return model.AuthorizedUser{}, err
 	}

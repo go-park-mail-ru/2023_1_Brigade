@@ -35,7 +35,7 @@ func (u usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, user
 	oldUser := model.AuthorizedUser{
 		Id:       userID,
 		Username: updateUser.Username,
-		Email:    updateUser.Email,
+		Email:    updateUser.Nickname,
 		Status:   updateUser.Status,
 		Password: updateUser.CurrentPassword,
 	}

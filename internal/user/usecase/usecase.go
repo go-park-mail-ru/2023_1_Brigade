@@ -8,7 +8,7 @@ import (
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
-	"project/internal/pkg/validation"
+//	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 
@@ -40,10 +40,10 @@ func (u usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, user
 		Password: updateUser.CurrentPassword,
 	}
 
-	validateError := validation.ValidateUser(oldUser)
-	if validateError != nil {
-		return model.User{}, validation.ErrorConversion(validateError[0])
-	}
+//	validateError := validation.ValidateUser(oldUser)
+//	if validateError != nil {
+//		return model.User{}, validation.ErrorConversion(validateError[0])
+//	}
 
 	password := security.Hash([]byte(oldUser.Password))
 	oldUser.Password = password

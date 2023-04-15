@@ -1,6 +1,7 @@
 package http
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/model"
@@ -50,6 +51,7 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 	var updateUser model.UpdateUser
 	err := ctx.Bind(&updateUser)
 	if err != nil {
+		log.Warn(err)
 		return err
 	}
 
@@ -57,6 +59,7 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 	user, err := u.usecase.PutUserById(ctx, updateUser, session.UserId)
 
 	if err != nil {
+		log.Warn(err)
 		return err
 	}
 

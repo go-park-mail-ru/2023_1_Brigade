@@ -1,19 +1,19 @@
 version: "3.9"
 
 services:
-  backend:
-    build: .
-    depends_on:
-      - postgres
-      - redis
-      - kafka
+#  backend:
+ #   build: .
+ #   depends_on:
+  #    - postgres
+  #    - redis
+  #    - kafka
  #     - minio
-    volumes:
-      - /home/ubuntu/avatars:/avatars
-    ports:
-      - "8081:8081"
-    networks:
-      - backend-network
+  #  volumes:
+  #    - /home/ubuntu/avatars:/avatars
+  #  ports:
+  #    - "8081:8081"
+  #  networks:
+  #    - backend-network
 
   postgres:
     image: postgres

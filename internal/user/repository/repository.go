@@ -74,23 +74,28 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
 	result, err := r.db.Exec("UPDATE chat SET SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5", user.Username, user.Nickname, user.Status, user.Password, user.Id)
 	if err != nil {
+		log.Warn(user)
 		return model.AuthorizedUser{}, err
 	}
+	log.Warn(user)	
 
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
+		log.Warn(user)
 		return model.AuthorizedUser{}, err
 	}
 
 	if rowsAffected == 0 {
+		log.Warn(user)
 		return model.AuthorizedUser{}, err
 	}
 
 	err = r.db.Get(&user, "SELECT * FROM profile WHERE id=$1", user.Id)
 	if err != nil {
+		log.Warn(user)
 		return model.AuthorizedUser{}, err
 	}
-
+	log.Warn(user)
 	return user, nil
 
 	//rows, err := r.db.NamedQuery("UPDATE profile SET username=:username, nickname=:nickname, status=:status, password=:password WHERE id=:id RETURNING *", user)

@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
+	"net/http"
 	"os"
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
@@ -103,7 +104,34 @@ func main() {
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
-	e.Use(myMiddleware.CSRFMiddleware())
+	//e.Use(myMiddleware.CSRFMiddleware())
+	//csrfMiddleware := csrf.Protect(
+	//	[]byte("32-byte-long-auth-key"),
+	//	csrf.Secure(false),
+	//	csrf.HttpOnly(false),
+	//)
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		Skipper: func(c echo.Context) bool {
+			// пропускаем проверку CSRF-токена для GET-запросов
+			if c.Request().Method == http.MethodGet {
+				return true
+			}
+			return false
+		},
+		CookieName: "_csrf",
+		//Head:  "X-CSRF-Token",
+		ContextKey: "csrf",
+		//FailOnError: true,
+		//SigningKey:  []byte("32-byte-long-auth-key"),
+	}))
+	//csrfMiddleware := csrf.Protect(
+	//	[]byte("32-byte-long-auth-key"),
+	//	csrf.Secure(false),
+	//	csrf.HttpOnly(false),
+	//)
+
+	// добавляем middleware для защиты от CSRF
+	//e.Use(csrfMiddleware)
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 

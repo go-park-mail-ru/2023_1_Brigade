@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/csrf"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -10,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
+	"net/http"
 	"os"
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
@@ -38,12 +38,11 @@ import (
 )
 
 func init() {
-	envPath := "../../.env"
+	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
 		log.Println("No .env file found")
 	}
 }
-
 func main() {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
@@ -103,7 +102,9 @@ func main() {
 		AllowOrigins:     config.Cors.AllowOrigins,
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
+		ExposeHeaders:    []string{"X-Csrf-Token"},
 	}))
+	//rpc.Register()
 	//csrfMiddleware := csrf.Protect(
 	//	[]byte("32-byte-long-auth-key"),
 	//	csrf.Secure(true),
@@ -111,13 +112,13 @@ func main() {
 	//	csrf.RequestHeader("X-CSRF-Token"),
 	//)
 	//e.Use(echo.WrapMiddleware(csrfMiddleware))
-	csrfMiddleware := csrf.Protect(
-		[]byte("32-byte-long-auth-key"),
-		csrf.Secure(true),
-		csrf.HttpOnly(false),
-		csrf.RequestHeader("X-CSRF-Token"),
-	)
-	e.Use(echo.WrapMiddleware(csrfMiddleware))
+	//csrfMiddleware := csrf.Protect(
+	//	[]byte("32-byte-long-auth-key"),
+	//	csrf.Secure(true),
+	//	csrf.HttpOnly(false),
+	//	csrf.RequestHeader("X-CSRF-Token"),
+	//)
+	//e.Use(echo.WrapMiddleware(csrfMiddleware))
 	//e.GET("/api/v1/csrf", func(c echo.Context) error {
 	//	csrfToken := uuid.New().String()
 	//	if err != nil {
@@ -132,9 +133,12 @@ func main() {
 	//	// возвращаем токен в качестве ответа
 	//	return c.JSON(http.StatusOK, a)
 	//})
-	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-	//	TokenLookup: "header:X-CSRF-Token",
-	//}))
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "header:X-Csrf-Token",
+		CookieSameSite: http.SameSiteLaxMode,
+		CookieSecure:   true,
+		CookiePath:     "/",
+	}))
 	//csrfMiddleware := csrf.Protect(
 	//	[]byte("32-byte-long-auth-key"),
 	//	csrf.Secure(false),

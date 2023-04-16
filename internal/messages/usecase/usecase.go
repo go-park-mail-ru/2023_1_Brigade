@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"time"
 	"context"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
@@ -22,7 +21,7 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
-	time.Sleep(time.Second * 15)
+	//time.Sleep(time.Second * 15)
 	consumer, err := consumer.NewConsumer(config.BrokerList, config.GroupID)
 	if err != nil {
 		log.Error(err)

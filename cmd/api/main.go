@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -104,26 +105,54 @@ func main() {
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
+	e.GET("/api/v1/csrf/", func(c echo.Context) error {
+		csrfToken := uuid.New().String()
+		if err != nil {
+			return err
+		}
+
+		// выставляем токен в хэдер X-CSRF-Token
+		c.Response().Header().Set("X-CSRF-Token", csrfToken)
+
+		// возвращаем токен в качестве ответа
+		return c.String(http.StatusOK, csrfToken)
+	})
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup: "header:X-CSRF-Token",
+	}))
+	//csrfMiddleware := csrf.Protect(
+	//	[]byte("32-byte-long-auth-key"),
+	//	csrf.Secure(false),
+	//	csrf.HttpOnly(false),
+	//)
+	//
+	//// создаем новый экземпляр Echo сервера
+	//
+	//// добавляем middleware для логирования запросов
+	//e.Use(middleware.Logger())
+	//
+	//// добавляем middleware для защиты от CSRF
+	//e.Use(echo.MiddlewareFunc(csrfMiddleware))
 	//e.Use(myMiddleware.CSRFMiddleware())
 	//csrfMiddleware := csrf.Protect(
 	//	[]byte("32-byte-long-auth-key"),
 	//	csrf.Secure(false),
 	//	csrf.HttpOnly(false),
 	//)
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		Skipper: func(c echo.Context) bool {
-			// пропускаем проверку CSRF-токена для GET-запросов
-			if c.Request().Method == http.MethodGet {
-				return true
-			}
-			return false
-		},
-		CookieName: "_csrf",
-		//Head:  "X-CSRF-Token",
-		ContextKey: "csrf",
-		//FailOnError: true,
-		//SigningKey:  []byte("32-byte-long-auth-key"),
-	}))
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	Skipper: func(c echo.Context) bool {
+	//		// пропускаем проверку CSRF-токена для GET-запросов
+	//		if c.Request().Method == http.MethodGet {
+	//			return true
+	//		}
+	//		return false
+	//	},
+	//	CookieName: "_csrf",
+	//	//Head:  "X-CSRF-Token",
+	//	ContextKey: "csrf",
+	//	//FailOnError: true,
+	//	//SigningKey:  []byte("32-byte-long-auth-key"),
+	//}))
 	//csrfMiddleware := csrf.Protect(
 	//	[]byte("32-byte-long-auth-key"),
 	//	csrf.Secure(false),

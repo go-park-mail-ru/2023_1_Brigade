@@ -105,17 +105,19 @@ func main() {
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
-	e.GET("/api/v1/csrf/", func(c echo.Context) error {
+	e.GET("/api/v1/csrf", func(c echo.Context) error {
 		csrfToken := uuid.New().String()
 		if err != nil {
 			return err
 		}
-
+		type CSRF struct {
+			csrf string `json:"csrf"`
+		}
 		// выставляем токен в хэдер X-CSRF-Token
 		c.Response().Header().Set("X-CSRF-Token", csrfToken)
-
+		a := CSRF{csrf: csrfToken}
 		// возвращаем токен в качестве ответа
-		return c.String(http.StatusOK, csrfToken)
+		return c.JSON(http.StatusOK, a)
 	})
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "header:X-CSRF-Token",

@@ -36,7 +36,7 @@ func (u usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, user
 	oldUser := model.AuthorizedUser{
 		Id:       userID,
 		Username: updateUser.Username,
-		Email:    updateUser.Nickname,
+		Nickname: updateUser.Nickname,
 		Status:   updateUser.Status,
 		Password: updateUser.CurrentPassword,
 	}
@@ -59,6 +59,9 @@ func (u usecase) PutUserById(ctx echo.Context, updateUser model.UpdateUser, user
 		log.Warn(myErrors.ErrIncorrectPassword)
 		return model.User{}, myErrors.ErrIncorrectPassword
 	}
+	newPassword := security.Hash([]byte(oldUser.Password))
+	oldUser.Password = newPassword
+	//oldUser.Password =
 	//err := u.authRepo.CheckCorrectPassword(context.Background(), oldUser.Email, oldUser.Password)
 	//if err != nil {
 	//	return model.User{}, err

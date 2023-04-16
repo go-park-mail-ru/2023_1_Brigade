@@ -2,15 +2,14 @@ package middleware
 
 import (
 	"encoding/json"
+	"github.com/gorilla/csrf"
 	"github.com/labstack/echo/v4"
-	"github.com/microcosm-cc/bluemonday"
 	log "github.com/sirupsen/logrus"
-	"io"
 	"math/rand"
+	"net/http"
 	authSession "project/internal/auth/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
-	"regexp"
 )
 
 type jsonError struct {
@@ -21,30 +20,27 @@ func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
-func XSSMidlleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		contentType := ctx.Request().Header.Get("Content-Type")
-		if contentType == "multipart/form-data" {
-			return next(ctx)
-		}
+func CSRFMiddleware() echo.MiddlewareFunc {
+	csrfMiddleware := csrf.Protect(
+		[]byte("random-secret-key"),
+		csrf.Secure(false),
+	)
 
-		p := bluemonday.UGCPolicy()
-		body, err := io.ReadAll(ctx.Request().Body)
-		if err != nil {
-			return err
-		}
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			// Генерируем токен CSRF
+			token := csrf.Token(c.Request())
+			//token := "123"
+			// Добавляем токен CSRF в заголовок ответа
+			c.Response().Header().Set("X-CSRF-Token", token)
 
-		if body != nil {
-			stringBody := string(body)
-			stringBody = p.Sanitize(stringBody)
-			re := regexp.MustCompile("&#34;")
-			stringBody = re.ReplaceAllString(stringBody, `"`)
-			re = regexp.MustCompile("&#39;")
-			stringBody = re.ReplaceAllString(stringBody, `'`)
-			ctx.Set("body", []byte(stringBody))
-		}
+			// Продолжаем обработку запроса
+			csrfMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				next(c)
+			})).ServeHTTP(c.Response().Writer, c.Request())
 
-		return next(ctx)
+			return nil
+		}
 	}
 }
 

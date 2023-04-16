@@ -1,10 +1,11 @@
 package http
 
 import (
-	log "github.com/sirupsen/logrus"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/model"
+	httpUtils "project/internal/pkg/http_utils"
 	"project/internal/user"
 	"strconv"
 )
@@ -24,6 +25,8 @@ func (u userHandler) GetUserHandler(ctx echo.Context) error {
 		return err
 	}
 
+	user = httpUtils.SanitizeStruct(user).(model.User)
+
 	return ctx.JSON(http.StatusOK, user)
 }
 
@@ -33,6 +36,8 @@ func (u userHandler) GetCurrentUserHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+
+	user = httpUtils.SanitizeStruct(user).(model.User)
 
 	return ctx.JSON(http.StatusOK, user)
 }
@@ -62,6 +67,8 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 		log.Warn(err)
 		return err
 	}
+
+	user = httpUtils.SanitizeStruct(user).(model.User)
 
 	return ctx.JSON(http.StatusOK, user)
 }

@@ -6,6 +6,8 @@ import (
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/model"
+	httpUtils "project/internal/pkg/http_utils"
+
 	//	myErrors "project/internal/pkg/errors"
 
 	//	myErrors "project/internal/pkg/errors"
@@ -43,6 +45,8 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 			}
 		}
 	}
+
+	chat = httpUtils.SanitizeStruct(chat).(model.Chat)
 
 	return ctx.JSON(http.StatusOK, chat)
 }

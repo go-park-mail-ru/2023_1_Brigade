@@ -103,6 +103,7 @@ func main() {
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
+	e.Use(myMiddleware.CSRFMiddleware())
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
@@ -114,3 +115,5 @@ func main() {
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }
+
+//curl -X POST http://localhost:8081/api/v1/signup -H 'Content-Type: application/json' -H 'X-CSRF-Token: <csrf_token>' -d '{"data": "some data"}'

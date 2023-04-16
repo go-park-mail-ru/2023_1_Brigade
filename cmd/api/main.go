@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
+	"github.com/gorilla/csrf"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -10,7 +10,6 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
-	"net/http"
 	"os"
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
@@ -105,23 +104,31 @@ func main() {
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
-	e.GET("/api/v1/csrf", func(c echo.Context) error {
-		csrfToken := uuid.New().String()
-		if err != nil {
-			return err
-		}
-		type CSRF struct {
-			csrf string `json:"csrf"`
-		}
-		// выставляем токен в хэдер X-CSRF-Token
-		c.Response().Header().Set("X-CSRF-Token", csrfToken)
-		a := CSRF{csrf: csrfToken}
-		// возвращаем токен в качестве ответа
-		return c.JSON(http.StatusOK, a)
-	})
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		TokenLookup: "header:X-CSRF-Token",
-	}))
+	csrfMiddleware := csrf.Protect(
+		[]byte("32-byte-long-auth-key"),
+		csrf.Secure(true),
+		csrf.HttpOnly(true),
+		csrf.RequestHeader("X-CSRF-Token"),
+	)
+	e.Use(echo.WrapMiddleware(csrfMiddleware))
+
+	//e.GET("/api/v1/csrf", func(c echo.Context) error {
+	//	csrfToken := uuid.New().String()
+	//	if err != nil {
+	//		return err
+	//	}
+	//	type CSRF struct {
+	//		csrf string `json:"csrf"`
+	//	}
+	//	// выставляем токен в хэдер X-CSRF-Token
+	//	c.Response().Header().Set("X-CSRF-Token", csrfToken)
+	//	a := CSRF{csrf: csrfToken}
+	//	// возвращаем токен в качестве ответа
+	//	return c.JSON(http.StatusOK, a)
+	//})
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	TokenLookup: "header:X-CSRF-Token",
+	//}))
 	//csrfMiddleware := csrf.Protect(
 	//	[]byte("32-byte-long-auth-key"),
 	//	csrf.Secure(false),

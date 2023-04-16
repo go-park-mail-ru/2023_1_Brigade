@@ -104,14 +104,20 @@ func main() {
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
 	}))
+	//csrfMiddleware := csrf.Protect(
+	//	[]byte("32-byte-long-auth-key"),
+	//	csrf.Secure(true),
+	//	csrf.HttpOnly(true),
+	//	csrf.RequestHeader("X-CSRF-Token"),
+	//)
+	//e.Use(echo.WrapMiddleware(csrfMiddleware))
 	csrfMiddleware := csrf.Protect(
 		[]byte("32-byte-long-auth-key"),
 		csrf.Secure(true),
-		csrf.HttpOnly(true),
+		csrf.HttpOnly(false),
 		csrf.RequestHeader("X-CSRF-Token"),
 	)
 	e.Use(echo.WrapMiddleware(csrfMiddleware))
-
 	//e.GET("/api/v1/csrf", func(c echo.Context) error {
 	//	csrfToken := uuid.New().String()
 	//	if err != nil {
@@ -121,7 +127,7 @@ func main() {
 	//		csrf string `json:"csrf"`
 	//	}
 	//	// выставляем токен в хэдер X-CSRF-Token
-	//	c.Response().Header().Set("X-CSRF-Token", csrfToken)
+	//	c.Response().Header().Set("X-Csrf-Token", csrfToken)
 	//	a := CSRF{csrf: csrfToken}
 	//	// возвращаем токен в качестве ответа
 	//	return c.JSON(http.StatusOK, a)

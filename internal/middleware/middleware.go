@@ -2,11 +2,9 @@ package middleware
 
 import (
 	"encoding/json"
-	"github.com/gorilla/csrf"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"math/rand"
-	"net/http"
 	authSession "project/internal/auth/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
@@ -18,30 +16,6 @@ type jsonError struct {
 
 func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
-}
-
-func CSRFMiddleware() echo.MiddlewareFunc {
-	csrfMiddleware := csrf.Protect(
-		[]byte("random-secret-key"),
-		csrf.Secure(false),
-	)
-
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			// Генерируем токен CSRF
-			token := csrf.Token(c.Request())
-			//token := "123"
-			// Добавляем токен CSRF в заголовок ответа
-			c.Response().Header().Set("X-CSRF-Token", token)
-
-			// Продолжаем обработку запроса
-			csrfMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				next(c)
-			})).ServeHTTP(c.Response().Writer, c.Request())
-
-			return nil
-		}
-	}
 }
 
 func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {

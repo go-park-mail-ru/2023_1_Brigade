@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+//option go_package = "./;protobuf";
+//
+//package user;
+
+option go_package = "./protobuf_generated;protobuf_generated";
+
+package protobuf;
+
+//import "google/protobuf/empty.proto";
+
+message User {
+  uint64 id = 1;
+  string avatar = 2;
+  string username = 3;
+  string nickname = 4;
+  string email = 5;
+  string status = 6;
+}
+
+message AuthorizedUser {
+  uint64 id = 1;
+  string avatar = 2;
+  string username = 3;
+  string nickname = 4;
+  string email = 5;
+  string status = 6;
+  string password = 7;
+}
+
+message UpdateUser {
+  string username = 1;
+  string nickname = 2;
+  string status = 3;
+  string current_password = 4;
+  string new_password = 5;
+}
+
+message UserID {
+  uint64 UserID = 1;
+}
+
+message Contacts {
+  repeated User contacts = 1;
+}
+
+message AddUserContactArguments {
+  uint64 UserID = 1;
+  uint64 ContactID = 2;
+}
+
+message PutUserArguments {
+  UpdateUser user = 1;
+  uint64  userID = 2;
+}
+
+//service Users {
+//  rpc DeleteUserById(UserID) returns(google.protobuf.Empty) {}
+//  rpc CheckExistUserById(UserID) returns(google.protobuf.Empty) {}
+//  rpc GetUserById(UserID) returns(User) {}
+//  rpc AddUserContact(AddUserContactArguments) returns(Contacts) {}
+//  rpc GetUserContacts(UserID) returns(google.protobuf.Empty) {}
+//  rpc PutUserById(PutUserArguments) returns(User) {}
+//  rpc GetAllUsersExceptCurrentUser(UserID) returns(Contacts) {}
+//}

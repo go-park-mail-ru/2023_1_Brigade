@@ -8,8 +8,9 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
+	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
-	"net/http"
+	"net"
 	"os"
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
@@ -17,6 +18,9 @@ import (
 	myMiddleware "project/internal/middleware"
 
 	log "github.com/sirupsen/logrus"
+
+	grpcChat "project/internal/microservices/chat/grpc"
+	protobufChat "project/internal/microservices/chat/protobuf"
 
 	httpAuthUser "project/internal/auth/user/delivery/http"
 	httpChat "project/internal/chat/delivery/http"
@@ -38,11 +42,12 @@ import (
 )
 
 func init() {
-	envPath := ".env"
+	envPath := "../../.env"
 	if err := godotenv.Load(envPath); err != nil {
 		log.Println("No .env file found")
 	}
 }
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
@@ -82,12 +87,53 @@ func main() {
 	})
 	defer redis.Close()
 
+	// Warehouse microservice
+	//chatsService := grpcChats.NewChatsClient(grpcConnChats)
+
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	chatRepository := repositoryChat.NewChatMemoryRepository(db)
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
 	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
+
+	/// Microservices
+	//grpcConnChats, err := grpc.Dial(
+	//	"localhost:8090",
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer grpcConnChats.Close()
+	listen, err := net.Listen("tcp", "localhost:8090")
+	if err != nil {
+		log.Fatal("%s:%s: %s", err)
+	}
+
+	microChat := grpcChat.New(chatRepository, userRepository, messagesRepository)
+	grpcServer := grpc.NewServer()
+
+	protobufChat.RegisterChatsServer(grpcServer, microChat)
+
+	go func() {
+		if err = grpcServer.Serve(listen); err != nil {
+			log.Fatal("posts: %s", "service image stopped")
+		}
+	}()
+
+	conn, err := grpc.Dial("localhost:8090", grpc.WithInsecure())
+	if err != nil {
+		log.Fatal("Failed to connect: %v", err)
+	}
+	defer conn.Close()
+
+	//microSeviceChat := NewChat
+	//ьш
+	//client := pb.NewGreeterClient(conn)
+
+	//protobuf.RegisterChatsServer(grpcConnChats)
 
 	userUsecase := usecaseUser.NewUserUsecase(userRepository, authUserRepository)
 	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
@@ -135,8 +181,8 @@ func main() {
 	//})
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup:    "header:X-Csrf-Token",
-		CookieSameSite: http.SameSiteLaxMode,
 		CookieSecure:   true,
+		CookieHTTPOnly: true,
 		CookiePath:     "/",
 	}))
 	//csrfMiddleware := csrf.Protect(
@@ -181,7 +227,7 @@ func main() {
 	// добавляем middleware для защиты от CSRF
 	//e.Use(csrfMiddleware)
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	httpUser.NewUserHandler(e, userUsecase)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)

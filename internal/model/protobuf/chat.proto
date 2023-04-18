@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+//option go_package = "./;protobuf";
+
+//package chat;
+
+option go_package = "./protobuf_generated;protobuf_generated";
+
+package protobuf;
+
+
+//    protoc -I=protobuf --go_out=../chat/delivery/grpc/client --go-grpc_out=../chat/delivery/grpc/client --grpc-gateway_out=logtostderr=true,paths=source_relative,grpc_api_configuration=protobuf/chat.yaml:../chat/delivery/grpc/client --go_opt=module=github.com/yourusername/yourproject/chat/delivery/grpc/client --go-grpc_opt=module=github.com/yourusername/yourproject/chat/delivery/grpc/client,require=protobuf/protobuf.proto,Mproto/chat.proto=protobuf:. protobuf/chat.proto
+//    protoc -I=protobuf --go_out=../chat/delivery/grpc/client --go-grpc_out=../chat/delivery/grpc/client --grpc-gateway_out=logtostderr=true,paths=source_relative,grpc_api_configuration=protobuf/chat.yaml:../chat/delivery/grpc/client --go_opt=module=github.com/yourusername/yourproject/chat/delivery/grpc/client --go-grpc_opt=module=github.com/yourusername/yourproject/chat/delivery/grpc/client,require=protobuf/protobuf.proto,Mproto/chat.proto=protobuf:. protobuf/chat.proto
+import "google/protobuf/empty.proto";
+import "user.proto";
+import "messages.proto";
+
+message Chat {
+  uint64 Id = 1;
+  uint64 Type = 2;
+  string Title = 3;
+  string Avatar = 4;
+  repeated protobuf.User Members = 5;
+  repeated protobuf.Message Messages = 6;
+}
+
+message EditChatModel {
+  uint64 Id = 1;
+  uint64 Type = 2;
+  string Title = 3;
+  repeated uint64 Members = 4;
+}
+
+message CreateChat {
+  uint64 Type = 1;
+  string Title = 2;
+  repeated uint64 Members = 3;
+}
+
+message ChatID {
+  uint64 ChatID = 1;
+}
+
+message CreateChatArguments {
+  CreateChat Chat = 1;
+  protobuf.UserID userID = 2;
+}
+
+message ExistChatArguments {
+  Chat Chat = 1;
+  protobuf.UserID userID = 2;
+}
+
+message ChatInListUser {
+  uint64 Id = 1;
+  uint64 Type = 2;
+  string Title = 3;
+  string Avatar = 4;
+  repeated protobuf.User Members = 5;
+  protobuf.Message LastMessage = 6;
+  protobuf.User LastMessageAuthor = 7;
+}
+
+service Chats {
+  rpc GetChatById(ChatID) returns(Chat) {}
+  rpc EditChat(EditChatModel) returns(Chat) {}
+  rpc CreateChat(CreateChatArguments) returns(Chat) {}
+  rpc DeleteChatById(ChatID) returns(google.protobuf.Empty) {}
+  rpc CheckExistUserInChat(ExistChatArguments) returns(google.protobuf.Empty) {}
+  rpc GetListUserChats(protobuf.UserID) returns(ChatInListUser) {}
+}

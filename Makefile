@@ -1,3 +1,5 @@
+PROTO_FILES = $(shell find . -iname '*.proto')
+
 all: run clean
 
 .PHONY: run
@@ -12,6 +14,10 @@ clean: ## Clean containers and images
 .PHONY: test
 test: ## Run all the tests
 	go test ./...
+
+.PHONY: proto
+proto: ## Make protobuf files
+	protoc -I=. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative $(PROTO_FILES)
 
 .PHONY: cover_out
 cover_out: test ## Run all the tests and opens the coverage report

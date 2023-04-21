@@ -34,3 +34,9 @@ Kafka:
   brokerList:
     - "kafka:9092"
   groupID: "group-message"
+
+ChatsService:
+  addr: "localhost:9000"
+
+UsersService:
+  addr: "localhost:9001"

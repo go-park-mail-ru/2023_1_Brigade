@@ -10,7 +10,9 @@ import (
 	"project/internal/messages"
 	"project/internal/model"
 	"project/internal/qaas/send_messages/consumer"
+	consumerUsecase "project/internal/qaas/send_messages/consumer/usecase"
 	"project/internal/qaas/send_messages/producer"
+	producerUsecase "project/internal/qaas/send_messages/producer/usecase"
 )
 
 type usecase struct {
@@ -21,13 +23,12 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
-	//time.Sleep(time.Second * 15)
-	consumer, err := consumer.NewConsumer(config.BrokerList, config.GroupID)
+	consumer, err := consumerUsecase.NewConsumer(config.BrokerList, config.GroupID)
 	if err != nil {
 		log.Error(err)
 	}
 
-	producer, err := producer.NewProducer(config.BrokerList)
+	producer, err := producerUsecase.NewProducer(config.BrokerList)
 	if err != nil {
 		log.Error(err)
 	}

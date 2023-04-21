@@ -107,17 +107,22 @@ func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+	//
+	//chat, err := u.chatUsecase.GetChatById(ctx, chatID)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//session := ctx.Get("session").(model.Session)
+	//err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
+	//if err == nil {
+	//	return err
+	//}
 
-	chat, err := u.chatUsecase.GetChatById(ctx, chatID)
-	if err != nil {
-		return err
-	}
-
-	session := ctx.Get("session").(model.Session)
-	err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-	if err == nil {
-		return err
-	}
+	//err = u.chatUsecase.DeleteChatById(ctx, chatID)
+	//if err != nil {
+	//	return err
+	//}
 
 	err = u.chatUsecase.DeleteChatById(ctx, chatID)
 	if err != nil {

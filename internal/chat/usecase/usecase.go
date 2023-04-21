@@ -180,7 +180,6 @@ func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat
 		Title:  chatFromDB.Title,
 		Avatar: chatFromDB.Avatar,
 	}
-	log.Warn(chat)
 
 	err = u.chatRepo.DeleteChatMembers(context.Background(), editChat.Id)
 	if err != nil {

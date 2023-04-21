@@ -13,11 +13,11 @@ import (
 	"gopkg.in/yaml.v2"
 	"os"
 	clientChat "project/internal/clients/chat"
+	clientMessages "project/internal/clients/messages"
 	clientUser "project/internal/clients/user"
 
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
-	usecaseMessages "project/internal/messages/usecase"
 	myMiddleware "project/internal/middleware"
 
 	log "github.com/sirupsen/logrus"
@@ -33,9 +33,7 @@ import (
 
 	repositoryAuthSession "project/internal/auth/session/repository"
 	repositoryAuthUser "project/internal/auth/user/repository"
-	repositoryChat "project/internal/chat/repository"
 	repositoryImages "project/internal/images/repository"
-	repositoryMessages "project/internal/messages/repository"
 	repositoryUser "project/internal/user/repository"
 )
 
@@ -105,19 +103,27 @@ func main() {
 	}
 	defer grpcConnUsers.Close()
 
+	grpcConnMessages, err := grpc.Dial(
+		config.MessagesService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Error("cant connect to grpc ", err)
+	}
+	defer grpcConnMessages.Close()
+
 	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
+	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
 	userRepository := repositoryUser.NewUserMemoryRepository(db)
-	chatRepository := repositoryChat.NewChatMemoryRepository(db)
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
-	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
 	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
 
 	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepository, messagesRepository, config.Kafka)
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
 	e := echo.New()
@@ -142,7 +148,7 @@ func main() {
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
-	wsMessages.NewMessagesHandler(e, messagesUsecase)
+	wsMessages.NewMessagesHandler(e, messagesService)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))

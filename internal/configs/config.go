@@ -1,14 +1,15 @@
 package configs
 
 type Config struct {
-	Server       Server       `yaml:"Server"`
-	Postgres     Postgres     `yaml:"Postgres"`
-	Cors         Cors         `yaml:"Cors"`
-	Redis        Redis        `yaml:"Redis"`
-	Minio        Minio        `yaml:"Minio"`
-	Kafka        Kafka        `yaml:"Kafka"`
-	ChatsService ChatsService `yaml:"ChatsService"`
-	UsersService UsersService `yaml:"UsersService"`
+	Server          Server          `yaml:"Server"`
+	Postgres        Postgres        `yaml:"Postgres"`
+	Cors            Cors            `yaml:"Cors"`
+	Redis           Redis           `yaml:"Redis"`
+	Minio           Minio           `yaml:"Minio"`
+	Kafka           Kafka           `yaml:"Kafka"`
+	ChatsService    ChatsService    `yaml:"ChatsService"`
+	UsersService    UsersService    `yaml:"UsersService"`
+	MessagesService MessagesService `yaml:"MessagesService"`
 }
 
 type Server struct {
@@ -49,6 +50,10 @@ type ChatsService struct {
 }
 
 type UsersService struct {
+	Addr string `yaml:"addr"`
+}
+
+type MessagesService struct {
 	Addr string `yaml:"addr"`
 }
 

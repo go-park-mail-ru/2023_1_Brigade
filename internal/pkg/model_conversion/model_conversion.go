@@ -1,8 +1,8 @@
 package model_conversion
 
 import (
+	protobuf "project/internal/generated"
 	"project/internal/model"
-	protobuf "project/internal/model/generated"
 )
 
 func FromUserIDToProtoUserID(userID uint64) *protobuf.UserID {

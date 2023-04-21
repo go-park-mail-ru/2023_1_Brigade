@@ -5,7 +5,7 @@ WORKDIR /usr/local/go/src/
 ADD . /usr/local/go/src/
 
 RUN go clean --modcache
-RUN go build -mod=readonly -o app cmd/api/main.go
+RUN go build -mod=readonly -o user cmd/user/main.go
 
 VOLUME /usr/local/go/src/avatars /home/ubuntu/2023_1_Brigade/avatars
 
@@ -16,9 +16,4 @@ COPY --from=builder /usr/local/go/src/internal/configs/config.yaml /
 COPY --from=builder /usr/local/go/src/cmd/api/background.png /
 COPY --from=builder /usr/local/go/src/avatars /
 
-CMD ["/app"]
-
-#
-#FROM redis:latest
-#COPY redis.conf /usr/local/etc/redis/redis.conf
-#CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+CMD ["/user"]

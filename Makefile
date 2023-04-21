@@ -4,7 +4,7 @@ all: run clean
 
 .PHONY: run
 run: ## Run project
-	docker compose up -d
+	cd docker && docker compose up -d
 
 .PHONY: stop
 clean: ## Clean containers and images
@@ -19,12 +19,6 @@ test: ## Run all the tests
 
 proto:
 	protoc -I=protobuf --go_out=plugins=grpc:client protobuf/chat.proto
-#    protoc -I=protobuf --go_out=plugins=grpc:client_generated protobuf/chat.proto
-#    protoc -I=protobuf --grpc-gateway_out=logtostderr=true,paths=source_relative,grpc_api_configuration=protobuf/chat.yaml:client_generated protobuf/chat.proto
-
-#.PHONY: proto
-#proto: ## Make protobuf files
-#	protoc -I=. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative $(PROTO_FILES)
 
 .PHONY: cover_out
 cover_out: test ## Run all the tests and opens the coverage report

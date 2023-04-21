@@ -9,7 +9,6 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
 	"gopkg.in/yaml.v2"
-	"net/http"
 	"os"
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
@@ -38,7 +37,7 @@ import (
 )
 
 func init() {
-	envPath := ".env"
+	envPath := "../../.env"
 	if err := godotenv.Load(envPath); err != nil {
 		log.Println("No .env file found")
 	}
@@ -133,12 +132,12 @@ func main() {
 	//	// возвращаем токен в качестве ответа
 	//	return c.JSON(http.StatusOK, a)
 	//})
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		TokenLookup:    "header:X-Csrf-Token",
-		CookieSameSite: http.SameSiteLaxMode,
-		CookieSecure:   true,
-		CookiePath:     "/",
-	}))
+//	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+//		TokenLookup:    "header:X-Csrf-Token",
+//		CookieSameSite: http.SameSiteLaxMode,
+//		CookieSecure:   true,
+//		CookiePath:     "/",
+//	}))
 	//csrfMiddleware := csrf.Protect(
 	//	[]byte("32-byte-long-auth-key"),
 	//	csrf.Secure(false),

@@ -1,19 +1,19 @@
 version: "3.9"
 
 services:
-#  backend:
- #   build: .
- #   depends_on:
-  #    - postgres
-  #    - redis
-  #    - kafka
+  backend:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+      - kafka
  #     - minio
-  #  volumes:
-  #    - /home/ubuntu/avatars:/avatars
-  #  ports:
-  #    - "8081:8081"
-  #  networks:
-  #    - backend-network
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "8081:8081"
+    networks:
+      - backend-network
 
   postgres:
     image: postgres
@@ -30,16 +30,25 @@ services:
       - backend-network
 
   redis:
-    image: redis
+    image: redis:alpine
     container_name: redis
     ports:
       - "6379:6379"
-    build: .
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: redis-server --appendonly yes --replica-read-only no
     networks:
       - backend-network
+
+#  redis:
+#    image: redis
+ #   container_name: redis
+ #   ports:
+ #     - "6379:6379"
+ #   build: .
+ #   volumes:
+ #     - ./redis.conf:/usr/local/etc/redis/redis.conf
+ #   command: redis-server /usr/local/etc/redis/redis.conf
+ #   networks:
+ #     - backend-network
 
   zookeeper:
     image: zookeeper

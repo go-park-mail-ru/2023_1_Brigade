@@ -52,7 +52,7 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 
 func (u *usecase) ConsumeMessage() []byte {
 	config := centrifuge.Config{}
-	c := centrifuge.NewJsonClient("wss://centrifugo:8900/connection/websocket", config) // url - адрес на котором работает centrifugo
+	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", config) // url - адрес на котором работает centrifugo
 	c.OnError(func(e centrifuge.ErrorEvent) {
 		log.Error(e.Error)
 	})

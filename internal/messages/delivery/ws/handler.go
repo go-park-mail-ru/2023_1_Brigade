@@ -20,7 +20,7 @@ type messageHandler struct {
 
 func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	config := centrifuge.Config{}
-	c := centrifuge.NewProtobufClient("wss://centrifugo:8900/connection/websocket", config) // url - адрес на котором работает centrifugo
+	c := centrifuge.NewProtobufClient("ws://centrifugo:8900/connection/websocket", config) // url - адрес на котором работает centrifugo
 	c.OnError(func(e centrifuge.ErrorEvent) {
 		log.Error(e.Error)
 	})

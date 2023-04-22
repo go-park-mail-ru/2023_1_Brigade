@@ -107,6 +107,15 @@ services:
     networks:
       - backend-network
 
+  centrifugo:
+    image: centrifugo/centrifugo:latest
+    container_name: centrifugo
+    volumes:
+      - ./../config.json:/etc/centrifugo/config.json
+    ports:
+      - "8900:8900"
+    command: [ "centrifugo", "--config=/etc/centrifugo/config.json" ]
+
 networks:
   backend-network:
     name: "backend-network"

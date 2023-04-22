@@ -4,6 +4,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
+	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
@@ -15,6 +16,7 @@ import (
 	clientChat "project/internal/clients/chat"
 	clientMessages "project/internal/clients/messages"
 	clientUser "project/internal/clients/user"
+	httpUser "project/internal/user/delivery/http"
 
 	"project/internal/configs"
 	wsMessages "project/internal/messages/delivery/ws"
@@ -22,13 +24,11 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	usecaseAuthSession "project/internal/auth/session/usecase"
 	httpAuthUser "project/internal/auth/user/delivery/http"
+	usecaseAuthUser "project/internal/auth/user/usecase"
 	httpChat "project/internal/chat/delivery/http"
 	httpImages "project/internal/images/delivery/http"
-	httpUser "project/internal/user/delivery/http"
-
-	usecaseAuthSession "project/internal/auth/session/usecase"
-	usecaseAuthUser "project/internal/auth/user/usecase"
 	usecaseImages "project/internal/images/usecase"
 
 	repositoryAuthSession "project/internal/auth/session/repository"
@@ -144,6 +144,8 @@ func main() {
 
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+	p := prometheus.NewPrometheus("echo", nil) // работает только без авторизации
+	p.Use(e)
 
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userService)

@@ -1,15 +1,8 @@
 syntax = "proto3";
 
-//option go_package = "./;protobuf";
-//
-//package user;
-
-//option go_package = "project/internal/model/generated;generated";
 option go_package = ".;generated";
 
 package protobuf;
-
-//import "google/protobuf/empty.proto";
 
 message User {
   uint64 id = 1;
@@ -55,13 +48,3 @@ message PutUserArguments {
   UpdateUser user = 1;
   uint64  userID = 2;
 }
-
-//service Users {
-//  rpc DeleteUserById(UserID) returns(google.protobuf.Empty) {}
-//  rpc CheckExistUserById(UserID) returns(google.protobuf.Empty) {}
-//  rpc GetUserById(UserID) returns(User) {}
-//  rpc AddUserContact(AddUserContactArguments) returns(Contacts) {}
-//  rpc GetUserContacts(UserID) returns(google.protobuf.Empty) {}
-//  rpc PutUserById(PutUserArguments) returns(User) {}
-//  rpc GetAllUsersExceptCurrentUser(UserID) returns(Contacts) {}
-//}

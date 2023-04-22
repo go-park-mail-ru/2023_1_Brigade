@@ -1,14 +1,5 @@
 syntax = "proto3";
 
-//option go_package = "./;protobuf";
-//
-//package messages;
-
-//option go_package = "./protobuf_generated;protobuf_generated";
-//option go_package = "./;protobuf";
-
-//option go_package = "project/internal/model/generated;generated";
-
 option go_package = ".;generated";
 
 package protobuf;

@@ -5,7 +5,7 @@ option go_package = ".;generated";
 package protobuf;
 
 message Bytes {
-  bytes bytes = 1;
+  bytes Bytes = 1;
 }
 
 message Message {

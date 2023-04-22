@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v4.22.3
-// source: protobuf/messages.proto
+// source: messages.proto
 
 package generated
 
@@ -25,13 +25,13 @@ type Bytes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Bytes []byte `protobuf:"bytes,1,opt,name=bytes,proto3" json:"bytes,omitempty"`
+	Bytes []byte `protobuf:"bytes,1,opt,name=Bytes,proto3" json:"Bytes,omitempty"`
 }
 
 func (x *Bytes) Reset() {
 	*x = Bytes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protobuf_messages_proto_msgTypes[0]
+		mi := &file_messages_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -44,7 +44,7 @@ func (x *Bytes) String() string {
 func (*Bytes) ProtoMessage() {}
 
 func (x *Bytes) ProtoReflect() protoreflect.Message {
-	mi := &file_protobuf_messages_proto_msgTypes[0]
+	mi := &file_messages_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *Bytes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Bytes.ProtoReflect.Descriptor instead.
 func (*Bytes) Descriptor() ([]byte, []int) {
-	return file_protobuf_messages_proto_rawDescGZIP(), []int{0}
+	return file_messages_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Bytes) GetBytes() []byte {
@@ -81,7 +81,7 @@ type Message struct {
 func (x *Message) Reset() {
 	*x = Message{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protobuf_messages_proto_msgTypes[1]
+		mi := &file_messages_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -94,7 +94,7 @@ func (x *Message) String() string {
 func (*Message) ProtoMessage() {}
 
 func (x *Message) ProtoReflect() protoreflect.Message {
-	mi := &file_protobuf_messages_proto_msgTypes[1]
+	mi := &file_messages_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,7 +107,7 @@ func (x *Message) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Message.ProtoReflect.Descriptor instead.
 func (*Message) Descriptor() ([]byte, []int) {
-	return file_protobuf_messages_proto_rawDescGZIP(), []int{1}
+	return file_messages_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Message) GetId() uint64 {
@@ -138,41 +138,41 @@ func (x *Message) GetChatId() uint64 {
 	return 0
 }
 
-var File_protobuf_messages_proto protoreflect.FileDescriptor
+var File_messages_proto protoreflect.FileDescriptor
 
-var file_protobuf_messages_proto_rawDesc = []byte{
-	0x0a, 0x17, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x6d, 0x65, 0x73, 0x73, 0x61,
-	0x67, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x22, 0x1d, 0x0a, 0x05, 0x42, 0x79, 0x74, 0x65, 0x73, 0x12, 0x14, 0x0a, 0x05,
-	0x62, 0x79, 0x74, 0x65, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x05, 0x62, 0x79, 0x74,
-	0x65, 0x73, 0x22, 0x61, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x0e, 0x0a,
-	0x02, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x49, 0x64, 0x12, 0x12, 0x0a,
-	0x04, 0x42, 0x6f, 0x64, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x42, 0x6f, 0x64,
-	0x79, 0x12, 0x1a, 0x0a, 0x08, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x49, 0x64, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x08, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x16, 0x0a,
-	0x06, 0x43, 0x68, 0x61, 0x74, 0x49, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x43,
-	0x68, 0x61, 0x74, 0x49, 0x64, 0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x3b, 0x67, 0x65, 0x6e, 0x65, 0x72,
-	0x61, 0x74, 0x65, 0x64, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+var file_messages_proto_rawDesc = []byte{
+	0x0a, 0x0e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x12, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x22, 0x1d, 0x0a, 0x05, 0x42, 0x79,
+	0x74, 0x65, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x42, 0x79, 0x74, 0x65, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0c, 0x52, 0x05, 0x42, 0x79, 0x74, 0x65, 0x73, 0x22, 0x61, 0x0a, 0x07, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x02, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x42, 0x6f, 0x64, 0x79, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x42, 0x6f, 0x64, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x41, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x49, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x41, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x43, 0x68, 0x61, 0x74, 0x49, 0x64, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x43, 0x68, 0x61, 0x74, 0x49, 0x64, 0x42, 0x0d, 0x5a, 0x0b,
+	0x2e, 0x3b, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
-	file_protobuf_messages_proto_rawDescOnce sync.Once
-	file_protobuf_messages_proto_rawDescData = file_protobuf_messages_proto_rawDesc
+	file_messages_proto_rawDescOnce sync.Once
+	file_messages_proto_rawDescData = file_messages_proto_rawDesc
 )
 
-func file_protobuf_messages_proto_rawDescGZIP() []byte {
-	file_protobuf_messages_proto_rawDescOnce.Do(func() {
-		file_protobuf_messages_proto_rawDescData = protoimpl.X.CompressGZIP(file_protobuf_messages_proto_rawDescData)
+func file_messages_proto_rawDescGZIP() []byte {
+	file_messages_proto_rawDescOnce.Do(func() {
+		file_messages_proto_rawDescData = protoimpl.X.CompressGZIP(file_messages_proto_rawDescData)
 	})
-	return file_protobuf_messages_proto_rawDescData
+	return file_messages_proto_rawDescData
 }
 
-var file_protobuf_messages_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_protobuf_messages_proto_goTypes = []interface{}{
+var file_messages_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_messages_proto_goTypes = []interface{}{
 	(*Bytes)(nil),   // 0: protobuf.Bytes
 	(*Message)(nil), // 1: protobuf.Message
 }
-var file_protobuf_messages_proto_depIdxs = []int32{
+var file_messages_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -180,13 +180,13 @@ var file_protobuf_messages_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_protobuf_messages_proto_init() }
-func file_protobuf_messages_proto_init() {
-	if File_protobuf_messages_proto != nil {
+func init() { file_messages_proto_init() }
+func file_messages_proto_init() {
+	if File_messages_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_protobuf_messages_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_messages_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Bytes); i {
 			case 0:
 				return &v.state
@@ -198,7 +198,7 @@ func file_protobuf_messages_proto_init() {
 				return nil
 			}
 		}
-		file_protobuf_messages_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_messages_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Message); i {
 			case 0:
 				return &v.state
@@ -215,18 +215,18 @@ func file_protobuf_messages_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_protobuf_messages_proto_rawDesc,
+			RawDescriptor: file_messages_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_protobuf_messages_proto_goTypes,
-		DependencyIndexes: file_protobuf_messages_proto_depIdxs,
-		MessageInfos:      file_protobuf_messages_proto_msgTypes,
+		GoTypes:           file_messages_proto_goTypes,
+		DependencyIndexes: file_messages_proto_depIdxs,
+		MessageInfos:      file_messages_proto_msgTypes,
 	}.Build()
-	File_protobuf_messages_proto = out.File
-	file_protobuf_messages_proto_rawDesc = nil
-	file_protobuf_messages_proto_goTypes = nil
-	file_protobuf_messages_proto_depIdxs = nil
+	File_messages_proto = out.File
+	file_messages_proto_rawDesc = nil
+	file_messages_proto_goTypes = nil
+	file_messages_proto_depIdxs = nil
 }

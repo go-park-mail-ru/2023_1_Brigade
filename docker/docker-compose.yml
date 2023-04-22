@@ -115,6 +115,8 @@ services:
     ports:
       - "8900:8900"
     command: [ "centrifugo", "--config=/etc/centrifugo/config.json" ]
+    networks:
+      - backend-network
 
 networks:
   backend-network:

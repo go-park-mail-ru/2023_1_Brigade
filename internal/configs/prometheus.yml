@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:
+  - job_name: 'api'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'api:8079' ]
+
+  - job_name: 'chat'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'chat:9000' ]
+
+  - job_name: 'user'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'user:9001' ]
+
+  - job_name: 'messages'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'messages:9002' ]

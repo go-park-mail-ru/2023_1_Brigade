@@ -124,6 +124,7 @@ services:
     container_name: vdonate-prometheus
     restart: unless-stopped
     command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
@@ -131,10 +132,11 @@ services:
       - '--web.enable-lifecycle'
     volumes:
       - prometheus_data:/prometheus
+      - ./../internal/configs/prometheus.yml:/etc/prometheus/prometheus.yml
     expose:
       - "9090"
     networks:
-      - vdonate-network-api
+      - backend-network
 
   grafana:
     image: grafana/grafana:latest
@@ -146,6 +148,8 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+    networks:
+      - backend-network
 
 volumes:
   prometheus_data: {}

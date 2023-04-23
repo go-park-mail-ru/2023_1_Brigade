@@ -7,6 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"os"
+	"os/signal"
 	"project/internal/messages"
 	"project/internal/model"
 	"time"
@@ -72,7 +74,18 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {
 	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
-	defer c.Close()
+
+	signals := make(chan os.Signal)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		err := c.Close
+		if err != nil {
+			log.Error(err)
+		}
+		log.Fatal()
+	}()
 
 	err := c.Connect()
 	if err != nil {

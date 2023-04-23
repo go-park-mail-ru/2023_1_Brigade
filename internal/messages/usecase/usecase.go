@@ -7,6 +7,8 @@ import (
 	"github.com/centrifugal/centrifuge-go"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
+	"os"
+	"os/signal"
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/messages"
@@ -39,7 +41,17 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 	consumer.StartConsumeMessages()
 
 	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
-	defer c.Close()
+	signals := make(chan os.Signal)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		err := c.Close
+		if err != nil {
+			log.Error(err)
+		}
+		log.Fatal()
+	}()
 
 	err = c.Connect()
 	if err != nil {

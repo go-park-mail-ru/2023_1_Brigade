@@ -14,6 +14,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "8081:8081"
+      - "8079:8079"
     networks:
       - backend-network
 
@@ -116,25 +117,39 @@ services:
       - ./../config.json:/centrifugo/config.json
     networks:
       - backend-network
-#  centrifugo:
-#    image: centrifugo/centrifugo:latest
-#    command: centrifugo -c config.json --port=8900 --admin
-#    ports:
-#      - "8900:8900"
-#    volumes:
-#      - ./config.json:/centrifugo/config.json
-#    networks:
-#      - backend-network
-#  centrifugo:
-#    image: centrifugo/centrifugo:latest
-#    container_name: centrifugo
-#    volumes:
-#      - ./../config.json:/etc/centrifugo/config.json
-#    ports:
-#      - "8900:8900"
-#    command: [ "centrifugo", "--config=/etc/centrifugo/config.json" ]
-#    networks:
-#      - backend-network
+
+  prometheus:
+    hostname: prometheus
+    image: prom/prometheus:latest
+    container_name: vdonate-prometheus
+    restart: unless-stopped
+    command:
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - prometheus_data:/prometheus
+    expose:
+      - "9090"
+    networks:
+      - vdonate-network-api
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=myuser
+      - GF_SECURITY_ADMIN_PASSWORD=mypassword
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
 
 networks:
   backend-network:

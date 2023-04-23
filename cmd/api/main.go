@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -144,8 +145,19 @@ func main() {
 
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
-	p := prometheus.NewPrometheus("echo", nil) // работает только без авторизации
-	p.Use(e)
+	//p := prometheus.NewPrometheus("echo", nil) // работает только без авторизации
+	//p.Use(e)
+	p := prometheus.NewPrometheus("echo", nil)
+	eProtheus := echo.New()
+
+	e.Use(p.HandlerFunc)
+	eProtheus.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
+	go func() {
+		err := eProtheus.Start(":8079")
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userService)

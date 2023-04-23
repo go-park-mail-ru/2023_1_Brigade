@@ -20,13 +20,7 @@ type messageHandler struct {
 }
 
 func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
-	sub, err := u.centrifugo.NewSubscription("channel", centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	if err != nil {
-		return err
-	}
+	sub, _ := u.centrifugo.GetSubscription("channel")
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
 		msg, err := u.messageUsecase.ReceiveMessage(ctx)
@@ -54,11 +48,6 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 		}
 	})
 
-	err = sub.Subscribe()
-	if err != nil {
-		return err
-	}
-
 	ws, err := u.upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
 	if err != nil {
 		return err
@@ -82,11 +71,23 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 }
 
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {
-	config := centrifuge.Config{}
-	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", config)
+	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
 	defer c.Close()
 
 	err := c.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := c.NewSubscription("channel", centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
 	if err != nil {
 		log.Error(err)
 	}

@@ -21,7 +21,7 @@ func NewMessagesServiceGRPSClient(con *grpc.ClientConn) messages.Usecase {
 }
 
 func (m messagesServiceGRPCClient) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error {
-	log.Warn("Client send messages", jsonWebSocketMessage)
+	log.Warn("Client send messages", string(jsonWebSocketMessage))
 	_, err := m.messagesClient.SendMessage(context.TODO(), &generated.Bytes{Bytes: jsonWebSocketMessage})
 	log.Warn("Client send messages error", err)
 	return err

@@ -131,7 +131,7 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 	})
 	defer c.Close()
 
-	err := c.Connect()
+	err = c.Connect()
 	if err != nil {
 		log.Error(err)
 	}
@@ -159,7 +159,7 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 	})
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		log.Warn("опубликовал")
+		log.Printf("Someone says via channel %s: %s (offset %d)", sub.Channel, e.Offset)
 	})
 
 	sub.OnJoin(func(e centrifuge.JoinEvent) {
@@ -174,7 +174,7 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 		log.Fatalln(err)
 	}
 
-	res, err := sub.Publish(context.Background(), []byte{})
+	res, err := sub.Publish(context.Background(), jsonWebSocketMessage)
 	log.Error(res, err)
 
 	return nil

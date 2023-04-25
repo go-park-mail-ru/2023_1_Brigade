@@ -49,7 +49,7 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 	return &usecase{consumer: consumer, messagesChan: messagesChan}, nil
 }
 
-func (u *usecase) ConsumeMessage() []byte {
+func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
 	msg := <-u.messagesChan
 	return msg
 }

@@ -153,7 +153,7 @@ func (u usecase) SendMessage(ctx context.Context, webSocketMessage model.WebSock
 			return err
 		}
 
-		err = u.producer.ProduceMessage(jsonProducerMessage)
+		err = u.producer.ProduceMessage(ctx, jsonProducerMessage)
 		if err != nil {
 			return err
 		}

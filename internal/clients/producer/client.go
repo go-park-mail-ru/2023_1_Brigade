@@ -1,6 +1,7 @@
 package producer
 
 import (
+	"context"
 	"project/internal/generated"
 	"project/internal/qaas/send_messages/producer"
 
@@ -17,6 +18,9 @@ func NewProducerServiceGRPCClient(con *grpc.ClientConn) producer.Usecase {
 	}
 }
 
-func (p producerServiceGRPCClient) ProduceMessage(message []byte) error {
-	p.producerClient.ProduceMessage()
+func (p producerServiceGRPCClient) ProduceMessage(ctx context.Context, message []byte) error {
+	_, err := p.producerClient.ProduceMessage(ctx, &generated.Bytes{
+		Bytes: message,
+	})
+	return err
 }

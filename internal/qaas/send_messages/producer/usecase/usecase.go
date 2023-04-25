@@ -1,12 +1,13 @@
 package usecase
 
 import (
-	"github.com/Shopify/sarama"
-	log "github.com/sirupsen/logrus"
+	"context"
 	"os"
 	"os/signal"
 	"project/internal/qaas/send_messages/producer"
-	"project/internal/generated"
+
+	"github.com/Shopify/sarama"
+	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -29,7 +30,7 @@ func NewProducer(brokerList []string) (producer.Usecase, error) {
 	return &usecase{producer: producer}, nil
 }
 
-func (u *usecase) ProduceMessage(message []byte) error {
+func (u *usecase) ProduceMessage(ctx context.Context, message []byte) error {
 	msg := &sarama.ProducerMessage{
 		Topic: "message",
 		Value: sarama.ByteEncoder(message),

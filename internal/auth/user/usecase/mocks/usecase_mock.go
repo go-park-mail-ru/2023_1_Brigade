@@ -5,11 +5,11 @@
 package mock_user
 
 import (
+	context "context"
 	model "project/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	echo "github.com/labstack/echo/v4"
 )
 
 // MockUsecase is a mock of Usecase interface.
@@ -36,7 +36,7 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 }
 
 // Login mocks base method.
-func (m *MockUsecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error) {
+func (m *MockUsecase) Login(ctx context.Context, loginUser model.LoginUser) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Login", ctx, loginUser)
 	ret0, _ := ret[0].(model.User)
@@ -51,7 +51,7 @@ func (mr *MockUsecaseMockRecorder) Login(ctx, loginUser interface{}) *gomock.Cal
 }
 
 // Signup mocks base method.
-func (m *MockUsecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
+func (m *MockUsecase) Signup(ctx context.Context, registrationUser model.RegistrationUser) (model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Signup", ctx, registrationUser)
 	ret0, _ := ret[0].(model.User)

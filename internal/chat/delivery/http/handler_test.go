@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
@@ -45,7 +46,7 @@ func TestHandlers_CreateChat_OK(t *testing.T) {
 	err := json.Unmarshal(test.body, &chat)
 	require.NoError(t, err)
 
-	chatUsecase.EXPECT().CreateChat(ctx, chat, uint64(1)).Return(dbChat, nil).Times(1)
+	chatUsecase.EXPECT().CreateChat(context.TODO(), chat, uint64(1)).Return(dbChat, nil).Times(1)
 
 	err = handler.CreateCurrentUserChatHandler(ctx)
 
@@ -76,7 +77,7 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
-	chatUsecase.EXPECT().GetChatById(ctx, uint64(1)).Return(chat, nil).Times(1)
+	chatUsecase.EXPECT().GetChatById(context.TODO(), uint64(1)).Return(chat, nil).Times(1)
 
 	err := handler.GetChatHandler(ctx)
 

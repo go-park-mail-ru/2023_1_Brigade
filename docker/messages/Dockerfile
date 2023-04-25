@@ -7,8 +7,6 @@ RUN go mod download
 FROM builder AS build
 
 COPY . .
-COPY internal/configs/config.yaml /
-COPY cmd/api/background.png /
 
 RUN go build -o ./../../messages cmd/messages/main.go
 

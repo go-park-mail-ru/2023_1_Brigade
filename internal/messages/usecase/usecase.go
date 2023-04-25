@@ -49,8 +49,6 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 		log.Error(err)
 	}
 
-	consumer.StartConsumeMessages()
-
 	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
@@ -78,6 +76,8 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 	if err != nil {
 		log.Error(err)
 	}
+
+	consumer.StartConsumeMessages()
 
 	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer, client: c}
 }

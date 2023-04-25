@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
@@ -50,8 +51,8 @@ func TestHandlers_Signup_Created(t *testing.T) {
 	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, nil).Times(1)
-	authSessionUsecase.EXPECT().CreateSessionById(ctx, user.Id).Times(1)
+	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, nil).Times(1)
+	authSessionUsecase.EXPECT().CreateSessionById(context.TODO(), user.Id).Times(1)
 
 	err = handler.SignupHandler(ctx)
 	require.NoError(t, err)
@@ -84,7 +85,7 @@ func TestHandlers_Signup_EmailRegistered(t *testing.T) {
 	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrEmailIsAlreadyRegistered).Times(1)
+	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrEmailIsAlreadyRegistered).Times(1)
 
 	err = handler.SignupHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -116,7 +117,7 @@ func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
 	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrUsernameIsAlreadyRegistered).Times(1)
+	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrUsernameIsAlreadyRegistered).Times(1)
 
 	err = handler.SignupHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -148,7 +149,7 @@ func TestHandlers_Signup_InvalidEmail(t *testing.T) {
 	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrInvalidEmail).Times(1)
+	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrInvalidEmail).Times(1)
 
 	err = handler.SignupHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -180,7 +181,7 @@ func TestHandlers_Signup_InvalidUsername(t *testing.T) {
 	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrInvalidUsername).Times(1)
+	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrInvalidUsername).Times(1)
 
 	err = handler.SignupHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -212,7 +213,7 @@ func TestHandlers_Signup_InvalidPassword(t *testing.T) {
 	err := json.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Signup(ctx, registrationUser).Return(user, myErrors.ErrInvalidPassword).Times(1)
+	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrInvalidPassword).Times(1)
 
 	err = handler.SignupHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -266,8 +267,8 @@ func TestHandlers_Login_OK(t *testing.T) {
 	err := json.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Login(ctx, loginUser).Return(user, nil).Times(1)
-	authSessionUsecase.EXPECT().CreateSessionById(ctx, user.Id).Return(model.Session{}, nil).Times(1)
+	authUserUsecase.EXPECT().Login(context.TODO(), loginUser).Return(user, nil).Times(1)
+	authSessionUsecase.EXPECT().CreateSessionById(context.TODO(), user.Id).Return(model.Session{}, nil).Times(1)
 
 	err = handler.LoginHandler(ctx)
 	require.NoError(t, err)
@@ -299,7 +300,7 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 	err := json.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Login(ctx, loginUser).Return(user, myErrors.ErrEmailNotFound).Times(1)
+	authUserUsecase.EXPECT().Login(context.TODO(), loginUser).Return(user, myErrors.ErrEmailNotFound).Times(1)
 
 	err = handler.LoginHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -330,7 +331,7 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 	err := json.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
-	authUserUsecase.EXPECT().Login(ctx, loginUser).Return(user, myErrors.ErrIncorrectPassword).Times(1)
+	authUserUsecase.EXPECT().Login(context.TODO(), loginUser).Return(user, myErrors.ErrIncorrectPassword).Times(1)
 
 	err = handler.LoginHandler(ctx)
 	require.Equal(t, http_utils.StatusCode(err), test.status)
@@ -380,8 +381,8 @@ func TestHandlers_Auth_UserOK(t *testing.T) {
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
-	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{}, nil).Times(1)
+	authSessionUsecase.EXPECT().GetSessionByCookie(context.TODO(), cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(model.User{}, nil).Times(1)
 
 	err := handler.AuthHandler(ctx)
 
@@ -409,8 +410,8 @@ func TestHandlers_Auth_SessionOK(t *testing.T) {
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
-	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
+	authSessionUsecase.EXPECT().GetSessionByCookie(context.TODO(), cookie).Return(model.Session{UserId: 1, Cookie: cookie}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(model.User{}, myErrors.ErrUserNotFound).Times(1)
 
 	err := handler.AuthHandler(ctx)
 
@@ -462,7 +463,7 @@ func TestHandlers_Auth_SessionNotFound(t *testing.T) {
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authSessionUsecase.EXPECT().GetSessionByCookie(ctx, cookie).Return(model.Session{}, myErrors.ErrSessionNotFound).Times(1)
+	authSessionUsecase.EXPECT().GetSessionByCookie(context.TODO(), cookie).Return(model.Session{}, myErrors.ErrSessionNotFound).Times(1)
 
 	err := handler.AuthHandler(ctx)
 
@@ -490,7 +491,7 @@ func TestHandlers_Logout_Delete(t *testing.T) {
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authSessionUsecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Times(1)
+	authSessionUsecase.EXPECT().DeleteSessionByCookie(context.TODO(), cookie).Times(1)
 
 	err := handler.LogoutHandler(ctx)
 
@@ -542,7 +543,7 @@ func TestHandlers_Logout_SessionNotFound(t *testing.T) {
 	handler := NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
 	r.AddCookie(&http.Cookie{Name: "session_id", Value: cookie})
 
-	authSessionUsecase.EXPECT().DeleteSessionByCookie(ctx, cookie).Return(myErrors.ErrSessionNotFound).Times(1)
+	authSessionUsecase.EXPECT().DeleteSessionByCookie(context.TODO(), cookie).Return(myErrors.ErrSessionNotFound).Times(1)
 
 	err := handler.LogoutHandler(ctx)
 

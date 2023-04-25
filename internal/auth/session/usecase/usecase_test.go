@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 	authSessionMock "project/internal/auth/session/repository/mocks"
 	"project/internal/model"
@@ -51,11 +50,10 @@ func Test_GetSessionByCookie(t *testing.T) {
 
 	authRepository := authSessionMock.NewMockRepository(ctl)
 	usecase := NewAuthUserUsecase(authRepository)
-	var ctx echo.Context
 
 	for _, test := range tests {
 		authRepository.EXPECT().GetSessionByCookie(context.Background(), "").Return(test.expectedSession, test.expectedError).Times(1)
-		session, err := usecase.GetSessionByCookie(ctx, "")
+		session, err := usecase.GetSessionByCookie(context.TODO(), "")
 
 		require.Error(t, err, test.expectedError)
 		require.Equal(t, session, test.expectedSession, test.name)

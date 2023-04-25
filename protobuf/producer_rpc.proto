@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "google/protobuf/empty.proto";
+import "protobuf/messages.proto";
+
+service Producer {
+    rpc ProduceMessage(Bytes) returns (google.protobuf.Empty) {}
+}

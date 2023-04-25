@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"errors"
-	"github.com/labstack/echo/v4"
 	auth "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -23,7 +22,7 @@ func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository) auth
 	return &usecase{authRepo: authRepo, userRepo: userRepo}
 }
 
-func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error) {
+func (u usecase) Signup(ctx context.Context, registrationUser model.RegistrationUser) (model.User, error) {
 	user := model.AuthorizedUser{
 		Nickname: registrationUser.Nickname,
 		Email:    registrationUser.Email,
@@ -59,7 +58,7 @@ func (u usecase) Signup(ctx echo.Context, registrationUser model.RegistrationUse
 	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }
 
-func (u usecase) Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error) {
+func (u usecase) Login(ctx context.Context, loginUser model.LoginUser) (model.User, error) {
 	user := model.AuthorizedUser{
 		Email:    loginUser.Email,
 		Password: loginUser.Password,

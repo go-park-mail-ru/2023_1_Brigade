@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/centrifugal/centrifuge-go"
 	"github.com/gorilla/websocket"
@@ -25,7 +26,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	sub, _ := u.centrifugo.GetSubscription("channel")
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		msg, err := u.messageUsecase.ReceiveMessage(ctx)
+		msg, err := u.messageUsecase.ReceiveMessage(context.TODO())
 		if err != nil {
 			log.Error(err)
 			return
@@ -65,7 +66,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			return err
 		}
 
-		err = u.messageUsecase.SendMessage(ctx, message)
+		err = u.messageUsecase.SwitchMesssageType(context.TODO(), message)
 		if err != nil {
 			log.Error(err)
 		}
@@ -80,10 +81,7 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHa
 
 	go func() {
 		<-signals
-		err := c.Close
-		if err != nil {
-			log.Error(err)
-		}
+		_ = c.Close
 		log.Fatal()
 	}()
 

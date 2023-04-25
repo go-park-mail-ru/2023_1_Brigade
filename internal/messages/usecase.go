@@ -1,10 +1,14 @@
 package messages
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
+	"project/internal/model"
 )
 
 type Usecase interface {
-	SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error
-	ReceiveMessage(ctx echo.Context) ([]byte, error)
+	SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error
+	SendMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error
+	EditMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error
+	DeleteMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error
+	ReceiveMessage(ctx context.Context) ([]byte, error)
 }

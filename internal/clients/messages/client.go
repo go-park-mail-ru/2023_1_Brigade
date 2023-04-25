@@ -3,11 +3,11 @@ package messages
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"google.golang.org/grpc"
 	"project/internal/generated"
 	"project/internal/messages"
+	"project/internal/model"
+	"project/internal/pkg/model_conversion"
 )
 
 type messagesServiceGRPCClient struct {
@@ -20,18 +20,29 @@ func NewMessagesServiceGRPSClient(con *grpc.ClientConn) messages.Usecase {
 	}
 }
 
-func (m messagesServiceGRPCClient) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error {
-	log.Warn("Client send messages", string(jsonWebSocketMessage))
-	_, err := m.messagesClient.SendMessage(context.TODO(), &generated.Bytes{Bytes: jsonWebSocketMessage})
-	log.Warn("Client send messages error", err)
+func (m messagesServiceGRPCClient) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error {
+	_, err := m.messagesClient.SwitchMesssageType(ctx, &generated.Bytes{Bytes: jsonWebSocketMessage})
 	return err
 }
 
-func (m messagesServiceGRPCClient) ReceiveMessage(ctx echo.Context) ([]byte, error) {
-	bytes, err := m.messagesClient.ReceiveMessage(context.TODO(), &empty.Empty{})
-	log.Warn("Client receive messages", string(bytes.Bytes))
+func (m messagesServiceGRPCClient) SendMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+	_, err := m.messagesClient.SendMessage(ctx, model_conversion.FromWebSocketMessageToProtoWebSocketMessage(webSocketMessage))
+	return err
+}
+
+func (m messagesServiceGRPCClient) EditMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m messagesServiceGRPCClient) DeleteMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m messagesServiceGRPCClient) ReceiveMessage(ctx context.Context) ([]byte, error) {
+	bytes, err := m.messagesClient.ReceiveMessage(ctx, &empty.Empty{})
 	if err != nil {
-		log.Warn("Client receive messages err", err)
 		return nil, err
 	}
 

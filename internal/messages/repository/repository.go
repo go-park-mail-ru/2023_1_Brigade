@@ -18,7 +18,7 @@ func NewMessagesMemoryRepository(db *sqlx.DB) messages.Repository {
 	return &repository{db: db}
 }
 
-func (r repository) GetMessageById(ctx context.Context, messageID uint64) (model.Message, error) {
+func (r repository) GetMessageById(ctx context.Context, messageID string) (model.Message, error) {
 	var message model.Message
 	err := r.db.Get(&message, "SELECT * FROM message WHERE id=$1", messageID)
 
@@ -54,19 +54,13 @@ func (r repository) GetChatMessages(ctx context.Context, chatID uint64) ([]model
 }
 
 func (r repository) InsertMessageInDB(ctx context.Context, message model.Message) (model.Message, error) {
-	row, err := r.db.NamedQuery(`INSERT INTO message (body, id_chat, author_id) `+
-		`VALUES (:body, :id_chat, :author_id) RETURNING id`, message)
+	_, err := r.db.NamedQuery(`INSERT INTO message (id, body, id_chat, author_id, created_at) `+
+		`VALUES (:id, :body, :id_chat, :author_id, :created_at)`, message)
 
 	if err != nil {
 		return model.Message{}, err
 	}
-	if row.Next() {
-		err = row.Scan(&message.Id)
-		if err != nil {
-			return model.Message{}, err
-		}
-	}
-//	log.Warn(message)
+
 	_, err = r.db.NamedQuery("INSERT INTO chat_messages (id_chat, id_message) VALUES (:id_chat, :id_message)", model.ChatMessages{
 		ChatId:    message.ChatId,
 		MessageId: message.Id,
@@ -81,7 +75,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 
 func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (model.Message, error) {
 	var lastMessage model.Message
-	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND id = (SELECT MAX(id) FROM message WHERE id_chat = $1)`, chatID)
+	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND created_at = (SELECT MAX(created_at) FROM message WHERE id_chat = $1)`, chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return model.Message{}, nil

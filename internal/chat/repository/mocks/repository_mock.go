@@ -138,10 +138,10 @@ func (mr *MockRepositoryMockRecorder) GetChatsByUserId(ctx, userID interface{}) 
 }
 
 // UpdateChatById mocks base method.
-func (m *MockRepository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.Chat, error) {
+func (m *MockRepository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateChatById", ctx, title, chatID)
-	ret0, _ := ret[0].(model.Chat)
+	ret0, _ := ret[0].(model.DBChat)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

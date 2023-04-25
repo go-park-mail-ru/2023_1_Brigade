@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"project/internal/qaas/send_messages/producer"
+	"project/internal/generated"
 )
 
 type usecase struct {

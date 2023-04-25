@@ -659,8 +659,6 @@ func file_protobuf_chat_proto_init() {
 	if File_protobuf_chat_proto != nil {
 		return
 	}
-	file_protobuf_user_proto_init()
-
 	if !protoimpl.UnsafeEnabled {
 		file_protobuf_chat_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Chat); i {

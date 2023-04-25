@@ -52,7 +52,7 @@ type ChatMembers struct {
 
 type ChatMessages struct {
 	ChatId    uint64 `json:"id_chat"    db:"id_chat"`
-	MessageId uint64 `json:"id_message" db:"id_message"`
+	MessageId string `json:"id_message" db:"id_message"`
 }
 
 type ChatUsersInGroup struct {

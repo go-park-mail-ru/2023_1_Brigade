@@ -49,31 +49,6 @@ func (r repository) UpdateChatById(ctx context.Context, title string, chatID uin
 	}
 
 	return chat, nil
-
-	//rows, err := r.db.Exec("UPDATE chat SET title=$1 WHERE id=$2", title, chatID)
-	//if err != nil {
-	//	// Обработка ошибки
-	//}
-	//
-	//rowsAffected, err := rows.RowsAffected()
-	//if err != nil {
-	//	// Обработка ошибки
-	//}
-
-	//var chat model.DBChat
-	//rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
-	//
-	//if err != nil {
-	//	return model.DBChat{}, err
-	//}
-	//if rows.Next() {
-	//	err = rows.Scan(&chat)
-	//	if err != nil {
-	//		return model.DBChat{}, err
-	//	}
-	//}
-	//
-	//return chat, nil
 }
 
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {

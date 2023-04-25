@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -20,7 +21,7 @@ func (u userHandler) GetUserHandler(ctx echo.Context) error {
 		return err
 	}
 
-	user, err := u.usecase.GetUserById(ctx, userID)
+	user, err := u.usecase.GetUserById(context.TODO(), userID)
 	if err != nil {
 		return err
 	}
@@ -32,7 +33,7 @@ func (u userHandler) GetUserHandler(ctx echo.Context) error {
 
 func (u userHandler) GetCurrentUserHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
-	user, err := u.usecase.GetUserById(ctx, session.UserId)
+	user, err := u.usecase.GetUserById(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}
@@ -44,7 +45,7 @@ func (u userHandler) GetCurrentUserHandler(ctx echo.Context) error {
 
 func (u userHandler) DeleteUserHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
-	err := u.usecase.DeleteUserById(ctx, session.UserId)
+	err := u.usecase.DeleteUserById(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}
@@ -61,7 +62,7 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
-	user, err := u.usecase.PutUserById(ctx, updateUser, session.UserId)
+	user, err := u.usecase.PutUserById(context.TODO(), updateUser, session.UserId)
 
 	if err != nil {
 		log.Warn(err)
@@ -75,7 +76,7 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 
 func (u userHandler) GetUserContactsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
-	contacts, err := u.usecase.GetAllUsersExceptCurrentUser(ctx, session.UserId)
+	contacts, err := u.usecase.GetAllUsersExceptCurrentUser(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}
@@ -90,7 +91,7 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
-	contacts, err := u.usecase.AddUserContact(ctx, session.UserId, contactID)
+	contacts, err := u.usecase.AddUserContact(context.TODO(), session.UserId, contactID)
 	if err != nil {
 		return err
 	}

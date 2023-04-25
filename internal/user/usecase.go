@@ -1,16 +1,16 @@
 package user
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"project/internal/model"
 )
 
 type Usecase interface {
-	DeleteUserById(ctx echo.Context, userID uint64) error
-	CheckExistUserById(ctx echo.Context, userID uint64) error
-	GetUserById(ctx echo.Context, userID uint64) (model.User, error)
-	AddUserContact(ctx echo.Context, userID uint64, contactID uint64) ([]model.User, error)
-	GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error)
-	PutUserById(ctx echo.Context, user model.UpdateUser, userID uint64) (model.User, error)
-	GetAllUsersExceptCurrentUser(ctx echo.Context, userID uint64) ([]model.User, error)
+	DeleteUserById(ctx context.Context, userID uint64) error
+	CheckExistUserById(ctx context.Context, userID uint64) error
+	GetUserById(ctx context.Context, userID uint64) (model.User, error)
+	AddUserContact(ctx context.Context, userID uint64, contactID uint64) ([]model.User, error)
+	GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error)
+	PutUserById(ctx context.Context, user model.UpdateUser, userID uint64) (model.User, error)
+	GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.User, error)
 }

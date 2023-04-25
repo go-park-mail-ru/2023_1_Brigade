@@ -39,7 +39,7 @@ import (
 )
 
 func init() {
-	envPath := "../../.env"
+	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
 		log.Println("No .env file found")
 	}
@@ -145,8 +145,7 @@ func main() {
 
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
-	//p := prometheus.NewPrometheus("echo", nil) // работает только без авторизации
-	//p.Use(e)
+
 	p := prometheus.NewPrometheus("echo", nil)
 	eProtheus := echo.New()
 

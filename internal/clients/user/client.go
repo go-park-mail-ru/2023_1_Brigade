@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
 	"project/internal/generated"
 	"project/internal/model"
@@ -20,18 +19,18 @@ func NewUserServiceGRPSClient(con *grpc.ClientConn) user.Usecase {
 	}
 }
 
-func (u userServiceGRPCClient) DeleteUserById(ctx echo.Context, userID uint64) error {
-	_, err := u.userClient.DeleteUserById(context.TODO(), model_conversion.FromUserIDToProtoUserID(userID))
+func (u userServiceGRPCClient) DeleteUserById(ctx context.Context, userID uint64) error {
+	_, err := u.userClient.DeleteUserById(ctx, model_conversion.FromUserIDToProtoUserID(userID))
 	return err
 }
 
-func (u userServiceGRPCClient) CheckExistUserById(ctx echo.Context, userID uint64) error {
-	_, err := u.userClient.CheckExistUserById(context.TODO(), model_conversion.FromUserIDToProtoUserID(userID))
+func (u userServiceGRPCClient) CheckExistUserById(ctx context.Context, userID uint64) error {
+	_, err := u.userClient.CheckExistUserById(ctx, model_conversion.FromUserIDToProtoUserID(userID))
 	return err
 }
 
-func (u userServiceGRPCClient) GetUserById(ctx echo.Context, userID uint64) (model.User, error) {
-	user, err := u.userClient.GetUserById(context.TODO(), model_conversion.FromUserIDToProtoUserID(userID))
+func (u userServiceGRPCClient) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
+	user, err := u.userClient.GetUserById(ctx, model_conversion.FromUserIDToProtoUserID(userID))
 	if err != nil {
 		return model.User{}, err
 	}
@@ -39,8 +38,8 @@ func (u userServiceGRPCClient) GetUserById(ctx echo.Context, userID uint64) (mod
 	return model_conversion.FromProtoUserToUser(user), nil
 }
 
-func (u userServiceGRPCClient) AddUserContact(ctx echo.Context, userID uint64, contactID uint64) ([]model.User, error) {
-	contacts, err := u.userClient.AddUserContact(context.TODO(),
+func (u userServiceGRPCClient) AddUserContact(ctx context.Context, userID uint64, contactID uint64) ([]model.User, error) {
+	contacts, err := u.userClient.AddUserContact(ctx,
 		&generated.AddUserContactArguments{
 			UserID:    userID,
 			ContactID: contactID,
@@ -53,8 +52,8 @@ func (u userServiceGRPCClient) AddUserContact(ctx echo.Context, userID uint64, c
 	return model_conversion.FromProtoMembersToMembers(contacts.Contacts), nil
 }
 
-func (u userServiceGRPCClient) GetUserContacts(ctx echo.Context, userID uint64) ([]model.User, error) {
-	contacts, err := u.userClient.GetUserContacts(context.TODO(), model_conversion.FromUserIDToProtoUserID(userID))
+func (u userServiceGRPCClient) GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error) {
+	contacts, err := u.userClient.GetUserContacts(ctx, model_conversion.FromUserIDToProtoUserID(userID))
 	if err != nil {
 		return nil, err
 	}
@@ -62,8 +61,8 @@ func (u userServiceGRPCClient) GetUserContacts(ctx echo.Context, userID uint64) 
 	return model_conversion.FromProtoMembersToMembers(contacts.Contacts), nil
 }
 
-func (u userServiceGRPCClient) PutUserById(ctx echo.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
-	user, err := u.userClient.PutUserById(context.TODO(),
+func (u userServiceGRPCClient) PutUserById(ctx context.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
+	user, err := u.userClient.PutUserById(ctx,
 		&generated.PutUserArguments{
 			User:   model_conversion.FromUpdateUserToProtoUpdateUser(updateUser),
 			UserID: userID,
@@ -75,8 +74,8 @@ func (u userServiceGRPCClient) PutUserById(ctx echo.Context, updateUser model.Up
 	return model_conversion.FromProtoUserToUser(user), nil
 }
 
-func (u userServiceGRPCClient) GetAllUsersExceptCurrentUser(ctx echo.Context, userID uint64) ([]model.User, error) {
-	users, err := u.userClient.GetAllUsersExceptCurrentUser(context.TODO(), model_conversion.FromUserIDToProtoUserID(userID))
+func (u userServiceGRPCClient) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.User, error) {
+	users, err := u.userClient.GetAllUsersExceptCurrentUser(ctx, model_conversion.FromUserIDToProtoUserID(userID))
 	if err != nil {
 		return nil, err
 	}

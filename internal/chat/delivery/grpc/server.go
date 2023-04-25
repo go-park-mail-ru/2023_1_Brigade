@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
 	"net"
 	"project/internal/chat"
@@ -35,8 +34,7 @@ func (c *chatsServiceGRPCServer) StartGRPCServer(listenURL string) error {
 }
 
 func (c *chatsServiceGRPCServer) GetChatById(ctx context.Context, chatID *generated.ChatID) (*generated.Chat, error) {
-	var echoCtx echo.Context
-	chat, err := c.chatUsecase.GetChatById(echoCtx, model_conversion.FromProtoChatIDToChatID(chatID))
+	chat, err := c.chatUsecase.GetChatById(ctx, model_conversion.FromProtoChatIDToChatID(chatID))
 	if err != nil {
 		return nil, err
 	}
@@ -45,8 +43,7 @@ func (c *chatsServiceGRPCServer) GetChatById(ctx context.Context, chatID *genera
 }
 
 func (c *chatsServiceGRPCServer) EditChat(ctx context.Context, editChat *generated.EditChatModel) (*generated.Chat, error) {
-	var echoCtx echo.Context
-	chat, err := c.chatUsecase.EditChat(echoCtx, model_conversion.FromProtoEditChatToEditChat(editChat))
+	chat, err := c.chatUsecase.EditChat(ctx, model_conversion.FromProtoEditChatToEditChat(editChat))
 	if err != nil {
 		return nil, err
 	}
@@ -55,9 +52,8 @@ func (c *chatsServiceGRPCServer) EditChat(ctx context.Context, editChat *generat
 }
 
 func (c *chatsServiceGRPCServer) CreateChat(ctx context.Context, createChat *generated.CreateChatArguments) (*generated.Chat, error) {
-	var echoCtx echo.Context
 	chat, err := c.chatUsecase.CreateChat(
-		echoCtx,
+		ctx,
 		model_conversion.FromProtoCreateChatToCreateChat(createChat.Chat),
 		model_conversion.FromProtoUserIDToUserID(createChat.UserID),
 	)
@@ -69,15 +65,13 @@ func (c *chatsServiceGRPCServer) CreateChat(ctx context.Context, createChat *gen
 }
 
 func (c *chatsServiceGRPCServer) DeleteChatById(ctx context.Context, chatID *generated.ChatID) (*empty.Empty, error) {
-	var echoCtx echo.Context
-	err := c.chatUsecase.DeleteChatById(echoCtx, model_conversion.FromProtoChatIDToChatID(chatID))
+	err := c.chatUsecase.DeleteChatById(ctx, model_conversion.FromProtoChatIDToChatID(chatID))
 	return &empty.Empty{}, err
 }
 
 func (c *chatsServiceGRPCServer) CheckExistUserInChat(ctx context.Context, existChat *generated.ExistChatArguments) (*empty.Empty, error) {
-	var echoCtx echo.Context
 	err := c.chatUsecase.CheckExistUserInChat(
-		echoCtx,
+		ctx,
 		model_conversion.FromProtoChatToChat(existChat.Chat),
 		model_conversion.FromProtoUserIDToUserID(existChat.UserID),
 	)
@@ -85,8 +79,7 @@ func (c *chatsServiceGRPCServer) CheckExistUserInChat(ctx context.Context, exist
 }
 
 func (c *chatsServiceGRPCServer) GetListUserChats(ctx context.Context, userID *generated.UserID) (*generated.ArrayChatInListUser, error) {
-	var echoCtx echo.Context
-	chats, err := c.chatUsecase.GetListUserChats(echoCtx, model_conversion.FromProtoUserIDToUserID(userID))
+	chats, err := c.chatUsecase.GetListUserChats(ctx, model_conversion.FromProtoUserIDToUserID(userID))
 	if err != nil {
 		return nil, err
 	}

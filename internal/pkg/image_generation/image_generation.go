@@ -24,7 +24,7 @@ func GenerateAvatar() (string, error) {
 	draw.Draw(img, img.Bounds(), &image.Uniform{color}, image.Point{}, draw.Src)
 
 	// Загружаем изображение из файла
-	file, err := os.Open("../../background.png")
+	file, err := os.Open("../../avatars/background.png")
 	if err != nil {
 		return "", err
 	}

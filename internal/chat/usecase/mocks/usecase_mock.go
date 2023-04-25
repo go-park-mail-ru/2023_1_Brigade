@@ -5,11 +5,11 @@
 package mock_chat
 
 import (
+	context "context"
 	model "project/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	echo "github.com/labstack/echo/v4"
 )
 
 // MockUsecase is a mock of Usecase interface.
@@ -36,7 +36,7 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 }
 
 // CheckExistUserInChat mocks base method.
-func (m *MockUsecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
+func (m *MockUsecase) CheckExistUserInChat(ctx context.Context, chat model.Chat, userID uint64) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CheckExistUserInChat", ctx, chat, userID)
 	ret0, _ := ret[0].(error)
@@ -50,22 +50,22 @@ func (mr *MockUsecaseMockRecorder) CheckExistUserInChat(ctx, chat, userID interf
 }
 
 // CreateChat mocks base method.
-func (m *MockUsecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error) {
+func (m *MockUsecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateChat", ctx, chat)
+	ret := m.ctrl.Call(m, "CreateChat", ctx, chat, userID)
 	ret0, _ := ret[0].(model.Chat)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateChat indicates an expected call of CreateChat.
-func (mr *MockUsecaseMockRecorder) CreateChat(ctx, chat interface{}) *gomock.Call {
+func (mr *MockUsecaseMockRecorder) CreateChat(ctx, chat, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChat", reflect.TypeOf((*MockUsecase)(nil).CreateChat), ctx, chat)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChat", reflect.TypeOf((*MockUsecase)(nil).CreateChat), ctx, chat, userID)
 }
 
 // DeleteChatById mocks base method.
-func (m *MockUsecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
+func (m *MockUsecase) DeleteChatById(ctx context.Context, chatID uint64) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteChatById", ctx, chatID)
 	ret0, _ := ret[0].(error)
@@ -79,7 +79,7 @@ func (mr *MockUsecaseMockRecorder) DeleteChatById(ctx, chatID interface{}) *gomo
 }
 
 // EditChat mocks base method.
-func (m *MockUsecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
+func (m *MockUsecase) EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EditChat", ctx, editChat)
 	ret0, _ := ret[0].(model.Chat)
@@ -94,7 +94,7 @@ func (mr *MockUsecaseMockRecorder) EditChat(ctx, editChat interface{}) *gomock.C
 }
 
 // GetChatById mocks base method.
-func (m *MockUsecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
+func (m *MockUsecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChatById", ctx, chatID)
 	ret0, _ := ret[0].(model.Chat)
@@ -109,7 +109,7 @@ func (mr *MockUsecaseMockRecorder) GetChatById(ctx, chatID interface{}) *gomock.
 }
 
 // GetListUserChats mocks base method.
-func (m *MockUsecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
+func (m *MockUsecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetListUserChats", ctx, userID)
 	ret0, _ := ret[0].([]model.ChatInListUser)

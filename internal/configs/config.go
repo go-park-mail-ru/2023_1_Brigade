@@ -58,6 +58,11 @@ type MessagesService struct {
 }
 
 const DefaultAvatarUrl = `https://avatars.mds.yandex.net/i?id=fb89295056d345e663a7c3c998a0dfd44ea37174-8497272-images-thumbs&n=13&exp=1`
+
 const Chat = 0
 const Group = 1
 const Channel = 2
+
+const Create = 0
+const Edit = 1
+const Delete = 2

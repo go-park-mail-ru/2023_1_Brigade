@@ -32,6 +32,7 @@ func (r repository) GetMessageById(ctx context.Context, messageID string) (model
 func (r repository) GetChatMessages(ctx context.Context, chatID uint64) ([]model.ChatMessages, error) {
 	var chatMessages []model.ChatMessages
 	rows, err := r.db.Query("SELECT * FROM chat_messages WHERE id_chat=$1", chatID)
+	defer rows.Close()
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -54,8 +55,9 @@ func (r repository) GetChatMessages(ctx context.Context, chatID uint64) ([]model
 }
 
 func (r repository) InsertMessageInDB(ctx context.Context, message model.Message) (model.Message, error) {
-	_, err := r.db.NamedQuery(`INSERT INTO message (id, body, id_chat, author_id, created_at) `+
+	rows, err := r.db.NamedQuery(`INSERT INTO message (id, body, id_chat, author_id, created_at) `+
 		`VALUES (:id, :body, :id_chat, :author_id, :created_at)`, message)
+	defer rows.Close()
 
 	if err != nil {
 		return model.Message{}, err

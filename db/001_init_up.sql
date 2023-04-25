@@ -16,10 +16,11 @@ CREATE TABLE IF NOT EXISTS chat (
     );
 
 CREATE TABLE IF NOT EXISTS message (
-                                       id         SERIAL UNIQUE PRIMARY KEY,
+                                       id         VARCHAR(255),
                                        body       VARCHAR(1024), -- валидация, со стороны приложения
     id_chat    INTEGER,
     author_id  INTEGER,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     FOREIGN KEY (author_id) REFERENCES profile(id),
     FOREIGN KEY (id_chat)   REFERENCES chat(id)
     );
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS user_contacts (
 
 CREATE TABLE IF NOT EXISTS chat_messages (
                                              id_chat    INTEGER,
-                                             id_message INTEGER,
+                                             id_message VARCHAR(255),
                                              FOREIGN KEY (id_chat)   REFERENCES chat(id),
     FOREIGN KEY (id_message) REFERENCES message(id)
     );

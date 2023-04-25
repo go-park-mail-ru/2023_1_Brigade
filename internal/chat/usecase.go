@@ -1,15 +1,15 @@
 package chat
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"project/internal/model"
 )
 
 type Usecase interface {
-	GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error)
-	EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error)
-	CreateChat(ctx echo.Context, chat model.CreateChat, userID uint64) (model.Chat, error)
-	DeleteChatById(ctx echo.Context, chatID uint64) error
-	CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error
-	GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error)
+	GetChatById(ctx context.Context, chatID uint64) (model.Chat, error)
+	EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error)
+	CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error)
+	DeleteChatById(ctx context.Context, chatID uint64) error
+	CheckExistUserInChat(ctx context.Context, chat model.Chat, userID uint64) error
+	GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error)
 }

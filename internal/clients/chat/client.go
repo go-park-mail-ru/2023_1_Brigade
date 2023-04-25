@@ -2,7 +2,6 @@ package chat
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
 	"project/internal/chat"
 	"project/internal/generated"
@@ -20,8 +19,8 @@ func NewChatServiceGRPSClient(con *grpc.ClientConn) chat.Usecase {
 	}
 }
 
-func (c chatServiceGRPCClient) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
-	_, err := c.chatClient.CheckExistUserInChat(context.TODO(), &generated.ExistChatArguments{
+func (c chatServiceGRPCClient) CheckExistUserInChat(ctx context.Context, chat model.Chat, userID uint64) error {
+	_, err := c.chatClient.CheckExistUserInChat(ctx, &generated.ExistChatArguments{
 		Chat:   model_conversion.FromChatToProtoChat(chat),
 		UserID: model_conversion.FromUserIDToProtoUserID(userID),
 	})
@@ -29,8 +28,8 @@ func (c chatServiceGRPCClient) CheckExistUserInChat(ctx echo.Context, chat model
 	return err
 }
 
-func (c chatServiceGRPCClient) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
-	chat, err := c.chatClient.GetChatById(context.Background(), model_conversion.FromChatIDToProtoChatID(chatID))
+func (c chatServiceGRPCClient) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
+	chat, err := c.chatClient.GetChatById(ctx, model_conversion.FromChatIDToProtoChatID(chatID))
 	if err != nil {
 		return model.Chat{}, err
 	}
@@ -38,8 +37,8 @@ func (c chatServiceGRPCClient) GetChatById(ctx echo.Context, chatID uint64) (mod
 	return model_conversion.FromProtoChatToChat(chat), nil
 }
 
-func (c chatServiceGRPCClient) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
-	chat, err := c.chatClient.EditChat(context.TODO(), model_conversion.FromEditChatToProtoEditChat(editChat))
+func (c chatServiceGRPCClient) EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error) {
+	chat, err := c.chatClient.EditChat(ctx, model_conversion.FromEditChatToProtoEditChat(editChat))
 
 	if err != nil {
 		return model.Chat{}, err
@@ -48,8 +47,8 @@ func (c chatServiceGRPCClient) EditChat(ctx echo.Context, editChat model.EditCha
 	return model_conversion.FromProtoChatToChat(chat), err
 }
 
-func (c chatServiceGRPCClient) CreateChat(ctx echo.Context, createChat model.CreateChat, userID uint64) (model.Chat, error) {
-	chat, err := c.chatClient.CreateChat(context.TODO(),
+func (c chatServiceGRPCClient) CreateChat(ctx context.Context, createChat model.CreateChat, userID uint64) (model.Chat, error) {
+	chat, err := c.chatClient.CreateChat(ctx,
 		&generated.CreateChatArguments{
 			Chat:   model_conversion.FromCreateChatToProtoCreateChat(createChat),
 			UserID: model_conversion.FromUserIDToProtoUserID(userID),
@@ -62,13 +61,13 @@ func (c chatServiceGRPCClient) CreateChat(ctx echo.Context, createChat model.Cre
 	return model_conversion.FromProtoChatToChat(chat), err
 }
 
-func (c chatServiceGRPCClient) DeleteChatById(ctx echo.Context, chatID uint64) error {
-	_, err := c.chatClient.DeleteChatById(context.TODO(), model_conversion.FromChatIDToProtoChatID(chatID))
+func (c chatServiceGRPCClient) DeleteChatById(ctx context.Context, chatID uint64) error {
+	_, err := c.chatClient.DeleteChatById(ctx, model_conversion.FromChatIDToProtoChatID(chatID))
 	return err
 }
 
-func (c chatServiceGRPCClient) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
-	chats, err := c.chatClient.GetListUserChats(context.TODO(), model_conversion.FromUserIDToProtoUserID(userID))
+func (c chatServiceGRPCClient) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
+	chats, err := c.chatClient.GetListUserChats(ctx, model_conversion.FromUserIDToProtoUserID(userID))
 	if err != nil {
 		return nil, err
 	}

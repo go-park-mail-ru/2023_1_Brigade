@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"project/internal/chat"
@@ -27,7 +28,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	chat, err := u.chatUsecase.GetChatById(ctx, chatID)
+	chat, err := u.chatUsecase.GetChatById(context.TODO(), chatID)
 	if err != nil {
 		return err
 	}
@@ -53,7 +54,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 
 func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
-	listUserChats, err := u.chatUsecase.GetListUserChats(ctx, session.UserId)
+	listUserChats, err := u.chatUsecase.GetListUserChats(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}
@@ -82,7 +83,7 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 
 	session := ctx.Get("session").(model.Session)
 
-	dbChat, err := u.chatUsecase.CreateChat(ctx, chat, session.UserId)
+	dbChat, err := u.chatUsecase.CreateChat(context.TODO(), chat, session.UserId)
 	if err != nil {
 		return err
 	}
@@ -124,7 +125,7 @@ func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 	//	return err
 	//}
 
-	err = u.chatUsecase.DeleteChatById(ctx, chatID)
+	err = u.chatUsecase.DeleteChatById(context.TODO(), chatID)
 	if err != nil {
 		return err
 	}
@@ -139,7 +140,7 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	newChat, err := u.chatUsecase.EditChat(ctx, chat)
+	newChat, err := u.chatUsecase.EditChat(context.TODO(), chat)
 	if err != nil {
 		return err
 	}

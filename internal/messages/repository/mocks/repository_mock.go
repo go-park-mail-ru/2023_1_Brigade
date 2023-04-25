@@ -2,7 +2,7 @@
 // Source: repository.go
 
 // Package mock_messages is a generated GoMock package.
-package mocks
+package mock_messages
 
 import (
 	context "context"
@@ -66,7 +66,7 @@ func (mr *MockRepositoryMockRecorder) GetLastChatMessage(ctx, chatID interface{}
 }
 
 // GetMessageById mocks base method.
-func (m *MockRepository) GetMessageById(ctx context.Context, messageID uint64) (model.Message, error) {
+func (m *MockRepository) GetMessageById(ctx context.Context, messageID string) (model.Message, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetMessageById", ctx, messageID)
 	ret0, _ := ret[0].(model.Message)

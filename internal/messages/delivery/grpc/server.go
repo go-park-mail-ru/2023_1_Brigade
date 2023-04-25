@@ -3,12 +3,11 @@ package grpc
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"google.golang.org/grpc"
 	"net"
 	"project/internal/generated"
 	"project/internal/messages"
+	"project/internal/pkg/model_conversion"
 )
 
 type messagesServiceGRPCServer struct {
@@ -34,20 +33,29 @@ func (c *messagesServiceGRPCServer) StartGRPCServer(listenURL string) error {
 	return c.grpcServer.Serve(lis)
 }
 
-func (c *messagesServiceGRPCServer) SendMessage(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
-	log.Warn("Server send messages", string(bytes.Bytes))
-	var echoCtx echo.Context
-	err := c.messagesUsecase.SendMessage(echoCtx, bytes.Bytes)
-	log.Warn("Server send messages error", err)
+func (c *messagesServiceGRPCServer) SwitchMesssageType(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
+	err := c.messagesUsecase.SwitchMesssageType(ctx, bytes.Bytes)
 	return nil, err
 }
 
+func (c *messagesServiceGRPCServer) SendMessage(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
+	err := c.messagesUsecase.SendMessage(ctx, model_conversion.FromProtoWebSocketMessageToWebSocketMessage(message))
+	return nil, err
+}
+
+func (c *messagesServiceGRPCServer) EditMessage(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *messagesServiceGRPCServer) DeleteMessage(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c *messagesServiceGRPCServer) ReceiveMessage(ctx context.Context, empty *empty.Empty) (*generated.Bytes, error) {
-	var echoCtx echo.Context
-	bytes, err := c.messagesUsecase.ReceiveMessage(echoCtx)
-	log.Warn("Server receive messages", string(bytes))
+	bytes, err := c.messagesUsecase.ReceiveMessage(ctx)
 	if err != nil {
-		log.Warn("Server receive messages error", err)
 		return nil, err
 	}
 

@@ -50,18 +50,18 @@ func (mr *MockUsecaseMockRecorder) CheckExistUserInChat(ctx, chat, userID interf
 }
 
 // CreateChat mocks base method.
-func (m *MockUsecase) CreateChat(ctx echo.Context, chat model.CreateChat) (model.Chat, error) {
+func (m *MockUsecase) CreateChat(ctx echo.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateChat", ctx, chat)
+	ret := m.ctrl.Call(m, "CreateChat", ctx, chat, userID)
 	ret0, _ := ret[0].(model.Chat)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateChat indicates an expected call of CreateChat.
-func (mr *MockUsecaseMockRecorder) CreateChat(ctx, chat interface{}) *gomock.Call {
+func (mr *MockUsecaseMockRecorder) CreateChat(ctx, chat, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChat", reflect.TypeOf((*MockUsecase)(nil).CreateChat), ctx, chat)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChat", reflect.TypeOf((*MockUsecase)(nil).CreateChat), ctx, chat, userID)
 }
 
 // DeleteChatById mocks base method.

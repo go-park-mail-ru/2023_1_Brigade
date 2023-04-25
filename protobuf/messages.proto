@@ -9,8 +9,17 @@ message Bytes {
 }
 
 message Message {
-  uint64 Id = 1;
+  string Id = 1;
   string Body = 2;
   uint64 AuthorId = 3;
   uint64 ChatId = 4;
+  string CreatedAt = 5;
+}
+
+message WebSocketMessage {
+  string Id = 1;
+  uint64 Type = 2;
+  string Body = 3;
+  uint64 AuthorID = 4;
+  uint64 ChatID = 5;
 }

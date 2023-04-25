@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -59,7 +60,7 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonError{Err: myErrors.ErrCookieNotFound})
 			}
 
-			authSession, err := authSessionUsecase.GetSessionByCookie(ctx, session.Value)
+			authSession, err := authSessionUsecase.GetSessionByCookie(context.TODO(), session.Value)
 			if err != nil {
 				return ctx.JSON(httpUtils.StatusCode(err), jsonError{Err: err})
 			}

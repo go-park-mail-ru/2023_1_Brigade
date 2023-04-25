@@ -23,7 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MessagesClient interface {
-	SendMessage(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
+	SwitchMesssageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
+	SendMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
+	EditMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
+	DeleteMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
 	ReceiveMessage(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error)
 }
 
@@ -35,9 +38,36 @@ func NewMessagesClient(cc grpc.ClientConnInterface) MessagesClient {
 	return &messagesClient{cc}
 }
 
-func (c *messagesClient) SendMessage(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *messagesClient) SwitchMesssageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/protobuf.Messages/SwitchMesssageType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagesClient) SendMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/protobuf.Messages/SendMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagesClient) EditMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/protobuf.Messages/EditMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagesClient) DeleteMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/protobuf.Messages/DeleteMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +87,10 @@ func (c *messagesClient) ReceiveMessage(ctx context.Context, in *empty.Empty, op
 // All implementations should embed UnimplementedMessagesServer
 // for forward compatibility
 type MessagesServer interface {
-	SendMessage(context.Context, *Bytes) (*empty.Empty, error)
+	SwitchMesssageType(context.Context, *Bytes) (*empty.Empty, error)
+	SendMessage(context.Context, *WebSocketMessage) (*empty.Empty, error)
+	EditMessage(context.Context, *WebSocketMessage) (*empty.Empty, error)
+	DeleteMessage(context.Context, *WebSocketMessage) (*empty.Empty, error)
 	ReceiveMessage(context.Context, *empty.Empty) (*Bytes, error)
 }
 
@@ -65,8 +98,17 @@ type MessagesServer interface {
 type UnimplementedMessagesServer struct {
 }
 
-func (UnimplementedMessagesServer) SendMessage(context.Context, *Bytes) (*empty.Empty, error) {
+func (UnimplementedMessagesServer) SwitchMesssageType(context.Context, *Bytes) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwitchMesssageType not implemented")
+}
+func (UnimplementedMessagesServer) SendMessage(context.Context, *WebSocketMessage) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+}
+func (UnimplementedMessagesServer) EditMessage(context.Context, *WebSocketMessage) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditMessage not implemented")
+}
+func (UnimplementedMessagesServer) DeleteMessage(context.Context, *WebSocketMessage) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteMessage not implemented")
 }
 func (UnimplementedMessagesServer) ReceiveMessage(context.Context, *empty.Empty) (*Bytes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReceiveMessage not implemented")
@@ -83,8 +125,26 @@ func RegisterMessagesServer(s grpc.ServiceRegistrar, srv MessagesServer) {
 	s.RegisterService(&Messages_ServiceDesc, srv)
 }
 
-func _Messages_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Messages_SwitchMesssageType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Bytes)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagesServer).SwitchMesssageType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Messages/SwitchMesssageType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagesServer).SwitchMesssageType(ctx, req.(*Bytes))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Messages_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebSocketMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -96,7 +156,43 @@ func _Messages_SendMessage_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/protobuf.Messages/SendMessage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).SendMessage(ctx, req.(*Bytes))
+		return srv.(MessagesServer).SendMessage(ctx, req.(*WebSocketMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Messages_EditMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebSocketMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagesServer).EditMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Messages/EditMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagesServer).EditMessage(ctx, req.(*WebSocketMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Messages_DeleteMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebSocketMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagesServer).DeleteMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Messages/DeleteMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagesServer).DeleteMessage(ctx, req.(*WebSocketMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -127,8 +223,20 @@ var Messages_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MessagesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "SwitchMesssageType",
+			Handler:    _Messages_SwitchMesssageType_Handler,
+		},
+		{
 			MethodName: "SendMessage",
 			Handler:    _Messages_SendMessage_Handler,
+		},
+		{
+			MethodName: "EditMessage",
+			Handler:    _Messages_EditMessage_Handler,
+		},
+		{
+			MethodName: "DeleteMessage",
+			Handler:    _Messages_DeleteMessage_Handler,
 		},
 		{
 			MethodName: "ReceiveMessage",

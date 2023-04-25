@@ -124,7 +124,6 @@ func TestHandlers_PutUser_OK(t *testing.T) {
 
 	newUser := model.UpdateUser{
 		Username:        "marcussss",
-		Email:           "marcussss@gmail.com",
 		Status:          "I'm marcussss",
 		CurrentPassword: "baumanka",
 		NewPassword:     "baumanka_cool",

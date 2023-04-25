@@ -1,11 +1,11 @@
 package user
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"project/internal/model"
 )
 
 type Usecase interface {
-	Signup(ctx echo.Context, registrationUser model.RegistrationUser) (model.User, error)
-	Login(ctx echo.Context, loginUser model.LoginUser) (model.User, error)
+	Signup(ctx context.Context, registrationUser model.RegistrationUser) (model.User, error)
+	Login(ctx context.Context, loginUser model.LoginUser) (model.User, error)
 }

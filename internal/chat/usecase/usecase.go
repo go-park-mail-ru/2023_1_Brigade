@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
@@ -24,7 +23,7 @@ func NewChatUsecase(chatRepo chat.Repository, userRepo user.Repository, messages
 	return &usecase{chatRepo: chatRepo, userRepo: userRepo, messagesRepo: messagesRepo}
 }
 
-func (u usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID uint64) error {
+func (u usecase) CheckExistUserInChat(ctx context.Context, chat model.Chat, userID uint64) error {
 	members := chat.Members
 	for _, member := range members {
 		if member.Id == userID {
@@ -35,7 +34,7 @@ func (u usecase) CheckExistUserInChat(ctx echo.Context, chat model.Chat, userID 
 	return nil
 }
 
-func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error) {
+func (u usecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	chat, err := u.chatRepo.GetChatById(context.Background(), chatID)
 	if err != nil {
 		return model.Chat{}, err
@@ -81,7 +80,7 @@ func (u usecase) GetChatById(ctx echo.Context, chatID uint64) (model.Chat, error
 	}, nil
 }
 
-func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
+func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
 	var members []model.User
 	for _, userID := range chat.Members {
 		user, err := u.userRepo.GetUserById(context.Background(), userID)
@@ -108,12 +107,12 @@ func (u usecase) CreateChat(ctx echo.Context, chat model.CreateChat, userID uint
 	return chatFromDB, err
 }
 
-func (u usecase) DeleteChatById(ctx echo.Context, chatID uint64) error {
+func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
 	err := u.chatRepo.DeleteChatById(context.Background(), chatID)
 	return err
 }
 
-func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.ChatInListUser, error) {
+func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
 	userChats, err := u.chatRepo.GetChatsByUserId(context.Background(), userID)
 
@@ -169,7 +168,7 @@ func (u usecase) GetListUserChats(ctx echo.Context, userID uint64) ([]model.Chat
 	return chatsInListUser, nil
 }
 
-func (u usecase) EditChat(ctx echo.Context, editChat model.EditChat) (model.Chat, error) {
+func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error) {
 	chatFromDB, err := u.chatRepo.UpdateChatById(context.Background(), editChat.Title, editChat.Id)
 	if err != nil {
 		return model.Chat{}, err

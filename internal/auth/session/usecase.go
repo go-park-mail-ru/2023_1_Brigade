@@ -1,12 +1,12 @@
 package session
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"project/internal/model"
 )
 
 type Usecase interface {
-	GetSessionByCookie(ctx echo.Context, cookie string) (model.Session, error)
-	CreateSessionById(ctx echo.Context, userID uint64) (model.Session, error)
-	DeleteSessionByCookie(ctx echo.Context, cookie string) error
+	GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error)
+	CreateSessionById(ctx context.Context, userID uint64) (model.Session, error)
+	DeleteSessionByCookie(ctx context.Context, cookie string) error
 }

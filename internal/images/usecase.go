@@ -1,10 +1,10 @@
 package images
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
 	"mime/multipart"
 )
 
 type Usecase interface {
-	LoadImage(ctx echo.Context, file multipart.File, filename string, userID uint64) (string, error)
+	LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (string, error)
 }

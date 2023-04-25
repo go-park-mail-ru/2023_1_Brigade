@@ -18,7 +18,7 @@ import (
 )
 
 func init() {
-	envPath := "../../.env"
+	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
 		log.Println("No .env file found")
 	}

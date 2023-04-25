@@ -1,8 +1,10 @@
 package model_conversion
 
 import (
+	log "github.com/sirupsen/logrus"
 	protobuf "project/internal/generated"
 	"project/internal/model"
+	"time"
 )
 
 func FromUserIDToProtoUserID(userID uint64) *protobuf.UserID {
@@ -32,15 +34,6 @@ func FromProtoUserToUser(user *protobuf.User) model.User {
 	}
 }
 
-func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
-	return model.Message{
-		Id:       message.Id,
-		Body:     message.Body,
-		AuthorId: message.AuthorId,
-		ChatId:   message.ChatId,
-	}
-}
-
 func FromUserToProtoUser(user model.User) *protobuf.User {
 	return &protobuf.User{
 		Id:       user.Id,
@@ -52,12 +45,49 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 	}
 }
 
+func FromProtoWebSocketMessageToWebSocketMessage(message *protobuf.WebSocketMessage) model.WebSocketMessage {
+	return model.WebSocketMessage{
+		Id:       message.Id,
+		Type:     message.Type,
+		Body:     message.Body,
+		AuthorID: message.AuthorID,
+		ChatID:   message.ChatID,
+	}
+}
+
+func FromWebSocketMessageToProtoWebSocketMessage(message model.WebSocketMessage) *protobuf.WebSocketMessage {
+	return &protobuf.WebSocketMessage{
+		Id:       message.Id,
+		Type:     message.Type,
+		Body:     message.Body,
+		AuthorID: message.AuthorID,
+		ChatID:   message.ChatID,
+	}
+}
+
+func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
+	str := "2022-01-01T12:00:00-07:00"
+	time, err := time.Parse(time.RFC3339, str)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return model.Message{
+		Id:        message.Id,
+		Body:      message.Body,
+		AuthorId:  message.AuthorId,
+		ChatId:    message.ChatId,
+		CreatedAt: time,
+	}
+}
+
 func FromMessageToProtoMessage(message model.Message) *protobuf.Message {
 	return &protobuf.Message{
-		Id:       message.Id,
-		Body:     message.Body,
-		AuthorId: message.AuthorId,
-		ChatId:   message.ChatId,
+		Id:        message.Id,
+		Body:      message.Body,
+		AuthorId:  message.AuthorId,
+		ChatId:    message.ChatId,
+		CreatedAt: message.CreatedAt.String(),
 	}
 }
 

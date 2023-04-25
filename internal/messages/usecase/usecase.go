@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/centrifugal/centrifuge-go"
-	"github.com/labstack/echo/v4"
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -17,6 +17,7 @@ import (
 	consumerUsecase "project/internal/qaas/send_messages/consumer/usecase"
 	"project/internal/qaas/send_messages/producer"
 	producerUsecase "project/internal/qaas/send_messages/producer/usecase"
+	"time"
 )
 
 type usecase struct {
@@ -25,6 +26,16 @@ type usecase struct {
 	producer     producer.Usecase
 	consumer     consumer.Usecase
 	client       *centrifuge.Client
+}
+
+func (u usecase) EditMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u usecase) DeleteMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
@@ -46,10 +57,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 
 	go func() {
 		<-signals
-		err := c.Close
-		if err != nil {
-			log.Error(err)
-		}
+		_ = c.Close
 		log.Fatal()
 	}()
 
@@ -84,24 +92,41 @@ func (u usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
 	return err
 }
 
-func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) error {
+func (u usecase) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error {
 	var webSocketMessage model.WebSocketMessage
 	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
 	if err != nil {
 		return err
 	}
 
+	switch webSocketMessage.Type {
+	case configs.Create:
+		return u.SendMessage(ctx, webSocketMessage)
+	case configs.Edit:
+		return u.EditMessage(ctx, webSocketMessage)
+	case configs.Delete:
+		return u.DeleteMessage(ctx, webSocketMessage)
+	}
+
+	return errors.New("не выбран ни один из трех 0, 1, 2")
+}
+
+func (u usecase) SendMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
 	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), webSocketMessage.ChatID)
 	if err != nil {
 		return err
 	}
 
+	id := uuid.New().String()
+	createdAt := time.Now()
+
 	go func() {
 		message := model.Message{
-			Id:       0,
-			Body:     webSocketMessage.Body,
-			AuthorId: webSocketMessage.AuthorID,
-			ChatId:   webSocketMessage.ChatID,
+			Id:        id,
+			Body:      webSocketMessage.Body,
+			AuthorId:  webSocketMessage.AuthorID,
+			ChatId:    webSocketMessage.ChatID,
+			CreatedAt: createdAt,
 		}
 
 		_, err = u.messagesRepo.InsertMessageInDB(context.Background(), message)
@@ -116,10 +141,12 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 		}
 
 		producerMessage := model.ProducerMessage{
+			Id:         id,
 			Body:       webSocketMessage.Body,
 			AuthorId:   webSocketMessage.AuthorID,
 			ChatID:     webSocketMessage.ChatID,
 			ReceiverID: member.MemberId,
+			CreatedAt:  createdAt,
 		}
 		jsonProducerMessage, err := json.Marshal(producerMessage)
 		if err != nil {
@@ -127,6 +154,11 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 		}
 
 		err = u.producer.ProduceMessage(jsonProducerMessage)
+		if err != nil {
+			return err
+		}
+
+		jsonWebSocketMessage, err := json.Marshal(webSocketMessage)
 		if err != nil {
 			return err
 		}
@@ -140,7 +172,7 @@ func (u usecase) SendMessage(ctx echo.Context, jsonWebSocketMessage []byte) erro
 	return nil
 }
 
-func (u usecase) ReceiveMessage(ctx echo.Context) ([]byte, error) {
+func (u usecase) ReceiveMessage(ctx context.Context) ([]byte, error) {
 	var message model.ProducerMessage
 	jsonMessage := u.consumer.ConsumeMessage()
 

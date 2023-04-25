@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
 	"net"
 	"project/internal/generated"
@@ -35,20 +34,17 @@ func (c *usersServiceGRPCServer) StartGRPCServer(listenURL string) error {
 }
 
 func (c *usersServiceGRPCServer) DeleteUserById(ctx context.Context, id *generated.UserID) (*empty.Empty, error) {
-	var echoCtx echo.Context
-	err := c.userUsecase.DeleteUserById(echoCtx, model_conversion.FromProtoUserIDToUserID(id))
+	err := c.userUsecase.DeleteUserById(ctx, model_conversion.FromProtoUserIDToUserID(id))
 	return nil, err
 }
 
 func (c *usersServiceGRPCServer) CheckExistUserById(ctx context.Context, id *generated.UserID) (*empty.Empty, error) {
-	var echoCtx echo.Context
-	err := c.userUsecase.CheckExistUserById(echoCtx, model_conversion.FromProtoUserIDToUserID(id))
+	err := c.userUsecase.CheckExistUserById(ctx, model_conversion.FromProtoUserIDToUserID(id))
 	return nil, err
 }
 
 func (c *usersServiceGRPCServer) GetUserById(ctx context.Context, id *generated.UserID) (*generated.User, error) {
-	var echoCtx echo.Context
-	user, err := c.userUsecase.GetUserById(echoCtx, model_conversion.FromProtoUserIDToUserID(id))
+	user, err := c.userUsecase.GetUserById(ctx, model_conversion.FromProtoUserIDToUserID(id))
 	if err != nil {
 		return nil, err
 	}
@@ -57,8 +53,7 @@ func (c *usersServiceGRPCServer) GetUserById(ctx context.Context, id *generated.
 }
 
 func (c *usersServiceGRPCServer) AddUserContact(ctx context.Context, arguments *generated.AddUserContactArguments) (*generated.Contacts, error) {
-	var echoCtx echo.Context
-	contacts, err := c.userUsecase.AddUserContact(echoCtx, arguments.UserID, arguments.ContactID)
+	contacts, err := c.userUsecase.AddUserContact(ctx, arguments.UserID, arguments.ContactID)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +62,7 @@ func (c *usersServiceGRPCServer) AddUserContact(ctx context.Context, arguments *
 }
 
 func (c *usersServiceGRPCServer) GetUserContacts(ctx context.Context, id *generated.UserID) (*generated.Contacts, error) {
-	var echoCtx echo.Context
-	contacts, err := c.userUsecase.GetUserContacts(echoCtx, model_conversion.FromProtoUserIDToUserID(id))
+	contacts, err := c.userUsecase.GetUserContacts(ctx, model_conversion.FromProtoUserIDToUserID(id))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +71,7 @@ func (c *usersServiceGRPCServer) GetUserContacts(ctx context.Context, id *genera
 }
 
 func (c *usersServiceGRPCServer) PutUserById(ctx context.Context, arguments *generated.PutUserArguments) (*generated.User, error) {
-	var echoCtx echo.Context
-	user, err := c.userUsecase.PutUserById(echoCtx, model_conversion.FromProtoUpdateUserToUpdateUser(arguments.User), arguments.UserID)
+	user, err := c.userUsecase.PutUserById(ctx, model_conversion.FromProtoUpdateUserToUpdateUser(arguments.User), arguments.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +80,7 @@ func (c *usersServiceGRPCServer) PutUserById(ctx context.Context, arguments *gen
 }
 
 func (c *usersServiceGRPCServer) GetAllUsersExceptCurrentUser(ctx context.Context, id *generated.UserID) (*generated.Contacts, error) {
-	var echoCtx echo.Context
-	contacts, err := c.userUsecase.GetAllUsersExceptCurrentUser(echoCtx, model_conversion.FromProtoUserIDToUserID(id))
+	contacts, err := c.userUsecase.GetAllUsersExceptCurrentUser(ctx, model_conversion.FromProtoUserIDToUserID(id))
 	if err != nil {
 		return nil, err
 	}

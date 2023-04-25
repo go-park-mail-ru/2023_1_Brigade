@@ -77,7 +77,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 		log.Error(err)
 	}
 
-	consumer.StartConsumeMessages()
+	consumer.StartConsumeMessages(context.Background())
 
 	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer, client: c}
 }
@@ -174,7 +174,7 @@ func (u usecase) SendMessage(ctx context.Context, webSocketMessage model.WebSock
 
 func (u usecase) ReceiveMessage(ctx context.Context) ([]byte, error) {
 	var message model.ProducerMessage
-	jsonMessage := u.consumer.ConsumeMessage()
+	jsonMessage := u.consumer.ConsumeMessage(ctx)
 
 	err := json.Unmarshal(jsonMessage, &message)
 	if err != nil {

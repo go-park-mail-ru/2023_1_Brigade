@@ -2,11 +2,12 @@ package usecase
 
 import (
 	"context"
-	"github.com/Shopify/sarama"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"project/internal/qaas/send_messages/consumer"
+
+	"github.com/Shopify/sarama"
+	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -54,9 +55,8 @@ func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
 	return msg
 }
 
-func (u *usecase) StartConsumeMessages() {
+func (u *usecase) StartConsumeMessages(ctx context.Context) {
 	handler := messageHandler{messagesChan: u.messagesChan}
-	ctx := context.Background()
 	topic := []string{"message"}
 
 	signals := make(chan os.Signal)

@@ -56,7 +56,7 @@ func SetCookie(ctx echo.Context, session model.Session) {
 		Value:    session.Cookie,
 		HttpOnly: true,
 		Path:     "/",
-		Expires:  time.Now().Add(10 * time.Hour),
+		Expires:  time.Now().Add(48 * time.Hour),
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	}

@@ -3,6 +3,7 @@ package model_conversion
 import (
 	protobuf "project/internal/generated"
 	"project/internal/model"
+	"time"
 )
 
 func FromUserIDToProtoUserID(userID uint64) *protobuf.UserID {
@@ -62,6 +63,7 @@ func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage
 		AuthorId:   message.AuthorId,
 		ChatID:     message.ChatId,
 		ReceiverID: message.ReceiverID,
+		CreatedAt:  time.Now(),
 		//CreatedAt:  time,
 	}
 }
@@ -74,6 +76,7 @@ func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *p
 		AuthorId:   message.AuthorId,
 		ChatId:     message.ChatID,
 		ReceiverID: message.ReceiverID,
+		CreatedAt:  "",
 		//CreatedAt:  message.CreatedAt.String(),
 	}
 }
@@ -91,20 +94,22 @@ func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
 	//}
 
 	return model.Message{
-		Id:       message.Id,
-		Body:     message.Body,
-		AuthorId: message.AuthorId,
-		ChatId:   message.ChatId,
+		Id:        message.Id,
+		Body:      message.Body,
+		AuthorId:  message.AuthorId,
+		ChatId:    message.ChatId,
+		CreatedAt: time.Now(),
 		//CreatedAt: time,
 	}
 }
 
 func FromMessageToProtoMessage(message model.Message) *protobuf.Message {
 	return &protobuf.Message{
-		Id:       message.Id,
-		Body:     message.Body,
-		AuthorId: message.AuthorId,
-		ChatId:   message.ChatId,
+		Id:        message.Id,
+		Body:      message.Body,
+		AuthorId:  message.AuthorId,
+		ChatId:    message.ChatId,
+		CreatedAt: "",
 		//CreatedAt: message.CreatedAt.String(),
 	}
 }

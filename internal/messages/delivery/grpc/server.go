@@ -33,8 +33,8 @@ func (c *messagesServiceGRPCServer) StartGRPCServer(listenURL string) error {
 	return c.grpcServer.Serve(lis)
 }
 
-func (c *messagesServiceGRPCServer) SwitchMesssageType(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
-	err := c.messagesUsecase.SwitchMesssageType(ctx, bytes.Bytes)
+func (c *messagesServiceGRPCServer) SwitchMessageType(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
+	err := c.messagesUsecase.SwitchMessageType(ctx, bytes.Bytes)
 	return nil, err
 }
 

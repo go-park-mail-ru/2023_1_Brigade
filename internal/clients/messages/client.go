@@ -20,8 +20,8 @@ func NewMessagesServiceGRPSClient(con *grpc.ClientConn) messages.Usecase {
 	}
 }
 
-func (m messagesServiceGRPCClient) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error {
-	_, err := m.messagesClient.SwitchMesssageType(ctx, &generated.Bytes{Bytes: jsonWebSocketMessage})
+func (m messagesServiceGRPCClient) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
+	_, err := m.messagesClient.SwitchMessageType(ctx, &generated.Bytes{Bytes: jsonWebSocketMessage})
 	return err
 }
 

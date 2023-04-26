@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MessagesClient interface {
-	SwitchMesssageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
+	SwitchMessageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
 	PutInProducer(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error)
 	PullFromConsumer(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error)
 }
@@ -36,9 +36,9 @@ func NewMessagesClient(cc grpc.ClientConnInterface) MessagesClient {
 	return &messagesClient{cc}
 }
 
-func (c *messagesClient) SwitchMesssageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *messagesClient) SwitchMessageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/protobuf.Messages/SwitchMesssageType", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Messages/SwitchMessageType", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (c *messagesClient) PullFromConsumer(ctx context.Context, in *empty.Empty, 
 // All implementations should embed UnimplementedMessagesServer
 // for forward compatibility
 type MessagesServer interface {
-	SwitchMesssageType(context.Context, *Bytes) (*empty.Empty, error)
+	SwitchMessageType(context.Context, *Bytes) (*empty.Empty, error)
 	PutInProducer(context.Context, *ProducerMessage) (*empty.Empty, error)
 	PullFromConsumer(context.Context, *empty.Empty) (*Bytes, error)
 }
@@ -76,8 +76,8 @@ type MessagesServer interface {
 type UnimplementedMessagesServer struct {
 }
 
-func (UnimplementedMessagesServer) SwitchMesssageType(context.Context, *Bytes) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SwitchMesssageType not implemented")
+func (UnimplementedMessagesServer) SwitchMessageType(context.Context, *Bytes) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwitchMessageType not implemented")
 }
 func (UnimplementedMessagesServer) PutInProducer(context.Context, *ProducerMessage) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutInProducer not implemented")
@@ -97,20 +97,20 @@ func RegisterMessagesServer(s grpc.ServiceRegistrar, srv MessagesServer) {
 	s.RegisterService(&Messages_ServiceDesc, srv)
 }
 
-func _Messages_SwitchMesssageType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Messages_SwitchMessageType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Bytes)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MessagesServer).SwitchMesssageType(ctx, in)
+		return srv.(MessagesServer).SwitchMessageType(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protobuf.Messages/SwitchMesssageType",
+		FullMethod: "/protobuf.Messages/SwitchMessageType",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).SwitchMesssageType(ctx, req.(*Bytes))
+		return srv.(MessagesServer).SwitchMessageType(ctx, req.(*Bytes))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -159,8 +159,8 @@ var Messages_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MessagesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SwitchMesssageType",
-			Handler:    _Messages_SwitchMesssageType_Handler,
+			MethodName: "SwitchMessageType",
+			Handler:    _Messages_SwitchMessageType_Handler,
 		},
 		{
 			MethodName: "PutInProducer",

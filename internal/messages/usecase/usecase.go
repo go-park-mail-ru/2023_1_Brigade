@@ -82,7 +82,7 @@ func (u usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
 	return err
 }
 
-func (u usecase) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error {
+func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
 	var webSocketMessage model.WebSocketMessage
 	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
 	if err != nil {

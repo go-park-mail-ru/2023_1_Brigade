@@ -83,7 +83,7 @@ services:
       - "6379:6379"
     command: redis-server --appendonly yes --replica-read-only no
     volumes:
-      - redis_data:./storage/redis/data
+      - redis_data:/data
     networks:
       - backend-network
 

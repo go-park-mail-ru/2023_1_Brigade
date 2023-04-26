@@ -25,8 +25,8 @@ func (m messagesServiceGRPCClient) SwitchMessageType(ctx context.Context, jsonWe
 	return err
 }
 
-func (m messagesServiceGRPCClient) PutInProducer(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	_, err := m.messagesClient.PutInProducer(ctx, model_conversion.FromWebSocketMessageToProtoWebSocketMessage(webSocketMessage))
+func (m messagesServiceGRPCClient) PutInProducer(ctx context.Context, webSocketMessage model.ProducerMessage) error {
+	_, err := m.messagesClient.PutInProducer(ctx, model_conversion.FromProducerMessageToProtoProducerMessage(webSocketMessage))
 	return err
 }
 

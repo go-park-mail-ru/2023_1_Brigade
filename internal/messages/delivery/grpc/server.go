@@ -38,8 +38,8 @@ func (c *messagesServiceGRPCServer) SwitchMessageType(ctx context.Context, bytes
 	return nil, err
 }
 
-func (c *messagesServiceGRPCServer) PutInProducer(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
-	err := c.messagesUsecase.PutInProducer(ctx, model_conversion.FromProtoWebSocketMessageToWebSocketMessage(message))
+func (c *messagesServiceGRPCServer) PutInProducer(ctx context.Context, message *generated.ProducerMessage) (*empty.Empty, error) {
+	err := c.messagesUsecase.PutInProducer(ctx, model_conversion.FromProtoProducerMessageToProducerMessage(message))
 	return nil, err
 }
 

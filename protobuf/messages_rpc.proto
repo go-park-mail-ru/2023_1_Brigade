@@ -9,6 +9,6 @@ import "protobuf/messages.proto";
 
 service Messages {
   rpc SwitchMessageType(protobuf.Bytes) returns(google.protobuf.Empty) {}
-  rpc PutInProducer(protobuf.WebSocketMessage) returns(google.protobuf.Empty) {}
+  rpc PutInProducer(protobuf.ProducerMessage) returns(google.protobuf.Empty) {}
   rpc PullFromConsumer(google.protobuf.Empty) returns(Bytes) {}
 }

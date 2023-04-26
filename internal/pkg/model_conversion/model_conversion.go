@@ -45,23 +45,23 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 	}
 }
 
-func FromProtoWebSocketMessageToWebSocketMessage(message *protobuf.WebSocketMessage) model.WebSocketMessage {
-	return model.WebSocketMessage{
+func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
+	return model.ProducerMessage{
 		Id:       message.Id,
 		Type:     message.Type,
 		Body:     message.Body,
-		AuthorID: message.AuthorID,
-		ChatID:   message.ChatID,
+		AuthorId: message.AuthorId,
+		ChatID:   message.ChatId,
 	}
 }
 
-func FromWebSocketMessageToProtoWebSocketMessage(message model.WebSocketMessage) *protobuf.WebSocketMessage {
-	return &protobuf.WebSocketMessage{
+func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *protobuf.ProducerMessage {
+	return &protobuf.ProducerMessage{
 		Id:       message.Id,
 		Type:     message.Type,
 		Body:     message.Body,
-		AuthorID: message.AuthorID,
-		ChatID:   message.ChatID,
+		AuthorId: message.AuthorId,
+		ChatId:   message.ChatID,
 	}
 }
 

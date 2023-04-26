@@ -24,7 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MessagesClient interface {
 	SwitchMessageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
-	PutInProducer(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
+	PutInProducer(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error)
 	PullFromConsumer(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error)
 }
 
@@ -45,7 +45,7 @@ func (c *messagesClient) SwitchMessageType(ctx context.Context, in *Bytes, opts 
 	return out, nil
 }
 
-func (c *messagesClient) PutInProducer(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *messagesClient) PutInProducer(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/protobuf.Messages/PutInProducer", in, out, opts...)
 	if err != nil {
@@ -68,7 +68,7 @@ func (c *messagesClient) PullFromConsumer(ctx context.Context, in *empty.Empty, 
 // for forward compatibility
 type MessagesServer interface {
 	SwitchMessageType(context.Context, *Bytes) (*empty.Empty, error)
-	PutInProducer(context.Context, *WebSocketMessage) (*empty.Empty, error)
+	PutInProducer(context.Context, *ProducerMessage) (*empty.Empty, error)
 	PullFromConsumer(context.Context, *empty.Empty) (*Bytes, error)
 }
 
@@ -79,7 +79,7 @@ type UnimplementedMessagesServer struct {
 func (UnimplementedMessagesServer) SwitchMessageType(context.Context, *Bytes) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SwitchMessageType not implemented")
 }
-func (UnimplementedMessagesServer) PutInProducer(context.Context, *WebSocketMessage) (*empty.Empty, error) {
+func (UnimplementedMessagesServer) PutInProducer(context.Context, *ProducerMessage) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutInProducer not implemented")
 }
 func (UnimplementedMessagesServer) PullFromConsumer(context.Context, *empty.Empty) (*Bytes, error) {
@@ -116,7 +116,7 @@ func _Messages_SwitchMessageType_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _Messages_PutInProducer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WebSocketMessage)
+	in := new(ProducerMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func _Messages_PutInProducer_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/protobuf.Messages/PutInProducer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).PutInProducer(ctx, req.(*WebSocketMessage))
+		return srv.(MessagesServer).PutInProducer(ctx, req.(*ProducerMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }

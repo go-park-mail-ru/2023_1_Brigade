@@ -20,6 +20,7 @@ type WebSocketMessage struct {
 
 type ProducerMessage struct {
 	Id         string    `json:"id"          db:"id"`
+	Type       uint64    `json:"type"        db:"type"`
 	Body       string    `json:"body"        db:"body"`
 	AuthorId   uint64    `json:"author_id"   db:"author_id"`
 	ChatID     uint64    `json:"chat_id"     db:"chat_id"`

@@ -91,14 +91,20 @@ func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []b
 
 	switch webSocketMessage.Type {
 	case configs.Create:
-		return u.PutInProducer(ctx, webSocketMessage)
+		return u.PutInProducer(ctx, model.ProducerMessage{
+			Id:       webSocketMessage.Id,
+			Type:     webSocketMessage.Type,
+			Body:     webSocketMessage.Body,
+			AuthorId: webSocketMessage.AuthorID,
+			ChatID:   webSocketMessage.ChatID,
+		})
 	}
 
 	return errors.New("не выбран ни один из трех 0, 1, 2")
 }
 
-func (u usecase) PutInProducer(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), webSocketMessage.ChatID)
+func (u usecase) PutInProducer(ctx context.Context, producerMessage model.ProducerMessage) error {
+	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), producerMessage.ChatID)
 	if err != nil {
 		return err
 	}
@@ -109,9 +115,9 @@ func (u usecase) PutInProducer(ctx context.Context, webSocketMessage model.WebSo
 	go func() {
 		message := model.Message{
 			Id:        id,
-			Body:      webSocketMessage.Body,
-			AuthorId:  webSocketMessage.AuthorID,
-			ChatId:    webSocketMessage.ChatID,
+			Body:      producerMessage.Body,
+			AuthorId:  producerMessage.AuthorId,
+			ChatId:    producerMessage.ChatID,
 			CreatedAt: createdAt,
 		}
 
@@ -122,15 +128,15 @@ func (u usecase) PutInProducer(ctx context.Context, webSocketMessage model.WebSo
 	}()
 
 	for _, member := range members {
-		if member.MemberId == webSocketMessage.AuthorID {
+		if member.MemberId == producerMessage.AuthorId {
 			continue
 		}
 
 		producerMessage := model.ProducerMessage{
 			Id:         id,
-			Body:       webSocketMessage.Body,
-			AuthorId:   webSocketMessage.AuthorID,
-			ChatID:     webSocketMessage.ChatID,
+			Body:       producerMessage.Body,
+			AuthorId:   producerMessage.AuthorId,
+			ChatID:     producerMessage.ChatID,
 			ReceiverID: member.MemberId,
 			CreatedAt:  createdAt,
 		}
@@ -144,7 +150,7 @@ func (u usecase) PutInProducer(ctx context.Context, webSocketMessage model.WebSo
 			return err
 		}
 
-		jsonWebSocketMessage, err := json.Marshal(webSocketMessage)
+		jsonWebSocketMessage, err := json.Marshal(producerMessage)
 		if err != nil {
 			return err
 		}

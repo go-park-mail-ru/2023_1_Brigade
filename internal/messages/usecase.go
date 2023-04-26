@@ -7,8 +7,6 @@ import (
 
 type Usecase interface {
 	SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error
-	SendMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error
-	EditMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error
-	DeleteMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error
-	ReceiveMessage(ctx context.Context) ([]byte, error)
+	PutInProducer(ctx context.Context, producerMessage model.ProducerMessage) error
+	PullFromConsumer(ctx context.Context) ([]byte, error)
 }

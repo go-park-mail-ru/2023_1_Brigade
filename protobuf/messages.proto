@@ -23,3 +23,13 @@ message WebSocketMessage {
   uint64 AuthorID = 4;
   uint64 ChatID = 5;
 }
+
+message ProducerMessage {
+  string Id = 1;
+  uint64 Type = 2;
+  string Body = 3;
+  uint64 AuthorId = 4;
+  uint64 ChatId = 5;
+  uint64 ReceiverID = 6;
+  string CreatedAt = 7;
+}

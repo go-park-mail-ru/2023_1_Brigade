@@ -18,6 +18,30 @@ func NewMessagesMemoryRepository(db *sqlx.DB) messages.Repository {
 	return &repository{db: db}
 }
 
+func (r repository) EditMessageById(ctx context.Context, producerMessage model.ProducerMessage) (model.Message, error) {
+	var message model.Message
+	err := r.db.Get(&message, "UPDATE message SET body = $1, created_at = $2 WHERE id = $3 RETURNING *", producerMessage.Body, producerMessage.CreatedAt, producerMessage.Id)
+	if err != nil {
+		return model.Message{}, err
+	}
+
+	return message, nil
+}
+
+func (r repository) DeleteMessageById(ctx context.Context, messageID string) error {
+	_, err := r.db.Exec("DELETE FROM message WHERE id=$1", messageID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return myErrors.ErrMessageNotFound
+	}
+
+	_, err = r.db.Exec("DELETE FROM chat_messages WHERE id_message=$1", messageID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return myErrors.ErrMessageNotFound
+	}
+
+	return nil
+}
+
 func (r repository) GetMessageById(ctx context.Context, messageID string) (model.Message, error) {
 	var message model.Message
 	err := r.db.Get(&message, "SELECT * FROM message WHERE id=$1", messageID)

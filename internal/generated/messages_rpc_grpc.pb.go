@@ -24,10 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MessagesClient interface {
 	SwitchMesssageType(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
-	SendMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
-	EditMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
-	DeleteMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error)
-	ReceiveMessage(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error)
+	PutInProducer(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error)
+	PullFromConsumer(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error)
 }
 
 type messagesClient struct {
@@ -47,36 +45,18 @@ func (c *messagesClient) SwitchMesssageType(ctx context.Context, in *Bytes, opts
 	return out, nil
 }
 
-func (c *messagesClient) SendMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *messagesClient) PutInProducer(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/protobuf.Messages/SendMessage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Messages/PutInProducer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *messagesClient) EditMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/protobuf.Messages/EditMessage", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *messagesClient) DeleteMessage(ctx context.Context, in *WebSocketMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/protobuf.Messages/DeleteMessage", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *messagesClient) ReceiveMessage(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error) {
+func (c *messagesClient) PullFromConsumer(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error) {
 	out := new(Bytes)
-	err := c.cc.Invoke(ctx, "/protobuf.Messages/ReceiveMessage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Messages/PullFromConsumer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,10 +68,8 @@ func (c *messagesClient) ReceiveMessage(ctx context.Context, in *empty.Empty, op
 // for forward compatibility
 type MessagesServer interface {
 	SwitchMesssageType(context.Context, *Bytes) (*empty.Empty, error)
-	SendMessage(context.Context, *WebSocketMessage) (*empty.Empty, error)
-	EditMessage(context.Context, *WebSocketMessage) (*empty.Empty, error)
-	DeleteMessage(context.Context, *WebSocketMessage) (*empty.Empty, error)
-	ReceiveMessage(context.Context, *empty.Empty) (*Bytes, error)
+	PutInProducer(context.Context, *ProducerMessage) (*empty.Empty, error)
+	PullFromConsumer(context.Context, *empty.Empty) (*Bytes, error)
 }
 
 // UnimplementedMessagesServer should be embedded to have forward compatible implementations.
@@ -101,17 +79,11 @@ type UnimplementedMessagesServer struct {
 func (UnimplementedMessagesServer) SwitchMesssageType(context.Context, *Bytes) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SwitchMesssageType not implemented")
 }
-func (UnimplementedMessagesServer) SendMessage(context.Context, *WebSocketMessage) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+func (UnimplementedMessagesServer) PutInProducer(context.Context, *ProducerMessage) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutInProducer not implemented")
 }
-func (UnimplementedMessagesServer) EditMessage(context.Context, *WebSocketMessage) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EditMessage not implemented")
-}
-func (UnimplementedMessagesServer) DeleteMessage(context.Context, *WebSocketMessage) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteMessage not implemented")
-}
-func (UnimplementedMessagesServer) ReceiveMessage(context.Context, *empty.Empty) (*Bytes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReceiveMessage not implemented")
+func (UnimplementedMessagesServer) PullFromConsumer(context.Context, *empty.Empty) (*Bytes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PullFromConsumer not implemented")
 }
 
 // UnsafeMessagesServer may be embedded to opt out of forward compatibility for this service.
@@ -143,74 +115,38 @@ func _Messages_SwitchMesssageType_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Messages_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WebSocketMessage)
+func _Messages_PutInProducer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProducerMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MessagesServer).SendMessage(ctx, in)
+		return srv.(MessagesServer).PutInProducer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protobuf.Messages/SendMessage",
+		FullMethod: "/protobuf.Messages/PutInProducer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).SendMessage(ctx, req.(*WebSocketMessage))
+		return srv.(MessagesServer).PutInProducer(ctx, req.(*ProducerMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Messages_EditMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WebSocketMessage)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MessagesServer).EditMessage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.Messages/EditMessage",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).EditMessage(ctx, req.(*WebSocketMessage))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Messages_DeleteMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WebSocketMessage)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MessagesServer).DeleteMessage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.Messages/DeleteMessage",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).DeleteMessage(ctx, req.(*WebSocketMessage))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Messages_ReceiveMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Messages_PullFromConsumer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(empty.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MessagesServer).ReceiveMessage(ctx, in)
+		return srv.(MessagesServer).PullFromConsumer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protobuf.Messages/ReceiveMessage",
+		FullMethod: "/protobuf.Messages/PullFromConsumer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessagesServer).ReceiveMessage(ctx, req.(*empty.Empty))
+		return srv.(MessagesServer).PullFromConsumer(ctx, req.(*empty.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -227,20 +163,12 @@ var Messages_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Messages_SwitchMesssageType_Handler,
 		},
 		{
-			MethodName: "SendMessage",
-			Handler:    _Messages_SendMessage_Handler,
+			MethodName: "PutInProducer",
+			Handler:    _Messages_PutInProducer_Handler,
 		},
 		{
-			MethodName: "EditMessage",
-			Handler:    _Messages_EditMessage_Handler,
-		},
-		{
-			MethodName: "DeleteMessage",
-			Handler:    _Messages_DeleteMessage_Handler,
-		},
-		{
-			MethodName: "ReceiveMessage",
-			Handler:    _Messages_ReceiveMessage_Handler,
+			MethodName: "PullFromConsumer",
+			Handler:    _Messages_PullFromConsumer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

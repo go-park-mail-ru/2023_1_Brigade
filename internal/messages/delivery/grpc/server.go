@@ -38,23 +38,13 @@ func (c *messagesServiceGRPCServer) SwitchMesssageType(ctx context.Context, byte
 	return nil, err
 }
 
-func (c *messagesServiceGRPCServer) SendMessage(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
-	err := c.messagesUsecase.SendMessage(ctx, model_conversion.FromProtoWebSocketMessageToWebSocketMessage(message))
+func (c *messagesServiceGRPCServer) PutInProducer(ctx context.Context, message *generated.ProducerMessage) (*empty.Empty, error) {
+	err := c.messagesUsecase.PutInProducer(ctx, model_conversion.FromProtoProducerMessageToProducerMessage(message))
 	return nil, err
 }
 
-func (c *messagesServiceGRPCServer) EditMessage(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (c *messagesServiceGRPCServer) DeleteMessage(ctx context.Context, message *generated.WebSocketMessage) (*empty.Empty, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (c *messagesServiceGRPCServer) ReceiveMessage(ctx context.Context, empty *empty.Empty) (*generated.Bytes, error) {
-	bytes, err := c.messagesUsecase.ReceiveMessage(ctx)
+func (c *messagesServiceGRPCServer) PullFromConsumer(ctx context.Context, empty *empty.Empty) (*generated.Bytes, error) {
+	bytes, err := c.messagesUsecase.PullFromConsumer(ctx)
 	if err != nil {
 		return nil, err
 	}

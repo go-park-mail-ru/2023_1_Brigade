@@ -26,7 +26,7 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	user := model.AuthorizedUser{
 		Nickname: registrationUser.Nickname,
 		Email:    registrationUser.Email,
-		Status:   "Hello! I'm use technogramm",
+		Status:   "Привет, я использую технограм!",
 	}
 
 	err := u.authRepo.CheckExistEmail(context.Background(), user.Email)

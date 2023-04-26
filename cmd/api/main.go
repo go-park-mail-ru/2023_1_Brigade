@@ -1,13 +1,12 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	_ "github.com/lib/pq"
+	//_ "github.com/lib/pq"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
@@ -78,6 +77,9 @@ func main() {
 		log.Error(err)
 	}
 	defer db.Close()
+
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
 
 	redis := redis.NewClient(&redis.Options{
 		Addr: config.Redis.Addr,

@@ -63,10 +63,11 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		return model.Message{}, err
 	}
 
-	_, err = r.db.NamedQuery("INSERT INTO chat_messages (id_chat, id_message) VALUES (:id_chat, :id_message)", model.ChatMessages{
+	rows, err = r.db.NamedQuery("INSERT INTO chat_messages (id_chat, id_message) VALUES (:id_chat, :id_message)", model.ChatMessages{
 		ChatId:    message.ChatId,
 		MessageId: message.Id,
 	})
+	defer rows.Close()
 
 	if err != nil {
 		return model.Message{}, err

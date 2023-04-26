@@ -30,6 +30,11 @@ test:
 proto:
 	protoc -I=protobuf --go_out=plugins=grpc:client protobuf/chat.proto
 
+.PHONY: clean_images_containers
+clean_images_containers: |
+	docker stop $(docker ps -q)
+	docker system prune -a
+
 #.PHONY: cover_out
 #cover_out: test
 	#go test -coverpkg=$(ACTIVE_PACKAGES) -coverprofile=c.out ./...

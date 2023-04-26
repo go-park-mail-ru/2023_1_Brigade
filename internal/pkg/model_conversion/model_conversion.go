@@ -46,7 +46,12 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 }
 
 func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
-	time, err := time.Parse(time.RFC3339, message.CreatedAt)
+	//time, err := time.Parse(time.RFC3339, message.CreatedAt)
+	//if err != nil {
+	//	log.Error(err)
+	//}
+	layout := "2006-01-02 15:04:05.000000 -0700 UTC"
+	time, err := time.Parse(layout, message.CreatedAt)
 	if err != nil {
 		log.Error(err)
 	}
@@ -75,7 +80,12 @@ func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *p
 }
 
 func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
-	time, err := time.Parse(time.RFC3339, message.CreatedAt)
+	//time, err := time.Parse(time.RFC3339, message.CreatedAt)
+	//if err != nil {
+	//	log.Error(err)
+	//}
+	layout := "2006-01-02 15:04:05.000000 -0700 UTC"
+	time, err := time.Parse(layout, message.CreatedAt)
 	if err != nil {
 		log.Error(err)
 	}

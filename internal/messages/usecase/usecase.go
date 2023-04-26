@@ -28,16 +28,6 @@ type usecase struct {
 	client       *centrifuge.Client
 }
 
-func (u usecase) EditMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (u usecase) DeleteMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	//TODO implement me
-	panic("implement me")
-}
-
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
 	consumer, err := consumerUsecase.NewConsumer(config.BrokerList, config.GroupID)
 	if err != nil {
@@ -92,7 +82,7 @@ func (u usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
 	return err
 }
 
-func (u usecase) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error {
+func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
 	var webSocketMessage model.WebSocketMessage
 	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
 	if err != nil {
@@ -101,17 +91,13 @@ func (u usecase) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []
 
 	switch webSocketMessage.Type {
 	case configs.Create:
-		return u.SendMessage(ctx, webSocketMessage)
-	case configs.Edit:
-		return u.EditMessage(ctx, webSocketMessage)
-	case configs.Delete:
-		return u.DeleteMessage(ctx, webSocketMessage)
+		return u.PutInProducer(ctx, webSocketMessage)
 	}
 
 	return errors.New("не выбран ни один из трех 0, 1, 2")
 }
 
-func (u usecase) SendMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+func (u usecase) PutInProducer(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
 	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), webSocketMessage.ChatID)
 	if err != nil {
 		return err
@@ -172,7 +158,7 @@ func (u usecase) SendMessage(ctx context.Context, webSocketMessage model.WebSock
 	return nil
 }
 
-func (u usecase) ReceiveMessage(ctx context.Context) ([]byte, error) {
+func (u usecase) PullFromConsumer(ctx context.Context) ([]byte, error) {
 	var message model.ProducerMessage
 	jsonMessage := u.consumer.ConsumeMessage()
 

@@ -66,7 +66,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			return err
 		}
 
-		err = u.messageUsecase.SwitchMesssageType(context.TODO(), message)
+		err = u.messageUsecase.SwitchMessageType(context.TODO(), message)
 		if err != nil {
 			log.Error(err)
 		}

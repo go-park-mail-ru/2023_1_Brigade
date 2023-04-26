@@ -20,28 +20,18 @@ func NewMessagesServiceGRPSClient(con *grpc.ClientConn) messages.Usecase {
 	}
 }
 
-func (m messagesServiceGRPCClient) SwitchMesssageType(ctx context.Context, jsonWebSocketMessage []byte) error {
-	_, err := m.messagesClient.SwitchMesssageType(ctx, &generated.Bytes{Bytes: jsonWebSocketMessage})
+func (m messagesServiceGRPCClient) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
+	_, err := m.messagesClient.SwitchMessageType(ctx, &generated.Bytes{Bytes: jsonWebSocketMessage})
 	return err
 }
 
-func (m messagesServiceGRPCClient) SendMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	_, err := m.messagesClient.SendMessage(ctx, model_conversion.FromWebSocketMessageToProtoWebSocketMessage(webSocketMessage))
+func (m messagesServiceGRPCClient) PutInProducer(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
+	_, err := m.messagesClient.PutInProducer(ctx, model_conversion.FromWebSocketMessageToProtoWebSocketMessage(webSocketMessage))
 	return err
 }
 
-func (m messagesServiceGRPCClient) EditMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (m messagesServiceGRPCClient) DeleteMessage(ctx context.Context, webSocketMessage model.WebSocketMessage) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (m messagesServiceGRPCClient) ReceiveMessage(ctx context.Context) ([]byte, error) {
-	bytes, err := m.messagesClient.ReceiveMessage(ctx, &empty.Empty{})
+func (m messagesServiceGRPCClient) PullFromConsumer(ctx context.Context) ([]byte, error) {
+	bytes, err := m.messagesClient.PullFromConsumer(ctx, &empty.Empty{})
 	if err != nil {
 		return nil, err
 	}

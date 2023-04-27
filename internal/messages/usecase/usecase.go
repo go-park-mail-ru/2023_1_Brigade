@@ -17,6 +17,7 @@ import (
 	consumerUsecase "project/internal/qaas/send_messages/consumer/usecase"
 	"project/internal/qaas/send_messages/producer"
 	producerUsecase "project/internal/qaas/send_messages/producer/usecase"
+	"time"
 )
 
 type usecase struct {
@@ -82,44 +83,44 @@ func (u usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
 }
 
 func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
-	var webSocketMessage model.WebSocketMessage
-	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
-	if err != nil {
-		return err
-	}
-
-	id := webSocketMessage.Id
-	//createdAt := time.Now()
-
-	// если пришел ивент на создание сообщения (0)
-	if id == "" {
-		id = uuid.New().String()
-	}
-
-	producerMessage := model.ProducerMessage{
-		Id:       id,
-		Type:     webSocketMessage.Type,
-		Body:     webSocketMessage.Body,
-		AuthorId: webSocketMessage.AuthorID,
-		ChatID:   webSocketMessage.ChatID,
-		//CreatedAt: createdAt,
-	}
-
-	switch producerMessage.Type {
-	case configs.Create:
-		go func() {
-			_, err = u.messagesRepo.InsertMessageInDB(ctx, model.Message{
-				Id:       id,
-				Body:     producerMessage.Body,
-				AuthorId: producerMessage.AuthorId,
-				ChatId:   producerMessage.ChatID,
-				//CreatedAt: createdAt,
-			})
-			if err != nil {
-				log.Error(err)
-			}
-		}()
-	}
+	//
+	//var webSocketMessage model.WebSocketMessage
+	//err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//id := webSocketMessage.Id
+	////createdAt := time.Now()
+	//
+	//// если пришел ивент на создание сообщения (0)
+	//if id == "" {
+	//	id = uuid.New().String()
+	//}
+	//
+	//producerMessage := model.ProducerMessage{
+	//	Id:       id,
+	//	Type:     webSocketMessage.Type,
+	//	Body:     webSocketMessage.Body,
+	//	AuthorId: webSocketMessage.AuthorID,
+	//	ChatID:   webSocketMessage.ChatID,
+	//	//CreatedAt: createdAt,
+	//}
+	//
+	//switch producerMessage.Type {
+	//case configs.Create:
+	//	go func() {
+	//		_, err = u.messagesRepo.InsertMessageInDB(ctx, model.Message{
+	//			Id:       id,
+	//			Body:     producerMessage.Body,
+	//			AuthorId: producerMessage.AuthorId,
+	//			ChatId:   producerMessage.ChatID,
+	//			//CreatedAt: createdAt,
+	//		})
+	//		if err != nil {
+	//			log.Error(err)
+	//		}
+	//	}()
 	//case configs.Edit:
 	//	go func() {
 	//		_, err = u.messagesRepo.EditMessageById(ctx, producerMessage)
@@ -137,27 +138,50 @@ func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []b
 	//default:
 	//	return errors.New("не выбран ни один из трех 0, 1, 2")
 	//}
-
-	return u.PutInProducer(ctx, producerMessage)
-
-	//var webSocketMessage model.WebSocketMessage
-	//err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
-	//if err != nil {
-	//	return err
-	//}
 	//
-	//switch webSocketMessage.Type {
-	//case configs.Create:
-	//	return u.PutInProducer(ctx, model.ProducerMessage{
-	//		Id:       webSocketMessage.Id,
-	//		Type:     webSocketMessage.Type,
-	//		Body:     webSocketMessage.Body,
-	//		AuthorId: webSocketMessage.AuthorID,
-	//		ChatID:   webSocketMessage.ChatID,
-	//	})
-	//}
-	//
-	//return errors.New("не выбран ни один из трех 0, 1, 2")
+	//return u.PutInProducer(ctx, producerMessage)
+
+	var webSocketMessage model.WebSocketMessage
+	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
+	if err != nil {
+		return err
+	}
+
+	id := webSocketMessage.Id
+	createdAt := time.Now()
+
+	if id == "" {
+		id = uuid.New().String()
+	}
+
+	switch webSocketMessage.Type {
+	case configs.Create:
+		go func() {
+			message := model.Message{
+				Id:        id,
+				Body:      webSocketMessage.Body,
+				AuthorId:  webSocketMessage.AuthorID,
+				ChatId:    webSocketMessage.ChatID,
+				CreatedAt: createdAt,
+			}
+
+			_, err = u.messagesRepo.InsertMessageInDB(context.Background(), message)
+			if err != nil {
+				log.Error(err)
+			}
+		}()
+
+		return u.PutInProducer(ctx, model.ProducerMessage{
+			Id:        webSocketMessage.Id,
+			Type:      webSocketMessage.Type,
+			Body:      webSocketMessage.Body,
+			AuthorId:  webSocketMessage.AuthorID,
+			ChatID:    webSocketMessage.ChatID,
+			CreatedAt: createdAt,
+		})
+	}
+
+	return errors.New("не выбран ни один из трех 0, 1, 2")
 }
 
 func (u usecase) PutInProducer(ctx context.Context, producerMessage model.ProducerMessage) error {
@@ -217,13 +241,14 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 		}
 
 		//producerMessage := model.ProducerMessage{
-		//	Id:         id,
+		//	Id:         producerMessage.Id,
 		//	Body:       producerMessage.Body,
 		//	AuthorId:   producerMessage.AuthorId,
 		//	ChatID:     producerMessage.ChatID,
 		//	ReceiverID: member.MemberId,
-		//	CreatedAt:  createdAt,
+		//	CreatedAt:  producerMessage.CreatedAt,
 		//}
+		producerMessage.ReceiverID = member.MemberId
 		jsonProducerMessage, err := json.Marshal(producerMessage)
 		if err != nil {
 			return err

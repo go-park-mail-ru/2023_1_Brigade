@@ -49,29 +49,39 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 	}
 }
 
-func FromProtoWebSocketMessageToWebSocketMessage(message *protobuf.WebSocketMessage) model.WebSocketMessage {
-	return model.WebSocketMessage{
-		Id:       message.Id,
-		Type:     message.Type,
-		Body:     message.Body,
-		AuthorID: message.AuthorID,
-		ChatID:   message.ChatID,
+func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
+	layout := "2006-01-02 15:04:05.000000 -0700 UTC"
+	time, err := time.Parse(layout, message.CreatedAt)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return model.ProducerMessage{
+		Id:         message.Id,
+		Type:       message.Type,
+		Body:       message.Body,
+		AuthorId:   message.AuthorId,
+		ChatID:     message.ChatId,
+		ReceiverID: message.ReceiverID,
+		CreatedAt:  time,
 	}
 }
 
-func FromWebSocketMessageToProtoWebSocketMessage(message model.WebSocketMessage) *protobuf.WebSocketMessage {
-	return &protobuf.WebSocketMessage{
-		Id:       message.Id,
-		Type:     message.Type,
-		Body:     message.Body,
-		AuthorID: message.AuthorID,
-		ChatID:   message.ChatID,
+func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *protobuf.ProducerMessage {
+	return &protobuf.ProducerMessage{
+		Id:         message.Id,
+		Type:       message.Type,
+		Body:       message.Body,
+		AuthorId:   message.AuthorId,
+		ChatId:     message.ChatID,
+		ReceiverID: message.ReceiverID,
+		CreatedAt:  message.CreatedAt.String(),
 	}
 }
 
 func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
-	str := "2022-01-01T12:00:00-07:00"
-	time, err := time.Parse(time.RFC3339, str)
+	layout := "2006-01-02 15:04:05.000000 -0700 UTC"
+	time, err := time.Parse(layout, message.CreatedAt)
 	if err != nil {
 		log.Error(err)
 	}

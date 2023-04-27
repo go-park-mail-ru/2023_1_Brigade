@@ -19,7 +19,9 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 }
 
 func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
-	_, err := r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	rows, err := r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	defer rows.Close()
+
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrUserNotFound
 	}
@@ -54,6 +56,7 @@ func (r repository) UpdateChatById(ctx context.Context, title string, chatID uin
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
 	var chatMembers []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_chat=$1", chatID)
+	defer rows.Close()
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -89,6 +92,7 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
 	rows, err := r.db.NamedQuery("INSERT INTO chat (type, title, avatar) "+
 		"VALUES (:type, :title, :avatar) RETURNING id", chat)
+	defer rows.Close()
 
 	if err != nil {
 		return model.Chat{}, err
@@ -111,22 +115,26 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 }
 
 func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
-	_, err := r.db.Query("DELETE FROM chat_messages WHERE id_chat=$1", chatID)
+	rows, err := r.db.Query("DELETE FROM chat_messages WHERE id_chat=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound
 	}
 
-	_, err = r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	rows, err = r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound
 	}
 
-	_, err = r.db.Query("DELETE FROM message WHERE id_chat=$1", chatID)
+	rows, err = r.db.Query("DELETE FROM message WHERE id_chat=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrMessageNotFound
 	}
 
-	_, err = r.db.Query("DELETE FROM chat WHERE id=$1", chatID)
+	rows, err = r.db.Query("DELETE FROM chat WHERE id=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound
 	}
@@ -135,7 +143,8 @@ func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
 }
 
 func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID uint64) error {
-	_, err := r.db.Query("INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
+	rows, err := r.db.Query("INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
+	defer rows.Close()
 	if err != nil {
 		return err
 	}
@@ -146,6 +155,7 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error) {
 	var chat []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_member=$1", userID)
+	defer rows.Close()
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

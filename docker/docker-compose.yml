@@ -72,6 +72,7 @@ services:
       - "5432:5432"
     volumes:
       - ./../db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - backend-network
 
@@ -81,6 +82,8 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --replica-read-only no
+    volumes:
+      - redis_data:/data
     networks:
       - backend-network
 
@@ -121,7 +124,7 @@ services:
   prometheus:
     hostname: prometheus
     image: prom/prometheus:latest
-    container_name: vdonate-prometheus
+    container_name: prometheus
     restart: unless-stopped
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -152,6 +155,8 @@ services:
       - backend-network
 
 volumes:
+  postgres_data: {}
+  redis_data: {}
   prometheus_data: {}
   grafana_data: {}
 

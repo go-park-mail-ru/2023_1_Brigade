@@ -26,7 +26,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	sub, _ := u.centrifugo.GetSubscription("channel")
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		msg, err := u.messageUsecase.ReceiveMessage(context.TODO())
+		msg, err := u.messageUsecase.PullFromConsumer(context.TODO())
 		if err != nil {
 			log.Error(err)
 			return
@@ -66,7 +66,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			return err
 		}
 
-		err = u.messageUsecase.SwitchMesssageType(context.TODO(), message)
+		err = u.messageUsecase.SwitchMessageType(context.TODO(), message)
 		if err != nil {
 			log.Error(err)
 		}

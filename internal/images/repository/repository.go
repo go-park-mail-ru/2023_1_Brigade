@@ -32,7 +32,8 @@ func (r repository) LoadImage(ctx context.Context, file multipart.File, filename
 	}
 
 	url := "https://technogramm.ru/avatars/" + hash + ".jpg"
-	_, err = r.db.Query("UPDATE profile SET avatar=$1 WHERE id=$2", url, userID)
+	rows, err := r.db.Query("UPDATE profile SET avatar=$1 WHERE id=$2", url, userID)
+	defer rows.Close()
 
 	return url, nil
 }

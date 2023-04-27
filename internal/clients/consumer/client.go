@@ -2,6 +2,7 @@ package consumer
 
 import (
 	"context"
+	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/labstack/gommon/log"
 	"project/internal/generated"
 	"project/internal/qaas/send_messages/consumer"
@@ -20,7 +21,7 @@ func NewConsumerServiceGRPCClient(con *grpc.ClientConn) consumer.Usecase {
 }
 
 func (c consumerServiceGRPCClient) ConsumeMessage(ctx context.Context) []byte {
-	bytes, err := c.consumerClient.ConsumeMessage(ctx, nil)
+	bytes, err := c.consumerClient.ConsumeMessage(ctx, &empty.Empty{})
 	if err != nil {
 		log.Error("client consumer error: ", err)
 	}
@@ -32,5 +33,5 @@ func (c consumerServiceGRPCClient) ConsumeMessage(ctx context.Context) []byte {
 }
 
 func (c consumerServiceGRPCClient) StartConsumeMessages(ctx context.Context) {
-	c.consumerClient.StartConsumeMessages(ctx, nil)
+	c.consumerClient.StartConsumeMessages(ctx, &empty.Empty{})
 }

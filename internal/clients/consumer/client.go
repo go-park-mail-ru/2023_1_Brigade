@@ -25,6 +25,7 @@ func (c consumerServiceGRPCClient) ConsumeMessage(ctx context.Context) []byte {
 	if err != nil {
 		return []byte{}
 	}
+
 	return bytes.Bytes
 }
 

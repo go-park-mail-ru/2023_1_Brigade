@@ -14,9 +14,7 @@ import (
 	"project/internal/messages"
 	"project/internal/model"
 	"project/internal/qaas/send_messages/consumer"
-	consumerUsecase "project/internal/qaas/send_messages/consumer/usecase"
 	"project/internal/qaas/send_messages/producer"
-	producerUsecase "project/internal/qaas/send_messages/producer/usecase"
 	"time"
 )
 
@@ -28,16 +26,16 @@ type usecase struct {
 	client       *centrifuge.Client
 }
 
-func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, config configs.Kafka) messages.Usecase {
-	consumer, err := consumerUsecase.NewConsumer(config.BrokerList, config.GroupID)
-	if err != nil {
-		log.Error(err)
-	}
-
-	producer, err := producerUsecase.NewProducer(config.BrokerList)
-	if err != nil {
-		log.Error(err)
-	}
+func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
+	//consumer, err := consumerUsecase.NewConsumer(config.BrokerList, config.GroupID)
+	//if err != nil {
+	//	log.Error(err)
+	//}
+	//
+	//producer, err := producerUsecase.NewProducer(config.BrokerList)
+	//if err != nil {
+	//	log.Error(err)
+	//}
 
 	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
 	signals := make(chan os.Signal)
@@ -49,7 +47,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 		log.Fatal()
 	}()
 
-	err = c.Connect()
+	err := c.Connect()
 	if err != nil {
 		log.Error(err)
 	}

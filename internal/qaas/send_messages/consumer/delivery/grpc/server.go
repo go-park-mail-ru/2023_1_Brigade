@@ -41,4 +41,5 @@ func (c *consumerServiceGRPCServer) ConsumeMessage(ctx context.Context, _ *empty
 
 func (c *consumerServiceGRPCServer) StartConsumeMessages(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
 	c.consumerUsecase.StartConsumeMessages(ctx)
+	return nil, nil
 }

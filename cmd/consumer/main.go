@@ -1,20 +1,14 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	serverChat "project/internal/chat/delivery/grpc"
-	repositoryChat "project/internal/chat/repository"
-	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
-	repositoryMessages "project/internal/messages/repository"
-	repositoryUser "project/internal/user/repository"
+	serverConsumer "project/internal/qaas/send_messages/consumer/delivery/grpc"
+	"project/internal/qaas/send_messages/consumer/usecase"
 )
 
 func init() {
@@ -52,23 +46,16 @@ func main() {
 		log.Error(err)
 	}
 
-	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
+	grpcServer := grpc.NewServer()
+
+	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
 	if err != nil {
 		log.Error(err)
 	}
-	defer db.Close()
 
-	chatRepo := repositoryChat.NewChatMemoryRepository(db)
-	userRepo := repositoryUser.NewUserMemoryRepository(db)
-	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
+	service := serverConsumer.NewConsumerServiceGRPCServer(grpcServer, consumerUsecase)
 
-	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo)
-
-	grpcServer := grpc.NewServer()
-
-	service := serverChat.NewChatsServiceGRPCServer(grpcServer, chatUsecase)
-
-	err = service.StartGRPCServer(config.ChatsService.Addr)
+	err = service.StartGRPCServer(config.ConsumerService.Addr)
 	if err != nil {
 		log.Error(err)
 	}

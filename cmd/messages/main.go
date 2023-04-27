@@ -76,7 +76,7 @@ func main() {
 	defer grpcConnConsumer.Close()
 
 	grpcConnProducer, err := grpc.Dial(
-		config.ConsumerService.Addr,
+		config.ProducerService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
 	)

@@ -2,6 +2,7 @@ package producer
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"project/internal/generated"
 	"project/internal/qaas/send_messages/producer"
 
@@ -22,5 +23,8 @@ func (p producerServiceGRPCClient) ProduceMessage(ctx context.Context, message [
 	_, err := p.producerClient.ProduceMessage(ctx, &generated.Bytes{
 		Bytes: message,
 	})
+	if err != nil {
+		log.Error("client producer error: ", err)
+	}
 	return err
 }

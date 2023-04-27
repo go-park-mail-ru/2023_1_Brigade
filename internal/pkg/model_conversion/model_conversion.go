@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+func FromProtoBytesToBytes(bytes *protobuf.Bytes) []byte {
+	return bytes.Bytes
+}
+
 func FromUserIDToProtoUserID(userID uint64) *protobuf.UserID {
 	return &protobuf.UserID{UserID: userID}
 }

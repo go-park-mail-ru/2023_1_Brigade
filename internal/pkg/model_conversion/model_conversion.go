@@ -1,6 +1,7 @@
 package model_conversion
 
 import (
+	log "github.com/sirupsen/logrus"
 	protobuf "project/internal/generated"
 	"project/internal/model"
 	"time"
@@ -45,16 +46,11 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 }
 
 func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
-	//time, err := time.Parse(time.RFC3339, message.CreatedAt)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
-	//layout := "2006-01-02 15:04:05.000000 -0700 UTC"
-	//time, err := time.Parse(layout, message.CreatedAt)
-	//if err != nil {
-	//	log.Error(err)
-	//}
+	layout := "2006-01-02 15:04:05.000000 -0700 UTC"
+	time, err := time.Parse(layout, message.CreatedAt)
+	if err != nil {
+		log.Error(err)
+	}
 
 	return model.ProducerMessage{
 		Id:         message.Id,
@@ -63,8 +59,7 @@ func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage
 		AuthorId:   message.AuthorId,
 		ChatID:     message.ChatId,
 		ReceiverID: message.ReceiverID,
-		CreatedAt:  time.Now(),
-		//CreatedAt:  time,
+		CreatedAt:  time,
 	}
 }
 
@@ -76,30 +71,23 @@ func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *p
 		AuthorId:   message.AuthorId,
 		ChatId:     message.ChatID,
 		ReceiverID: message.ReceiverID,
-		CreatedAt:  "",
-		//CreatedAt:  message.CreatedAt.String(),
+		CreatedAt:  message.CreatedAt.String(),
 	}
 }
 
 func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
-	//time, err := time.Parse(time.RFC3339, message.CreatedAt)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
-	//layout := "2006-01-02 15:04:05.000000 -0700 UTC"
-	//time, err := time.Parse(layout, message.CreatedAt)
-	//if err != nil {
-	//	log.Error(err)
-	//}
+	layout := "2006-01-02 15:04:05.000000 -0700 UTC"
+	time, err := time.Parse(layout, message.CreatedAt)
+	if err != nil {
+		log.Error(err)
+	}
 
 	return model.Message{
 		Id:        message.Id,
 		Body:      message.Body,
 		AuthorId:  message.AuthorId,
 		ChatId:    message.ChatId,
-		CreatedAt: time.Now(),
-		//CreatedAt: time,
+		CreatedAt: time,
 	}
 }
 
@@ -109,8 +97,7 @@ func FromMessageToProtoMessage(message model.Message) *protobuf.Message {
 		Body:      message.Body,
 		AuthorId:  message.AuthorId,
 		ChatId:    message.ChatId,
-		CreatedAt: "",
-		//CreatedAt: message.CreatedAt.String(),
+		CreatedAt: message.CreatedAt.String(),
 	}
 }
 

@@ -88,21 +88,10 @@ func main() {
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)
 
-	//producerService, err := usecase2.NewProducer(config.Kafka.BrokerList)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//
-	//consumerService, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
 	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerService)
 
 	messagesService := serverMessages.NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
 
-	log.Info("messages start")
 	err = messagesService.StartGRPCServer(config.MessagesService.Addr)
 	if err != nil {
 		log.Error(err)

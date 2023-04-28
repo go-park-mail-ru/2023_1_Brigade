@@ -65,8 +65,6 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 		log.Error(err)
 	}
 
-	consumer.StartConsumeMessages(context.Background())
-
 	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer, client: c}
 }
 
@@ -140,7 +138,6 @@ func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []b
 }
 
 func (u usecase) PutInProducer(ctx context.Context, producerMessage model.ProducerMessage) error {
-	log.Warn("PUT MSG")
 	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), producerMessage.ChatID)
 	if err != nil {
 		return err
@@ -177,7 +174,6 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 }
 
 func (u usecase) PullFromConsumer(ctx context.Context) ([]byte, error) {
-	log.Warn("PULL MSG")
 	var message model.ProducerMessage
 	jsonMessage := u.consumer.ConsumeMessage(ctx)
 

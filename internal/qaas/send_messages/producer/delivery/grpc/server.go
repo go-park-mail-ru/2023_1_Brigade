@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
-	log "github.com/sirupsen/logrus"
 	"net"
 	"project/internal/generated"
 	"project/internal/qaas/send_messages/producer"
@@ -37,7 +36,6 @@ func (p *producerServiceGRPCServer) StartGRPCServer(listenURL string) error {
 }
 
 func (p *producerServiceGRPCServer) ProduceMessage(ctx context.Context, bytes *generated.Bytes) (*emptypb.Empty, error) {
-	log.Warn("PRODUCE SERVER")
 	err := p.producerUsecase.ProduceMessage(ctx, model_conversion.FromProtoBytesToBytes(bytes))
 	return new(empty.Empty), err
 }

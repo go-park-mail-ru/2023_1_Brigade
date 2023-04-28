@@ -2,7 +2,6 @@ package producer
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
 	"project/internal/generated"
 	"project/internal/qaas/send_messages/producer"
 
@@ -20,7 +19,6 @@ func NewProducerServiceGRPCClient(con *grpc.ClientConn) producer.Usecase {
 }
 
 func (p producerServiceGRPCClient) ProduceMessage(ctx context.Context, message []byte) error {
-	log.Warn("PRODUCER CLIENT")
 	_, err := p.producerClient.ProduceMessage(ctx, &generated.Bytes{
 		Bytes: message,
 	})

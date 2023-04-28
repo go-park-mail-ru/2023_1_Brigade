@@ -29,7 +29,6 @@ func (h *messageHandler) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (h *messageHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for msg := range claim.Messages() {
-		log.Warn("OK MSG")
 		session.MarkMessage(msg, "")
 		h.messagesChan <- msg.Value
 	}
@@ -48,17 +47,19 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 		return &usecase{}, err
 	}
 
-	return &usecase{consumer: consumer, messagesChan: messagesChan}, nil
+	consumerUsecase := usecase{consumer: consumer, messagesChan: messagesChan}
+
+	consumerUsecase.StartConsumeMessages(context.TODO())
+
+	return &consumerUsecase, nil
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
-	log.Warn("consume")
 	msg := <-u.messagesChan
 	return msg
 }
 
 func (u *usecase) StartConsumeMessages(ctx context.Context) {
-	log.Warn("CONSUME USECASE START MESSAGE")
 	handler := messageHandler{messagesChan: u.messagesChan}
 	topic := []string{"message"}
 

@@ -1,119 +1,119 @@
 version: "3.9"
 
 services:
-#  api:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/api/Dockerfile
-#    container_name: api
-#    depends_on:
-#      - postgres
-#      - redis
-#      - kafka
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "8081:8081"
-#      - "8079:8079"
-#    networks:
-#      - backend-network
-#
-#  chat:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/chat/Dockerfile
-#    container_name: chat
-#    depends_on:
-#      - postgres
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9000:9000"
-#    networks:
-#      - backend-network
-#
-#  user:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/user/Dockerfile
-#    container_name: user
-#    depends_on:
-#      - postgres
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9001:9001"
-#    networks:
-#      - backend-network
-#
-#  messages:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/messages/Dockerfile
-#    container_name: messages
-#    depends_on:
-#      - postgres
-#      - kafka
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9002:9002"
-#    networks:
-#      - backend-network
-#
-#  consumer:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/consumer/Dockerfile
-#    container_name: consumer
-#    depends_on:
-#      - kafka
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9003:9003"
-#    networks:
-#      - backend-network
-#
-#  producer:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/producer/Dockerfile
-#    container_name: producer
-#    depends_on:
-#      - kafka
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9004:9004"
-#    networks:
-#      - backend-network
-#
-#  postgres:
-#    image: postgres
-#    container_name: postgres
-#    environment:
-#      POSTGRES_DB: "brigade"
-#      POSTGRES_USER: "brigade"
-#      POSTGRES_PASSWORD: "123"
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - ./../db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
-#      - postgres_data:/var/lib/postgresql/data
-#    networks:
-#      - backend-network
-#
-#  redis:
-#    image: redis:alpine
-#    container_name: redis
-#    ports:
-#      - "6379:6379"
-#    command: redis-server --appendonly yes --replica-read-only no
-#    volumes:
-#      - redis_data:/data
-#    networks:
-#      - backend-network
+  api:
+    build:
+      context: ../.
+      dockerfile: ./docker/api/Dockerfile
+    container_name: api
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "8081:8081"
+      - "8079:8079"
+    networks:
+      - backend-network
+
+  chat:
+    build:
+      context: ../.
+      dockerfile: ./docker/chat/Dockerfile
+    container_name: chat
+    depends_on:
+      - postgres
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9000:9000"
+    networks:
+      - backend-network
+
+  user:
+    build:
+      context: ../.
+      dockerfile: ./docker/user/Dockerfile
+    container_name: user
+    depends_on:
+      - postgres
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9001:9001"
+    networks:
+      - backend-network
+
+  messages:
+    build:
+      context: ../.
+      dockerfile: ./docker/messages/Dockerfile
+    container_name: messages
+    depends_on:
+      - postgres
+      - kafka
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9002:9002"
+    networks:
+      - backend-network
+
+  consumer:
+    build:
+      context: ../.
+      dockerfile: ./docker/consumer/Dockerfile
+    container_name: consumer
+    depends_on:
+      - kafka
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9003:9003"
+    networks:
+      - backend-network
+
+  producer:
+    build:
+      context: ../.
+      dockerfile: ./docker/producer/Dockerfile
+    container_name: producer
+    depends_on:
+      - kafka
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9004:9004"
+    networks:
+      - backend-network
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_DB: "brigade"
+      POSTGRES_USER: "brigade"
+      POSTGRES_PASSWORD: "123"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./../db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend-network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --replica-read-only no
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend-network
 
   zookeeper:
     image: zookeeper
@@ -138,55 +138,55 @@ services:
     networks:
       - backend-network
 
-#  centrifugo:
-#    image: centrifugo/centrifugo:latest
-#    container_name: centrifugo
-#    command: centrifugo -c config.json --port=8900 --admin
-#    ports:
-#      - "8900:8900"
-#    volumes:
-#      - ./../config.json:/centrifugo/config.json
-#    networks:
-#      - backend-network
-#
-#  prometheus:
-#    hostname: prometheus
-#    image: prom/prometheus:latest
-#    container_name: prometheus
-#    restart: unless-stopped
-#    command:
-#      - '--config.file=/etc/prometheus/prometheus.yml'
-#      - '--storage.tsdb.path=/prometheus'
-#      - '--web.console.libraries=/etc/prometheus/console_libraries'
-#      - '--web.console.templates=/etc/prometheus/consoles'
-#      - '--storage.tsdb.retention.time=200h'
-#      - '--web.enable-lifecycle'
-#    volumes:
-#      - prometheus_data:/prometheus
-#      - ./../internal/configs/prometheus.yml:/etc/prometheus/prometheus.yml
-#    expose:
-#      - "9090"
-#    networks:
-#      - backend-network
-#
-#  grafana:
-#    image: grafana/grafana:latest
-#    container_name: grafana
-#    environment:
-#      - GF_SECURITY_ADMIN_USER=myuser
-#      - GF_SECURITY_ADMIN_PASSWORD=mypassword
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - grafana_data:/var/lib/grafana
-#    networks:
-#      - backend-network
-#
-#volumes:
-#  postgres_data: {}
-#  redis_data: {}
-#  prometheus_data: {}
-#  grafana_data: {}
+  centrifugo:
+    image: centrifugo/centrifugo:latest
+    container_name: centrifugo
+    command: centrifugo -c config.json --port=8900 --admin
+    ports:
+      - "8900:8900"
+    volumes:
+      - ./../config.json:/centrifugo/config.json
+    networks:
+      - backend-network
+
+  prometheus:
+    hostname: prometheus
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - prometheus_data:/prometheus
+      - ./../internal/configs/prometheus.yml:/etc/prometheus/prometheus.yml
+    expose:
+      - "9090"
+    networks:
+      - backend-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=myuser
+      - GF_SECURITY_ADMIN_PASSWORD=mypassword
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - backend-network
+
+volumes:
+  postgres_data: {}
+  redis_data: {}
+  prometheus_data: {}
+  grafana_data: {}
 
 networks:
   backend-network:

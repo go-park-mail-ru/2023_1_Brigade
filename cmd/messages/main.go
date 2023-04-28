@@ -11,11 +11,11 @@ import (
 	"gopkg.in/yaml.v2"
 	"os"
 	repositoryChat "project/internal/chat/repository"
+	"project/internal/clients/consumer"
 	"project/internal/configs"
 	serverMessages "project/internal/messages/delivery/grpc"
 	repositoryMessages "project/internal/messages/repository"
 	usecaseMessages "project/internal/messages/usecase"
-	"project/internal/qaas/send_messages/consumer/usecase"
 	usecase2 "project/internal/qaas/send_messages/producer/usecase"
 )
 
@@ -85,19 +85,20 @@ func main() {
 	}
 	defer grpcConnProducer.Close()
 
-	//consumerService := consumerClient.NewConsumerServiceGRPCClient(grpcConnConsumer)
+	//consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
+	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	//producerService := producerClient.NewProducerServiceGRPCClient(grpcConnProducer)
-	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
-	if err != nil {
-		log.Error(err)
-	}
+	//consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
+	//if err != nil {
+	//	log.Error(err)
+	//}
 
 	producerUsecase, err := usecase2.NewProducer(config.Kafka.BrokerList)
 	if err != nil {
 		log.Error(err)
 	}
 
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerUsecase, producerUsecase)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerUsecase)
 
 	messagesService := serverMessages.NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
 

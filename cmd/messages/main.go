@@ -12,11 +12,11 @@ import (
 	"os"
 	repositoryChat "project/internal/chat/repository"
 	"project/internal/clients/consumer"
+	"project/internal/clients/producer"
 	"project/internal/configs"
 	serverMessages "project/internal/messages/delivery/grpc"
 	repositoryMessages "project/internal/messages/repository"
 	usecaseMessages "project/internal/messages/usecase"
-	usecase2 "project/internal/qaas/send_messages/producer/usecase"
 )
 
 func init() {
@@ -85,20 +85,10 @@ func main() {
 	}
 	defer grpcConnProducer.Close()
 
-	//consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
-	//producerService := producerClient.NewProducerServiceGRPCClient(grpcConnProducer)
-	//consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
-	//if err != nil {
-	//	log.Error(err)
-	//}
+	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)
 
-	producerUsecase, err := usecase2.NewProducer(config.Kafka.BrokerList)
-	if err != nil {
-		log.Error(err)
-	}
-
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerUsecase)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerService)
 
 	messagesService := serverMessages.NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
 

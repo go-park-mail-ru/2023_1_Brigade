@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"github.com/golang/protobuf/ptypes/empty"
 	"net"
 	"project/internal/generated"
 	"project/internal/qaas/send_messages/consumer"
@@ -41,5 +42,5 @@ func (c *consumerServiceGRPCServer) ConsumeMessage(ctx context.Context, _ *empty
 
 func (c *consumerServiceGRPCServer) StartConsumeMessages(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
 	c.consumerUsecase.StartConsumeMessages(ctx)
-	return nil, nil
+	return new(empty.Empty), nil
 }

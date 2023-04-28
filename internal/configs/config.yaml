@@ -36,16 +36,16 @@ Kafka:
   groupID: "group-message"
 
 ChatsService:
-  addr: "chat:9000"
+  addr: "localhost:9000"
 
 UsersService:
-  addr: "user:9001"
+  addr: "localhost:9001"
 
 MessagesService:
-  addr: "messages:9002"
+  addr: "localhost:9002"
 
 ConsumerService:
-  addr: "consumer:9003"
+  addr: "localhost:9003"
 
 ProducerService:
-  addr: "producer:9004"
+  addr: "localhost:9004"

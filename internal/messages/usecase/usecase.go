@@ -140,6 +140,7 @@ func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []b
 }
 
 func (u usecase) PutInProducer(ctx context.Context, producerMessage model.ProducerMessage) error {
+	log.Warn("PUT MSG")
 	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), producerMessage.ChatID)
 	if err != nil {
 		return err
@@ -176,6 +177,7 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 }
 
 func (u usecase) PullFromConsumer(ctx context.Context) ([]byte, error) {
+	log.Warn("PULL MSG")
 	var message model.ProducerMessage
 	jsonMessage := u.consumer.ConsumeMessage(ctx)
 

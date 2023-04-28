@@ -12,14 +12,18 @@ import (
 	"os/signal"
 	"project/internal/messages"
 	"project/internal/model"
+	"project/internal/qaas/send_messages/consumer"
+	"project/internal/qaas/send_messages/producer"
 	"time"
 )
 
 type messageHandler struct {
-	messageUsecase messages.Usecase
-	upgrader       websocket.Upgrader
-	clients        map[uint64]*websocket.Conn
-	centrifugo     *centrifuge.Client
+	messageUsecase  messages.Usecase
+	consumerUsecase consumer.Usecase
+	producerUsecase producer.Usecase
+	upgrader        websocket.Upgrader
+	clients         map[uint64]*websocket.Conn
+	centrifugo      *centrifuge.Client
 }
 
 func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
@@ -59,7 +63,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
-
+	log.Warn(session)
 	for {
 		_, message, err := ws.ReadMessage()
 		if err != nil {

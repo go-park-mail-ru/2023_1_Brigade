@@ -29,6 +29,7 @@ func (h *messageHandler) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (h *messageHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for msg := range claim.Messages() {
+		log.Warn("OK MSG")
 		session.MarkMessage(msg, "")
 		h.messagesChan <- msg.Value
 	}
@@ -36,7 +37,7 @@ func (h *messageHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim
 }
 
 func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) {
-	messagesChan := make(chan []byte, 10)
+	messagesChan := make(chan []byte)
 
 	config := sarama.NewConfig()                          // Создаем конфигурацию для Kafka-продюсера
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest // Начинаем с самого старого сообщения
@@ -51,11 +52,13 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
+	log.Warn("consume")
 	msg := <-u.messagesChan
 	return msg
 }
 
 func (u *usecase) StartConsumeMessages(ctx context.Context) {
+	log.Warn("CONSUME USECASE START MESSAGE")
 	handler := messageHandler{messagesChan: u.messagesChan}
 	topic := []string{"message"}
 

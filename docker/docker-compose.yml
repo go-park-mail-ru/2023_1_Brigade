@@ -54,6 +54,8 @@ services:
     depends_on:
       - postgres
       - kafka
+      - consumer
+      - producer
     volumes:
       - /home/ubuntu/avatars:/avatars
     ports:

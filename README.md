@@ -17,4 +17,4 @@
 Ментор по фронту - [Антон Елагин](https://github.com/AntonElagin)
 
 Status of Last Deployment:<br>
-<img src=" https://github.com/go-park-mail-ru/2023_1_Brigade/blob/microservices/workflows/CI//badge.svg?branch=master"><br>
+<img src=" https://github.com/go-park-mail-ru/2023_1_Brigade/blob/microservices/workflows/CI//badge.svg?branch=main"><br>

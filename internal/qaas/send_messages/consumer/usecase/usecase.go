@@ -54,6 +54,7 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
+	log.Warn("CONSUME")
 	msg := <-u.messagesChan
 	return msg
 }

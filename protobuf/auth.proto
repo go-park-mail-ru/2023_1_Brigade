@@ -5,21 +5,21 @@ option go_package = ".;generated";
 package protobuf;
 
 message RegistrationUser {
-    string Nickname = 1;
-    string Email = 2;
-    string Password = 3;
+  string Nickname = 1;
+  string Email = 2;
+  string Password = 3;
 }
 
 message LoginUser {
-    string Email = 1;
-    string Password = 2;
+  string Email = 1;
+  string Password = 2;
 }
 
 message Session {
-    uint64 UserId = 1;
+  uint64 UserId = 1;
 	string Cookie = 2;
 }
 
 message Cookie {
-    string Cookie = 1;
+  string Cookie = 1;
 }

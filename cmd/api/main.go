@@ -130,12 +130,9 @@ func main() {
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
 	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
-	//userRepository := repositoryUser.NewUserMemoryRepository(db)
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
-	//authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
 
-	//authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 

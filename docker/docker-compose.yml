@@ -88,7 +88,21 @@ services:
       - "9004:9004"
     networks:
       - backend-network
-#
+
+  auth:
+    build:
+      context: ../.
+      dockerfile: ./docker/auth/Dockerfile
+    container_name: auth
+    depends_on:
+      - postgres
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9005:9005"
+    networks:
+      - backend-network
+
   postgres:
     image: postgres
     container_name: postgres

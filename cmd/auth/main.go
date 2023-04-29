@@ -5,15 +5,18 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/redis/go-redis/v9"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	repositoryAuthUser "project/internal/auth/user/repository"
+	authSessionRepository "project/internal/auth/session/repository"
+	authSessionUsecase "project/internal/auth/session/usecase"
+	serverAuthUser "project/internal/auth/user/delivery/grpc"
+	authUserRepository "project/internal/auth/user/repository"
+	authUserUsecase "project/internal/auth/user/usecase"
 	"project/internal/configs"
-	clientUser "project/internal/user/delivery/grpc"
-	repositoryUser "project/internal/user/repository"
-	usecaseUser "project/internal/user/usecase"
+	userRepository "project/internal/user/repository"
 )
 
 func init() {
@@ -60,16 +63,23 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	authUserRepo := repositoryAuthUser.NewAuthUserMemoryRepository(db)
-	userRepo := repositoryUser.NewUserMemoryRepository(db)
+	redis := redis.NewClient(&redis.Options{
+		Addr: config.Redis.Addr,
+	})
+	defer redis.Close()
 
-	userUsecase := usecaseUser.NewUserUsecase(userRepo, authUserRepo)
+	userRepository := userRepository.NewUserMemoryRepository(db)
+	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
+	authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(redis)
+
+	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository)
+	authSessionUsecase := authSessionUsecase.NewAuthUserUsecase(authSessionRepository)
 
 	grpcServer := grpc.NewServer()
 
-	service := clientUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
+	service := serverAuthUser.NewAuthUserServiceGRPCServer(grpcServer, authUserUsecase, authSessionUsecase)
 
-	err = service.StartGRPCServer(config.UsersService.Addr)
+	err = service.StartGRPCServer(config.AuthService.Addr)
 	if err != nil {
 		log.Error(err)
 	}

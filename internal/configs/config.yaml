@@ -49,3 +49,6 @@ ConsumerService:
 
 ProducerService:
   addr: "producer:9004"
+
+AuthService:
+  addr: "auth:9005"

@@ -3,8 +3,6 @@ package model_conversion
 import (
 	protobuf "project/internal/generated"
 	"project/internal/model"
-	"time"
-	log "github.com/sirupsen/logrus"
 )
 
 func FromProtoRegistrationUserToRegistrationUser(registrationUser *protobuf.RegistrationUser) model.RegistrationUser {
@@ -38,7 +36,7 @@ func FromSessionToProtoSession(session model.Session) *protobuf.Session {
 
 func FromProtoCookieToCookie(cookie *protobuf.Cookie) string {
 	return cookie.Cookie
-)
+}
 
 func FromProtoBytesToBytes(bytes *protobuf.Bytes) []byte {
 	return bytes.Bytes

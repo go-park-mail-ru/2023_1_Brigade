@@ -12,6 +12,7 @@ type Config struct {
 	MessagesService MessagesService `yaml:"MessagesService"`
 	ConsumerService ConsumerService `yaml:"ConsumerService"`
 	ProducerService ProducerService `yaml:"ProducerService"`
+	AuthService     AuthService     `yaml:"AuthService"`
 }
 
 type Server struct {
@@ -64,6 +65,10 @@ type ConsumerService struct {
 }
 
 type ProducerService struct {
+	Addr string `yaml:"addr"`
+}
+
+type AuthService struct {
 	Addr string `yaml:"addr"`
 }
 

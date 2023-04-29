@@ -60,6 +60,9 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
+
 	grpcServer := grpc.NewServer()
 
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)

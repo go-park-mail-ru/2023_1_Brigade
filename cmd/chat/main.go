@@ -58,6 +58,9 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
+
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)

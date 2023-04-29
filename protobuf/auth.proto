@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+message RegistrationUser {
+  string Nickname = 1;
+  string Email = 2;
+  string Password = 3;
+}
+
+message LoginUser {
+  string Email = 1;
+  string Password = 2;
+}

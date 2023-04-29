@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	clientChat "project/internal/chat/delivery/grpc"
+	serverChat "project/internal/chat/delivery/grpc"
 	repositoryChat "project/internal/chat/repository"
 	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
@@ -58,6 +58,9 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
+
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
@@ -66,7 +69,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	service := clientChat.NewChatsServiceGRPCServer(grpcServer, chatUsecase)
+	service := serverChat.NewChatsServiceGRPCServer(grpcServer, chatUsecase)
 
 	err = service.StartGRPCServer(config.ChatsService.Addr)
 	if err != nil {

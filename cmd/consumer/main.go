@@ -1,19 +1,14 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	repositoryAuthUser "project/internal/auth/user/repository"
 	"project/internal/configs"
-	clientUser "project/internal/user/delivery/grpc"
-	repositoryUser "project/internal/user/repository"
-	usecaseUser "project/internal/user/usecase"
+	serverConsumer "project/internal/qaas/send_messages/consumer/delivery/grpc"
+	"project/internal/qaas/send_messages/consumer/usecase"
 )
 
 func init() {
@@ -51,25 +46,16 @@ func main() {
 		log.Error(err)
 	}
 
-	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
+	grpcServer := grpc.NewServer()
+
+	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
 	if err != nil {
 		log.Error(err)
 	}
-	defer db.Close()
 
-	db.SetMaxIdleConns(10)
-	db.SetMaxOpenConns(10)
+	service := serverConsumer.NewConsumerServiceGRPCServer(grpcServer, consumerUsecase)
 
-	authUserRepo := repositoryAuthUser.NewAuthUserMemoryRepository(db)
-	userRepo := repositoryUser.NewUserMemoryRepository(db)
-
-	userUsecase := usecaseUser.NewUserUsecase(userRepo, authUserRepo)
-
-	grpcServer := grpc.NewServer()
-
-	service := clientUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
-
-	err = service.StartGRPCServer(config.UsersService.Addr)
+	err = service.StartGRPCServer(config.ConsumerService.Addr)
 	if err != nil {
 		log.Error(err)
 	}

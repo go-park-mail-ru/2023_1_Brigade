@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "protobuf/auth.proto";
+import "protobuf/user.proto";
+
+service Auth {
+  rpc Signup(RegistrationUser) returns (User) {}
+  rpc Login(LoginUser) returns (User) {}
+}
+

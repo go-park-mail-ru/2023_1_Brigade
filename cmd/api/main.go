@@ -13,9 +13,11 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
+	clientAuth "project/internal/clients/auth"
 	clientChat "project/internal/clients/chat"
 	clientMessages "project/internal/clients/messages"
 	clientUser "project/internal/clients/user"
+
 	httpUser "project/internal/user/delivery/http"
 
 	"project/internal/configs"
@@ -26,15 +28,12 @@ import (
 
 	usecaseAuthSession "project/internal/auth/session/usecase"
 	httpAuthUser "project/internal/auth/user/delivery/http"
-	usecaseAuthUser "project/internal/auth/user/usecase"
 	httpChat "project/internal/chat/delivery/http"
 	httpImages "project/internal/images/delivery/http"
 	usecaseImages "project/internal/images/usecase"
 
 	repositoryAuthSession "project/internal/auth/session/repository"
-	repositoryAuthUser "project/internal/auth/user/repository"
 	repositoryImages "project/internal/images/repository"
-	repositoryUser "project/internal/user/repository"
 )
 
 func init() {
@@ -116,16 +115,24 @@ func main() {
 	}
 	defer grpcConnMessages.Close()
 
+	grpcConnAuth, err := grpc.Dial(
+		config.AuthService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Error("cant connect to grpc ", err)
+	}
+	defer grpcConnAuth.Close()
+
+	authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
 	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
 	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
-	userRepository := repositoryUser.NewUserMemoryRepository(db)
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
-	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
 
-	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
 
@@ -161,7 +168,7 @@ func main() {
 	}()
 
 	httpUser.NewUserHandler(e, userService)
-	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userService)
+	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
 	wsMessages.NewMessagesHandler(e, messagesService)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)

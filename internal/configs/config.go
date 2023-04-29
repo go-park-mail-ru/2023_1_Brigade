@@ -10,6 +10,9 @@ type Config struct {
 	ChatsService    ChatsService    `yaml:"ChatsService"`
 	UsersService    UsersService    `yaml:"UsersService"`
 	MessagesService MessagesService `yaml:"MessagesService"`
+	ConsumerService ConsumerService `yaml:"ConsumerService"`
+	ProducerService ProducerService `yaml:"ProducerService"`
+	AuthService     AuthService     `yaml:"AuthService"`
 }
 
 type Server struct {
@@ -57,7 +60,17 @@ type MessagesService struct {
 	Addr string `yaml:"addr"`
 }
 
-const DefaultAvatarUrl = `https://avatars.mds.yandex.net/i?id=fb89295056d345e663a7c3c998a0dfd44ea37174-8497272-images-thumbs&n=13&exp=1`
+type ConsumerService struct {
+	Addr string `yaml:"addr"`
+}
+
+type ProducerService struct {
+	Addr string `yaml:"addr"`
+}
+
+type AuthService struct {
+	Addr string `yaml:"addr"`
+}
 
 const Chat = 0
 const Group = 1

@@ -2,11 +2,12 @@ package usecase
 
 import (
 	"context"
-	"github.com/Shopify/sarama"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"project/internal/qaas/send_messages/consumer"
+
+	"github.com/Shopify/sarama"
+	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -35,7 +36,7 @@ func (h *messageHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim
 }
 
 func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) {
-	messagesChan := make(chan []byte, 10)
+	messagesChan := make(chan []byte)
 
 	config := sarama.NewConfig()                          // Создаем конфигурацию для Kafka-продюсера
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest // Начинаем с самого старого сообщения
@@ -46,17 +47,20 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 		return &usecase{}, err
 	}
 
-	return &usecase{consumer: consumer, messagesChan: messagesChan}, nil
+	consumerUsecase := usecase{consumer: consumer, messagesChan: messagesChan}
+
+	consumerUsecase.StartConsumeMessages(context.TODO())
+
+	return &consumerUsecase, nil
 }
 
-func (u *usecase) ConsumeMessage() []byte {
+func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
 	msg := <-u.messagesChan
 	return msg
 }
 
-func (u *usecase) StartConsumeMessages() {
+func (u *usecase) StartConsumeMessages(ctx context.Context) {
 	handler := messageHandler{messagesChan: u.messagesChan}
-	ctx := context.Background()
 	topic := []string{"message"}
 
 	signals := make(chan os.Signal)

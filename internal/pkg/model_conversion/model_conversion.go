@@ -20,24 +20,6 @@ func FromProtoLoginUserToLoginUser(loginUser *protobuf.LoginUser) model.LoginUse
 	}
 }
 
-func FromProtoSessionToSession(session *protobuf.Session) model.Session {
-	return model.Session{
-		UserId: session.UserId,
-		Cookie: session.Cookie,
-	}
-}
-
-func FromSessionToProtoSession(session model.Session) *protobuf.Session {
-	return &protobuf.Session{
-		UserId: session.UserId,
-		Cookie: session.Cookie,
-	}
-}
-
-func FromProtoCookieToCookie(cookie *protobuf.Cookie) string {
-	return cookie.Cookie
-}
-
 func FromProtoBytesToBytes(bytes *protobuf.Bytes) []byte {
 	return bytes.Bytes
 }

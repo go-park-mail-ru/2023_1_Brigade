@@ -35,7 +35,7 @@ func NewProducer(brokerList []string) (producer.Usecase, error) {
 
 func (u *usecase) ProduceMessage(ctx context.Context, message []byte) error {
 	msg := &sarama.ProducerMessage{
-		Topic: "message",
+		Topic: "messages",
 		Value: sarama.ByteEncoder(message),
 	}
 

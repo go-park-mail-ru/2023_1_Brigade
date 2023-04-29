@@ -33,7 +33,7 @@ Minio:
 Kafka:
   brokerList:
     - "kafka:9092"
-  groupID: "group-message"
+  groupID: "messages"
 
 ChatsService:
   addr: "chat:9000"

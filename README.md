@@ -17,4 +17,4 @@
 Ментор по фронту - [Антон Елагин](https://github.com/AntonElagin)
 
 Status of Last Deployment:<br>
-<img src=" https://github.com/adv4000/github-actions-part-1-basics/workflows/My-GitHubActions-Basics//badge.svg?branch=master"><br>
+<img src=" https://github.com/go-park-mail-ru/2023_1_Brigade/workflows/My-GitHubActions-Basics//badge.svg?branch=master"><br>

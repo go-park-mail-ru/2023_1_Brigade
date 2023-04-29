@@ -35,6 +35,35 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
+// DeleteMessageById mocks base method.
+func (m *MockRepository) DeleteMessageById(ctx context.Context, messageID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMessageById", ctx, messageID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteMessageById indicates an expected call of DeleteMessageById.
+func (mr *MockRepositoryMockRecorder) DeleteMessageById(ctx, messageID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMessageById", reflect.TypeOf((*MockRepository)(nil).DeleteMessageById), ctx, messageID)
+}
+
+// EditMessageById mocks base method.
+func (m *MockRepository) EditMessageById(ctx context.Context, producerMessage model.ProducerMessage) (model.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EditMessageById", ctx, producerMessage)
+	ret0, _ := ret[0].(model.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EditMessageById indicates an expected call of EditMessageById.
+func (mr *MockRepositoryMockRecorder) EditMessageById(ctx, producerMessage interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditMessageById", reflect.TypeOf((*MockRepository)(nil).EditMessageById), ctx, producerMessage)
+}
+
 // GetChatMessages mocks base method.
 func (m *MockRepository) GetChatMessages(ctx context.Context, chatID uint64) ([]model.ChatMessages, error) {
 	m.ctrl.T.Helper()

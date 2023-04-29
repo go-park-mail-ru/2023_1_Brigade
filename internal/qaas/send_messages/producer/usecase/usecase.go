@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"project/internal/qaas/send_messages/producer"
+	"time"
 
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
@@ -21,6 +22,8 @@ func NewProducer(brokerList []string) (producer.Usecase, error) {
 	config.Producer.RequiredAcks = sarama.WaitForAll // Устанавливаем ожидание подтверждения от всех брокеров кластера
 	config.Producer.Return.Successes = true          // Включаем возвращение успешных сообщений в канал
 	config.Producer.Return.Errors = true             // Включаем возвращение ошибок в канал
+
+	time.Sleep(10 * time.Second)
 
 	producer, err := sarama.NewAsyncProducer(brokerList, config)
 	if err != nil {

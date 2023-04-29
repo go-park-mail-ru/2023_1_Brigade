@@ -15,3 +15,5 @@
 
 Ментор по беку - [Олег Реуцкий](https://github.com/astlok)  
 Ментор по фронту - [Антон Елагин](https://github.com/AntonElagin)
+
+[![Actions Status](https://github.com/username/repo-name/workflows/Action-Name/badge.svg)](https://github.com/username/repo-name/actions)

@@ -99,7 +99,12 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	if createdChat.Type == configs.Group {
-		createdChat.Avatar = image_generation.GenerateGroupAvatar()
+		avatar, err := image_generation.GenerateAvatar(string(chat.Title[0]))
+		if err != nil {
+			log.Error(err)
+		}
+
+		createdChat.Avatar = avatar
 	}
 
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)

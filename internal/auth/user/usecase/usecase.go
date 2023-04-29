@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	log "github.com/sirupsen/logrus"
 	auth "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -44,9 +45,9 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 
 	hashedPassword := security.Hash([]byte(registrationUser.Password))
 	user.Password = hashedPassword
-	avatar, err := image_generation.GenerateAvatar()
+	avatar, err := image_generation.GenerateAvatar(string(registrationUser.Nickname[0]))
 	if err != nil {
-		return model.User{}, err
+		log.Error(err)
 	}
 	user.Avatar = avatar
 

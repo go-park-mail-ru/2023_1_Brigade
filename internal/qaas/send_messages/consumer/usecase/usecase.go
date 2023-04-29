@@ -2,13 +2,11 @@ package usecase
 
 import (
 	"context"
+	"github.com/Shopify/sarama"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"project/internal/qaas/send_messages/consumer"
-	"time"
-
-	"github.com/Shopify/sarama"
-	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -42,8 +40,6 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 	config := sarama.NewConfig()                          // Создаем конфигурацию для Kafka-продюсера
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest // Начинаем с самого старого сообщения
 	config.Consumer.Return.Errors = true                  // Включаем отслеживание ошибок
-
-	time.Sleep(10 * time.Second)
 
 	consumer, err := sarama.NewConsumerGroup(brokerList, groupID, config)
 	if err != nil {

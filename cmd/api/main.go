@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
-	clientAuth "project/internal/clients/auth/user"
+	clientAuth "project/internal/clients/auth"
 	clientChat "project/internal/clients/chat"
 	clientMessages "project/internal/clients/messages"
 	clientUser "project/internal/clients/user"

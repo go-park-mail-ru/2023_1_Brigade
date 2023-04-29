@@ -8,7 +8,6 @@ package generated
 
 import (
 	context "context"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -25,9 +24,6 @@ const _ = grpc.SupportPackageIsVersion7
 type AuthClient interface {
 	Signup(ctx context.Context, in *RegistrationUser, opts ...grpc.CallOption) (*User, error)
 	Login(ctx context.Context, in *LoginUser, opts ...grpc.CallOption) (*User, error)
-	GetSessionByCookie(ctx context.Context, in *Cookie, opts ...grpc.CallOption) (*Session, error)
-	CreateSessionById(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*Session, error)
-	DeleteSessionByCookie(ctx context.Context, in *Cookie, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type authClient struct {
@@ -56,42 +52,12 @@ func (c *authClient) Login(ctx context.Context, in *LoginUser, opts ...grpc.Call
 	return out, nil
 }
 
-func (c *authClient) GetSessionByCookie(ctx context.Context, in *Cookie, opts ...grpc.CallOption) (*Session, error) {
-	out := new(Session)
-	err := c.cc.Invoke(ctx, "/protobuf.Auth/GetSessionByCookie", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) CreateSessionById(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*Session, error) {
-	out := new(Session)
-	err := c.cc.Invoke(ctx, "/protobuf.Auth/CreateSessionById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) DeleteSessionByCookie(ctx context.Context, in *Cookie, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/protobuf.Auth/DeleteSessionByCookie", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // AuthServer is the server API for Auth service.
 // All implementations should embed UnimplementedAuthServer
 // for forward compatibility
 type AuthServer interface {
 	Signup(context.Context, *RegistrationUser) (*User, error)
 	Login(context.Context, *LoginUser) (*User, error)
-	GetSessionByCookie(context.Context, *Cookie) (*Session, error)
-	CreateSessionById(context.Context, *UserID) (*Session, error)
-	DeleteSessionByCookie(context.Context, *Cookie) (*empty.Empty, error)
 }
 
 // UnimplementedAuthServer should be embedded to have forward compatible implementations.
@@ -103,15 +69,6 @@ func (UnimplementedAuthServer) Signup(context.Context, *RegistrationUser) (*User
 }
 func (UnimplementedAuthServer) Login(context.Context, *LoginUser) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
-}
-func (UnimplementedAuthServer) GetSessionByCookie(context.Context, *Cookie) (*Session, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSessionByCookie not implemented")
-}
-func (UnimplementedAuthServer) CreateSessionById(context.Context, *UserID) (*Session, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateSessionById not implemented")
-}
-func (UnimplementedAuthServer) DeleteSessionByCookie(context.Context, *Cookie) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteSessionByCookie not implemented")
 }
 
 // UnsafeAuthServer may be embedded to opt out of forward compatibility for this service.
@@ -161,60 +118,6 @@ func _Auth_Login_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_GetSessionByCookie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Cookie)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServer).GetSessionByCookie(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.Auth/GetSessionByCookie",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).GetSessionByCookie(ctx, req.(*Cookie))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Auth_CreateSessionById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserID)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServer).CreateSessionById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.Auth/CreateSessionById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).CreateSessionById(ctx, req.(*UserID))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Auth_DeleteSessionByCookie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Cookie)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServer).DeleteSessionByCookie(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.Auth/DeleteSessionByCookie",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).DeleteSessionByCookie(ctx, req.(*Cookie))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -229,18 +132,6 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _Auth_Login_Handler,
-		},
-		{
-			MethodName: "GetSessionByCookie",
-			Handler:    _Auth_GetSessionByCookie_Handler,
-		},
-		{
-			MethodName: "CreateSessionById",
-			Handler:    _Auth_CreateSessionById_Handler,
-		},
-		{
-			MethodName: "DeleteSessionByCookie",
-			Handler:    _Auth_DeleteSessionByCookie_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -7,11 +7,14 @@ import (
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
 	repositoryChat "project/internal/chat/repository"
+	"project/internal/clients/consumer"
+	"project/internal/clients/producer"
 	"project/internal/configs"
-	clientMessages "project/internal/messages/delivery/grpc"
+	serverMessages "project/internal/messages/delivery/grpc"
 	repositoryMessages "project/internal/messages/repository"
 	usecaseMessages "project/internal/messages/usecase"
 )
@@ -57,16 +60,39 @@ func main() {
 	}
 	defer db.Close()
 
+	grpcServer := grpc.NewServer()
+
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, config.Kafka)
+	grpcConnConsumer, err := grpc.Dial(
+		config.ConsumerService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Error("cant connect to grpc ", err)
+	}
+	defer grpcConnConsumer.Close()
 
-	grpcServer := grpc.NewServer()
+	grpcConnProducer, err := grpc.Dial(
+		config.ProducerService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Error("cant connect to grpc ", err)
+	}
+	defer grpcConnProducer.Close()
 
-	service := clientMessages.NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
+	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
+	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)
 
-	err = service.StartGRPCServer(config.MessagesService.Addr)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerService)
+
+	messagesService := serverMessages.NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
+
+	err = messagesService.StartGRPCServer(config.MessagesService.Addr)
 	if err != nil {
 		log.Error(err)
 	}

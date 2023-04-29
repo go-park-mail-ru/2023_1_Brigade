@@ -1,6 +1,8 @@
 package consumer
 
+import "context"
+
 type Usecase interface {
-	ConsumeMessage() []byte
-	StartConsumeMessages()
+	ConsumeMessage(ctx context.Context) []byte
+	StartConsumeMessages(ctx context.Context)
 }

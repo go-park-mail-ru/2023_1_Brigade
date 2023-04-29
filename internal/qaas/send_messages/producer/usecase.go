@@ -1,5 +1,7 @@
 package producer
 
+import "context"
+
 type Usecase interface {
-	ProduceMessage(message []byte) error
+	ProduceMessage(ctx context.Context, message []byte) error
 }

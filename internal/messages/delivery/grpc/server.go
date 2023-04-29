@@ -35,12 +35,12 @@ func (c *messagesServiceGRPCServer) StartGRPCServer(listenURL string) error {
 
 func (c *messagesServiceGRPCServer) SwitchMessageType(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
 	err := c.messagesUsecase.SwitchMessageType(ctx, bytes.Bytes)
-	return nil, err
+	return new(empty.Empty), err
 }
 
 func (c *messagesServiceGRPCServer) PutInProducer(ctx context.Context, message *generated.ProducerMessage) (*empty.Empty, error) {
 	err := c.messagesUsecase.PutInProducer(ctx, model_conversion.FromProtoProducerMessageToProducerMessage(message))
-	return nil, err
+	return new(empty.Empty), err
 }
 
 func (c *messagesServiceGRPCServer) PullFromConsumer(ctx context.Context, empty *empty.Empty) (*generated.Bytes, error) {

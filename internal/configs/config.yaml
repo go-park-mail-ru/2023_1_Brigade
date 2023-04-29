@@ -43,3 +43,9 @@ UsersService:
 
 MessagesService:
   addr: "messages:9002"
+
+ConsumerService:
+  addr: "consumer:9003"
+
+ProducerService:
+  addr: "producer:9004"

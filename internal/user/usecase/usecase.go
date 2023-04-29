@@ -7,7 +7,6 @@ import (
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
-	//	"project/internal/pkg/validation"
 	"project/internal/user"
 )
 

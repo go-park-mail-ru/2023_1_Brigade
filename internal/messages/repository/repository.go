@@ -91,7 +91,6 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		ChatId:    message.ChatId,
 		MessageId: message.Id,
 	})
-	defer rows.Close()
 
 	if err != nil {
 		return model.Message{}, err

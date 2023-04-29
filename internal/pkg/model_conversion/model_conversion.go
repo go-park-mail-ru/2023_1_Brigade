@@ -3,6 +3,41 @@ package model_conversion
 import (
 	protobuf "project/internal/generated"
 	"project/internal/model"
+	"time"
+	log "github.com/sirupsen/logrus"
+)
+
+func FromProtoRegistrationUserToRegistrationUser(registrationUser *protobuf.RegistrationUser) model.RegistrationUser {
+	return model.RegistrationUser{
+		Nickname: registrationUser.Nickname,
+		Email:    registrationUser.Email,
+		Password: registrationUser.Password,
+	}
+}
+
+func FromProtoLoginUserToLoginUser(loginUser *protobuf.LoginUser) model.LoginUser {
+	return model.LoginUser{
+		Email:    loginUser.Email,
+		Password: loginUser.Password,
+	}
+}
+
+func FromProtoSessionToSession(session *protobuf.Session) model.Session {
+	return model.Session{
+		UserId: session.UserId,
+		Cookie: session.Cookie,
+	}
+}
+
+func FromSessionToProtoSession(session model.Session) *protobuf.Session {
+	return &protobuf.Session{
+		UserId: session.UserId,
+		Cookie: session.Cookie,
+	}
+}
+
+func FromProtoCookieToCookie(cookie *protobuf.Cookie) string {
+	return cookie.Cookie
 )
 
 func FromProtoBytesToBytes(bytes *protobuf.Bytes) []byte {

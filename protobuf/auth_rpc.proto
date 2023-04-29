@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "protobuf/auth.proto";
+import "protobuf/user.proto";
+import "google/protobuf/empty.proto";
+
+service Auth {
+    rpc Signup(RegistrationUser) returns (User) {}
+    rpc Login(LoginUser) returns (User) {}
+    rpc GetSessionByCookie(Cookie) returns (Session) {}
+	rpc CreateSessionById(UserID) returns (Session) {}
+	rpc DeleteSessionByCookie(Cookie) returns (google.protobuf.Empty) {}
+}
+

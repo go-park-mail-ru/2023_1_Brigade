@@ -125,9 +125,10 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
-    command: redis-server --appendonly yes --replica-read-only no
     volumes:
       - redis_data:/data
+      - ./../redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
     networks:
       - backend-network
 

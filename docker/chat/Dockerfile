@@ -1,13 +1,19 @@
-FROM golang:1.19-alpine AS builder
+FROM golang:1.19-alpine as builder
 
 WORKDIR /app
+
 COPY go.mod go.sum ./
 RUN go mod download
 
-FROM builder AS build
-
 COPY . .
 
-RUN go build -o ./../../chat cmd/chat/main.go
+RUN go build -o /app/chat cmd/chat/main.go
 
-CMD ["/chat"]
+# Финальный этап, копируем собранное приложение
+FROM alpine:3
+
+WORKDIR /app
+
+COPY --from=builder /app .
+
+ENTRYPOINT ["/app/chat"]

@@ -11,40 +11,39 @@ import (
 	"testing"
 )
 
-//func Test_CreateChat_OK(t *testing.T) {
-//	var members []model.User
-//
-//	newChat := model.CreateChat{}
-//
-//	createdChat := model.Chat{
-//		Avatar:   configs.DefaultAvatarUrl,
-//		Messages: []model.Message{},
-//		Members:  members,
-//	}
-//
-//	expectedChat := model.Chat{
-//		Id:       1,
-//		Avatar:   configs.DefaultAvatarUrl,
-//		Messages: []model.Message{},
-//		Members:  members,
-//	}
-//
-//	ctl := gomock.NewController(t)
-//	defer ctl.Finish()
-//
-//	var ctx echo.Context
-//	chatRepository := chatMock.NewMockRepository(ctl)
-//	userRepository := userMock.NewMockRepository(ctl)
-//	messagesRepository := messageMock.NewMockRepository(ctl)
-//	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
-//
-//	chatRepository.EXPECT().CreateChat(context.Background(), createdChat).Return(expectedChat, nil).Times(1)
-//
-//	chat, err := usecase.CreateChat(ctx, newChat, 1)
-//
-//	require.NoError(t, err)
-//	require.Equal(t, chat, expectedChat)
-//}
+func Test_CreateChat_OK(t *testing.T) {
+	var members []model.User
+
+	newChat := model.CreateChat{}
+
+	createdChat := model.Chat{
+		Avatar:   "",
+		Messages: []model.Message{},
+		Members:  members,
+	}
+
+	expectedChat := model.Chat{
+		Id:       1,
+		Avatar:   "",
+		Messages: []model.Message{},
+		Members:  members,
+	}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	chatRepository := chatMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	messagesRepository := messageMock.NewMockRepository(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+
+	chatRepository.EXPECT().CreateChat(context.Background(), createdChat).Return(expectedChat, nil).Times(1)
+
+	chat, err := usecase.CreateChat(context.TODO(), newChat, 1)
+
+	require.NoError(t, err)
+	require.Equal(t, chat, expectedChat)
+}
 
 func Test_DeleteChat_OK(t *testing.T) {
 	ctl := gomock.NewController(t)

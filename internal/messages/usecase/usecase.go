@@ -27,16 +27,6 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
-	//consumer, err := consumerUsecase.NewConsumer(config.BrokerList, config.GroupID)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//
-	//producer, err := producerUsecase.NewProducer(config.BrokerList)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
 	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)

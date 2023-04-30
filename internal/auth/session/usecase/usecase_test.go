@@ -59,3 +59,26 @@ func Test_GetSessionByCookie(t *testing.T) {
 		require.Equal(t, session, test.expectedSession, test.name)
 	}
 }
+
+func Test_DeletSessionByCookie_OK(t *testing.T) {
+	test := testSessionCase{
+		expectedSession: model.Session{
+			UserId: 1,
+			Cookie: uuid.New().String(),
+		},
+		expectedError: nil,
+		name:          "Successfull getting session",
+	}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authSessionMock.NewMockRepository(ctl)
+	usecase := NewAuthUserUsecase(authRepository)
+
+	authRepository.EXPECT().DeleteSession(context.TODO(), test.expectedSession.Cookie).Return(nil).Times(1)
+
+	err := usecase.DeleteSessionByCookie(context.TODO(), test.expectedSession.Cookie)
+
+	require.NoError(t, test.expectedError, err)
+}

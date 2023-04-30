@@ -10,7 +10,7 @@ type usecase struct {
 	imagesRepo images.Repostiory
 }
 
-func NewChatUsecase(imagesRepo images.Repostiory) images.Usecase {
+func NewImagesUsecase(imagesRepo images.Repostiory) images.Usecase {
 	return &usecase{imagesRepo: imagesRepo}
 }
 

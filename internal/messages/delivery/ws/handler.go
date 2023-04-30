@@ -63,7 +63,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
-	log.Warn(session)
+
 	for {
 		_, message, err := ws.ReadMessage()
 		if err != nil {

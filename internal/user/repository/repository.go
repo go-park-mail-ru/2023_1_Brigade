@@ -73,7 +73,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	result, err := r.db.Exec("UPDATE chat SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5", user.Username, user.Nickname, user.Status, user.Password, user.Id)
+	result, err := r.db.Exec("UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5", user.Username, user.Nickname, user.Status, user.Password, user.Id)
 	if err != nil {
 		return model.AuthorizedUser{}, err
 	}
@@ -127,10 +127,6 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 	}
 
 	return nil
-}
-
-func (r repository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
-	return "", nil
 }
 
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {

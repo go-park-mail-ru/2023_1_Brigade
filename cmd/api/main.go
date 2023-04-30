@@ -134,7 +134,7 @@ func main() {
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
-	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

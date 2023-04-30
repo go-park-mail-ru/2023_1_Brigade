@@ -5,6 +5,14 @@ import (
 	"project/internal/model"
 )
 
+func FromRegistrationUserToProtoRegistrationUser(registrationUser model.RegistrationUser) *protobuf.RegistrationUser {
+	return &protobuf.RegistrationUser{
+		Nickname: registrationUser.Nickname,
+		Email:    registrationUser.Email,
+		Password: registrationUser.Password,
+	}
+}
+
 func FromProtoRegistrationUserToRegistrationUser(registrationUser *protobuf.RegistrationUser) model.RegistrationUser {
 	return model.RegistrationUser{
 		Nickname: registrationUser.Nickname,
@@ -13,10 +21,23 @@ func FromProtoRegistrationUserToRegistrationUser(registrationUser *protobuf.Regi
 	}
 }
 
+func FromLoginUserToProtoLoginUser(loginUser model.LoginUser) *protobuf.LoginUser {
+	return &protobuf.LoginUser{
+		Email:    loginUser.Email,
+		Password: loginUser.Password,
+	}
+}
+
 func FromProtoLoginUserToLoginUser(loginUser *protobuf.LoginUser) model.LoginUser {
 	return model.LoginUser{
 		Email:    loginUser.Email,
 		Password: loginUser.Password,
+	}
+}
+
+func FromBytesToProtoBytes(bytes []byte) *protobuf.Bytes {
+	return &protobuf.Bytes{
+		Bytes: bytes,
 	}
 }
 
@@ -63,8 +84,14 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 }
 
 func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
-	//layout := "2006-01-02 15:04:05.000000 -0700 UTC"
-	//time, err := time.Parse(layout, message.CreatedAt)
+	//layout := "2023-04-30 20:28:57.465635051 +0300 MSK m=+0.001514907"
+	//time, err := time.Parse(time.Now().String(), message.CreatedAt)
+	//if err != nil {
+	//	log.Error(err)
+	//}
+	//str := message.CreatedAt
+	////layout := "2023-04-30 20:35:39.45856491 +0300 MSK m=+0.001436522"
+	//time, err := time.Parse(time.RFC3339, str)
 	//if err != nil {
 	//	log.Error(err)
 	//}
@@ -88,7 +115,7 @@ func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *p
 		AuthorId:   message.AuthorId,
 		ChatId:     message.ChatID,
 		ReceiverID: message.ReceiverID,
-		//CreatedAt:  message.CreatedAt.String(),
+		CreatedAt:  message.CreatedAt.String(),
 	}
 }
 

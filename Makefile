@@ -4,6 +4,17 @@ all: clean run
 run:
 	cd docker && docker compose up -d
 
+.PHONY: build
+build: |
+	go build -o cmd/auth/auth cmd/auth/main.go
+	go build -o cmd/api/api cmd/api/main.go
+	go build -o cmd/chat/chat cmd/chat/main.go
+	go build -o cmd/consumer/consumer cmd/consumer/main.go
+	go build -o cmd/producer/producer cmd/producer/main.go
+	go build -o cmd/messages/messages cmd/messages/main.go
+	go build -o cmd/user/user cmd/user/main.go
+	cd docker && docker compose up -d
+
 .PHONY: clean_microservices
 clean: |
 	docker stop api || true

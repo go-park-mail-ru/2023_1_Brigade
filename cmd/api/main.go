@@ -161,7 +161,7 @@ func main() {
 	e.Use(p.HandlerFunc)
 	eProtheus.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
 	go func() {
-		err := eProtheus.Start(":8079")
+		err := eProtheus.Start(":9090")
 		if err != nil {
 			log.Error(err)
 		}

@@ -198,6 +198,8 @@ services:
       - grafana_data:/var/lib/grafana
     networks:
       - backend-network
+    depends_on:
+      - prometheus
 
 volumes:
   postgres_data: {}

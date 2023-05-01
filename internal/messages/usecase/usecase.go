@@ -137,9 +137,9 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 	}
 
 	for _, member := range members {
-		if member.MemberId == producerMessage.AuthorId {
-			continue
-		}
+		//if member.MemberId == producerMessage.AuthorId {
+		//	continue
+		//}
 
 		producerMessage.ReceiverID = member.MemberId
 		jsonProducerMessage, err := json.Marshal(producerMessage)

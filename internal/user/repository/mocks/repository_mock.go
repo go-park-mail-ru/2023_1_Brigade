@@ -106,19 +106,19 @@ func (mr *MockRepositoryMockRecorder) GetAllUsersExceptCurrentUser(ctx, userID i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsersExceptCurrentUser", reflect.TypeOf((*MockRepository)(nil).GetAllUsersExceptCurrentUser), ctx, userID)
 }
 
-// GetUserAvatar mocks base method.
-func (m *MockRepository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
+// GetSearchUsers mocks base method.
+func (m *MockRepository) GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserAvatar", ctx, userID)
-	ret0, _ := ret[0].(string)
+	ret := m.ctrl.Call(m, "GetSearchUsers", ctx, string)
+	ret0, _ := ret[0].([]model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetUserAvatar indicates an expected call of GetUserAvatar.
-func (mr *MockRepositoryMockRecorder) GetUserAvatar(ctx, userID interface{}) *gomock.Call {
+// GetSearchUsers indicates an expected call of GetSearchUsers.
+func (mr *MockRepositoryMockRecorder) GetSearchUsers(ctx, string interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserAvatar", reflect.TypeOf((*MockRepository)(nil).GetUserAvatar), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchUsers", reflect.TypeOf((*MockRepository)(nil).GetSearchUsers), ctx, string)
 }
 
 // GetUserByEmail mocks base method.

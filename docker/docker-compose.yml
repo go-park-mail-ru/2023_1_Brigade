@@ -6,6 +6,7 @@ services:
       context: ../.
       dockerfile: ./docker/api/Dockerfile
     container_name: api
+    image: api
     depends_on:
       - postgres
       - redis
@@ -24,6 +25,7 @@ services:
       context: ../.
       dockerfile: ./docker/chat/Dockerfile
     container_name: chat
+    image: chat
     depends_on:
       - postgres
     volumes:
@@ -39,6 +41,7 @@ services:
       context: ../.
       dockerfile: ./docker/user/Dockerfile
     container_name: user
+    image: user
     depends_on:
       - postgres
     volumes:
@@ -54,6 +57,7 @@ services:
       context: ../.
       dockerfile: ./docker/messages/Dockerfile
     container_name: messages
+    image: messages
     depends_on:
       - postgres
       - kafka
@@ -72,6 +76,7 @@ services:
       context: ../.
       dockerfile: ./docker/consumer/Dockerfile
     container_name: consumer
+    image: consumer
     depends_on:
       - kafka
     volumes:
@@ -87,6 +92,7 @@ services:
       context: ../.
       dockerfile: ./docker/producer/Dockerfile
     container_name: producer
+    image: producer
     depends_on:
       - kafka
     volumes:
@@ -102,6 +108,7 @@ services:
       context: ../.
       dockerfile: ./docker/auth/Dockerfile
     container_name: auth
+    image: auth
     depends_on:
       - postgres
     volumes:

@@ -93,6 +93,21 @@ func (mr *MockUsecaseMockRecorder) GetAllUsersExceptCurrentUser(ctx, userID inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsersExceptCurrentUser", reflect.TypeOf((*MockUsecase)(nil).GetAllUsersExceptCurrentUser), ctx, userID)
 }
 
+// GetSearchUsers mocks base method.
+func (m *MockUsecase) GetSearchUsers(ctx context.Context, string string) ([]model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSearchUsers", ctx, string)
+	ret0, _ := ret[0].([]model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSearchUsers indicates an expected call of GetSearchUsers.
+func (mr *MockUsecaseMockRecorder) GetSearchUsers(ctx, string interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchUsers", reflect.TypeOf((*MockUsecase)(nil).GetSearchUsers), ctx, string)
+}
+
 // GetUserById mocks base method.
 func (m *MockUsecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	m.ctrl.T.Helper()

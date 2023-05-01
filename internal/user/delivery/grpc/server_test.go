@@ -225,3 +225,20 @@ func TestServer_GetAllUsersExceptCurrentUser_OK(t *testing.T) {
 		},
 	})
 }
+
+func TestServer_GetSearchUsers_OK(t *testing.T) {
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	grpcServer := grpc.NewServer()
+
+	userUsecase := mockUser.NewMockUsecase(ctl)
+
+	userService := NewUsersServiceGRPCServer(grpcServer, userUsecase)
+
+	userUsecase.EXPECT().GetSearchUsers(context.TODO(), "string").Return([]model.User{}, nil).Times(1)
+
+	_, err := userService.GetSearchUsers(context.TODO(), &protobuf.String{String_: "string"})
+
+	require.NoError(t, err)
+}

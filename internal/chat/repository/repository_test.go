@@ -186,3 +186,47 @@ func TestPostgres_GetChatsByUserId_OK(t *testing.T) {
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err)
 }
+
+func TestPostgres_UpdateChatById_OK(t *testing.T) {
+	title := ""
+	chatID := uint64(1)
+	expectedChat := model.DBChat{
+		Id:     1,
+		Type:   configs.Chat,
+		Title:  title,
+		Avatar: "",
+	}
+
+	db, mock, err := sqlmock.New()
+	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	row := sqlmock.NewRows([]string{"id", "title", "type", "avatar"}).
+		AddRow(1, title, configs.Chat, "")
+
+	mock.
+		ExpectQuery(regexp.QuoteMeta(`UPDATE chat SET title=$1 WHERE id=$2`)).
+		WithArgs(title, chatID).
+		WillReturnRows(row)
+
+	dbx := sqlx.NewDb(db, "sqlmock")
+	repo := NewChatMemoryRepository(dbx)
+
+	chat, err := repo.UpdateChatById(context.TODO(), title, chatID)
+	require.NoError(t, err)
+
+	expectedChat.Id = chat.Id
+	expectedChat.Type = chat.Type
+	expectedChat.Title = chat.Title
+	expectedChat.Avatar = chat.Avatar
+
+	require.Equal(t, expectedChat, chat)
+
+	err = mock.ExpectationsWereMet()
+	require.NoError(t, err)
+}

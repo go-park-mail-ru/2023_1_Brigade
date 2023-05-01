@@ -137,6 +137,36 @@ func (mr *MockRepositoryMockRecorder) GetChatsByUserId(ctx, userID interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatsByUserId", reflect.TypeOf((*MockRepository)(nil).GetChatsByUserId), ctx, userID)
 }
 
+// GetSearchChannels mocks base method.
+func (m *MockRepository) GetSearchChannels(ctx context.Context, string string) ([]model.Chat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSearchChannels", ctx, string)
+	ret0, _ := ret[0].([]model.Chat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSearchChannels indicates an expected call of GetSearchChannels.
+func (mr *MockRepositoryMockRecorder) GetSearchChannels(ctx, string interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchChannels", reflect.TypeOf((*MockRepository)(nil).GetSearchChannels), ctx, string)
+}
+
+// GetSearchChats mocks base method.
+func (m *MockRepository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSearchChats", ctx, userID, string)
+	ret0, _ := ret[0].([]model.Chat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSearchChats indicates an expected call of GetSearchChats.
+func (mr *MockRepositoryMockRecorder) GetSearchChats(ctx, userID, string interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchChats", reflect.TypeOf((*MockRepository)(nil).GetSearchChats), ctx, userID, string)
+}
+
 // UpdateChatById mocks base method.
 func (m *MockRepository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
 	m.ctrl.T.Helper()

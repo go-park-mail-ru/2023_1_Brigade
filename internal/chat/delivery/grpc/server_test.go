@@ -219,3 +219,19 @@ func TestServer_GetListUserChats_OK(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, expectedListUserChats[0], model_conversion.FromProtoUserChatToUserChat(listUserChats.Chats[0]))
 }
+
+func TestServer_GetSearchChatsMessagesChannels_OK(t *testing.T) {
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	grpcServer := grpc.NewServer()
+	chatUsecase := chatMock.NewMockUsecase(ctl)
+
+	chatsService := NewChatsServiceGRPCServer(grpcServer, chatUsecase)
+
+	chatUsecase.EXPECT().GetSearchChatsMessagesChannels(context.TODO(), uint64(1), "string").Return(model.FoundedChatsMessagesChannels{}, nil).Times(1)
+
+	_, err := chatsService.GetSearchChatsMessagesChannels(context.TODO(), &protobuf.SearchChatsArgumets{UserID: uint64(1), String_: "string"})
+
+	require.NoError(t, err)
+}

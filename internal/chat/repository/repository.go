@@ -39,7 +39,7 @@ func (r repository) UpdateChatById(ctx context.Context, title string, chatID uin
 		return model.DBChat{}, err
 	}
 	if rows.Next() {
-		err = rows.Scan(&chat)
+		err = rows.Scan(&chat.Id, &chat.Title, &chat.Type, &chat.Avatar)
 		if err != nil {
 			return model.DBChat{}, err
 		}

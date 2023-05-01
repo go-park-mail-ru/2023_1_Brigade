@@ -74,3 +74,15 @@ func (c chatServiceGRPCClient) GetListUserChats(ctx context.Context, userID uint
 
 	return model_conversion.FromProtoUserChatsToUserChats(chats), nil
 }
+
+func (c chatServiceGRPCClient) GetSearchChatsMessagesChannels(ctx context.Context, userID uint64, string string) (model.FoundedChatsMessagesChannels, error) {
+	chats, err := c.chatClient.GetSearchChatsMessagesChannels(ctx, &generated.SearchChatsArgumets{
+		UserID:  userID,
+		String_: string,
+	})
+	if err != nil {
+		return model.FoundedChatsMessagesChannels{}, err
+	}
+
+	return model_conversion.FromProtoSearchChatsToSearchChats(chats), nil
+}

@@ -56,3 +56,14 @@ message ChatInListUser {
 message ArrayChatInListUser {
   repeated ChatInListUser chats = 1;
 }
+
+message FoundedChatsMessagesChannels {
+  repeated ChatInListUser FoundedChats = 1;
+  repeated ChatInListUser FoundedMessages = 2;
+  repeated ChatInListUser FoundedChannels = 3;
+}
+
+message SearchChatsArgumets {
+  uint64 UserID = 1;
+  string String = 2;
+}

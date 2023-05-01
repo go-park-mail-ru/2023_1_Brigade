@@ -29,6 +29,7 @@ type ChatsClient interface {
 	DeleteChatById(ctx context.Context, in *ChatID, opts ...grpc.CallOption) (*empty.Empty, error)
 	CheckExistUserInChat(ctx context.Context, in *ExistChatArguments, opts ...grpc.CallOption) (*empty.Empty, error)
 	GetListUserChats(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*ArrayChatInListUser, error)
+	GetSearchChatsMessagesChannels(ctx context.Context, in *SearchChatsArgumets, opts ...grpc.CallOption) (*FoundedChatsMessagesChannels, error)
 }
 
 type chatsClient struct {
@@ -93,6 +94,15 @@ func (c *chatsClient) GetListUserChats(ctx context.Context, in *UserID, opts ...
 	return out, nil
 }
 
+func (c *chatsClient) GetSearchChatsMessagesChannels(ctx context.Context, in *SearchChatsArgumets, opts ...grpc.CallOption) (*FoundedChatsMessagesChannels, error) {
+	out := new(FoundedChatsMessagesChannels)
+	err := c.cc.Invoke(ctx, "/protobuf.Chats/GetSearchChatsMessagesChannels", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatsServer is the server API for Chats service.
 // All implementations should embed UnimplementedChatsServer
 // for forward compatibility
@@ -103,6 +113,7 @@ type ChatsServer interface {
 	DeleteChatById(context.Context, *ChatID) (*empty.Empty, error)
 	CheckExistUserInChat(context.Context, *ExistChatArguments) (*empty.Empty, error)
 	GetListUserChats(context.Context, *UserID) (*ArrayChatInListUser, error)
+	GetSearchChatsMessagesChannels(context.Context, *SearchChatsArgumets) (*FoundedChatsMessagesChannels, error)
 }
 
 // UnimplementedChatsServer should be embedded to have forward compatible implementations.
@@ -126,6 +137,9 @@ func (UnimplementedChatsServer) CheckExistUserInChat(context.Context, *ExistChat
 }
 func (UnimplementedChatsServer) GetListUserChats(context.Context, *UserID) (*ArrayChatInListUser, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetListUserChats not implemented")
+}
+func (UnimplementedChatsServer) GetSearchChatsMessagesChannels(context.Context, *SearchChatsArgumets) (*FoundedChatsMessagesChannels, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSearchChatsMessagesChannels not implemented")
 }
 
 // UnsafeChatsServer may be embedded to opt out of forward compatibility for this service.
@@ -247,6 +261,24 @@ func _Chats_GetListUserChats_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Chats_GetSearchChatsMessagesChannels_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchChatsArgumets)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatsServer).GetSearchChatsMessagesChannels(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Chats/GetSearchChatsMessagesChannels",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatsServer).GetSearchChatsMessagesChannels(ctx, req.(*SearchChatsArgumets))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Chats_ServiceDesc is the grpc.ServiceDesc for Chats service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -277,6 +309,10 @@ var Chats_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetListUserChats",
 			Handler:    _Chats_GetListUserChats_Handler,
+		},
+		{
+			MethodName: "GetSearchChatsMessagesChannels",
+			Handler:    _Chats_GetSearchChatsMessagesChannels_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -86,3 +86,12 @@ func (c *chatsServiceGRPCServer) GetListUserChats(ctx context.Context, userID *g
 
 	return model_conversion.FromUserChatsToProtoUserChats(chats), nil
 }
+
+func (c *chatsServiceGRPCServer) GetSearchChatsMessagesChannels(ctx context.Context, argumets *generated.SearchChatsArgumets) (*generated.FoundedChatsMessagesChannels, error) {
+	chats, err := c.chatUsecase.GetSearchChatsMessagesChannels(ctx, argumets.UserID, argumets.String_)
+	if err != nil {
+		return nil, err
+	}
+
+	return model_conversion.FromSearchChatsToProtoSearchChats(chats), nil
+}

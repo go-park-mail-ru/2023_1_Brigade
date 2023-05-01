@@ -84,12 +84,15 @@ func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []b
 	}
 
 	producerMessage := model.ProducerMessage{
-		Id:        id,
-		Type:      webSocketMessage.Type,
-		Body:      webSocketMessage.Body,
-		AuthorId:  webSocketMessage.AuthorID,
-		ChatID:    webSocketMessage.ChatID,
-		CreatedAt: createdAt,
+		Id:       id,
+		Type:     webSocketMessage.Type,
+		Body:     webSocketMessage.Body,
+		AuthorId: webSocketMessage.AuthorID,
+		ChatID:   webSocketMessage.ChatID,
+	}
+
+	if id == "" {
+		producerMessage.CreatedAt = createdAt
 	}
 
 	switch producerMessage.Type {

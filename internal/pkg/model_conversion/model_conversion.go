@@ -223,6 +223,52 @@ func FromCreateChatToProtoCreateChat(chat model.CreateChat) *protobuf.CreateChat
 	}
 }
 
+func FromProtoSearchChatsToSearchChats(protoChats *protobuf.FoundedChatsMessagesChannels) model.FoundedChatsMessagesChannels {
+	foundedChats := make([]model.ChatInListUser, len(protoChats.FoundedChats))
+	for idx, value := range protoChats.FoundedChats {
+		foundedChats[idx] = FromProtoUserChatToUserChat(value)
+	}
+
+	foundedMessages := make([]model.ChatInListUser, len(protoChats.FoundedMessages))
+	for idx, value := range protoChats.FoundedMessages {
+		foundedMessages[idx] = FromProtoUserChatToUserChat(value)
+	}
+
+	foundedChannels := make([]model.ChatInListUser, len(protoChats.FoundedChannels))
+	for idx, value := range protoChats.FoundedChannels {
+		foundedChannels[idx] = FromProtoUserChatToUserChat(value)
+	}
+
+	return model.FoundedChatsMessagesChannels{
+		FoundedChats:    foundedChats,
+		FoundedMessages: foundedMessages,
+		FoundedChannels: foundedChannels,
+	}
+}
+
+func FromSearchChatsToProtoSearchChats(chats model.FoundedChatsMessagesChannels) *protobuf.FoundedChatsMessagesChannels {
+	foundedChats := make([]*protobuf.ChatInListUser, len(chats.FoundedChats))
+	for idx, value := range chats.FoundedChats {
+		foundedChats[idx] = FromUserChatToProtoUserChat(value)
+	}
+
+	foundedMessages := make([]*protobuf.ChatInListUser, len(chats.FoundedMessages))
+	for idx, value := range chats.FoundedMessages {
+		foundedMessages[idx] = FromUserChatToProtoUserChat(value)
+	}
+
+	foundedChannels := make([]*protobuf.ChatInListUser, len(chats.FoundedChannels))
+	for idx, value := range chats.FoundedChannels {
+		foundedChannels[idx] = FromUserChatToProtoUserChat(value)
+	}
+
+	return &protobuf.FoundedChatsMessagesChannels{
+		FoundedChats:    foundedChats,
+		FoundedMessages: foundedMessages,
+		FoundedChannels: foundedChannels,
+	}
+}
+
 func FromProtoMembersToMembers(members []*protobuf.User) []model.User {
 	res := make([]model.User, len(members))
 

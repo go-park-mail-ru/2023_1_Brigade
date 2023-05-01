@@ -12,7 +12,7 @@ type Repository interface {
 	GetChatById(ctx context.Context, chatID uint64) (model.Chat, error)
 	GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error)
 	CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error)
-	GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error)
 	AddUserInChatDB(ctx context.Context, chatID uint64, memberID uint64) error
-	//GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error)
+	GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error)
+	GetSearchChannels(ctx context.Context, string string) ([]model.Chat, error)
 }

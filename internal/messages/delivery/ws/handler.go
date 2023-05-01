@@ -66,7 +66,9 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	for {
 		_, message, err := ws.ReadMessage()
+		log.Warn(string(message))
 		if err != nil {
+			log.Error(err)
 			return err
 		}
 

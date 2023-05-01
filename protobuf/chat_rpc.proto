@@ -15,4 +15,5 @@ service Chats {
   rpc DeleteChatById(ChatID) returns(google.protobuf.Empty) {}
   rpc CheckExistUserInChat(ExistChatArguments) returns(google.protobuf.Empty) {}
   rpc GetListUserChats(UserID) returns(ArrayChatInListUser) {}
+  rpc GetSearchChatsMessagesChannels(SearchChatsArgumets) returns(FoundedChatsMessagesChannels) {}
 }

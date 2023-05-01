@@ -55,12 +55,8 @@ type ChatMessages struct {
 	MessageId string `json:"id_message" db:"id_message"`
 }
 
-type ChatUsersInGroup struct {
-	Type    uint64   `json:"type"    db:"type"`
-	Members []uint64 `json:"members" db:"members"`
-}
-
-type FoundedChatMessages struct {
+type FoundedChatsMessagesChannels struct {
 	FoundedChats    []ChatInListUser `json:"founded_chats"    db:"founded_chats"`
-	FoundedMessages []Chat           `json:"founded_messages" db:"founded_messages"`
+	FoundedMessages []ChatInListUser `json:"founded_messages" db:"founded_messages"`
+	FoundedChannels []ChatInListUser `json:"founded_channels" db:"founded_channels"`
 }

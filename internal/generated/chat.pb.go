@@ -540,6 +540,124 @@ func (x *ArrayChatInListUser) GetChats() []*ChatInListUser {
 	return nil
 }
 
+type FoundedChatsMessagesChannels struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	FoundedChats    []*ChatInListUser `protobuf:"bytes,1,rep,name=FoundedChats,proto3" json:"FoundedChats,omitempty"`
+	FoundedMessages []*ChatInListUser `protobuf:"bytes,2,rep,name=FoundedMessages,proto3" json:"FoundedMessages,omitempty"`
+	FoundedChannels []*ChatInListUser `protobuf:"bytes,3,rep,name=FoundedChannels,proto3" json:"FoundedChannels,omitempty"`
+}
+
+func (x *FoundedChatsMessagesChannels) Reset() {
+	*x = FoundedChatsMessagesChannels{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protobuf_chat_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FoundedChatsMessagesChannels) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FoundedChatsMessagesChannels) ProtoMessage() {}
+
+func (x *FoundedChatsMessagesChannels) ProtoReflect() protoreflect.Message {
+	mi := &file_protobuf_chat_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FoundedChatsMessagesChannels.ProtoReflect.Descriptor instead.
+func (*FoundedChatsMessagesChannels) Descriptor() ([]byte, []int) {
+	return file_protobuf_chat_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *FoundedChatsMessagesChannels) GetFoundedChats() []*ChatInListUser {
+	if x != nil {
+		return x.FoundedChats
+	}
+	return nil
+}
+
+func (x *FoundedChatsMessagesChannels) GetFoundedMessages() []*ChatInListUser {
+	if x != nil {
+		return x.FoundedMessages
+	}
+	return nil
+}
+
+func (x *FoundedChatsMessagesChannels) GetFoundedChannels() []*ChatInListUser {
+	if x != nil {
+		return x.FoundedChannels
+	}
+	return nil
+}
+
+type SearchChatsArgumets struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserID  uint64 `protobuf:"varint,1,opt,name=UserID,proto3" json:"UserID,omitempty"`
+	String_ string `protobuf:"bytes,2,opt,name=String,proto3" json:"String,omitempty"`
+}
+
+func (x *SearchChatsArgumets) Reset() {
+	*x = SearchChatsArgumets{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protobuf_chat_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SearchChatsArgumets) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SearchChatsArgumets) ProtoMessage() {}
+
+func (x *SearchChatsArgumets) ProtoReflect() protoreflect.Message {
+	mi := &file_protobuf_chat_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SearchChatsArgumets.ProtoReflect.Descriptor instead.
+func (*SearchChatsArgumets) Descriptor() ([]byte, []int) {
+	return file_protobuf_chat_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SearchChatsArgumets) GetUserID() uint64 {
+	if x != nil {
+		return x.UserID
+	}
+	return 0
+}
+
+func (x *SearchChatsArgumets) GetString_() string {
+	if x != nil {
+		return x.String_
+	}
+	return ""
+}
+
 var File_protobuf_chat_proto protoreflect.FileDescriptor
 
 var file_protobuf_chat_proto_rawDesc = []byte{
@@ -606,8 +724,27 @@ var file_protobuf_chat_proto_rawDesc = []byte{
 	0x65, 0x72, 0x12, 0x2e, 0x0a, 0x05, 0x63, 0x68, 0x61, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
 	0x0b, 0x32, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x68, 0x61,
 	0x74, 0x49, 0x6e, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x05, 0x63, 0x68, 0x61,
-	0x74, 0x73, 0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x3b, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65,
-	0x64, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x73, 0x22, 0xe4, 0x01, 0x0a, 0x1c, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65, 0x64, 0x43, 0x68,
+	0x61, 0x74, 0x73, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x43, 0x68, 0x61, 0x6e, 0x6e,
+	0x65, 0x6c, 0x73, 0x12, 0x3c, 0x0a, 0x0c, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65, 0x64, 0x43, 0x68,
+	0x61, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x68, 0x61, 0x74, 0x49, 0x6e, 0x4c, 0x69, 0x73, 0x74, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x0c, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65, 0x64, 0x43, 0x68, 0x61, 0x74,
+	0x73, 0x12, 0x42, 0x0a, 0x0f, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65, 0x64, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x68, 0x61, 0x74, 0x49, 0x6e, 0x4c, 0x69, 0x73, 0x74,
+	0x55, 0x73, 0x65, 0x72, 0x52, 0x0f, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65, 0x64, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x73, 0x12, 0x42, 0x0a, 0x0f, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65, 0x64,
+	0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x68, 0x61, 0x74, 0x49, 0x6e,
+	0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x0f, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x65,
+	0x64, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x73, 0x22, 0x45, 0x0a, 0x13, 0x53, 0x65, 0x61,
+	0x72, 0x63, 0x68, 0x43, 0x68, 0x61, 0x74, 0x73, 0x41, 0x72, 0x67, 0x75, 0x6d, 0x65, 0x74, 0x73,
+	0x12, 0x16, 0x0a, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x12, 0x16, 0x0a, 0x06, 0x53, 0x74, 0x72, 0x69,
+	0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
+	0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x3b, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -622,36 +759,41 @@ func file_protobuf_chat_proto_rawDescGZIP() []byte {
 	return file_protobuf_chat_proto_rawDescData
 }
 
-var file_protobuf_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_protobuf_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_protobuf_chat_proto_goTypes = []interface{}{
-	(*Chat)(nil),                // 0: protobuf.Chat
-	(*EditChatModel)(nil),       // 1: protobuf.EditChatModel
-	(*CreateChat)(nil),          // 2: protobuf.CreateChat
-	(*ChatID)(nil),              // 3: protobuf.ChatID
-	(*CreateChatArguments)(nil), // 4: protobuf.CreateChatArguments
-	(*ExistChatArguments)(nil),  // 5: protobuf.ExistChatArguments
-	(*ChatInListUser)(nil),      // 6: protobuf.ChatInListUser
-	(*ArrayChatInListUser)(nil), // 7: protobuf.ArrayChatInListUser
-	(*User)(nil),                // 8: protobuf.User
-	(*Message)(nil),             // 9: protobuf.Message
-	(*UserID)(nil),              // 10: protobuf.UserID
+	(*Chat)(nil),                         // 0: protobuf.Chat
+	(*EditChatModel)(nil),                // 1: protobuf.EditChatModel
+	(*CreateChat)(nil),                   // 2: protobuf.CreateChat
+	(*ChatID)(nil),                       // 3: protobuf.ChatID
+	(*CreateChatArguments)(nil),          // 4: protobuf.CreateChatArguments
+	(*ExistChatArguments)(nil),           // 5: protobuf.ExistChatArguments
+	(*ChatInListUser)(nil),               // 6: protobuf.ChatInListUser
+	(*ArrayChatInListUser)(nil),          // 7: protobuf.ArrayChatInListUser
+	(*FoundedChatsMessagesChannels)(nil), // 8: protobuf.FoundedChatsMessagesChannels
+	(*SearchChatsArgumets)(nil),          // 9: protobuf.SearchChatsArgumets
+	(*User)(nil),                         // 10: protobuf.User
+	(*Message)(nil),                      // 11: protobuf.Message
+	(*UserID)(nil),                       // 12: protobuf.UserID
 }
 var file_protobuf_chat_proto_depIdxs = []int32{
-	8,  // 0: protobuf.Chat.Members:type_name -> protobuf.User
-	9,  // 1: protobuf.Chat.Messages:type_name -> protobuf.Message
+	10, // 0: protobuf.Chat.Members:type_name -> protobuf.User
+	11, // 1: protobuf.Chat.Messages:type_name -> protobuf.Message
 	2,  // 2: protobuf.CreateChatArguments.Chat:type_name -> protobuf.CreateChat
-	10, // 3: protobuf.CreateChatArguments.userID:type_name -> protobuf.UserID
+	12, // 3: protobuf.CreateChatArguments.userID:type_name -> protobuf.UserID
 	0,  // 4: protobuf.ExistChatArguments.Chat:type_name -> protobuf.Chat
-	10, // 5: protobuf.ExistChatArguments.userID:type_name -> protobuf.UserID
-	8,  // 6: protobuf.ChatInListUser.Members:type_name -> protobuf.User
-	9,  // 7: protobuf.ChatInListUser.LastMessage:type_name -> protobuf.Message
-	8,  // 8: protobuf.ChatInListUser.LastMessageAuthor:type_name -> protobuf.User
+	12, // 5: protobuf.ExistChatArguments.userID:type_name -> protobuf.UserID
+	10, // 6: protobuf.ChatInListUser.Members:type_name -> protobuf.User
+	11, // 7: protobuf.ChatInListUser.LastMessage:type_name -> protobuf.Message
+	10, // 8: protobuf.ChatInListUser.LastMessageAuthor:type_name -> protobuf.User
 	6,  // 9: protobuf.ArrayChatInListUser.chats:type_name -> protobuf.ChatInListUser
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	6,  // 10: protobuf.FoundedChatsMessagesChannels.FoundedChats:type_name -> protobuf.ChatInListUser
+	6,  // 11: protobuf.FoundedChatsMessagesChannels.FoundedMessages:type_name -> protobuf.ChatInListUser
+	6,  // 12: protobuf.FoundedChatsMessagesChannels.FoundedChannels:type_name -> protobuf.ChatInListUser
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_protobuf_chat_proto_init() }
@@ -758,6 +900,30 @@ func file_protobuf_chat_proto_init() {
 				return nil
 			}
 		}
+		file_protobuf_chat_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FoundedChatsMessagesChannels); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protobuf_chat_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SearchChatsArgumets); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -765,7 +931,7 @@ func file_protobuf_chat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protobuf_chat_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

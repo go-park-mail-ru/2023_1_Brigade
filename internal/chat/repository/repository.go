@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/jmoiron/sqlx"
 	"project/internal/chat"
+	"project/internal/configs"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 )
@@ -143,30 +144,6 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 	return nil
 }
 
-func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error) {
-	var chat []model.ChatMembers
-	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_member=$1", userID)
-	defer rows.Close()
-
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, myErrors.ErrChatNotFound
-		}
-		return nil, err
-	}
-
-	for rows.Next() {
-		var memberChat model.ChatMembers
-		err := rows.Scan(&memberChat.ChatId, &memberChat.MemberId)
-		if err != nil {
-			return nil, err
-		}
-		chat = append(chat, memberChat)
-	}
-
-	return chat, err
-}
-
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
 	return nil, nil
 	//var chat model.Chat
@@ -177,4 +154,18 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 	//}
 
 	//return chat, err
+}
+
+func (r repository) GetSearchChannels(ctx context.Context, string string) ([]model.Chat, error) {
+	var channels []model.Chat
+	err := r.db.Select(&channels, `SELECT * FROM chat WHERE title LIKE $1 AND type=$2`, "%"+string+"%", configs.Channel)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, myErrors.ErrChatNotFound
+		}
+
+		return nil, err
+	}
+
+	return channels, nil
 }

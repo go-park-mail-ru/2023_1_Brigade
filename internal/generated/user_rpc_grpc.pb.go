@@ -30,6 +30,7 @@ type UsersClient interface {
 	GetUserContacts(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*Contacts, error)
 	PutUserById(ctx context.Context, in *PutUserArguments, opts ...grpc.CallOption) (*User, error)
 	GetAllUsersExceptCurrentUser(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*Contacts, error)
+	GetSearchUsers(ctx context.Context, in *String, opts ...grpc.CallOption) (*Contacts, error)
 }
 
 type usersClient struct {
@@ -103,6 +104,15 @@ func (c *usersClient) GetAllUsersExceptCurrentUser(ctx context.Context, in *User
 	return out, nil
 }
 
+func (c *usersClient) GetSearchUsers(ctx context.Context, in *String, opts ...grpc.CallOption) (*Contacts, error) {
+	out := new(Contacts)
+	err := c.cc.Invoke(ctx, "/protobuf.Users/GetSearchUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsersServer is the server API for Users service.
 // All implementations should embed UnimplementedUsersServer
 // for forward compatibility
@@ -114,6 +124,7 @@ type UsersServer interface {
 	GetUserContacts(context.Context, *UserID) (*Contacts, error)
 	PutUserById(context.Context, *PutUserArguments) (*User, error)
 	GetAllUsersExceptCurrentUser(context.Context, *UserID) (*Contacts, error)
+	GetSearchUsers(context.Context, *String) (*Contacts, error)
 }
 
 // UnimplementedUsersServer should be embedded to have forward compatible implementations.
@@ -140,6 +151,9 @@ func (UnimplementedUsersServer) PutUserById(context.Context, *PutUserArguments) 
 }
 func (UnimplementedUsersServer) GetAllUsersExceptCurrentUser(context.Context, *UserID) (*Contacts, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllUsersExceptCurrentUser not implemented")
+}
+func (UnimplementedUsersServer) GetSearchUsers(context.Context, *String) (*Contacts, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSearchUsers not implemented")
 }
 
 // UnsafeUsersServer may be embedded to opt out of forward compatibility for this service.
@@ -279,6 +293,24 @@ func _Users_GetAllUsersExceptCurrentUser_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Users_GetSearchUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(String)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServer).GetSearchUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Users/GetSearchUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServer).GetSearchUsers(ctx, req.(*String))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Users_ServiceDesc is the grpc.ServiceDesc for Users service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -313,6 +345,10 @@ var Users_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllUsersExceptCurrentUser",
 			Handler:    _Users_GetAllUsersExceptCurrentUser_Handler,
+		},
+		{
+			MethodName: "GetSearchUsers",
+			Handler:    _Users_GetSearchUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

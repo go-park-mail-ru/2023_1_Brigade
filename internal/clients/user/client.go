@@ -82,3 +82,12 @@ func (u userServiceGRPCClient) GetAllUsersExceptCurrentUser(ctx context.Context,
 
 	return model_conversion.FromProtoMembersToMembers(users.Contacts), nil
 }
+
+func (u userServiceGRPCClient) GetSearchUsers(ctx context.Context, string string) ([]model.User, error) {
+	searchUsers, err := u.userClient.GetSearchUsers(ctx, &generated.String{String_: string})
+	if err != nil {
+		return nil, err
+	}
+
+	return model_conversion.FromProtoMembersToMembers(searchUsers.Contacts), nil
+}

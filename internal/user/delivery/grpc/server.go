@@ -87,3 +87,12 @@ func (c *usersServiceGRPCServer) GetAllUsersExceptCurrentUser(ctx context.Contex
 
 	return &generated.Contacts{Contacts: model_conversion.FromMembersToProtoMembers(contacts)}, nil
 }
+
+func (c *usersServiceGRPCServer) GetSearchUsers(ctx context.Context, string *generated.String) (*generated.Contacts, error) {
+	searchUsers, err := c.userUsecase.GetSearchUsers(ctx, string.String_)
+	if err != nil {
+		return nil, err
+	}
+
+	return &generated.Contacts{Contacts: model_conversion.FromMembersToProtoMembers(searchUsers)}, nil
+}

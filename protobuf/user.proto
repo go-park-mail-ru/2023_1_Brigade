@@ -48,3 +48,7 @@ message PutUserArguments {
   UpdateUser user = 1;
   uint64  userID = 2;
 }
+
+message String {
+  string string = 1;
+}

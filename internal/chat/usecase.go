@@ -12,5 +12,5 @@ type Usecase interface {
 	DeleteChatById(ctx context.Context, chatID uint64) error
 	CheckExistUserInChat(ctx context.Context, chat model.Chat, userID uint64) error
 	GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error)
-	GetSearchChatsMessages(ctx context.Context, userID uint64, string string) (model.FoundedChatMessages, error)
+	//GetSearchChatsMessages(ctx context.Context, userID uint64, string string) (model.FoundedChatMessages, error)
 }

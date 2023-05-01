@@ -197,7 +197,6 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 			log.Error(err)
 		}
 
-		log.Warn(editChat.Id)
 		err = u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, memberID)
 		if err != nil {
 			log.Error(err)
@@ -211,7 +210,6 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 	}
 	chat.Members = members
-	chat.Title = editChat.Title
 
 	return chat, nil
 }

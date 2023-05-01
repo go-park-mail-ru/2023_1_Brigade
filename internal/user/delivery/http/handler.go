@@ -99,6 +99,17 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, contacts)
 }
 
+func (u userHandler) SearchUsersHandler(ctx echo.Context) error {
+	string := ctx.Param("string")
+
+	searchContacts, err := u.usecase.GetSearchUsers(context.TODO(), string)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, searchContacts)
+}
+
 func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	handler := userHandler{usecase: us}
 	userUrl := "/users/:userID/"
@@ -106,6 +117,7 @@ func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	currentUserUrl := "/users/settings/"
 	userContactsUrl := "/users/contacts/"
 	userAddContactUrl := "/users/:userID/add/"
+	searchContactsUrl := "users/search/:string"
 
 	api := e.Group("api/v1")
 	user := api.Group(userUrl)
@@ -113,12 +125,14 @@ func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	currentUser := api.Group(currentUserUrl)
 	userContacts := api.Group(userContactsUrl)
 	userAddContact := api.Group(userAddContactUrl)
+	searchContacts := api.Group(searchContactsUrl)
 
 	user.GET("", handler.GetUserHandler)
 	currentUser.PUT("", handler.PutUserHandler)
 	deleteUser.DELETE("", handler.DeleteUserHandler)
 	currentUser.GET("", handler.GetCurrentUserHandler)
 	userContacts.GET("", handler.GetUserContactsHandler)
+	searchContacts.GET("", handler.SearchUsersHandler)
 	userAddContact.POST("", handler.UserAddContactHandler)
 
 	return handler

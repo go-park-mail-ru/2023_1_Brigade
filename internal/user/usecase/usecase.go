@@ -104,3 +104,8 @@ func (u usecase) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64
 	users, err := u.userRepo.GetAllUsersExceptCurrentUser(context.Background(), userID)
 	return model_conversion.FromAuthorizedUserArrayToUserArray(users), err
 }
+
+func (u usecase) GetSearchUsers(ctx context.Context, string string) ([]model.User, error) {
+	searchContacts, err := u.userRepo.GetSearchUsers(ctx, string)
+	return model_conversion.FromAuthorizedUserArrayToUserArray(searchContacts), err
+}

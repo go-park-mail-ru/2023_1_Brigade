@@ -48,6 +48,30 @@ func (r repository) UpdateChatById(ctx context.Context, title string, chatID uin
 	return chat, nil
 }
 
+func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error) {
+	var chat []model.ChatMembers
+	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_member=$1", userID)
+	defer rows.Close()
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, myErrors.ErrChatNotFound
+		}
+		return nil, err
+	}
+
+	for rows.Next() {
+		var memberChat model.ChatMembers
+		err := rows.Scan(&memberChat.ChatId, &memberChat.MemberId)
+		if err != nil {
+			return nil, err
+		}
+		chat = append(chat, memberChat)
+	}
+
+	return chat, err
+}
+
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
 	var chatMembers []model.ChatMembers
 	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_chat=$1", chatID)

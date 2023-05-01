@@ -120,7 +120,7 @@ func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
 
 func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
-	userChats, err := u.chatRepo.GetChatMembersByChatId(context.Background(), userID)
+	userChats, err := u.chatRepo.GetChatsByUserId(context.Background(), userID)
 
 	if err != nil {
 		return nil, err

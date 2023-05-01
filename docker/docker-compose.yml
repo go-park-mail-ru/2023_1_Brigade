@@ -49,53 +49,53 @@ services:
     networks:
       - backend-network
 
-#  messages:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/messages/Dockerfile
-#    container_name: messages
-#    depends_on:
-#      - postgres
-#      - kafka
-#      - consumer
-#      - producer
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9002:9002"
-#    restart: always
-#    networks:
-#      - backend-network
-#
-#  consumer:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/consumer/Dockerfile
-#    container_name: consumer
-#    depends_on:
-#      - kafka
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9003:9003"
-#    restart: always
-#    networks:
-#      - backend-network
-#
-#  producer:
-#    build:
-#      context: ../.
-#      dockerfile: ./docker/producer/Dockerfile
-#    container_name: producer
-#    depends_on:
-#      - kafka
-#    volumes:
-#      - /home/ubuntu/avatars:/avatars
-#    ports:
-#      - "9004:9004"
-#    restart: always
-#    networks:
-#      - backend-network
+  messages:
+    build:
+      context: ../.
+      dockerfile: ./docker/messages/Dockerfile
+    container_name: messages
+    depends_on:
+      - postgres
+      - kafka
+      - consumer
+      - producer
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9002:9002"
+    restart: always
+    networks:
+      - backend-network
+
+  consumer:
+    build:
+      context: ../.
+      dockerfile: ./docker/consumer/Dockerfile
+    container_name: consumer
+    depends_on:
+      - kafka
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9003:9003"
+    restart: always
+    networks:
+      - backend-network
+
+  producer:
+    build:
+      context: ../.
+      dockerfile: ./docker/producer/Dockerfile
+    container_name: producer
+    depends_on:
+      - kafka
+    volumes:
+      - /home/ubuntu/avatars:/avatars
+    ports:
+      - "9004:9004"
+    restart: always
+    networks:
+      - backend-network
 
   auth:
     build:

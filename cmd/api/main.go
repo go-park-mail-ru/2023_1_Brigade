@@ -98,6 +98,7 @@ func main() {
 	grpcConnUsers, err := grpc.Dial(
 		config.UsersService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
 	)
 	if err != nil {
 		log.Error("cant connect to grpc ", err)

@@ -13,10 +13,14 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
+	repositoryChat "project/internal/chat/repository"
 	clientAuth "project/internal/clients/auth"
 	clientChat "project/internal/clients/chat"
-	clientMessages "project/internal/clients/messages"
 	clientUser "project/internal/clients/user"
+	repositoryMessages "project/internal/messages/repository"
+	usecaseMessages "project/internal/messages/usecase"
+	"project/internal/qaas/send_messages/consumer/usecase"
+	usecase2 "project/internal/qaas/send_messages/producer/usecase"
 
 	httpUser "project/internal/user/delivery/http"
 
@@ -105,15 +109,15 @@ func main() {
 	}
 	defer grpcConnUsers.Close()
 
-	grpcConnMessages, err := grpc.Dial(
-		config.MessagesService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Error("cant connect to grpc ", err)
-	}
-	defer grpcConnMessages.Close()
+	//grpcConnMessages, err := grpc.Dial(
+	//	config.MessagesService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Error("cant connect to grpc ", err)
+	//}
+	//defer grpcConnMessages.Close()
 
 	grpcConnAuth, err := grpc.Dial(
 		config.AuthService.Addr,
@@ -128,13 +132,27 @@ func main() {
 	authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
 	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
-	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
+	//messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
+	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
+	chatRepository := repositoryChat.NewChatMemoryRepository(db)
 
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)
+
+	producerService, err := usecase2.NewProducer(config.Kafka.BrokerList)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	consumerService, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepository, messagesRepository, consumerService, producerService)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -170,7 +188,7 @@ func main() {
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
-	wsMessages.NewMessagesHandler(e, messagesService)
+	wsMessages.NewMessagesHandler(e, messagesUsecase)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))

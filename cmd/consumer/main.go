@@ -50,13 +50,13 @@ func main() {
 
 	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	service := serverConsumer.NewConsumerServiceGRPCServer(grpcServer, consumerUsecase)
 
 	err = service.StartGRPCServer(config.ConsumerService.Addr)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 }

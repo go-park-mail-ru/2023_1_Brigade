@@ -117,9 +117,10 @@ func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {
 	currentUserUrl := "/users/settings/"
 	userContactsUrl := "/users/contacts/"
 	userAddContactUrl := "/users/:userID/add/"
-	searchContactsUrl := "users/search/:string"
+	searchContactsUrl := "/users/search/:string/"
 
 	api := e.Group("api/v1")
+
 	user := api.Group(userUrl)
 	deleteUser := api.Group(deleteUserUrl)
 	currentUser := api.Group(currentUserUrl)

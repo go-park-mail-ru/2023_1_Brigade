@@ -15,6 +15,7 @@ services:
     ports:
       - "8081:8081"
       - "8079:8079"
+    restart: always
     networks:
       - backend-network
 
@@ -29,6 +30,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "9000:9000"
+    restart: always
     networks:
       - backend-network
 
@@ -43,6 +45,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "9001:9001"
+    restart: always
     networks:
       - backend-network
 
@@ -60,6 +63,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "9002:9002"
+    restart: always
     networks:
       - backend-network
 
@@ -74,6 +78,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "9003:9003"
+    restart: always
     networks:
       - backend-network
 
@@ -88,6 +93,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "9004:9004"
+    restart: always
     networks:
       - backend-network
 
@@ -102,6 +108,7 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "9005:9005"
+    restart: always
     networks:
       - backend-network
 
@@ -117,6 +124,7 @@ services:
     volumes:
       - ./../db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
+    restart: always
     networks:
       - backend-network
 
@@ -129,6 +137,7 @@ services:
       - redis_data:/data
       - ./../redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
     networks:
       - backend-network
 
@@ -137,6 +146,7 @@ services:
     container_name: zookeeper
     ports:
       - "2181:2181"
+    restart: always
     networks:
       - backend-network
 
@@ -152,6 +162,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     depends_on:
       - zookeeper
+    restart: always
     networks:
       - backend-network
 
@@ -163,6 +174,7 @@ services:
       - "8900:8900"
     volumes:
       - ./../config.json:/centrifugo/config.json
+    restart: always
     networks:
       - backend-network
 
@@ -196,6 +208,7 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+    restart: always
     networks:
       - backend-network
     depends_on:

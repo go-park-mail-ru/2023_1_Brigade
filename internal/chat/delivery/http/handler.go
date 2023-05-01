@@ -108,22 +108,6 @@ func (u chatHandler) DeleteChatHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	//
-	//chat, err := u.chatUsecase.GetChatById(ctx, chatID)
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//session := ctx.Get("session").(model.Session)
-	//err = u.chatUsecase.CheckExistUserInChat(ctx, chat, session.UserId)
-	//if err == nil {
-	//	return err
-	//}
-
-	//err = u.chatUsecase.DeleteChatById(ctx, chatID)
-	//if err != nil {
-	//	return err
-	//}
 
 	err = u.chatUsecase.DeleteChatById(context.TODO(), chatID)
 	if err != nil {
@@ -148,23 +132,38 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, newChat)
 }
 
+func (u chatHandler) GetChatsMessagesHandler(ctx echo.Context) error {
+	string := ctx.Param("string")
+	session := ctx.Get("session").(model.Session)
+
+	searchChatsMessages, err := u.chatUsecase.GetSearchChatsMessages(context.TODO(), session.UserId, string)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, searchChatsMessages)
+}
+
 func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase) chatHandler {
 	handler := chatHandler{chatUsecase: chatUsecase, userUsecase: userUsecase}
 	currentUserChatsUrl := "/chats/"
 	getChatUrl := "/chats/:chatID/"
 	deleteChatUrl := "/chats/:chatID/"
+	searchChatsMessagesUrl := "/chats/search/:string/"
 
 	api := e.Group("api/v1")
 
 	getChat := api.Group(getChatUrl)
 	currentUserChats := api.Group(currentUserChatsUrl)
 	deleteChat := api.Group(deleteChatUrl)
+	searchChatsMessages := api.Group(searchChatsMessagesUrl)
 
 	getChat.GET("", handler.GetChatHandler)
 	deleteChat.DELETE("", handler.DeleteChatHandler)
 	currentUserChats.PUT("", handler.EditChatHandler)
 	currentUserChats.GET("", handler.GetCurrentUserChatsHandler)
 	currentUserChats.POST("", handler.CreateCurrentUserChatHandler)
+	searchChatsMessages.GET("", handler.GetChatsMessagesHandler)
 
 	return handler
 }

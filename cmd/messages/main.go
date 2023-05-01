@@ -71,20 +71,18 @@ func main() {
 	grpcConnConsumer, err := grpc.Dial(
 		config.ConsumerService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
 	)
 	if err != nil {
-		log.Error("cant connect to grpc ", err)
+		log.Fatal("cant connect to grpc ", err)
 	}
 	defer grpcConnConsumer.Close()
 
 	grpcConnProducer, err := grpc.Dial(
 		config.ProducerService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
 	)
 	if err != nil {
-		log.Error("cant connect to grpc ", err)
+		log.Fatal("cant connect to grpc ", err)
 	}
 	defer grpcConnProducer.Close()
 
@@ -107,6 +105,6 @@ func main() {
 
 	err = messagesService.StartGRPCServer(config.MessagesService.Addr)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 }

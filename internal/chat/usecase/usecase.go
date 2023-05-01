@@ -213,3 +213,12 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 
 	return chat, nil
 }
+
+func (u usecase) GetSearchChatsMessages(ctx context.Context, userID uint64, string string) (model.FoundedChatMessages, error) {
+	return model.FoundedChatMessages{}, nil
+	//foundedChats, err := u.chatRepo.GetSearchChats(ctx, userID, string)
+	//if err != nil {
+	//	return model.FoundedChatMessages{}, err
+	//}
+
+}

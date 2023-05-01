@@ -14,4 +14,5 @@ type Repository interface {
 	CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error)
 	GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error)
 	AddUserInChatDB(ctx context.Context, chatID uint64, memberID uint64) error
+	GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error)
 }

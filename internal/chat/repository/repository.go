@@ -166,3 +166,15 @@ func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]mode
 
 	return chat, err
 }
+
+func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
+	return nil, nil
+	//var chat model.Chat
+	//err := r.db.Get(&chat, "SELECT chat.id FROM chat JOIN chat_members ON chat.id = chat_members.id_chat WHERE chat_members.id_member = $1 AND chat.title LIKE $2;", userID, "%"+string+"%")
+	//
+	//if errors.Is(err, sql.ErrNoRows) {
+	//return chat, myErrors.ErrChatNotFound
+	//}
+
+	//return chat, err
+}

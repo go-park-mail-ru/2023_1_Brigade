@@ -88,9 +88,10 @@ func main() {
 	grpcConnChats, err := grpc.Dial(
 		config.ChatsService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
 	)
 	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
+		log.Error("cant connect to grpc ", err)
 	}
 	defer grpcConnChats.Close()
 
@@ -99,25 +100,27 @@ func main() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
+		log.Error("cant connect to grpc ", err)
 	}
 	defer grpcConnUsers.Close()
 
 	grpcConnMessages, err := grpc.Dial(
 		config.MessagesService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
 	)
 	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
+		log.Error("cant connect to grpc ", err)
 	}
 	defer grpcConnMessages.Close()
 
 	grpcConnAuth, err := grpc.Dial(
 		config.AuthService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
 	)
 	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
+		log.Error("cant connect to grpc ", err)
 	}
 	defer grpcConnAuth.Close()
 

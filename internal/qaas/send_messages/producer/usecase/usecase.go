@@ -23,7 +23,7 @@ func NewProducer(brokerList []string) (producer.Usecase, error) {
 
 	producer, err := sarama.NewAsyncProducer(brokerList, config)
 	if err != nil {
-		return &usecase{producer: nil}, err
+		log.Fatal(err)
 	}
 
 	return &usecase{producer: producer}, nil

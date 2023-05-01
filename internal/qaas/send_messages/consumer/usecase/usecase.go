@@ -43,7 +43,7 @@ func NewConsumer(brokerList []string, groupID string) (consumer.Usecase, error) 
 
 	consumer, err := sarama.NewConsumerGroup(brokerList, groupID, config)
 	if err != nil {
-		return &usecase{}, err
+		log.Fatal(err)
 	}
 
 	consumerUsecase := usecase{consumer: consumer, messagesChan: messagesChan}

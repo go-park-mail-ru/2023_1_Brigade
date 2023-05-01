@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	auth "project/internal/auth/user"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -14,6 +15,29 @@ func NewAuthUserMemoryRepository(db *sqlx.DB) auth.Repository {
 
 type repository struct {
 	db *sqlx.DB
+}
+
+func (r repository) createTechnogrammChat(user model.AuthorizedUser) {
+	var chat model.DBChat
+	err := r.db.Select(&chat, `INSERT INTO chat (type, avatar, title) VALUES (0, 'https://technogramm.ru/avatars/logo.png', 'Technogramm');`)
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = r.db.Exec(`INSERT INTO chat_messages (id_chat, id_message) VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM message WHERE id ='1337'));`, chat.Id)
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = r.db.Exec(`INSERT INTO chat_members (id_chat, id_member) VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM profile WHERE id = $2));`, chat.Id, user.Id)
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = r.db.Exec(`INSERT INTO chat_members (id_chat, id_member) VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM profile WHERE id = 0));`, chat.Id)
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
@@ -30,6 +54,8 @@ func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (
 			return model.AuthorizedUser{}, err
 		}
 	}
+
+	r.createTechnogrammChat(user)
 
 	return user, nil
 }

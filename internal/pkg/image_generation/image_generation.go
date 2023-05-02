@@ -1,13 +1,16 @@
 package image_generation
 
 import (
+	"crypto/rand"
 	"github.com/fogleman/gg"
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
-	"math/rand"
+	"math"
+	"math/big"
 	"os"
 	"strings"
 )
@@ -16,11 +19,22 @@ func GenerateAvatar(firstCharacterName string) (string, error) {
 	firstCharacterName = strings.ToUpper(firstCharacterName)
 	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))
 
-	r := uint8(rand.Intn(256))
-	g := uint8(rand.Intn(256))
-	b := uint8(rand.Intn(256))
+	rBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))
+	if err != nil {
+		log.Error(err)
+	}
 
-	color := color.RGBA{r, g, b, 255}
+	gBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))
+	if err != nil {
+		log.Error(err)
+	}
+
+	bBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))
+	if err != nil {
+		log.Error(err)
+	}
+
+	color := color.RGBA{uint8(rBig.Uint64()), uint8(gBig.Uint64()), uint8(bBig.Uint64()), 255}
 
 	draw.Draw(img, img.Bounds(), &image.Uniform{color}, image.Point{}, draw.Src)
 
@@ -43,7 +57,7 @@ func GenerateAvatar(firstCharacterName string) (string, error) {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
-	if err := dc.LoadFontFace("Go-Mono.ttf", 728); err != nil {
+	if err := dc.LoadFontFace("../../avatars/Go-Mono.ttf", 728); err != nil {
 		return "", err
 	}
 

@@ -141,16 +141,19 @@ func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
 	}
 
 	rows, err = r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound
 	}
 
 	rows, err = r.db.Query("DELETE FROM message WHERE id_chat=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrMessageNotFound
 	}
 
 	rows, err = r.db.Query("DELETE FROM chat WHERE id=$1", chatID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrChatNotFound
 	}

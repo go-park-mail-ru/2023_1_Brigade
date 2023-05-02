@@ -66,17 +66,10 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	for {
 		_, message, err := ws.ReadMessage()
-		log.Warn(string(message))
 
 		if err != nil {
 			log.Error(err)
-			//ws.
-			ws, err = u.upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
-			if err != nil {
-				log.Error(err)
-			}
-			continue
-			//return err
+			return err
 		}
 
 		err = u.messageUsecase.SwitchMessageType(context.TODO(), message)

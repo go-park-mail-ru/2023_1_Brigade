@@ -37,18 +37,30 @@ Kafka:
 
 ChatsService:
   addr: "chat:9000"
+  addrMetrics: "chat:9091"
+  serviceName: "chat"
 
 UsersService:
   addr: "user:9001"
+  addrMetrics: "user:9092"
+  serviceName: "user"
 
 MessagesService:
   addr: "messages:9002"
+  addrMetrics: "messages:9093"
+  serviceName: "messages"
 
 ConsumerService:
   addr: "consumer:9003"
+  addrMetrics: "consumer:9094"
+  serviceName: "consumer"
 
 ProducerService:
   addr: "producer:9004"
+  addrMetrics: "producer:9095"
+  serviceName: "producer"
 
 AuthService:
   addr: "auth:9005"
+  addrMetrics: "auth:9096"
+  serviceName: "auth"

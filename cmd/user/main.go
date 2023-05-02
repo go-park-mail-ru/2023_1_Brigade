@@ -11,6 +11,8 @@ import (
 	"os"
 	repositoryAuthUser "project/internal/auth/user/repository"
 	"project/internal/configs"
+	"project/internal/middleware"
+	metrics "project/internal/pkg/metrics/prometheus"
 	clientUser "project/internal/user/delivery/grpc"
 	repositoryUser "project/internal/user/repository"
 	usecaseUser "project/internal/user/usecase"
@@ -65,7 +67,22 @@ func main() {
 
 	userUsecase := usecaseUser.NewUserUsecase(userRepo, authUserRepo)
 
-	grpcServer := grpc.NewServer()
+	metrics, err := metrics.NewMetricsGRPCServer(config.UsersService.ServiceName)
+	if err != nil {
+		log.Error(err)
+	}
+
+	grpcMidleware := middleware.NewGRPCMiddleware(metrics)
+
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(grpcMidleware.GRPCMetricsMiddleware),
+	)
+
+	go func() {
+		if err = metrics.StartGRPCMetricsServer(config.UsersService.AddrMetrics); err != nil {
+			log.Error(err)
+		}
+	}()
 
 	service := clientUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
 

@@ -49,27 +49,39 @@ type Kafka struct {
 }
 
 type ChatsService struct {
-	Addr string `yaml:"addr"`
+	Addr        string `yaml:"addr"`
+	AddrMetrics string `yaml:"addrMetrics"`
+	ServiceName string `yaml:"serviceName"`
 }
 
 type UsersService struct {
-	Addr string `yaml:"addr"`
+	Addr        string `yaml:"addr"`
+	AddrMetrics string `yaml:"addrMetrics"`
+	ServiceName string `yaml:"serviceName"`
 }
 
 type MessagesService struct {
-	Addr string `yaml:"addr"`
+	Addr        string `yaml:"addr"`
+	AddrMetrics string `yaml:"addrMetrics"`
+	ServiceName string `yaml:"serviceName"`
 }
 
 type ConsumerService struct {
-	Addr string `yaml:"addr"`
+	Addr        string `yaml:"addr"`
+	AddrMetrics string `yaml:"addrMetrics"`
+	ServiceName string `yaml:"serviceName"`
 }
 
 type ProducerService struct {
-	Addr string `yaml:"addr"`
+	Addr        string `yaml:"addr"`
+	AddrMetrics string `yaml:"addrMetrics"`
+	ServiceName string `yaml:"serviceName"`
 }
 
 type AuthService struct {
-	Addr string `yaml:"addr"`
+	Addr        string `yaml:"addr"`
+	AddrMetrics string `yaml:"addrMetrics"`
+	ServiceName string `yaml:"serviceName"`
 }
 
 const Chat = 0

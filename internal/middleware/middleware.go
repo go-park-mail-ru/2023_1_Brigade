@@ -5,14 +5,26 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 	"math/rand"
 	authSession "project/internal/auth/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
+	metrics "project/internal/pkg/metrics/prometheus"
+	"time"
 )
 
 type jsonError struct {
 	Err error `json:"error"`
+}
+
+type GRPCMiddleware struct {
+	metric *metrics.MetricsGRPC
+}
+
+func NewGRPCMiddleware(metric *metrics.MetricsGRPC) *GRPCMiddleware {
+	return &GRPCMiddleware{metric: metric}
 }
 
 func (j jsonError) MarshalJSON() ([]byte, error) {
@@ -66,4 +78,18 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 			return next(ctx)
 		}
 	}
+}
+
+func (m *GRPCMiddleware) GRPCMetricsMiddleware(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, uHandler grpc.UnaryHandler) (interface{}, error) {
+	start := time.Now()
+
+	resp, err := uHandler(ctx, req)
+
+	errStatus, _ := status.FromError(err)
+	code := errStatus.Code()
+
+	m.metric.ResponseTime.WithLabelValues(code.String(), info.FullMethod).Observe(time.Since(start).Seconds())
+	m.metric.Hits.Inc()
+
+	return resp, err
 }

@@ -7,6 +7,8 @@ import (
 	"gopkg.in/yaml.v2"
 	"os"
 	"project/internal/configs"
+	"project/internal/middleware"
+	metrics "project/internal/pkg/metrics/prometheus"
 	serverConsumer "project/internal/qaas/send_messages/consumer/delivery/grpc"
 	"project/internal/qaas/send_messages/consumer/usecase"
 )
@@ -46,12 +48,27 @@ func main() {
 		log.Error(err)
 	}
 
-	grpcServer := grpc.NewServer()
-
 	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	metrics, err := metrics.NewMetricsGRPCServer(config.ConsumerService.ServiceName)
+	if err != nil {
+		log.Error(err)
+	}
+
+	grpcMidleware := middleware.NewGRPCMiddleware(metrics)
+
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(grpcMidleware.GRPCMetricsMiddleware),
+	)
+
+	go func() {
+		if err = metrics.StartGRPCMetricsServer(config.ConsumerService.AddrMetrics); err != nil {
+			log.Error(err)
+		}
+	}()
 
 	service := serverConsumer.NewConsumerServiceGRPCServer(grpcServer, consumerUsecase)
 

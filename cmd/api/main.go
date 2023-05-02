@@ -123,26 +123,12 @@ func main() {
 	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
 	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
-	//messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
-	//chatRepository := repositoryChat.NewChatMemoryRepository(db)
 
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)
-
-	//producerService, err := usecase2.NewProducer(config.Kafka.BrokerList)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//consumerService, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
-	//messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepository, messagesRepository, consumerService, producerService)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

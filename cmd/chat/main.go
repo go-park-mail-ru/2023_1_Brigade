@@ -14,6 +14,8 @@ import (
 	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
 	repositoryMessages "project/internal/messages/repository"
+	"project/internal/middleware"
+	metrics "project/internal/pkg/metrics/prometheus"
 	repositoryUser "project/internal/user/repository"
 )
 
@@ -67,7 +69,22 @@ func main() {
 
 	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo)
 
-	grpcServer := grpc.NewServer()
+	metrics, err := metrics.NewMetricsGRPCServer(config.ChatsService.ServiceName)
+	if err != nil {
+		log.Error(err)
+	}
+
+	grpcMidleware := middleware.NewGRPCMiddleware(metrics)
+
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(grpcMidleware.GRPCMetricsMiddleware),
+	)
+
+	go func() {
+		if err = metrics.StartGRPCMetricsServer(config.ChatsService.AddrMetrics); err != nil {
+			log.Error(err)
+		}
+	}()
 
 	service := serverChat.NewChatsServiceGRPCServer(grpcServer, chatUsecase)
 

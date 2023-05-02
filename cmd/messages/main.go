@@ -17,6 +17,8 @@ import (
 	serverMessages "project/internal/messages/delivery/grpc"
 	repositoryMessages "project/internal/messages/repository"
 	usecaseMessages "project/internal/messages/usecase"
+	"project/internal/middleware"
+	metrics "project/internal/pkg/metrics/prometheus"
 )
 
 func init() {
@@ -63,8 +65,6 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	grpcServer := grpc.NewServer()
-
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
@@ -91,17 +91,24 @@ func main() {
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)
 
-	//producerService, err := usecase2.NewProducer(config.Kafka.BrokerList)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//
-	//consumerService, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
 	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerService)
+
+	metrics, err := metrics.NewMetricsGRPCServer(config.MessagesService.ServiceName)
+	if err != nil {
+		log.Error(err)
+	}
+
+	grpcMidleware := middleware.NewGRPCMiddleware(metrics)
+
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(grpcMidleware.GRPCMetricsMiddleware),
+	)
+
+	go func() {
+		if err = metrics.StartGRPCMetricsServer(config.MessagesService.AddrMetrics); err != nil {
+			log.Error(err)
+		}
+	}()
 
 	messagesService := serverMessages.NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
 

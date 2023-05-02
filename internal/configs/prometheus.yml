@@ -10,32 +10,32 @@ scrape_configs:
   - job_name: 'chat'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'chat:9000' ]
+      - targets: [ 'chat:9091' ]
 
   - job_name: 'user'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'user:9001' ]
+      - targets: [ 'user:9092' ]
 
   - job_name: 'messages'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'messages:9002' ]
+      - targets: [ 'messages:9093' ]
 
   - job_name: 'consumer'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'consumer:9003' ]
+      - targets: [ 'consumer:9094' ]
 
   - job_name: 'producer'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'producer:9004' ]
+      - targets: [ 'producer:9095' ]
 
   - job_name: 'auth'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'auth:9005' ]
+      - targets: [ 'auth:9096' ]
 
   - job_name: "node"
     scrape_interval: 5s

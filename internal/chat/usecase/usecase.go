@@ -99,7 +99,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		Messages: []model.Message{},
 	}
 
-	if createdChat.Type == configs.Group {
+	if createdChat.Type != configs.Chat {
 		avatar, err := image_generation.GenerateAvatar(string(chat.Title[0]))
 		if err != nil {
 			log.Error(err)
@@ -216,7 +216,7 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 }
 
 func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint64, string string) (model.FoundedChatsMessagesChannels, error) {
-	channels, err := u.chatRepo.GetSearchChannels(ctx, string)
+	channels, err := u.chatRepo.GetSearchChannels(ctx, string, userID)
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}

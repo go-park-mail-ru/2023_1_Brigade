@@ -5,12 +5,11 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"github.com/redis/go-redis/v9"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	authSessionRepository "project/internal/auth/session/repository"
+	authSessionRepository "project/internal/auth/session/repository/postgres"
 	authSessionUsecase "project/internal/auth/session/usecase"
 	serverAuthUser "project/internal/auth/user/delivery/grpc"
 	authUserRepository "project/internal/auth/user/repository"
@@ -63,14 +62,9 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	redis := redis.NewClient(&redis.Options{
-		Addr: config.Redis.Addr,
-	})
-	defer redis.Close()
-
 	userRepository := userRepository.NewUserMemoryRepository(db)
 	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
-	authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(redis)
+	authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
 
 	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository)
 	authSessionUsecase := authSessionUsecase.NewAuthUserUsecase(authSessionRepository)

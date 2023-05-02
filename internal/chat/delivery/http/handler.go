@@ -133,15 +133,15 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 }
 
 func (u chatHandler) GetChatsMessagesHandler(ctx echo.Context) error {
-	//string := ctx.Param("string")
-	//session := ctx.Get("session").(model.Session)
-	//
-	//searchChatsMessages, err := u.chatUsecase.GetSearchChatsMessages(context.TODO(), session.UserId, string)
-	//if err != nil {
-	//	return err
-	//}
-	return ctx.NoContent(204)
-	//return ctx.JSON(http.StatusOK, searchChatsMessages)
+	string := ctx.Param("string")
+	session := ctx.Get("session").(model.Session)
+
+	searchChats, err := u.chatUsecase.GetSearchChatsMessagesChannels(context.TODO(), session.UserId, string)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, searchChats)
 }
 
 func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase) chatHandler {

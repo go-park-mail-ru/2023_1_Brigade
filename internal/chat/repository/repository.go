@@ -99,7 +99,7 @@ func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) (
 
 func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	var chat model.Chat
-	err := r.db.Get(&chat, "SELECT * FROM chat WHERE id=$1", chatID)
+	err := r.db.Get(&chat, "SELECT * FROM chat WHERE id=$01", chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return chat, myErrors.ErrChatNotFound
@@ -173,19 +173,15 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
 	return nil, nil
-	//var chat model.Chat
-	//err := r.db.Get(&chat, "SELECT chat.id FROM chat JOIN chat_members ON chat.id = chat_members.id_chat WHERE chat_members.id_member = $1 AND chat.title LIKE $2;", userID, "%"+string+"%")
-	//
-	//if errors.Is(err, sql.ErrNoRows) {
-	//return chat, myErrors.ErrChatNotFound
-	//}
-
-	//return chat, err
 }
 
-func (r repository) GetSearchChannels(ctx context.Context, string string) ([]model.Chat, error) {
+func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {
 	var channels []model.Chat
-	err := r.db.Select(&channels, `SELECT * FROM chat WHERE title LIKE $1 AND type=$2`, "%"+string+"%", configs.Channel)
+	err := r.db.Select(&channels, `
+		SELECT id, type, avatar, title 
+		FROM chat WHERE type = $1 AND title LIKE $2 AND 
+		NOT EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
+		configs.Channel, "%"+string+"%", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, myErrors.ErrChatNotFound

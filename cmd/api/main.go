@@ -8,7 +8,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
@@ -32,7 +31,7 @@ import (
 	httpImages "project/internal/images/delivery/http"
 	usecaseImages "project/internal/images/usecase"
 
-	repositoryAuthSession "project/internal/auth/session/repository"
+	repositoryAuthSession "project/internal/auth/session/repository/postgres"
 	repositoryImages "project/internal/images/repository"
 )
 
@@ -79,11 +78,6 @@ func main() {
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
-
-	redis := redis.NewClient(&redis.Options{
-		Addr: config.Redis.Addr,
-	})
-	defer redis.Close()
 
 	grpcConnChats, err := grpc.Dial(
 		config.ChatsService.Addr,
@@ -133,7 +127,7 @@ func main() {
 	//chatRepository := repositoryChat.NewChatMemoryRepository(db)
 
 	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
-	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
+	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)

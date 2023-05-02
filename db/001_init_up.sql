@@ -8,6 +8,12 @@ CREATE TABLE IF NOT EXISTS profile (
     password VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS session (
+    cookie     VARCHAR(255),
+    profile_id INTEGER,
+    FOREIGN KEY (profile_id) REFERENCES profile(id)
+);
+
 CREATE TABLE IF NOT EXISTS chat (
     id    SERIAL UNIQUE PRIMARY KEY,
     type INTEGER,

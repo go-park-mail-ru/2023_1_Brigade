@@ -99,7 +99,7 @@ func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) (
 
 func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	var chat model.Chat
-	err := r.db.Get(&chat, "SELECT * FROM chat WHERE id=$01", chatID)
+	err := r.db.Get(&chat, "SELECT * FROM chat WHERE id=$1", chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return chat, myErrors.ErrChatNotFound

@@ -138,18 +138,18 @@ func (mr *MockRepositoryMockRecorder) GetChatsByUserId(ctx, userID interface{}) 
 }
 
 // GetSearchChannels mocks base method.
-func (m *MockRepository) GetSearchChannels(ctx context.Context, string string) ([]model.Chat, error) {
+func (m *MockRepository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetSearchChannels", ctx, string)
+	ret := m.ctrl.Call(m, "GetSearchChannels", ctx, string, userID)
 	ret0, _ := ret[0].([]model.Chat)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetSearchChannels indicates an expected call of GetSearchChannels.
-func (mr *MockRepositoryMockRecorder) GetSearchChannels(ctx, string interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetSearchChannels(ctx, string, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchChannels", reflect.TypeOf((*MockRepository)(nil).GetSearchChannels), ctx, string)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchChannels", reflect.TypeOf((*MockRepository)(nil).GetSearchChannels), ctx, string, userID)
 }
 
 // GetSearchChats mocks base method.

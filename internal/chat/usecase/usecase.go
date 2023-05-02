@@ -221,7 +221,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, userID)
+	chatMembers, err := u.chatRepo.GetChatsByUserId(ctx, userID)
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}

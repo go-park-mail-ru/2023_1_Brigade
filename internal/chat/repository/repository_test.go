@@ -82,12 +82,12 @@ func TestPostgres_GetChatMembersByChatId_OK(t *testing.T) {
 }
 
 func TestPostgres_GetChatById_OK(t *testing.T) {
-	chatID := uint64(1)
+	chatID := uint64(0)
 	expectedChat := model.Chat{
 		Id:     chatID,
 		Type:   configs.Chat,
 		Avatar: "",
-		Title:  "chat",
+		Title:  "",
 	}
 
 	db, mock, err := sqlmock.New()
@@ -100,7 +100,7 @@ func TestPostgres_GetChatById_OK(t *testing.T) {
 	}()
 
 	row := sqlmock.NewRows([]string{"id", "type", "avatar", "title"}).
-		AddRow(chatID, configs.Chat, "", "chat")
+		AddRow(chatID, configs.Chat, "", "")
 
 	mock.
 		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM chat WHERE id=$1`)).

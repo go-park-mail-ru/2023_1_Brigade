@@ -65,7 +65,6 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 	user, err := u.usecase.PutUserById(context.TODO(), updateUser, session.UserId)
 
 	if err != nil {
-		log.Warn(err)
 		return err
 	}
 

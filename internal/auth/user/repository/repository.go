@@ -19,7 +19,8 @@ type repository struct {
 
 func (r repository) createTechnogrammChat(user model.AuthorizedUser) {
 	var chat model.DBChat
-	err := r.db.Select(&chat, `INSERT INTO chat (type, avatar, title) VALUES (0, 'https://technogramm.ru/avatars/logo.png', 'Technogramm');`)
+	err := r.db.QueryRow(`INSERT INTO chat (type, avatar, title) VALUES (0, 'https://technogramm.ru/avatars/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
+
 	if err != nil {
 		log.Error(err)
 	}

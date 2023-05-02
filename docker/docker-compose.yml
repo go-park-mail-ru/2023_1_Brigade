@@ -200,8 +200,8 @@ services:
     volumes:
       - prometheus_data:/prometheus
       - ./../internal/configs/prometheus.yml:/etc/prometheus/prometheus.yml
-    expose:
-      - "9090"
+    ports:
+      - "9090:9090"
     networks:
       - backend-network
 

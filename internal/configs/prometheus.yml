@@ -5,7 +5,7 @@ scrape_configs:
   - job_name: 'api'
     scrape_interval: 5s
     static_configs:
-      - targets: [ 'api:8079' ]
+      - targets: [ 'api:9090' ]
 
   - job_name: 'chat'
     scrape_interval: 5s

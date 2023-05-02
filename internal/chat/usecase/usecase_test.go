@@ -201,7 +201,7 @@ func Test_GetSearchChatsMessagesChannels_OK(t *testing.T) {
 	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
 
 	chatRepository.EXPECT().GetSearchChannels(context.TODO(), string, userID).Return([]model.Chat{}, nil).Times(1)
-	chatRepository.EXPECT().GetChatMembersByChatId(context.TODO(), userID).Return([]model.ChatMembers{}, nil).Times(1)
+	chatRepository.EXPECT().GetChatsByUserId(context.TODO(), userID).Return([]model.ChatMembers{}, nil).Times(1)
 
 	chats, err := usecase.GetSearchChatsMessagesChannels(context.TODO(), userID, string)
 

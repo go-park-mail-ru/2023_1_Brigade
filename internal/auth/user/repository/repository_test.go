@@ -36,7 +36,7 @@ import (
 //
 //	mock.
 //		ExpectQuery(regexp.QuoteMeta(`INSERT INTO profile (avatar, username, nickname, email, status, password) `+
-//			`VALUES (:avatar, :username, :nickname, :email, :status, :password) RETURNING id`)).
+//			`VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`)).
 //		WithArgs(expectedUser.Avatar, expectedUser.Username, expectedUser.Nickname, expectedUser.Email, expectedUser.Status, expectedUser.Password).
 //		WillReturnRows(row)
 //

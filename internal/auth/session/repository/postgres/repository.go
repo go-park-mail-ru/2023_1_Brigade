@@ -29,7 +29,7 @@ func (r repository) GetSessionByCookie(ctx context.Context, cookie string) (mode
 }
 
 func (r repository) CreateSession(ctx context.Context, session model.Session) error {
-	rows, err := r.db.NamedQuery(`INSERT INTO session (cookie, profile_id) VALUES (:cookie, :profile_id)`, session)
+	rows, err := r.db.Query(`INSERT INTO session (cookie, profile_id) VALUES ($1, $2)`, session.Cookie, session.UserId)
 	defer rows.Close()
 
 	return err

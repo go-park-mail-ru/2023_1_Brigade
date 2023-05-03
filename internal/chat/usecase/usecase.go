@@ -314,6 +314,9 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		correctChannels = append(correctChannels, channelToArray)
 	}
 
+	log.Info(contacts)
+	log.Info(model_conversion.FromAuthorizedUserArrayToUserArray(contacts))
+
 	return model.FoundedChatsMessagesChannels{
 		FoundedChats:    correctChats,
 		FoundedMessages: correctLastMessages,

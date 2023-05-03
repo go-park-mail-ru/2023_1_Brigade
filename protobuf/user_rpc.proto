@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "google/protobuf/empty.proto";
+import "protobuf/user.proto";
+
+service Users {
+  rpc DeleteUserById(UserID) returns(google.protobuf.Empty) {}
+  rpc CheckExistUserById(UserID) returns(google.protobuf.Empty) {}
+  rpc GetUserById(UserID) returns(User) {}
+  rpc AddUserContact(AddUserContactArguments) returns(Contacts) {}
+  rpc GetUserContacts(UserID) returns(Contacts) {}
+  rpc PutUserById(PutUserArguments) returns(User) {}
+  rpc GetAllUsersExceptCurrentUser(UserID) returns(Contacts) {}
+  rpc GetSearchUsers(String) returns(Contacts) {}
+}

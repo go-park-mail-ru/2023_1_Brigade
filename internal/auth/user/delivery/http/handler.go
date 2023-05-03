@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	authSession "project/internal/auth/session"
@@ -24,12 +25,14 @@ func (u authHandler) SignupHandler(ctx echo.Context) error {
 		return err
 	}
 
-	user, err := u.authUserUsecase.Signup(ctx, registrationUser)
+	registrationUser = httpUtils.SanitizeStruct(registrationUser).(model.RegistrationUser)
+
+	user, err := u.authUserUsecase.Signup(context.TODO(), registrationUser)
 	if err != nil {
 		return err
 	}
 
-	session, err := u.authSessionUsecase.CreateSessionById(ctx, user.Id)
+	session, err := u.authSessionUsecase.CreateSessionById(context.TODO(), user.Id)
 	if err != nil {
 		return err
 	}
@@ -45,12 +48,14 @@ func (u authHandler) LoginHandler(ctx echo.Context) error {
 		return err
 	}
 
-	user, err := u.authUserUsecase.Login(ctx, loginUser)
+	loginUser = httpUtils.SanitizeStruct(loginUser).(model.LoginUser)
+
+	user, err := u.authUserUsecase.Login(context.TODO(), loginUser)
 	if err != nil {
 		return err
 	}
 
-	session, err := u.authSessionUsecase.CreateSessionById(ctx, user.Id)
+	session, err := u.authSessionUsecase.CreateSessionById(context.TODO(), user.Id)
 	if err != nil {
 		return err
 	}
@@ -65,15 +70,17 @@ func (u authHandler) AuthHandler(ctx echo.Context) error {
 		return myErrors.ErrCookieNotFound
 	}
 
-	authSession, err := u.authSessionUsecase.GetSessionByCookie(ctx, session.Value)
+	authSession, err := u.authSessionUsecase.GetSessionByCookie(context.TODO(), session.Value)
 	if err != nil {
 		return err
 	}
 
-	user, err := u.userUsecase.GetUserById(ctx, authSession.UserId)
+	user, err := u.userUsecase.GetUserById(context.TODO(), authSession.UserId)
 	if err != nil {
 		return err
 	}
+
+	user = httpUtils.SanitizeStruct(user).(model.User)
 
 	httpUtils.SetCookie(ctx, authSession)
 	return ctx.JSON(http.StatusOK, user)
@@ -85,7 +92,7 @@ func (u authHandler) LogoutHandler(ctx echo.Context) error {
 		return myErrors.ErrCookieNotFound
 	}
 
-	err = u.authSessionUsecase.DeleteSessionByCookie(ctx, session.Value)
+	err = u.authSessionUsecase.DeleteSessionByCookie(context.TODO(), session.Value)
 	if err != nil {
 		return err
 	}

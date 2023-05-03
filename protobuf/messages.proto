@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+message Bytes {
+  bytes Bytes = 1;
+}
+
+message Message {
+  string Id = 1;
+  string Body = 2;
+  uint64 AuthorId = 3;
+  uint64 ChatId = 4;
+  string CreatedAt = 5;
+}
+
+message WebSocketMessage {
+  string Id = 1;
+  uint64 Type = 2;
+  string Body = 3;
+  uint64 AuthorID = 4;
+  uint64 ChatID = 5;
+}
+
+message ProducerMessage {
+  string Id = 1;
+  uint64 Type = 2;
+  string Body = 3;
+  uint64 AuthorId = 4;
+  uint64 ChatId = 5;
+  uint64 ReceiverID = 6;
+  string CreatedAt = 7;
+}

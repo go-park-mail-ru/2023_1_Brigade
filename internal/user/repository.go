@@ -14,7 +14,6 @@ type Repository interface {
 	GetUserContacts(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error)
 	CheckUserIsContact(ctx context.Context, contact model.UserContact) error
 	CheckExistUserById(ctx context.Context, userID uint64) error
-
-	GetUserAvatar(ctx context.Context, userID uint64) (string, error)
 	GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error)
+	GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error)
 }

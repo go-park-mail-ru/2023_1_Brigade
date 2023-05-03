@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
@@ -39,7 +40,7 @@ func TestHandlers_GetUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(model.User{}, nil).Times(1)
 
 	err := handler.GetUserHandler(ctx)
 
@@ -66,7 +67,7 @@ func TestHandlers_GetCurrentUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().GetUserById(ctx, uint64(1)).Return(model.User{Id: 1}, nil).Times(1)
+	userUsecase.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(model.User{Id: 1}, nil).Times(1)
 
 	err := handler.GetCurrentUserHandler(ctx)
 
@@ -95,7 +96,7 @@ func TestHandlers_DeleteUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().DeleteUserById(ctx, uint64(1)).Return(nil).Times(1)
+	userUsecase.EXPECT().DeleteUserById(context.TODO(), uint64(1)).Return(nil).Times(1)
 
 	err := handler.DeleteUserHandler(ctx)
 
@@ -124,7 +125,6 @@ func TestHandlers_PutUser_OK(t *testing.T) {
 
 	newUser := model.UpdateUser{
 		Username:        "marcussss",
-		Email:           "marcussss@gmail.com",
 		Status:          "I'm marcussss",
 		CurrentPassword: "baumanka",
 		NewPassword:     "baumanka_cool",
@@ -144,7 +144,7 @@ func TestHandlers_PutUser_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().PutUserById(ctx, newUser, uint64(1)).Return(model_conversion.FromAuthorizedUserToUser(user), nil).Times(1)
+	userUsecase.EXPECT().PutUserById(context.TODO(), newUser, uint64(1)).Return(model_conversion.FromAuthorizedUserToUser(user), nil).Times(1)
 
 	err := handler.PutUserHandler(ctx)
 
@@ -173,7 +173,7 @@ func TestHandlers_GetUserContacts_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().GetAllUsersExceptCurrentUser(ctx, uint64(1)).Return([]model.User{}, nil).Times(1)
+	userUsecase.EXPECT().GetAllUsersExceptCurrentUser(context.TODO(), uint64(1)).Return([]model.User{}, nil).Times(1)
 
 	err := handler.GetUserContactsHandler(ctx)
 
@@ -202,7 +202,7 @@ func TestHandlers_UserAddContact_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewUserHandler(e, userUsecase)
 
-	userUsecase.EXPECT().AddUserContact(ctx, uint64(1), uint64(2)).Return([]model.User{}, nil).Times(1)
+	userUsecase.EXPECT().AddUserContact(context.TODO(), uint64(1), uint64(2)).Return([]model.User{}, nil).Times(1)
 
 	err := handler.UserAddContactHandler(ctx)
 

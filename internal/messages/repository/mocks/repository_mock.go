@@ -2,7 +2,7 @@
 // Source: repository.go
 
 // Package mock_messages is a generated GoMock package.
-package mocks
+package mock_messages
 
 import (
 	context "context"
@@ -33,6 +33,35 @@ func NewMockRepository(ctrl *gomock.Controller) *MockRepository {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
+}
+
+// DeleteMessageById mocks base method.
+func (m *MockRepository) DeleteMessageById(ctx context.Context, messageID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMessageById", ctx, messageID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteMessageById indicates an expected call of DeleteMessageById.
+func (mr *MockRepositoryMockRecorder) DeleteMessageById(ctx, messageID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMessageById", reflect.TypeOf((*MockRepository)(nil).DeleteMessageById), ctx, messageID)
+}
+
+// EditMessageById mocks base method.
+func (m *MockRepository) EditMessageById(ctx context.Context, producerMessage model.ProducerMessage) (model.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EditMessageById", ctx, producerMessage)
+	ret0, _ := ret[0].(model.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EditMessageById indicates an expected call of EditMessageById.
+func (mr *MockRepositoryMockRecorder) EditMessageById(ctx, producerMessage interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditMessageById", reflect.TypeOf((*MockRepository)(nil).EditMessageById), ctx, producerMessage)
 }
 
 // GetChatMessages mocks base method.
@@ -66,7 +95,7 @@ func (mr *MockRepositoryMockRecorder) GetLastChatMessage(ctx, chatID interface{}
 }
 
 // GetMessageById mocks base method.
-func (m *MockRepository) GetMessageById(ctx context.Context, messageID uint64) (model.Message, error) {
+func (m *MockRepository) GetMessageById(ctx context.Context, messageID string) (model.Message, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetMessageById", ctx, messageID)
 	ret0, _ := ret[0].(model.Message)

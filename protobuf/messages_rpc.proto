@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "google/protobuf/empty.proto";
+import "protobuf/messages.proto";
+
+service Messages {
+  rpc SwitchMessageType(protobuf.Bytes) returns(google.protobuf.Empty) {}
+  rpc PutInProducer(protobuf.ProducerMessage) returns(google.protobuf.Empty) {}
+  rpc PullFromConsumer(google.protobuf.Empty) returns(Bytes) {}
+}

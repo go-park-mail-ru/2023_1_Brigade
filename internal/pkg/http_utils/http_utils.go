@@ -3,9 +3,11 @@ package http_utils
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
+	"github.com/microcosm-cc/bluemonday"
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"reflect"
 	"time"
 )
 
@@ -54,7 +56,7 @@ func SetCookie(ctx echo.Context, session model.Session) {
 		Value:    session.Cookie,
 		HttpOnly: true,
 		Path:     "/",
-		Expires:  time.Now().Add(10 * time.Hour),
+		Expires:  time.Now().Add(48 * time.Hour),
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	}
@@ -72,4 +74,25 @@ func DeleteCookie(ctx echo.Context) {
 		Secure:   true,
 	}
 	ctx.SetCookie(cookie)
+}
+
+func SanitizeStruct(input interface{}) interface{} {
+	inputValue := reflect.ValueOf(input)
+	inputType := inputValue.Type()
+
+	outputValue := reflect.New(inputType).Elem()
+
+	p := bluemonday.UGCPolicy()
+
+	for i := 0; i < inputValue.NumField(); i++ {
+		inputFieldValue := inputValue.Field(i)
+
+		if inputFieldValue.Kind() == reflect.String {
+			outputValue.Field(i).SetString(p.Sanitize(inputFieldValue.String()))
+		} else {
+			outputValue.Field(i).Set(inputFieldValue)
+		}
+	}
+
+	return outputValue.Interface()
 }

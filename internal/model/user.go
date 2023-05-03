@@ -12,7 +12,7 @@ type AuthorizedUser struct {
 
 type User struct {
 	Id       uint64 `json:"id"       valid:"type(int)"         db:"id"`
-	Username string `json:"username"						   db:"username"`
+	Username string `json:"username"    					   db:"username"`
 	Nickname string `json:"nickname" valid:"nicknameValidator" db:"nickname"`
 	Email    string `json:"email"    valid:"emailValidator"    db:"email"`
 	Status   string `json:"status"   valid:"type(string)"      db:"status"`
@@ -32,7 +32,7 @@ type RegistrationUser struct {
 
 type UpdateUser struct {
 	Username        string `json:"username"         valid:"usernameValidator" db:"username"`
-	Email           string `json:"email"            valid:"emailValidator"    db:"email"`
+	Nickname        string `json:"nickname"         valid:"nicknameValidator" db:"nickname"`
 	Status          string `json:"status"           valid:"type(string)"      db:"status"`
 	CurrentPassword string `json:"current_password" valid:"passwordValidator" db:"current_password"`
 	NewPassword     string `json:"new_password"     valid:"passwordValidator" db:"new_password"`

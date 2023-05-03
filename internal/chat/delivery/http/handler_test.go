@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
@@ -10,7 +11,6 @@ import (
 	"net/http/httptest"
 	chatMock "project/internal/chat/usecase/mocks"
 	"project/internal/model"
-	myErrors "project/internal/pkg/errors"
 	userMock "project/internal/user/usecase/mocks"
 	"testing"
 )
@@ -46,7 +46,7 @@ func TestHandlers_CreateChat_OK(t *testing.T) {
 	err := json.Unmarshal(test.body, &chat)
 	require.NoError(t, err)
 
-	chatUsecase.EXPECT().CreateChat(ctx, chat).Return(dbChat, nil).Times(1)
+	chatUsecase.EXPECT().CreateChat(context.TODO(), chat, uint64(1)).Return(dbChat, nil).Times(1)
 
 	err = handler.CreateCurrentUserChatHandler(ctx)
 
@@ -77,7 +77,7 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
-	chatUsecase.EXPECT().GetChatById(ctx, uint64(1)).Return(chat, nil).Times(1)
+	chatUsecase.EXPECT().GetChatById(context.TODO(), uint64(1)).Return(chat, nil).Times(1)
 
 	err := handler.GetChatHandler(ctx)
 
@@ -103,14 +103,11 @@ func TestHandlers_DeleteChat_OK(t *testing.T) {
 	ctx.SetParamNames("chatID")
 	ctx.SetParamValues("1")
 
-	var chat model.Chat
 	chatUsecase := chatMock.NewMockUsecase(ctl)
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
-	chatUsecase.EXPECT().GetChatById(ctx, uint64(1)).Return(chat, nil).Times(1)
-	chatUsecase.EXPECT().CheckExistUserInChat(ctx, chat, uint64(0)).Return(myErrors.ErrUserIsAlreadyInChat).Times(1)
-	chatUsecase.EXPECT().DeleteChatById(ctx, uint64(1)).Return(nil).Times(1)
+	chatUsecase.EXPECT().DeleteChatById(context.TODO(), uint64(1)).Return(nil).Times(1)
 
 	err := handler.DeleteChatHandler(ctx)
 

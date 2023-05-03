@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -36,12 +37,12 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		}
 	}()
 
-	url, err := h.imagesUsecase.LoadImage(ctx, file, header.Filename, userID)
+	url, err := h.imagesUsecase.LoadImage(context.TODO(), file, header.Filename, userID)
 	if err != nil {
 		return err
 	}
 
-	user, err := h.userUsecase.GetUserById(ctx, session.UserId)
+	user, err := h.userUsecase.GetUserById(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}

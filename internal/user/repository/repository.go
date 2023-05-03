@@ -20,7 +20,8 @@ type repository struct {
 }
 
 func (r repository) DeleteUserById(ctx context.Context, userID uint64) error {
-	_, err := r.db.Query("DELETE FROM profile WHERE id=$1", userID)
+	rows, err := r.db.Query("DELETE FROM profile WHERE id=$1", userID)
+	defer rows.Close()
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrUserNotFound
 	}
@@ -72,16 +73,23 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	rows, err := r.db.NamedQuery(`UPDATE profile SET username=:username, email=:email, status=:status, password=:password  WHERE :id = $1`, user)
-
+	result, err := r.db.Exec("UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5", user.Username, user.Nickname, user.Status, user.Password, user.Id)
 	if err != nil {
 		return model.AuthorizedUser{}, err
 	}
-	if rows.Next() {
-		err = rows.Scan(&user)
-		if err != nil {
-			return model.AuthorizedUser{}, err
-		}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return model.AuthorizedUser{}, err
+	}
+
+	if rowsAffected == 0 {
+		return model.AuthorizedUser{}, err
+	}
+
+	err = r.db.Get(&user, "SELECT * FROM profile WHERE id=$1", user.Id)
+	if err != nil {
+		return model.AuthorizedUser{}, err
 	}
 
 	return user, nil
@@ -89,7 +97,7 @@ func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUse
 
 func (r repository) CheckUserIsContact(ctx context.Context, contact model.UserContact) error {
 	rows, err := r.db.NamedQuery("SELECT * FROM user_contacts WHERE id_user=:id_user AND id_contact=:id_contact", contact)
-
+	defer rows.Close()
 	if err == nil && rows.Next() {
 		return myErrors.ErrUserIsAlreadyContact
 	}
@@ -98,7 +106,8 @@ func (r repository) CheckUserIsContact(ctx context.Context, contact model.UserCo
 }
 
 func (r repository) AddUserInContact(ctx context.Context, contact model.UserContact) error {
-	_, err := r.db.NamedQuery("INSERT INTO user_contacts (id_user, id_contact) VALUES (:id_user, :id_contact)", contact)
+	rows, err := r.db.NamedQuery("INSERT INTO user_contacts (id_user, id_contact) VALUES (:id_user, :id_contact)", contact)
+	defer rows.Close()
 	if err != nil {
 		return err
 	}
@@ -120,13 +129,10 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 	return nil
 }
 
-func (r repository) GetUserAvatar(ctx context.Context, userID uint64) (string, error) {
-	return "", nil
-}
-
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	var users []model.AuthorizedUser
 	rows, err := r.db.Query("SELECT * FROM profile WHERE id != $1", userID)
+	defer rows.Close()
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -145,4 +151,18 @@ func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uin
 	}
 
 	return users, err
+}
+
+func (r repository) GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error) {
+	var searchContacts []model.AuthorizedUser
+	err := r.db.Select(&searchContacts, `SELECT * FROM profile WHERE nickname LIKE $1`, "%"+string+"%")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, myErrors.ErrUserNotFound
+		}
+
+		return nil, err
+	}
+
+	return searchContacts, nil
 }

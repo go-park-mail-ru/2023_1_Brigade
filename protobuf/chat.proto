@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "protobuf/user.proto";
+import "protobuf/messages.proto";
+
+message Chat {
+  uint64 Id = 1;
+  uint64 MasterID = 2;
+  uint64 Type = 3;
+  string Title = 4;
+  string Avatar = 5;
+  repeated protobuf.User Members = 6;
+  repeated protobuf.Message Messages = 7;
+}
+
+message EditChatModel {
+  uint64 Id = 1;
+  uint64 Type = 2;
+  string Title = 3;
+  repeated uint64 Members = 4;
+}
+
+message CreateChat {
+  uint64 Type = 1;
+  string Title = 2;
+  repeated uint64 Members = 3;
+}
+
+message ChatID {
+  uint64 ChatID = 1;
+}
+
+message CreateChatArguments {
+  CreateChat Chat = 1;
+  protobuf.UserID userID = 2;
+}
+
+message ExistChatArguments {
+  Chat Chat = 1;
+  protobuf.UserID userID = 2;
+}
+
+message ChatInListUser {
+  uint64 Id = 1;
+  uint64 Type = 2;
+  string Title = 3;
+  string Avatar = 4;
+  repeated protobuf.User Members = 5;
+  protobuf.Message LastMessage = 6;
+  protobuf.User LastMessageAuthor = 7;
+}
+
+message ArrayChatInListUser {
+  repeated ChatInListUser chats = 1;
+}
+
+message FoundedChatsMessagesChannels {
+  repeated ChatInListUser FoundedChats = 1;
+  repeated ChatInListUser FoundedMessages = 2;
+  repeated ChatInListUser FoundedChannels = 3;
+  protobuf.Contacts FoundedContacts = 4;
+}
+
+message SearchChatsArgumets {
+  uint64 UserID = 1;
+  string String = 2;
+}

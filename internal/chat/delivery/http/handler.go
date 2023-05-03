@@ -34,7 +34,6 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Info(chat)
 	session := ctx.Get("session").(model.Session)
 
 	if chat.Type == configs.Chat {
@@ -50,8 +49,6 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	}
 
 	chat = httpUtils.SanitizeStruct(chat).(model.Chat)
-
-	log.Info(chat)
 
 	return ctx.JSON(http.StatusOK, chat)
 }

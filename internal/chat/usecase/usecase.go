@@ -40,7 +40,6 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, er
 	if err != nil {
 		return model.Chat{}, err
 	}
-	log.Info(chat)
 
 	chatMembers, err := u.chatRepo.GetChatMembersByChatId(context.Background(), chatID)
 	if err != nil {
@@ -114,7 +113,6 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
-	chatFromDB.MasterID = createdChat.MasterID
 
 	return chatFromDB, err
 }

@@ -20,12 +20,14 @@ func Test_CreateChat_OK(t *testing.T) {
 
 	createdChat := model.Chat{
 		Avatar:   "",
+		MasterID: 1,
 		Messages: []model.Message{},
 		Members:  members,
 	}
 
 	expectedChat := model.Chat{
 		Id:       1,
+		MasterID: 1,
 		Avatar:   "",
 		Messages: []model.Message{},
 		Members:  members,
@@ -202,6 +204,7 @@ func Test_GetSearchChatsMessagesChannels_OK(t *testing.T) {
 
 	chatRepository.EXPECT().GetSearchChannels(context.TODO(), string, userID).Return([]model.Chat{}, nil).Times(1)
 	chatRepository.EXPECT().GetChatsByUserId(context.TODO(), userID).Return([]model.ChatMembers{}, nil).Times(1)
+	userRepository.EXPECT().GetAllUsersExceptCurrentUser(context.TODO(), userID).Return([]model.AuthorizedUser{}, nil).Times(1)
 
 	chats, err := usecase.GetSearchChatsMessagesChannels(context.TODO(), userID, string)
 

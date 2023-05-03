@@ -62,7 +62,7 @@ message FoundedChatsMessagesChannels {
   repeated ChatInListUser FoundedChats = 1;
   repeated ChatInListUser FoundedMessages = 2;
   repeated ChatInListUser FoundedChannels = 3;
-  protobuf.ChatInListUser FoundedContacts = 4;
+  protobuf.Contacts FoundedContacts = 4;
 }
 
 message SearchChatsArgumets {

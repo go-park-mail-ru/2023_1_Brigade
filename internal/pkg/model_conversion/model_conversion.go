@@ -239,10 +239,16 @@ func FromProtoSearchChatsToSearchChats(protoChats *protobuf.FoundedChatsMessages
 		foundedChannels[idx] = FromProtoUserChatToUserChat(value)
 	}
 
+	foundedContacts := make([]model.User, len(protoChats.FoundedContacts.Contacts))
+	for idx, value := range protoChats.FoundedContacts.Contacts {
+		foundedContacts[idx] = FromProtoUserToUser(value)
+	}
+
 	return model.FoundedChatsMessagesChannels{
 		FoundedChats:    foundedChats,
 		FoundedMessages: foundedMessages,
 		FoundedChannels: foundedChannels,
+		FoundedContacts: foundedContacts,
 	}
 }
 
@@ -262,10 +268,16 @@ func FromSearchChatsToProtoSearchChats(chats model.FoundedChatsMessagesChannels)
 		foundedChannels[idx] = FromUserChatToProtoUserChat(value)
 	}
 
+	foundedContacts := make([]*protobuf.User, len(chats.FoundedContacts))
+	for idx, value := range chats.FoundedContacts {
+		foundedContacts[idx] = FromUserToProtoUser(value)
+	}
+
 	return &protobuf.FoundedChatsMessagesChannels{
 		FoundedChats:    foundedChats,
 		FoundedMessages: foundedMessages,
 		FoundedChannels: foundedChannels,
+		FoundedContacts: &protobuf.Contacts{Contacts: foundedContacts},
 	}
 }
 
@@ -332,6 +344,7 @@ func FromUserChatsToProtoUserChats(chats []model.ChatInListUser) *protobuf.Array
 func FromProtoChatToChat(chat *protobuf.Chat) model.Chat {
 	return model.Chat{
 		Id:       chat.Id,
+		MasterID: chat.MasterID,
 		Type:     chat.Type,
 		Title:    chat.Title,
 		Avatar:   chat.Avatar,
@@ -343,6 +356,7 @@ func FromProtoChatToChat(chat *protobuf.Chat) model.Chat {
 func FromChatToProtoChat(chat model.Chat) *protobuf.Chat {
 	return &protobuf.Chat{
 		Id:       chat.Id,
+		MasterID: chat.MasterID,
 		Type:     chat.Type,
 		Title:    chat.Title,
 		Avatar:   chat.Avatar,

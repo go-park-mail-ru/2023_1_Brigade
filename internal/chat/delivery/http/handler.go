@@ -34,7 +34,7 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-
+	log.Info(chat)
 	session := ctx.Get("session").(model.Session)
 
 	if chat.Type == configs.Chat {

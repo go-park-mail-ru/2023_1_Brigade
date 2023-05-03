@@ -73,6 +73,7 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, er
 
 	return model.Chat{
 		Id:       chat.Id,
+		MasterID: chat.MasterID,
 		Type:     chat.Type,
 		Title:    chat.Title,
 		Avatar:   chat.Avatar,
@@ -100,8 +101,6 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		Messages: []model.Message{},
 	}
 
-	log.Info(createdChat)
-
 	if createdChat.Type != configs.Chat {
 		avatar, err := image_generation.GenerateAvatar(string(chat.Title[0]))
 		if err != nil {
@@ -113,7 +112,6 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
 	chatFromDB.MasterID = createdChat.MasterID
-	log.Info(chatFromDB)
 
 	return chatFromDB, err
 }

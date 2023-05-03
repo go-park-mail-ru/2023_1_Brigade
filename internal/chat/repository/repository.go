@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/model"
@@ -110,7 +109,6 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
-	log.Info(chat)
 	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
 		chat.MasterID, chat.Type, chat.Avatar, chat.Title)
 	defer rows.Close()
@@ -126,7 +124,7 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 	}
 
 	for _, members := range chat.Members {
-		err = r.AddUserInChatDB(context.Background(), chat.Id, members.Id)
+		err = r.AddUserInChatDB(context.TODO(), chat.Id, members.Id)
 		if err != nil {
 			return model.Chat{}, err
 		}

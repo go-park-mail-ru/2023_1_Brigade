@@ -101,8 +101,8 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 			}
 		}
 	}
+
 	dbChat.MasterID = session.UserId
-	log.Warn(dbChat)
 	return ctx.JSON(http.StatusCreated, dbChat)
 }
 

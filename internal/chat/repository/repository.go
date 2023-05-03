@@ -181,7 +181,7 @@ func (r repository) GetSearchChannels(ctx context.Context, string string, userID
 	var channels []model.Chat
 	err := r.db.Select(&channels, `
 		SELECT id, type, avatar, title 
-		FROM chat WHERE type = $1 AND title LIKE $2 AND 
+		FROM chat WHERE type = $1 AND title ILIKE $2 AND 
 		NOT EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		configs.Channel, "%"+string+"%", userID)
 	if err != nil {

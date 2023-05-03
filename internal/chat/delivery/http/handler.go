@@ -3,7 +3,9 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
+	"net/url"
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/model"
@@ -99,7 +101,8 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 			}
 		}
 	}
-
+	dbChat.MasterID = session.UserId
+	log.Warn(dbChat)
 	return ctx.JSON(http.StatusCreated, dbChat)
 }
 
@@ -135,6 +138,10 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 func (u chatHandler) GetChatsMessagesHandler(ctx echo.Context) error {
 	string := ctx.Param("string")
 	session := ctx.Get("session").(model.Session)
+	string, err := url.QueryUnescape(string)
+	if err != nil {
+		log.Error(err)
+	}
 
 	searchChats, err := u.chatUsecase.GetSearchChatsMessagesChannels(context.TODO(), session.UserId, string)
 	if err != nil {

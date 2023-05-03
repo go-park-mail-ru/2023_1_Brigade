@@ -112,7 +112,8 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
-	chatFromDB.MasterID = userID
+	chatFromDB.MasterID = createdChat.MasterID
+	log.Info(chatFromDB)
 
 	return chatFromDB, err
 }
@@ -259,7 +260,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 	var correctChats []model.ChatInListUser
 	var correctChannels []model.ChatInListUser
 	for _, message := range lastMessages {
-		if strings.Contains(message.Body, string) {
+		if strings.Contains(strings.ToLower(message.Body), strings.ToLower(string)) {
 			chat, err := u.chatRepo.GetChatById(ctx, message.ChatId)
 			if err != nil {
 				return model.FoundedChatsMessagesChannels{}, err
@@ -278,7 +279,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 	}
 
 	for _, chat := range chats {
-		if strings.Contains(chat.Title, string) {
+		if strings.Contains(strings.ToLower(chat.Title), strings.ToLower(string)) {
 			chatToArray := model.ChatInListUser{
 				Id:     chat.Id,
 				Type:   chat.Type,

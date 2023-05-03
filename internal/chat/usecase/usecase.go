@@ -246,6 +246,9 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		if err != nil {
 			return model.FoundedChatsMessagesChannels{}, err
 		}
+		if chat.Type == configs.Chat {
+			continue
+		}
 
 		lastMessages = append(lastMessages, lastMessage)
 		chats = append(chats, chat)

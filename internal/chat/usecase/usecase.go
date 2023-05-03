@@ -40,6 +40,7 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, er
 	if err != nil {
 		return model.Chat{}, err
 	}
+	log.Info(chat)
 
 	chatMembers, err := u.chatRepo.GetChatMembersByChatId(context.Background(), chatID)
 	if err != nil {
@@ -257,6 +258,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 	var correctLastMessages []model.ChatInListUser
 	var correctChats []model.ChatInListUser
 	var correctChannels []model.ChatInListUser
+	var correctContacts []model.ChatInListUser
 	for _, message := range lastMessages {
 		if strings.Contains(strings.ToLower(message.Body), strings.ToLower(string)) {
 			chat, err := u.chatRepo.GetChatById(ctx, message.ChatId)
@@ -312,13 +314,16 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		correctChannels = append(correctChannels, channelToArray)
 	}
 
-	log.Info(contacts)
-	log.Info(model_conversion.FromAuthorizedUserArrayToUserArray(contacts))
+	for _, contact := range contacts {
+		if strings.Contains(strings.ToLower(contact.Nickname), strings.ToLower(string)) {
+			correctContacts = append(correctContacts, model.ChatInListUser{Members: model_conversion.FromAuthorizedUserArrayToUserArray(contacts)})
+		}
+	}
 
 	return model.FoundedChatsMessagesChannels{
 		FoundedChats:    correctChats,
 		FoundedMessages: correctLastMessages,
 		FoundedChannels: correctChannels,
-		FoundedContacts: model_conversion.FromAuthorizedUserArrayToUserArray(contacts),
+		FoundedContacts: correctContacts,
 	}, nil
 }

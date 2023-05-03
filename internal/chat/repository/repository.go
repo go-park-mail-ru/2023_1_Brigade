@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/model"
@@ -98,14 +99,32 @@ func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) (
 }
 
 func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
-	var chat model.Chat
-	err := r.db.Get(&chat, "SELECT * FROM chat WHERE id=$1", chatID)
+	var chat []model.Chat
+	rows, err := r.db.Query("SELECT * FROM chat WHERE id=$1", chatID)
+	defer rows.Close()
 
-	if errors.Is(err, sql.ErrNoRows) {
-		return chat, myErrors.ErrChatNotFound
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.Chat{}, myErrors.ErrChatNotFound
+		}
+		return model.Chat{}, err
 	}
 
-	return chat, err
+	for rows.Next() {
+		var chatFromDB model.Chat
+		rows.Scan(&chatFromDB.Id, &chatFromDB.MasterID, &chatFromDB.Type, &chatFromDB.Avatar, &chatFromDB.Title)
+		if err != nil {
+			return model.Chat{}, err
+		}
+
+		chat = append(chat, chatFromDB)
+	}
+	log.Info(chat)
+	if len(chat) == 0 {
+		return model.Chat{}, nil
+	}
+
+	return chat[0], nil
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {

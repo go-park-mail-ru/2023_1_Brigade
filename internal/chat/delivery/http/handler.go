@@ -51,6 +51,8 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 
 	chat = httpUtils.SanitizeStruct(chat).(model.Chat)
 
+	log.Info(chat)
+
 	return ctx.JSON(http.StatusOK, chat)
 }
 

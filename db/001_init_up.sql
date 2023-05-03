@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS chat (
     type INTEGER,
     avatar VARCHAR(255),
     title VARCHAR(255),
-    FOREIGN KEY (master_id) REFERENCES profile(id)
 );
 
 CREATE TABLE IF NOT EXISTS message (

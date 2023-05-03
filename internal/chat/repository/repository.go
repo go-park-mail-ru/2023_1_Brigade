@@ -111,8 +111,8 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
 	log.Info(chat)
-	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, avatar, title) SELECT id, $1, $2, $3 FROM profile WHERE id=$4 RETURNING id`,
-		chat.Type, chat.Title, chat.Avatar, chat.MasterID)
+	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
+		chat.MasterID, chat.Type, chat.Avatar, chat.Title)
 	defer rows.Close()
 
 	if err != nil {

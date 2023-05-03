@@ -57,7 +57,7 @@ func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (
 		}
 	}
 
-	r.createTechnogrammChat(user)
+	//r.createTechnogrammChat(user)
 
 	return user, nil
 }

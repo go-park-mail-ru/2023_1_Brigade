@@ -1,8 +1,10 @@
 package prometheus
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	log "github.com/sirupsen/logrus"
+	"net/http"
 )
 
 type MetricsGRPC struct {
@@ -36,7 +38,9 @@ func NewMetricsGRPCServer(microserviceName string) (*MetricsGRPC, error) {
 }
 
 func (m MetricsGRPC) StartGRPCMetricsServer(address string) error {
-	e := echo.New()
-	err := e.Start(address)
-	return err
+	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.Handler())
+	log.Info(m.MicroserviceName, ": starting metrics server...")
+
+	return http.ListenAndServe(address, mux)
 }

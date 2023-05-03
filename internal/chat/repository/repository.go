@@ -109,8 +109,8 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
-	rows, err := r.db.NamedQuery("INSERT INTO chat (type, title, avatar) "+
-		"VALUES (:type, :title, :avatar) RETURNING id", chat)
+	rows, err := r.db.NamedQuery("INSERT INTO chat (master_id, type, title, avatar) "+
+		"VALUES (:master_id, :type, :title, :avatar) RETURNING id", chat)
 	defer rows.Close()
 
 	if err != nil {

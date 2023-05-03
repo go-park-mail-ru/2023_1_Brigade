@@ -9,11 +9,12 @@ import "protobuf/messages.proto";
 
 message Chat {
   uint64 Id = 1;
-  uint64 Type = 2;
-  string Title = 3;
-  string Avatar = 4;
-  repeated protobuf.User Members = 5;
-  repeated protobuf.Message Messages = 6;
+  uint64 MasterID = 2;
+  uint64 Type = 3;
+  string Title = 4;
+  string Avatar = 5;
+  repeated protobuf.User Members = 6;
+  repeated protobuf.Message Messages = 7;
 }
 
 message EditChatModel {
@@ -61,6 +62,7 @@ message FoundedChatsMessagesChannels {
   repeated ChatInListUser FoundedChats = 1;
   repeated ChatInListUser FoundedMessages = 2;
   repeated ChatInListUser FoundedChannels = 3;
+  repeated ChatInListUser FoundedContacts = 4;
 }
 
 message SearchChatsArgumets {

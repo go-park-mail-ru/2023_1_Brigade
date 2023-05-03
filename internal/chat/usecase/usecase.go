@@ -93,6 +93,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	createdChat := model.Chat{
+		MasterID: userID,
 		Type:     chat.Type,
 		Title:    chat.Title,
 		Members:  members,
@@ -226,6 +227,11 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
+	contacts, err := u.userRepo.GetAllUsersExceptCurrentUser(ctx, userID)
+	if err != nil {
+		return model.FoundedChatsMessagesChannels{}, err
+	}
+
 	var lastMessages []model.Message
 	var chats []model.Chat
 	for _, chatMember := range chatMembers {
@@ -246,6 +252,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 	var correctLastMessages []model.ChatInListUser
 	var correctChats []model.ChatInListUser
 	var correctChannels []model.ChatInListUser
+	var correctContacts []model.ChatInListUser
 	for _, message := range lastMessages {
 		if strings.Contains(message.Body, string) {
 			chat, err := u.chatRepo.GetChatById(ctx, message.ChatId)
@@ -301,9 +308,20 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		correctChannels = append(correctChannels, channelToArray)
 	}
 
+	for _, contact := range contacts {
+		if strings.Contains(contact.Nickname, string) {
+			correctContacts = append(correctChats, model.ChatInListUser{
+				Id:     contact.Id,
+				Title:  contact.Nickname,
+				Avatar: contact.Avatar,
+			})
+		}
+	}
+
 	return model.FoundedChatsMessagesChannels{
 		FoundedChats:    correctChats,
 		FoundedMessages: correctLastMessages,
 		FoundedChannels: correctChannels,
+		FoundedContacts: correctContacts,
 	}, nil
 }

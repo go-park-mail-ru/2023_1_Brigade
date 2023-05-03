@@ -112,6 +112,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
+	chatFromDB.MasterID = userID
 
 	return chatFromDB, err
 }

@@ -12,4 +12,5 @@ type Repository interface {
 	GetChatMessages(ctx context.Context, chatID uint64) ([]model.ChatMessages, error)
 	GetLastChatMessage(ctx context.Context, chatID uint64) (model.Message, error)
 	InsertMessageInDB(ctx context.Context, message model.Message) (model.Message, error)
+	GetSearchMessages(ctx context.Context, userID uint64, string string) ([]model.Message, error)
 }

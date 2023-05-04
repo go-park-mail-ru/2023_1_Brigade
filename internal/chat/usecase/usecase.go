@@ -11,7 +11,6 @@ import (
 	"project/internal/pkg/image_generation"
 	"project/internal/pkg/model_conversion"
 	"project/internal/user"
-	"strings"
 )
 
 type usecase struct {
@@ -225,80 +224,27 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	chatMembers, err := u.chatRepo.GetChatsByUserId(ctx, userID)
+	chats, err := u.chatRepo.GetSearchChats(ctx, userID, string)
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	contacts, err := u.userRepo.GetAllUsersExceptCurrentUser(ctx, userID)
+	messages, err := u.messagesRepo.GetSearchMessages(ctx, userID, string)
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	var lastMessages []model.Message
-	var chats []model.Chat
-	for _, chatMember := range chatMembers {
-		lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chatMember.ChatId)
-		if err != nil {
-			return model.FoundedChatsMessagesChannels{}, err
-		}
-
-		chat, err := u.chatRepo.GetChatById(ctx, chatMember.ChatId)
-		if err != nil {
-			return model.FoundedChatsMessagesChannels{}, err
-		}
-		if chat.Type == configs.Chat {
-			continue
-		}
-
-		lastMessages = append(lastMessages, lastMessage)
-		chats = append(chats, chat)
+	foundedContacts, err := u.userRepo.GetSearchUsers(ctx, string)
+	if err != nil {
+		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	var correctLastMessages []model.ChatInListUser
-	var correctChats []model.ChatInListUser
-	var correctChannels []model.ChatInListUser
-	var correctContacts []model.User
-	for _, message := range lastMessages {
-		if strings.Contains(strings.ToLower(message.Body), strings.ToLower(string)) {
-			chat, err := u.chatRepo.GetChatById(ctx, message.ChatId)
-			if err != nil {
-				return model.FoundedChatsMessagesChannels{}, err
-			}
-
-			messageToArray := model.ChatInListUser{
-				Id:          chat.Id,
-				Type:        chat.Type,
-				Title:       chat.Title,
-				Avatar:      chat.Avatar,
-				LastMessage: message,
-			}
-
-			correctLastMessages = append(correctLastMessages, messageToArray)
-		}
-	}
-
-	for _, chat := range chats {
-		if strings.Contains(strings.ToLower(chat.Title), strings.ToLower(string)) {
-			chatToArray := model.ChatInListUser{
-				Id:     chat.Id,
-				Type:   chat.Type,
-				Title:  chat.Title,
-				Avatar: chat.Avatar,
-			}
-
-			lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chat.Id)
-			if err != nil {
-				return model.FoundedChatsMessagesChannels{}, err
-			}
-			chatToArray.LastMessage = lastMessage
-
-			correctChats = append(correctChats, chatToArray)
-		}
-	}
+	var foundedChannels []model.ChatInListUser
+	var foundedChats []model.ChatInListUser
+	var foundedMessages []model.ChatInListUser
 
 	for _, channel := range channels {
-		channelToArray := model.ChatInListUser{
+		foundedChannel := model.ChatInListUser{
 			Id:     channel.Id,
 			Type:   channel.Type,
 			Title:  channel.Title,
@@ -309,21 +255,49 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		if err != nil {
 			return model.FoundedChatsMessagesChannels{}, err
 		}
-		channelToArray.LastMessage = lastMessage
+		foundedChannel.LastMessage = lastMessage
 
-		correctChannels = append(correctChannels, channelToArray)
+		foundedChannels = append(foundedChannels, foundedChannel)
 	}
 
-	for _, contact := range contacts {
-		if strings.Contains(strings.ToLower(contact.Nickname), strings.ToLower(string)) {
-			correctContacts = append(correctContacts, model_conversion.FromAuthorizedUserToUser(contact))
+	for _, chat := range chats {
+		foundedChat := model.ChatInListUser{
+			Id:     chat.Id,
+			Type:   chat.Type,
+			Title:  chat.Title,
+			Avatar: chat.Avatar,
 		}
+
+		lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chat.Id)
+		if err != nil {
+			return model.FoundedChatsMessagesChannels{}, err
+		}
+		foundedChat.LastMessage = lastMessage
+
+		foundedChats = append(foundedChats, foundedChat)
+	}
+
+	for _, message := range messages {
+		chat, err := u.chatRepo.GetChatById(ctx, message.ChatId)
+		if err != nil {
+			return model.FoundedChatsMessagesChannels{}, err
+		}
+
+		foundedChat := model.ChatInListUser{
+			Id:     chat.Id,
+			Type:   chat.Type,
+			Title:  chat.Title,
+			Avatar: chat.Avatar,
+		}
+		foundedChat.LastMessage = message
+
+		foundedMessages = append(foundedMessages, foundedChat)
 	}
 
 	return model.FoundedChatsMessagesChannels{
-		FoundedChats:    correctChats,
-		FoundedMessages: correctLastMessages,
-		FoundedChannels: correctChannels,
-		FoundedContacts: correctContacts,
+		FoundedChats:    foundedChats,
+		FoundedMessages: foundedMessages,
+		FoundedChannels: foundedChannels,
+		FoundedContacts: model_conversion.FromAuthorizedUserArrayToUserArray(foundedContacts),
 	}, nil
 }

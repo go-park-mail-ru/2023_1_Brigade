@@ -84,6 +84,9 @@ func (m *GRPCMiddleware) GRPCMetricsMiddleware(ctx context.Context, req interfac
 	start := time.Now()
 
 	resp, err := uHandler(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
 	errStatus, _ := status.FromError(err)
 	code := errStatus.Code()

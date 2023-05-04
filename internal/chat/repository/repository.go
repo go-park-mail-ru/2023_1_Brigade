@@ -191,7 +191,21 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 }
 
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
-	return nil, nil
+	var groups []model.Chat
+	err := r.db.Select(&groups, `
+		SELECT id, type, avatar, title 
+		FROM chat WHERE type = $1 AND title ILIKE $2 AND 
+		EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
+		configs.Group, "%"+string+"%", userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, myErrors.ErrChatNotFound
+		}
+
+		return nil, err
+	}
+
+	return groups, nil
 }
 
 func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {

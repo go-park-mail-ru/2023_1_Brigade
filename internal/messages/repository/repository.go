@@ -110,3 +110,23 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 
 	return lastMessage, err
 }
+
+func (r repository) GetSearchMessages(ctx context.Context, userID uint64, string string) ([]model.Message, error) {
+	var messages []model.Message
+	err := r.db.Select(&messages, `
+		SELECT message.*
+		FROM message
+		JOIN chat_messages ON message.id = chat_messages.id_message
+		JOIN chat_members ON chat_messages.id_chat = chat_members.id_chat
+		WHERE message.body ILIKE $1 AND chat_members.id_member = $2;`,
+		"%"+string+"%", userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, myErrors.ErrChatNotFound
+		}
+
+		return nil, err
+	}
+
+	return messages, nil
+}

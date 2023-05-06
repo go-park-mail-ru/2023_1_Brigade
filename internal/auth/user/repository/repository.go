@@ -42,9 +42,9 @@ func (r repository) createTechnogrammChat(user model.AuthorizedUser) {
 }
 
 func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	row, err := r.db.Query(`INSERT INTO profile (username, nickname, email, status, password) `+
-		`VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-		user.Username, user.Nickname, user.Email, user.Status, user.Password)
+	row, err := r.db.Query(`INSERT INTO profile (avatar, username, nickname, email, status, password) `+
+		`VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+		"", user.Username, user.Nickname, user.Email, user.Status, user.Password)
 	defer row.Close()
 
 	if err != nil {
@@ -58,6 +58,30 @@ func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (
 	}
 
 	//r.createTechnogrammChat(user)
+
+	return user, nil
+}
+
+func (r repository) UpdateUserAvatar(ctx context.Context, url string, userID uint64) (model.AuthorizedUser, error) {
+	result, err := r.db.Exec("UPDATE profile SET avatar=$1 WHERE id=$2", url, userID)
+	if err != nil {
+		return model.AuthorizedUser{}, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return model.AuthorizedUser{}, err
+	}
+
+	if rowsAffected == 0 {
+		return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+	}
+
+	var user model.AuthorizedUser
+	err = r.db.Get(&user, "SELECT * FROM profile WHERE id=$1", userID)
+	if err != nil {
+		return model.AuthorizedUser{}, err
+	}
 
 	return user, nil
 }

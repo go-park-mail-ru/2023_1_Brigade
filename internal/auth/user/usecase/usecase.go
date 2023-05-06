@@ -33,7 +33,7 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 		Status:   "Привет, я использую технограм!",
 	}
 
-	err := u.authRepo.CheckExistEmail(context.Background(), user.Email)
+	err := u.authRepo.CheckExistEmail(ctx, user.Email)
 	if err == nil {
 		return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
 	}
@@ -49,7 +49,7 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	hashedPassword := security.Hash([]byte(registrationUser.Password))
 	user.Password = hashedPassword
 
-	sessionUser, err := u.authRepo.CreateUser(context.Background(), user)
+	sessionUser, err := u.authRepo.CreateUser(ctx, user)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -66,7 +66,11 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	if err != nil {
 		log.Error(err)
 	}
-	sessionUser.Avatar = url
+
+	sessionUser, err = u.authRepo.UpdateUserAvatar(ctx, url, sessionUser.Id)
+	if err != nil {
+		log.Error(err)
+	}
 
 	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }
@@ -77,7 +81,7 @@ func (u usecase) Login(ctx context.Context, loginUser model.LoginUser) (model.Us
 		Password: loginUser.Password,
 	}
 
-	err := u.authRepo.CheckExistEmail(context.Background(), user.Email)
+	err := u.authRepo.CheckExistEmail(ctx, user.Email)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -85,12 +89,12 @@ func (u usecase) Login(ctx context.Context, loginUser model.LoginUser) (model.Us
 	hashedPassword := security.Hash([]byte(user.Password))
 	user.Password = hashedPassword
 
-	err = u.authRepo.CheckCorrectPassword(context.Background(), user.Email, user.Password)
+	err = u.authRepo.CheckCorrectPassword(ctx, user.Email, user.Password)
 	if err != nil {
 		return model.User{}, err
 	}
 
-	user, err = u.userRepo.GetUserByEmail(context.Background(), user.Email)
+	user, err = u.userRepo.GetUserByEmail(ctx, user.Email)
 	if err != nil {
 		return model.User{}, err
 	}

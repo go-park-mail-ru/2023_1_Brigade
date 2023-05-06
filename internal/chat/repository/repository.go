@@ -33,6 +33,30 @@ func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error 
 	return err
 }
 
+func (r repository) UpdateChatAvatar(ctx context.Context, url string, chatID uint64) (model.Chat, error) {
+	result, err := r.db.Exec("UPDATE chat SET avatar=$1 WHERE id=$2", url, chatID)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	if rowsAffected == 0 {
+		return model.Chat{}, myErrors.ErrChatNotFound
+	}
+
+	var chat model.Chat
+	err = r.db.Get(&chat, "SELECT * FROM profile WHERE id=$1", chatID)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	return chat, nil
+}
+
 func (r repository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
 	var chat model.DBChat
 	rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
@@ -114,17 +138,10 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 
 	for rows.Next() {
 		var chatFromDB model.Chat
-		rows.Scan(&chatFromDB.Id, &chatFromDB.MasterID, &chatFromDB.Type, &chatFromDB.Title)
+		rows.Scan(&chatFromDB.Id, &chatFromDB.MasterID, &chatFromDB.Type, &chatFromDB.Title, &chatFromDB.Avatar)
 		if err != nil {
 			return model.Chat{}, err
 		}
-
-		filename := strconv.FormatUint(chatFromDB.Id, 10) + ".png"
-		url, err := r.s3.GetImage(ctx, configs.Chat_avatars_bucket, filename)
-		if err != nil {
-			return model.Chat{}, err
-		}
-		chatFromDB.Avatar = url
 
 		chat = append(chat, chatFromDB)
 	}
@@ -137,8 +154,8 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
-	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, title)  VALUES($1, $2, $3) RETURNING id`,
-		chat.MasterID, chat.Type, chat.Title)
+	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
+		chat.MasterID, chat.Type, "", chat.Title)
 	defer rows.Close()
 
 	if err != nil {
@@ -202,7 +219,7 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
 	var groups []model.Chat
 	err := r.db.Select(&groups, `
-		SELECT id, type, title 
+		SELECT id, type, avatar, title 
 		FROM chat WHERE type != $1 AND title ILIKE $2 AND 
 		EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		configs.Chat, "%"+string+"%", userID)
@@ -229,7 +246,7 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {
 	var channels []model.Chat
 	err := r.db.Select(&channels, `
-		SELECT id, type, title 
+		SELECT id, type, avatar, title 
 		FROM chat WHERE type = $1 AND title ILIKE $2 AND 
 		NOT EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		configs.Channel, "%"+string+"%", userID)

@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS profile (
     id       SERIAL UNIQUE PRIMARY KEY,
+    avatar   VARCHAR(1024),
     username VARCHAR(255),
     nickname VARCHAR(255),
     email    VARCHAR(255),
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS chat (
     id    SERIAL UNIQUE PRIMARY KEY,
     master_id    INTEGER,
     type INTEGER,
+    avatar VARCHAR(255),
     title VARCHAR(255),
     FOREIGN KEY (master_id) REFERENCES profile(id)
 );

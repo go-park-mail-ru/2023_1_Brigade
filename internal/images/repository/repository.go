@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"project/internal/configs"
 	"project/internal/images"
-	"time"
 )
 
 func NewImagesMemoryRepository(s3_user_avatars *minio.Client, s3_chat_avatars *minio.Client, s3_chat_images *minio.Client) images.Repository {
@@ -36,17 +35,16 @@ func (r repository) UploadImage(ctx context.Context, file io.Reader, bucketName 
 }
 
 func (r repository) GetImage(ctx context.Context, bucketName string, filename string) (string, error) {
-	expires := 24 * time.Hour
 	url := &url.URL{}
 	err := errors.New("")
 
 	switch bucketName {
 	case configs.User_avatars_bucket:
-		url, err = r.s3_user_avatars.PresignedGetObject(ctx, bucketName, filename, expires, nil)
+		url, err = r.s3_user_avatars.PresignedGetObject(ctx, bucketName, filename, 0, nil)
 	case configs.Chat_avatars_bucket:
-		url, err = r.s3_chat_avatars.PresignedGetObject(ctx, bucketName, filename, expires, nil)
+		url, err = r.s3_chat_avatars.PresignedGetObject(ctx, bucketName, filename, 0, nil)
 	case configs.Chat_images_bucket:
-		url, err = r.s3_chat_images.PresignedGetObject(ctx, bucketName, filename, expires, nil)
+		url, err = r.s3_chat_images.PresignedGetObject(ctx, bucketName, filename, 0, nil)
 	}
 	if err != nil {
 		return "", err

@@ -6,6 +6,7 @@ import (
 )
 
 type Repository interface {
+	UpdateUserAvatar(ctx context.Context, url string, userID uint64) (model.AuthorizedUser, error)
 	CreateUser(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error)
 	CheckCorrectPassword(ctx context.Context, email string, password string) error
 	CheckExistEmail(ctx context.Context, email string) error

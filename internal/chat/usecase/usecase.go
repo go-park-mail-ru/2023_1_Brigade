@@ -122,7 +122,11 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		if err != nil {
 			log.Error(err)
 		}
-		chatFromDB.Avatar = url
+
+		chatFromDB, err = u.chatRepo.UpdateChatAvatar(ctx, url, chatFromDB.Id)
+		if err != nil {
+			log.Error(err)
+		}
 	}
 
 	return chatFromDB, err

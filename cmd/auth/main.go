@@ -68,8 +68,8 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	accessKey := "5C8YjViNM475zK7rafg8ut"
-	secKey := "i1Prj7cjWGdDTQrEpbhX37wfcQRtAzAcvqsbtpRD6VG9"
+	accessKey := "hPGMCe6ZttM8VBVs7sXkFi"
+	secKey := "9knxejdQVDA3J8YGchKjh2XvMzyupvakHJqG6kBwe15R"
 	endpoint := "hb.bizmrg.com"
 	ssl := true
 

@@ -1,13 +1,12 @@
 package image_generation
 
 import (
-	"bytes"
 	"crypto/rand"
 	"github.com/fogleman/gg"
+	log "github.com/sirupsen/logrus"
 	"image"
 	"image/color"
 	"image/draw"
-	"image/jpeg"
 	"image/png"
 	"io"
 	"math"
@@ -53,7 +52,7 @@ func GenerateAvatar(firstCharacterName string) (io.Reader, error) {
 
 	draw.Draw(img, img.Bounds(), &image.Uniform{color}, image.Point{}, draw.Src)
 
-	file, err := os.Create("background.png")
+	file, err := os.Create("../../avatars/background.png")
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +62,7 @@ func GenerateAvatar(firstCharacterName string) (io.Reader, error) {
 	}
 
 	const S = 1024
-	im, err := gg.LoadImage("background.png")
+	im, err := gg.LoadImage("../../avatars/background.png")
 	if err != nil {
 		return nil, err
 	}
@@ -80,17 +79,29 @@ func GenerateAvatar(firstCharacterName string) (io.Reader, error) {
 	dc.DrawImage(im, 0, 0)
 	dc.DrawStringAnchored(firstCharacterName, S/2, S/2, 0.5, 0.5)
 	dc.Clip()
-
-	buf := new(bytes.Buffer)
-
-	// Записываем содержимое изображения в буфер
-	err = jpeg.Encode(buf, img, nil)
+	err = dc.SavePNG("../../avatars/background.png")
 	if err != nil {
-		return nil, err
+		log.Error(err)
 	}
 
-	// Возвращаем объект io.Reader
-	return buf, nil
+	return file, nil
+	//file2, err := os.O("background2.png")
+	//if err != nil {
+	//	return nil, err
+	//}
+	//defer file2.Close()
+	//
+	//return file2, nil
+	//buf := new(bytes.Buffer)
+	//
+	//// Записываем содержимое изображения в буфер
+	//err = png.Encode(buf, im)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//// Возвращаем объект io.Reader
+	//return buf, nil
 
 	//hash := uuid.New().String()
 	//

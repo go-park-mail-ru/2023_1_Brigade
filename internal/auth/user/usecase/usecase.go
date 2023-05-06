@@ -8,7 +8,6 @@ import (
 	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	"project/internal/pkg/image_generation"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
 	"project/internal/pkg/validation"
@@ -53,12 +52,12 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 		return model.User{}, err
 	}
 
-	file, err := image_generation.GenerateAvatar(string(sessionUser.Nickname[0]))
-	if err != nil {
-		log.Error(err)
-	}
-
-	err = u.imagesUsecase.UploadImage(ctx, file, "brigade_user_avatars", string(sessionUser.Id))
+	//file, err := image_generation.GenerateAvatar(string(sessionUser.Nickname[0]))
+	//if err != nil {
+	//	log.Error(err)
+	//}
+	//
+	err = u.imagesUsecase.UploadGeneratedImage(ctx, "brigade_user_avatars", string(sessionUser.Id), string(sessionUser.Nickname[0]))
 	if err != nil {
 		log.Error(err)
 	}

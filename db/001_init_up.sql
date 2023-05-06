@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS chat (
     id    SERIAL UNIQUE PRIMARY KEY,
     master_id    INTEGER,
     type INTEGER,
-    avatar VARCHAR(255),
+    avatar VARCHAR(1024),
     title VARCHAR(255),
     FOREIGN KEY (master_id) REFERENCES profile(id)
 );

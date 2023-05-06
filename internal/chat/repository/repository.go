@@ -10,7 +10,6 @@ import (
 	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	"strconv"
 )
 
 type repository struct {
@@ -49,7 +48,7 @@ func (r repository) UpdateChatAvatar(ctx context.Context, url string, chatID uin
 	}
 
 	var chat model.Chat
-	err = r.db.Get(&chat, "SELECT * FROM profile WHERE id=$1", chatID)
+	err = r.db.Get(&chat, "SELECT * FROM chat WHERE id=$1", chatID)
 	if err != nil {
 		return model.Chat{}, err
 	}
@@ -231,15 +230,6 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 		return nil, err
 	}
 
-	for idx, _ := range groups {
-		filename := strconv.FormatUint(groups[idx].Id, 10) + ".png"
-		url, err := r.s3.GetImage(ctx, configs.Chat_avatars_bucket, filename)
-		if err != nil {
-			return nil, err
-		}
-		groups[idx].Avatar = url
-	}
-
 	return groups, nil
 }
 
@@ -256,15 +246,6 @@ func (r repository) GetSearchChannels(ctx context.Context, string string, userID
 		}
 
 		return nil, err
-	}
-
-	for idx, _ := range channels {
-		filename := strconv.FormatUint(channels[idx].Id, 10) + ".png"
-		url, err := r.s3.GetImage(ctx, configs.Chat_avatars_bucket, filename)
-		if err != nil {
-			return nil, err
-		}
-		channels[idx].Avatar = url
 	}
 
 	return channels, nil

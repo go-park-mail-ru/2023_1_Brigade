@@ -80,7 +80,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 }
 
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {
-	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
+	c := centrifuge.NewJsonClient("ws://localhost:8900/connection/websocket", centrifuge.Config{})
 
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)

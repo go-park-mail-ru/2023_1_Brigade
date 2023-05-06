@@ -289,6 +289,31 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 			Title:  chat.Title,
 			Avatar: chat.Avatar,
 		}
+		if chat.Type == configs.Chat {
+			chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, message.ChatId)
+			if err != nil {
+				return model.FoundedChatsMessagesChannels{}, err
+			}
+
+			var members []model.User
+			for _, chatMember := range chatMembers {
+				member, err := u.userRepo.GetUserById(ctx, chatMember.MemberId)
+				if err != nil {
+					return model.FoundedChatsMessagesChannels{}, err
+				}
+
+				members = append(members, model_conversion.FromAuthorizedUserToUser(member))
+			}
+			if len(members) > 0 {
+				if members[0].Id == userID {
+					foundedChat.Title = members[1].Nickname
+					foundedChat.Avatar = members[1].Avatar
+				} else {
+					foundedChat.Title = members[0].Nickname
+					foundedChat.Avatar = members[0].Avatar
+				}
+			}
+		}
 		foundedChat.LastMessage = message
 
 		foundedMessages = append(foundedMessages, foundedChat)

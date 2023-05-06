@@ -27,7 +27,7 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
-	c := centrifuge.NewJsonClient("ws://centrifugo:8900/connection/websocket", centrifuge.Config{})
+	c := centrifuge.NewJsonClient("ws://localhost:8900/connection/websocket", centrifuge.Config{})
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 

@@ -12,6 +12,7 @@ import (
 	"project/internal/pkg/security"
 	"project/internal/pkg/validation"
 	"project/internal/user"
+	"strconv"
 )
 
 type usecase struct {
@@ -57,12 +58,14 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	//	log.Error(err)
 	//}
 	//
-	err = u.imagesUsecase.UploadGeneratedImage(ctx, "brigade_user_avatars", string(sessionUser.Id), string(sessionUser.Nickname[0]))
+	str := strconv.FormatUint(sessionUser.Id, 10)
+
+	err = u.imagesUsecase.UploadGeneratedImage(ctx, "brigade_user_avatars", str, string(sessionUser.Nickname[0]))
 	if err != nil {
 		log.Error(err)
 	}
 
-	url, err := u.imagesUsecase.GetImage(ctx, "brigade_user_avatars", string(sessionUser.Id))
+	url, err := u.imagesUsecase.GetImage(ctx, "brigade_user_avatars", str)
 	if err != nil {
 		log.Error(err)
 	}

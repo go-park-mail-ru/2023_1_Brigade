@@ -15,7 +15,7 @@ type imagesHandler struct {
 	imagesUsecase images.Usecase
 }
 
-func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
+func (h imagesHandler) UploadUserAvatarsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
 	userID := session.UserId
 
@@ -25,7 +25,7 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		return err
 	}
 
-	file, header, err := ctx.Request().FormFile("image")
+	file, _, err := ctx.Request().FormFile("image")
 	if err != nil {
 		return err
 	}
@@ -37,7 +37,7 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 		}
 	}()
 
-	url, err := h.imagesUsecase.LoadImage(context.TODO(), file, header.Filename, userID)
+	err = h.imagesUsecase.UploadImage(context.TODO(), file, "brigade_user_avatars", string(userID))
 	if err != nil {
 		return err
 	}
@@ -46,20 +46,99 @@ func (h imagesHandler) LoadCurrentUserAvatarHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	user.Avatar = url
 
 	return ctx.JSON(http.StatusCreated, user)
 }
 
+func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
+	return nil
+	//session := ctx.Get("session").(model.Session)
+	//	userID := session.UserId
+	//
+	//	maxSize := int64(64 << 20)
+	//	err := ctx.Request().ParseMultipartForm(maxSize)
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//	file, header, err := ctx.Request().FormFile("image")
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//	defer func() {
+	//		err := file.Close()
+	//		if err != nil {
+	//			log.Error(err)
+	//		}
+	//	}()
+	//
+	//	url, err := h.imagesUsecase.UploadImage(context.TODO(), file, header.Filename, userID)
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//	user, err := h.userUsecase.GetUserById(context.TODO(), session.UserId)
+	//	if err != nil {
+	//		return err
+	//	}
+	//	user.Avatar = url
+	//
+	//	return ctx.JSON(http.StatusCreated, user)
+}
+
+func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
+	return nil
+	//session := ctx.Get("session").(model.Session)
+	//userID := session.UserId
+	//
+	//maxSize := int64(64 << 20)
+	//err := ctx.Request().ParseMultipartForm(maxSize)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//file, header, err := ctx.Request().FormFile("image")
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//defer func() {
+	//	err := file.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
+	//
+	//url, err := h.imagesUsecase.UploadImage(context.TODO(), file, header.Filename, userID)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//user, err := h.userUsecase.GetUserById(context.TODO(), session.UserId)
+	//if err != nil {
+	//	return err
+	//}
+	//user.Avatar = url
+	//
+	//return ctx.JSON(http.StatusCreated, user)
+}
+
 func NewImagesHandler(e *echo.Echo, userUsecase user.Usecase, imagesUsecase images.Usecase) imagesHandler {
 	handler := imagesHandler{userUsecase: userUsecase, imagesUsecase: imagesUsecase}
-	loadImagesUrl := "/images/"
+	uploadUserAvatarsUrl := "/images/user/"
+	uploadChatAvatarsUrl := "/images/chat/"
+	uploadChatImagesUrl := "/images/chat/images/"
 
 	api := e.Group("api/v1")
 
-	loadImages := api.Group(loadImagesUrl)
+	uploadUserAvatars := api.Group(uploadUserAvatarsUrl)
+	uploadChatAvatars := api.Group(uploadChatAvatarsUrl)
+	uploadChatImages := api.Group(uploadChatImagesUrl)
 
-	loadImages.POST("", handler.LoadCurrentUserAvatarHandler)
+	uploadUserAvatars.POST("", handler.UploadUserAvatarsHandler)
+	uploadChatAvatars.POST("", handler.UploadChatAvatarsHandler)
+	uploadChatImages.POST("", handler.UploadChatImagesHandler)
 
 	return handler
 }

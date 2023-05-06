@@ -7,6 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -70,6 +72,16 @@ func main() {
 		log.Error(err)
 	}
 
+	accessKey := "5C8YjViNM475zK7rafg8ut"
+	secKey := "i1Prj7cjWGdDTQrEpbhX37wfcQRtAzAcvqsbtpRD6VG9"
+	endpoint := "hb.bizmrg.com"
+	ssl := true
+
+	client, err := minio.New(endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(accessKey, secKey, ""),
+		Secure: ssl,
+	})
+
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
 	if err != nil {
 		log.Error(err)
@@ -124,7 +136,7 @@ func main() {
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
 	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(db)
+	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(client)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)

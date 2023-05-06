@@ -5,6 +5,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
@@ -15,6 +17,8 @@ import (
 	authUserRepository "project/internal/auth/user/repository"
 	authUserUsecase "project/internal/auth/user/usecase"
 	"project/internal/configs"
+	repositoryImages "project/internal/images/repository"
+	usecaseImages "project/internal/images/usecase"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
 	userRepository "project/internal/user/repository"
@@ -64,12 +68,24 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
+	accessKey := "5C8YjViNM475zK7rafg8ut"
+	secKey := "i1Prj7cjWGdDTQrEpbhX37wfcQRtAzAcvqsbtpRD6VG9"
+	endpoint := "hb.bizmrg.com"
+	ssl := true
+
+	client, err := minio.New(endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(accessKey, secKey, ""),
+		Secure: ssl,
+	})
+
+	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(client)
 	userRepository := userRepository.NewUserMemoryRepository(db)
 	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
 	authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
 
-	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)
 	authSessionUsecase := authSessionUsecase.NewAuthUserUsecase(authSessionRepository)
+	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository, imagesUsecase)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.AuthService.ServiceName)
 	if err != nil {

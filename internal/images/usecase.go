@@ -2,9 +2,10 @@ package images
 
 import (
 	"context"
-	"mime/multipart"
+	"io"
 )
 
 type Usecase interface {
-	LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (string, error)
+	UploadImage(ctx context.Context, file io.Reader, bucketName string, filename string) error
+	GetImage(ctx context.Context, bucketName string, filename string) (string, error)
 }

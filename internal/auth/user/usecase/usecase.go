@@ -5,6 +5,7 @@ import (
 	"errors"
 	log "github.com/sirupsen/logrus"
 	auth "project/internal/auth/user"
+	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/image_generation"
@@ -15,12 +16,13 @@ import (
 )
 
 type usecase struct {
-	authRepo auth.Repository
-	userRepo user.Repository
+	authRepo      auth.Repository
+	userRepo      user.Repository
+	imagesUsecase images.Usecase
 }
 
-func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository) auth.Usecase {
-	return &usecase{authRepo: authRepo, userRepo: userRepo}
+func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository, imagesUsecase images.Usecase) auth.Usecase {
+	return &usecase{authRepo: authRepo, userRepo: userRepo, imagesUsecase: imagesUsecase}
 }
 
 func (u usecase) Signup(ctx context.Context, registrationUser model.RegistrationUser) (model.User, error) {
@@ -45,16 +47,27 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 
 	hashedPassword := security.Hash([]byte(registrationUser.Password))
 	user.Password = hashedPassword
-	avatar, err := image_generation.GenerateAvatar(string(registrationUser.Nickname[0]))
-	if err != nil {
-		log.Error(err)
-	}
-	user.Avatar = avatar
 
 	sessionUser, err := u.authRepo.CreateUser(context.Background(), user)
 	if err != nil {
 		return model.User{}, err
 	}
+
+	file, err := image_generation.GenerateAvatar(string(sessionUser.Nickname[0]))
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = u.imagesUsecase.UploadImage(ctx, file, "brigade_user_avatars", string(sessionUser.Id))
+	if err != nil {
+		log.Error(err)
+	}
+
+	url, err := u.imagesUsecase.GetImage(ctx, "brigade_user_avatars", string(sessionUser.Id))
+	if err != nil {
+		log.Error(err)
+	}
+	sessionUser.Avatar = url
 
 	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }

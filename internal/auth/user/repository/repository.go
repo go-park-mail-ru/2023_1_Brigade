@@ -42,9 +42,9 @@ func (r repository) createTechnogrammChat(user model.AuthorizedUser) {
 }
 
 func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	row, err := r.db.Query(`INSERT INTO profile (avatar, username, nickname, email, status, password) `+
-		`VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-		user.Avatar, user.Username, user.Nickname, user.Email, user.Status, user.Password)
+	row, err := r.db.Query(`INSERT INTO profile (username, nickname, email, status, password) `+
+		`VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+		user.Username, user.Nickname, user.Email, user.Status, user.Password)
 	defer row.Close()
 
 	if err != nil {

@@ -16,6 +16,7 @@ import (
 	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
 	repositoryImages "project/internal/images/repository"
+	usecaseImages "project/internal/images/usecase"
 	repositoryMessages "project/internal/messages/repository"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
@@ -95,7 +96,8 @@ func main() {
 	userRepo := repositoryUser.NewUserMemoryRepository(db, imagesRepository)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
-	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
+	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo, imagesUsecase)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.ChatsService.ServiceName)
 	if err != nil {

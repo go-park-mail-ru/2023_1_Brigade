@@ -150,11 +150,11 @@ func main() {
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
 	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
-	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

@@ -21,8 +21,8 @@ type usecase struct {
 	imagesUsecase images.Usecase
 }
 
-func NewChatUsecase(chatRepo chat.Repository, userRepo user.Repository, messagesRepo messages.Repository) chat.Usecase {
-	return &usecase{chatRepo: chatRepo, userRepo: userRepo, messagesRepo: messagesRepo}
+func NewChatUsecase(chatRepo chat.Repository, userRepo user.Repository, messagesRepo messages.Repository, imagesUsecase images.Usecase) chat.Usecase {
+	return &usecase{chatRepo: chatRepo, userRepo: userRepo, messagesRepo: messagesRepo, imagesUsecase: imagesUsecase}
 }
 
 func (u usecase) CheckExistUserInChat(ctx context.Context, chat model.Chat, userID uint64) error {

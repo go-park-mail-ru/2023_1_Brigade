@@ -12,7 +12,7 @@ type AuthorizedUser struct {
 
 type User struct {
 	Id       uint64 `json:"id"       valid:"type(int)"         db:"id"`
-	Username string `json:"username"    					   db:"username"`
+	Username string `json:"username"         				   db:"username"`
 	Nickname string `json:"nickname" valid:"nicknameValidator" db:"nickname"`
 	Email    string `json:"email"    valid:"emailValidator"    db:"email"`
 	Status   string `json:"status"   valid:"type(string)"      db:"status"`

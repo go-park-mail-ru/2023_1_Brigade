@@ -5,18 +5,20 @@ import (
 	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
+	"project/internal/images"
 	"project/internal/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
-	"project/internal/pkg/image_generation"
 	"project/internal/pkg/model_conversion"
 	"project/internal/user"
+	"strconv"
 )
 
 type usecase struct {
-	chatRepo     chat.Repository
-	userRepo     user.Repository
-	messagesRepo messages.Repository
+	chatRepo      chat.Repository
+	userRepo      user.Repository
+	messagesRepo  messages.Repository
+	imagesUsecase images.Usecase
 }
 
 func NewChatUsecase(chatRepo chat.Repository, userRepo user.Repository, messagesRepo messages.Repository) chat.Usecase {
@@ -102,16 +104,26 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		Messages: []model.Message{},
 	}
 
+	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
 	if createdChat.Type != configs.Chat {
-		avatar, err := image_generation.GenerateAvatar(string(chat.Title[0]))
+		filename := strconv.FormatUint(chatFromDB.Id, 10)
+		firstCharacterName := string(chat.Title[0])
+
+		err = u.imagesUsecase.UploadGeneratedImage(ctx, configs.User_avatars_bucket, filename, firstCharacterName)
 		if err != nil {
 			log.Error(err)
 		}
 
-		createdChat.Avatar = avatar
+		url, err := u.imagesUsecase.GetImage(ctx, configs.User_avatars_bucket, filename)
+		if err != nil {
+			log.Error(err)
+		}
+		chatFromDB.Avatar = url
 	}
-
-	chatFromDB, err := u.chatRepo.CreateChat(context.Background(), createdChat)
 
 	return chatFromDB, err
 }

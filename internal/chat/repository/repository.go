@@ -5,19 +5,21 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
+	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
+	"strconv"
 )
 
 type repository struct {
 	db *sqlx.DB
+	s3 images.Repository
 }
 
-func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
-	return &repository{db: db}
+func NewChatMemoryRepository(db *sqlx.DB, s3 images.Repository) chat.Repository {
+	return &repository{db: db, s3: s3}
 }
 
 func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
@@ -112,14 +114,21 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 
 	for rows.Next() {
 		var chatFromDB model.Chat
-		rows.Scan(&chatFromDB.Id, &chatFromDB.MasterID, &chatFromDB.Type, &chatFromDB.Avatar, &chatFromDB.Title)
+		rows.Scan(&chatFromDB.Id, &chatFromDB.MasterID, &chatFromDB.Type, &chatFromDB.Title)
 		if err != nil {
 			return model.Chat{}, err
 		}
 
+		filename := strconv.FormatUint(chatFromDB.Id, 10) + ".png"
+		url, err := r.s3.GetImage(ctx, configs.Chat_avatars_bucket, filename)
+		if err != nil {
+			return model.Chat{}, err
+		}
+		chatFromDB.Avatar = url
+
 		chat = append(chat, chatFromDB)
 	}
-	log.Info(chat)
+
 	if len(chat) == 0 {
 		return model.Chat{}, nil
 	}
@@ -128,8 +137,8 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
-	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
-		chat.MasterID, chat.Type, chat.Avatar, chat.Title)
+	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, title)  VALUES($1, $2, $3) RETURNING id`,
+		chat.MasterID, chat.Type, chat.Title)
 	defer rows.Close()
 
 	if err != nil {
@@ -205,6 +214,15 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 		return nil, err
 	}
 
+	for idx, _ := range groups {
+		filename := strconv.FormatUint(groups[idx].Id, 10) + ".png"
+		url, err := r.s3.GetImage(ctx, configs.Chat_avatars_bucket, filename)
+		if err != nil {
+			return nil, err
+		}
+		groups[idx].Avatar = url
+	}
+
 	return groups, nil
 }
 
@@ -221,6 +239,15 @@ func (r repository) GetSearchChannels(ctx context.Context, string string, userID
 		}
 
 		return nil, err
+	}
+
+	for idx, _ := range channels {
+		filename := strconv.FormatUint(channels[idx].Id, 10) + ".png"
+		url, err := r.s3.GetImage(ctx, configs.Chat_avatars_bucket, filename)
+		if err != nil {
+			return nil, err
+		}
+		channels[idx].Avatar = url
 	}
 
 	return channels, nil

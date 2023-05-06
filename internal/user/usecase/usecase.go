@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	authUser "project/internal/auth/user"
+	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
@@ -11,8 +12,9 @@ import (
 )
 
 type usecase struct {
-	userRepo user.Repository
-	authRepo authUser.Repository
+	userRepo      user.Repository
+	authRepo      authUser.Repository
+	imagesUsecase images.Usecase
 }
 
 func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user.Usecase {
@@ -26,6 +28,10 @@ func (u usecase) DeleteUserById(ctx context.Context, userID uint64) error {
 
 func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
 	user, err := u.userRepo.GetUserById(context.Background(), userID)
+	if err != nil {
+		return model.User{}, err
+	}
+
 	return model_conversion.FromAuthorizedUserToUser(user), err
 }
 
@@ -57,13 +63,12 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 }
 
 func (u usecase) GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error) {
-	contactsFromDB, err := u.userRepo.GetUserContacts(context.Background(), userID)
+	contacts, err := u.userRepo.GetUserContacts(ctx, userID)
 	if err != nil {
 		return []model.User{}, err
 	}
 
-	contacts := model_conversion.FromAuthorizedUserArrayToUserArray(contactsFromDB)
-	return contacts, err
+	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), err
 }
 
 func (u usecase) AddUserContact(ctx context.Context, userID uint64, contactID uint64) ([]model.User, error) {
@@ -102,10 +107,18 @@ func (u usecase) CheckExistUserById(ctx context.Context, userID uint64) error {
 
 func (u usecase) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.User, error) {
 	users, err := u.userRepo.GetAllUsersExceptCurrentUser(context.Background(), userID)
+	if err != nil {
+		return nil, err
+	}
+
 	return model_conversion.FromAuthorizedUserArrayToUserArray(users), err
 }
 
 func (u usecase) GetSearchUsers(ctx context.Context, string string) ([]model.User, error) {
 	searchContacts, err := u.userRepo.GetSearchUsers(ctx, string)
+	if err != nil {
+		return nil, err
+	}
+
 	return model_conversion.FromAuthorizedUserArrayToUserArray(searchContacts), err
 }

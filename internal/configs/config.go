@@ -6,6 +6,7 @@ type Config struct {
 	Cors            Cors            `yaml:"Cors"`
 	Redis           Redis           `yaml:"Redis"`
 	Minio           Minio           `yaml:"Minio"`
+	VkCloud         VkCloud         `yaml:"VkCloud"`
 	Kafka           Kafka           `yaml:"Kafka"`
 	ChatsService    ChatsService    `yaml:"ChatsService"`
 	UsersService    UsersService    `yaml:"UsersService"`
@@ -41,6 +42,20 @@ type Minio struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Token    string `yaml:"token"`
+}
+
+type VkCloud struct {
+	Endpoint string `yaml:"endpoint"`
+	Ssl      bool   `yaml:"ssl"`
+
+	UserAvatarsAccessKey string `yaml:"userAvatarsAccessKey"`
+	UserAvatarsSecretKey string `yaml:"userAvatarsSecretKey"`
+
+	ChatAvatarsAccessKey string `yaml:"chatAvatarsAccessKey"`
+	ChatAvatarsSecretKey string `yaml:"chatAvatarsSecretKey"`
+
+	ChatImagesAccessKey string `yaml:"chatImagesAccessKey"`
+	ChatImagesSecretKey string `yaml:"chatImagesSecretKey"`
 }
 
 type Kafka struct {
@@ -91,3 +106,7 @@ const Channel = 2
 const Create = 0
 const Edit = 1
 const Delete = 2
+
+const User_avatars_bucket = "brigade_user_avatars"
+const Chat_avatars_bucket = "brigade_chat_avatars"
+const Chat_images_bucket = "brigade_chat_images"

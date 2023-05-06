@@ -5,6 +5,7 @@ import (
 	"errors"
 	log "github.com/sirupsen/logrus"
 	auth "project/internal/auth/user"
+	"project/internal/configs"
 	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -53,19 +54,15 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 		return model.User{}, err
 	}
 
-	//file, err := image_generation.GenerateAvatar(string(sessionUser.Nickname[0]))
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//
-	str := strconv.FormatUint(sessionUser.Id, 10)
+	filename := strconv.FormatUint(sessionUser.Id, 10)
+	firstCharacterName := string(sessionUser.Nickname[0])
 
-	err = u.imagesUsecase.UploadGeneratedImage(ctx, "brigade_user_avatars", str, string(sessionUser.Nickname[0]))
+	err = u.imagesUsecase.UploadGeneratedImage(ctx, configs.User_avatars_bucket, filename, firstCharacterName)
 	if err != nil {
 		log.Error(err)
 	}
 
-	url, err := u.imagesUsecase.GetImage(ctx, "brigade_user_avatars", str)
+	url, err := u.imagesUsecase.GetImage(ctx, configs.User_avatars_bucket, filename)
 	if err != nil {
 		log.Error(err)
 	}

@@ -5,6 +5,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
@@ -13,6 +15,7 @@ import (
 	repositoryChat "project/internal/chat/repository"
 	usecaseChat "project/internal/chat/usecase"
 	"project/internal/configs"
+	repositoryImages "project/internal/images/repository"
 	repositoryMessages "project/internal/messages/repository"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
@@ -63,8 +66,33 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	chatRepo := repositoryChat.NewChatMemoryRepository(db)
-	userRepo := repositoryUser.NewUserMemoryRepository(db)
+	user_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_images_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
+	chatRepo := repositoryChat.NewChatMemoryRepository(db, imagesRepository)
+	userRepo := repositoryUser.NewUserMemoryRepository(db, imagesRepository)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
 	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo)

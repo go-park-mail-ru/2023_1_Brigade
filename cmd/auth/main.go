@@ -68,22 +68,36 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	accessKey := "hPGMCe6ZttM8VBVs7sXkFi"
-	secKey := "9knxejdQVDA3J8YGchKjh2XvMzyupvakHJqG6kBwe15R"
-	endpoint := "hb.bizmrg.com"
-	ssl := true
-
-	client, err := minio.New(endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(accessKey, secKey, ""),
-		Secure: ssl,
+	user_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
 	})
+	if err != nil {
+		log.Error(err)
+	}
 
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(client)
-	userRepository := userRepository.NewUserMemoryRepository(db)
+	chat_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_images_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
+	userRepository := userRepository.NewUserMemoryRepository(db, imagesRepository)
 	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
 	authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
 
-	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepostiory)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
 	authSessionUsecase := authSessionUsecase.NewAuthUserUsecase(authSessionRepository)
 	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository, imagesUsecase)
 

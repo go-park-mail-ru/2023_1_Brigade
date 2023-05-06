@@ -13,20 +13,6 @@ import (
 	"strings"
 )
 
-//func imageToReader(img image.Image) (io.Reader, error) {
-//	// Создаем буфер для записи содержимого изображения
-//	buf := new(bytes.Buffer)
-//
-//	// Записываем содержимое изображения в буфер
-//	err := jpeg.Encode(buf, img, nil)
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	// Возвращаем объект io.Reader
-//	return buf, nil
-//}
-
 func GenerateAvatar(firstCharacterName string) error {
 	firstCharacterName = strings.ToUpper(firstCharacterName)
 	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))

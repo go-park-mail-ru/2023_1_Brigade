@@ -6,17 +6,21 @@ import (
 	"errors"
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
+	"project/internal/configs"
+	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
+	"strconv"
 )
 
-func NewUserMemoryRepository(db *sqlx.DB) user.Repository {
-	return &repository{db: db}
+func NewUserMemoryRepository(db *sqlx.DB, s3 images.Repository) user.Repository {
+	return &repository{db: db, s3: s3}
 }
 
 type repository struct {
 	db *sqlx.DB
+	s3 images.Repository
 }
 
 func (r repository) DeleteUserById(ctx context.Context, userID uint64) error {
@@ -37,6 +41,13 @@ func (r repository) GetUserById(ctx context.Context, userID uint64) (model.Autho
 		return model.AuthorizedUser{}, myErrors.ErrUserNotFound
 	}
 
+	filename := strconv.FormatUint(userID, 10) + ".png"
+	url, err := r.s3.GetImage(ctx, configs.User_avatars_bucket, filename)
+	if err != nil {
+		return model.AuthorizedUser{}, err
+	}
+	user.Avatar = url
+
 	return user, err
 }
 
@@ -47,6 +58,13 @@ func (r repository) GetUserByEmail(ctx context.Context, email string) (model.Aut
 	if errors.Is(err, sql.ErrNoRows) {
 		return model.AuthorizedUser{}, myErrors.ErrUserNotFound
 	}
+
+	filename := strconv.FormatUint(user.Id, 10) + ".png"
+	url, err := r.s3.GetImage(ctx, configs.User_avatars_bucket, filename)
+	if err != nil {
+		return model.AuthorizedUser{}, err
+	}
+	user.Avatar = url
 
 	return user, err
 }
@@ -143,10 +161,18 @@ func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uin
 
 	for rows.Next() {
 		var user model.AuthorizedUser
-		err := rows.Scan(&user.Id, &user.Avatar, &user.Username, &user.Nickname, &user.Email, &user.Status, &user.Password)
+		err := rows.Scan(&user.Id, &user.Username, &user.Nickname, &user.Email, &user.Status, &user.Password)
 		if err != nil {
 			return nil, err
 		}
+
+		filename := strconv.FormatUint(user.Id, 10) + ".png"
+		url, err := r.s3.GetImage(ctx, configs.User_avatars_bucket, filename)
+		if err != nil {
+			return nil, err
+		}
+		user.Avatar = url
+
 		users = append(users, user)
 	}
 
@@ -162,6 +188,15 @@ func (r repository) GetSearchUsers(ctx context.Context, string string) ([]model.
 		}
 
 		return nil, err
+	}
+
+	for idx, user := range searchUsers {
+		filename := strconv.FormatUint(user.Id, 10) + ".png"
+		url, err := r.s3.GetImage(ctx, configs.User_avatars_bucket, filename)
+		if err != nil {
+			return nil, err
+		}
+		searchUsers[idx].Avatar = url
 	}
 
 	return searchUsers, nil

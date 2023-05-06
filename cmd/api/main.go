@@ -72,15 +72,29 @@ func main() {
 		log.Error(err)
 	}
 
-	accessKey := "hPGMCe6ZttM8VBVs7sXkFi"
-	secKey := "9knxejdQVDA3J8YGchKjh2XvMzyupvakHJqG6kBwe15R"
-	endpoint := "hb.bizmrg.com"
-	ssl := true
-
-	client, err := minio.New(endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(accessKey, secKey, ""),
-		Secure: ssl,
+	user_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
 	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_images_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
 
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
 	if err != nil {
@@ -136,7 +150,7 @@ func main() {
 	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
 	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(client)
+	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)

@@ -202,7 +202,7 @@ func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
 	var groups []model.Chat
 	err := r.db.Select(&groups, `
-		SELECT id, type, avatar, title 
+		SELECT id, type, title 
 		FROM chat WHERE type != $1 AND title ILIKE $2 AND 
 		EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		configs.Chat, "%"+string+"%", userID)
@@ -229,7 +229,7 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {
 	var channels []model.Chat
 	err := r.db.Select(&channels, `
-		SELECT id, type, avatar, title 
+		SELECT id, type, title 
 		FROM chat WHERE type = $1 AND title ILIKE $2 AND 
 		NOT EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		configs.Channel, "%"+string+"%", userID)

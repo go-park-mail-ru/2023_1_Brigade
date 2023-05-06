@@ -113,12 +113,12 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		filename := strconv.FormatUint(chatFromDB.Id, 10)
 		firstCharacterName := string(chat.Title[0])
 
-		err = u.imagesUsecase.UploadGeneratedImage(ctx, configs.User_avatars_bucket, filename, firstCharacterName)
+		err = u.imagesUsecase.UploadGeneratedImage(ctx, configs.Chat_avatars_bucket, filename, firstCharacterName)
 		if err != nil {
 			log.Error(err)
 		}
 
-		url, err := u.imagesUsecase.GetImage(ctx, configs.User_avatars_bucket, filename)
+		url, err := u.imagesUsecase.GetImage(ctx, configs.Chat_avatars_bucket, filename)
 		if err != nil {
 			log.Error(err)
 		}

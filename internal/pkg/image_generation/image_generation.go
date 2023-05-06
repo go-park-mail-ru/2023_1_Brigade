@@ -3,12 +3,10 @@ package image_generation
 import (
 	"crypto/rand"
 	"github.com/fogleman/gg"
-	log "github.com/sirupsen/logrus"
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
-	"io"
 	"math"
 	"math/big"
 	"os"
@@ -29,23 +27,23 @@ import (
 //	return buf, nil
 //}
 
-func GenerateAvatar(firstCharacterName string) (io.Reader, error) {
+func GenerateAvatar(firstCharacterName string) error {
 	firstCharacterName = strings.ToUpper(firstCharacterName)
 	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))
 
 	rBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	gBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	bBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	color := color.RGBA{uint8(rBig.Uint64()), uint8(gBig.Uint64()), uint8(bBig.Uint64()), 255}
@@ -54,17 +52,17 @@ func GenerateAvatar(firstCharacterName string) (io.Reader, error) {
 
 	file, err := os.Create("../../avatars/background.png")
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer file.Close()
 	if err := png.Encode(file, img); err != nil {
-		return nil, err
+		return err
 	}
 
 	const S = 1024
 	im, err := gg.LoadImage("../../avatars/background.png")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	dc := gg.NewContext(S, S)
@@ -72,41 +70,18 @@ func GenerateAvatar(firstCharacterName string) (io.Reader, error) {
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
 	if err := dc.LoadFontFace("../../avatars/Go-Mono.ttf", 728); err != nil {
-		return nil, err
+		return err
 	}
 
 	dc.DrawRoundedRectangle(0, 0, 512, 512, 0)
 	dc.DrawImage(im, 0, 0)
 	dc.DrawStringAnchored(firstCharacterName, S/2, S/2, 0.5, 0.5)
 	dc.Clip()
+
 	err = dc.SavePNG("../../avatars/background.png")
 	if err != nil {
-		log.Error(err)
+		return err
 	}
 
-	return file, nil
-	//file2, err := os.O("background2.png")
-	//if err != nil {
-	//	return nil, err
-	//}
-	//defer file2.Close()
-	//
-	//return file2, nil
-	//buf := new(bytes.Buffer)
-	//
-	//// Записываем содержимое изображения в буфер
-	//err = png.Encode(buf, im)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//// Возвращаем объект io.Reader
-	//return buf, nil
-
-	//hash := uuid.New().String()
-	//
-	//dc.("../../avatars/" + hash + ".png")
-	//
-	//url := "https://technogramm.ru/avatars/" + hash + ".png"
-	//return url, nil
+	return nil
 }

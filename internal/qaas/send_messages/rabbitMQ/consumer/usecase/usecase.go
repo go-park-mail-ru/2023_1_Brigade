@@ -85,8 +85,9 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
-	msg := <-u.messagesChan
-	return msg
+	//msg := <-u.messagesChan
+	//return msg
+	return nil
 }
 
 func (u *usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
@@ -117,7 +118,7 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 
 		for msg := range msgs {
 			log.Info("Consumed message: ", string(msg.Body))
-			u.messagesChan <- msg.Body
+			//u.messagesChan <- msg.Body
 			err := u.centrifugePublication(msg.Body)
 			if err != nil {
 				log.Error(err)

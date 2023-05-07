@@ -31,14 +31,15 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
 		log.Info("centrifugo publication")
-		msg, err := u.messageUsecase.PullFromConsumer(context.TODO())
-		if err != nil {
-			log.Error(err)
-			return
-		}
-		
+		//msg, err := u.messageUsecase.PullFromConsumer(context.TODO())
+		//if err != nil {
+		//	log.Error(err)
+		//	return
+		//}
+		msg := e.Data
+
 		var producerMessage model.ProducerMessage
-		err = json.Unmarshal(msg, &producerMessage)
+		err := json.Unmarshal(msg, &producerMessage)
 		if err != nil {
 			log.Error(err)
 			return

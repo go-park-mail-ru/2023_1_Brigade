@@ -46,6 +46,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		case <-signals:
 			producer.Close()
 			channel.Close()
+			log.Fatal()
 		}
 	}()
 
@@ -58,7 +59,7 @@ func (u *usecase) ProduceMessage(ctx context.Context, message []byte) error {
 		"",
 		u.queue.Name,
 		true,
-		true,
+		false,
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        message,

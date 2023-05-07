@@ -5,6 +5,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -14,6 +16,7 @@ import (
 	"project/internal/clients/consumer"
 	"project/internal/clients/producer"
 	"project/internal/configs"
+	repositoryImages "project/internal/images/repository"
 	serverMessages "project/internal/messages/delivery/grpc"
 	repositoryMessages "project/internal/messages/repository"
 	usecaseMessages "project/internal/messages/usecase"
@@ -65,7 +68,33 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	chatRepo := repositoryChat.NewChatMemoryRepository(db)
+	user_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	chat_images_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
+
+	chatRepo := repositoryChat.NewChatMemoryRepository(db, imagesRepository)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
 	grpcConnConsumer, err := grpc.Dial(

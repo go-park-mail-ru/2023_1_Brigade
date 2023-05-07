@@ -3,7 +3,7 @@ package producer
 import (
 	"context"
 	"project/internal/generated"
-	"project/internal/qaas/send_messages/producer"
+	producer "project/internal/qaas/send_messages/producer/usecase"
 
 	"google.golang.org/grpc"
 )

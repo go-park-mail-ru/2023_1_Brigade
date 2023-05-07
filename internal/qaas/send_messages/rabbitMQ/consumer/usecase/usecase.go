@@ -47,7 +47,14 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 		case <-signals:
 			consumer.Close()
 			channel.Close()
+			log.Fatal()
 		}
+	}()
+
+	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue}
+
+	go func() {
+		consumerUsecase.StartConsumeMessages(context.TODO())
 	}()
 
 	return &usecase{consumer: consumer, channel: channel, queue: &queue}, nil

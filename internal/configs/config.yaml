@@ -49,7 +49,7 @@ Kafka:
   groupID: "messages"
 
 RabbitMQ:
-  connAddr: "amqp://user:password@rabbitmq:5672/"
+  connAddr: "amqp://user:password@rabbitmq:15672/"
   queueName: "messages"
 
 ChatsService:

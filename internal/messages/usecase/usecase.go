@@ -13,8 +13,8 @@ import (
 	"project/internal/configs"
 	"project/internal/messages"
 	"project/internal/model"
-	"project/internal/qaas/send_messages/consumer"
-	"project/internal/qaas/send_messages/producer"
+	consumer "project/internal/qaas/send_messages/consumer/usecase"
+	producer "project/internal/qaas/send_messages/producer/usecase"
 	"time"
 )
 

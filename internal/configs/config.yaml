@@ -48,6 +48,10 @@ Kafka:
     - "kafka:9092"
   groupID: "messages"
 
+RabbitMQ:
+  connAddr: "amqp://user:password@rabbitmq:5672/"
+  queueName: "messages"
+
 ChatsService:
   addr: "localhost:9000"
   addrMetrics: "localhost:9091"

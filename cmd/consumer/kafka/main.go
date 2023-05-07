@@ -9,8 +9,8 @@ import (
 	"project/internal/configs"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
-	serverProducer "project/internal/qaas/send_messages/producer/delivery/grpc"
-	"project/internal/qaas/send_messages/producer/usecase"
+	serverConsumer "project/internal/qaas/send_messages/consumer/delivery/grpc"
+	"project/internal/qaas/send_messages/kafka/consumer/usecase"
 )
 
 func init() {
@@ -48,12 +48,12 @@ func main() {
 		log.Error(err)
 	}
 
-	producerUsecase, err := usecase.NewProducer(config.Kafka.BrokerList)
+	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	metrics, err := metrics.NewMetricsGRPCServer(config.ProducerService.ServiceName)
+	metrics, err := metrics.NewMetricsGRPCServer(config.ConsumerService.ServiceName)
 	if err != nil {
 		log.Error(err)
 	}
@@ -65,14 +65,14 @@ func main() {
 	)
 
 	go func() {
-		if err = metrics.StartGRPCMetricsServer(config.ProducerService.AddrMetrics); err != nil {
+		if err = metrics.StartGRPCMetricsServer(config.ConsumerService.AddrMetrics); err != nil {
 			log.Error(err)
 		}
 	}()
 
-	service := serverProducer.NewProducerServiceGRPCServer(grpcServer, producerUsecase)
+	service := serverConsumer.NewConsumerServiceGRPCServer(grpcServer, consumerUsecase)
 
-	err = service.StartGRPCServer(config.ProducerService.Addr)
+	err = service.StartGRPCServer(config.ConsumerService.Addr)
 	if err != nil {
 		log.Fatal(err)
 	}

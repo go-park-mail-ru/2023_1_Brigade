@@ -5,7 +5,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"net"
 	"project/internal/generated"
-	"project/internal/qaas/send_messages/consumer"
+	consumer "project/internal/qaas/send_messages/consumer/usecase"
 
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"

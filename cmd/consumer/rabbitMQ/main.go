@@ -10,7 +10,7 @@ import (
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
 	serverConsumer "project/internal/qaas/send_messages/consumer/delivery/grpc"
-	"project/internal/qaas/send_messages/consumer/usecase"
+	"project/internal/qaas/send_messages/rabbitMQ/consumer/usecase"
 )
 
 func init() {
@@ -48,7 +48,7 @@ func main() {
 		log.Error(err)
 	}
 
-	consumerUsecase, err := usecase.NewConsumer(config.Kafka.BrokerList, config.Kafka.GroupID)
+	consumerUsecase, err := usecase.NewConsumer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName)
 	if err != nil {
 		log.Fatal(err)
 	}

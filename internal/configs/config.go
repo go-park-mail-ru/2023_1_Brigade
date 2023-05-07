@@ -1,13 +1,14 @@
 package configs
 
 type Config struct {
-	Server          Server          `yaml:"Server"`
-	Postgres        Postgres        `yaml:"Postgres"`
-	Cors            Cors            `yaml:"Cors"`
-	Redis           Redis           `yaml:"Redis"`
-	Minio           Minio           `yaml:"Minio"`
-	VkCloud         VkCloud         `yaml:"VkCloud"`
-	Kafka           Kafka           `yaml:"Kafka"`
+	Server   Server   `yaml:"Server"`
+	Postgres Postgres `yaml:"Postgres"`
+	Cors     Cors     `yaml:"Cors"`
+	Redis    Redis    `yaml:"Redis"`
+	Minio    Minio    `yaml:"Minio"`
+	VkCloud  VkCloud  `yaml:"VkCloud"`
+	Kafka    Kafka    `yaml:"Kafka"`
+	RabbitMQ
 	ChatsService    ChatsService    `yaml:"ChatsService"`
 	UsersService    UsersService    `yaml:"UsersService"`
 	MessagesService MessagesService `yaml:"MessagesService"`
@@ -61,6 +62,11 @@ type VkCloud struct {
 type Kafka struct {
 	BrokerList []string `yaml:"brokerList"`
 	GroupID    string   `yaml:"groupID"`
+}
+
+type RabbitMQ struct {
+	ConnAddr  string `yaml:"connAddr"`
+	QueueName string `yaml:"queueName"`
 }
 
 type ChatsService struct {

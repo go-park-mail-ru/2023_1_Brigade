@@ -190,7 +190,7 @@ func main() {
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
-	wsMessages.NewMessagesHandler(e, messagesService)
+	wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))

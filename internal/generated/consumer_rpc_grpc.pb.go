@@ -23,7 +23,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ConsumerClient interface {
-	ConsumeMessage(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error)
 	StartConsumeMessages(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
@@ -33,15 +32,6 @@ type consumerClient struct {
 
 func NewConsumerClient(cc grpc.ClientConnInterface) ConsumerClient {
 	return &consumerClient{cc}
-}
-
-func (c *consumerClient) ConsumeMessage(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Bytes, error) {
-	out := new(Bytes)
-	err := c.cc.Invoke(ctx, "/protobuf.Consumer/ConsumeMessage", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *consumerClient) StartConsumeMessages(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*empty.Empty, error) {
@@ -57,7 +47,6 @@ func (c *consumerClient) StartConsumeMessages(ctx context.Context, in *empty.Emp
 // All implementations should embed UnimplementedConsumerServer
 // for forward compatibility
 type ConsumerServer interface {
-	ConsumeMessage(context.Context, *empty.Empty) (*Bytes, error)
 	StartConsumeMessages(context.Context, *empty.Empty) (*empty.Empty, error)
 }
 
@@ -65,9 +54,6 @@ type ConsumerServer interface {
 type UnimplementedConsumerServer struct {
 }
 
-func (UnimplementedConsumerServer) ConsumeMessage(context.Context, *empty.Empty) (*Bytes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConsumeMessage not implemented")
-}
 func (UnimplementedConsumerServer) StartConsumeMessages(context.Context, *empty.Empty) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartConsumeMessages not implemented")
 }
@@ -81,24 +67,6 @@ type UnsafeConsumerServer interface {
 
 func RegisterConsumerServer(s grpc.ServiceRegistrar, srv ConsumerServer) {
 	s.RegisterService(&Consumer_ServiceDesc, srv)
-}
-
-func _Consumer_ConsumeMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConsumerServer).ConsumeMessage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.Consumer/ConsumeMessage",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerServer).ConsumeMessage(ctx, req.(*empty.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Consumer_StartConsumeMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -126,10 +94,6 @@ var Consumer_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "protobuf.Consumer",
 	HandlerType: (*ConsumerServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "ConsumeMessage",
-			Handler:    _Consumer_ConsumeMessage_Handler,
-		},
 		{
 			MethodName: "StartConsumeMessages",
 			Handler:    _Consumer_StartConsumeMessages_Handler,

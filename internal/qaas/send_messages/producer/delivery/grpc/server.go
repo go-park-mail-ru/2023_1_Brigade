@@ -3,13 +3,11 @@ package grpc
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
+	"google.golang.org/grpc"
 	"net"
 	"project/internal/generated"
-	producer "project/internal/qaas/send_messages/producer/usecase"
-
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"project/internal/pkg/model_conversion"
+	producer "project/internal/qaas/send_messages/producer/usecase"
 )
 
 type producerServiceGRPCServer struct {
@@ -35,7 +33,7 @@ func (p *producerServiceGRPCServer) StartGRPCServer(listenURL string) error {
 	return p.grpcServer.Serve(lis)
 }
 
-func (p *producerServiceGRPCServer) ProduceMessage(ctx context.Context, bytes *generated.Bytes) (*emptypb.Empty, error) {
-	err := p.producerUsecase.ProduceMessage(ctx, model_conversion.FromProtoBytesToBytes(bytes))
+func (p *producerServiceGRPCServer) ProduceMessage(ctx context.Context, message *generated.ProducerMessage) (*empty.Empty, error) {
+	err := p.producerUsecase.ProduceMessage(ctx, model_conversion.FromProtoProducerMessageToProducerMessage(message))
 	return new(empty.Empty), err
 }

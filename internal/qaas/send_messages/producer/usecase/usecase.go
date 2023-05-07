@@ -1,7 +1,10 @@
 package usecase
 
-import "context"
+import (
+	"context"
+	"project/internal/model"
+)
 
 type Usecase interface {
-	ProduceMessage(ctx context.Context, message []byte) error
+	ProduceMessage(ctx context.Context, message model.ProducerMessage) error
 }

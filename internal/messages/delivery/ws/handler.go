@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"project/internal/configs"
 	"project/internal/messages"
 	"project/internal/model"
 	consumer "project/internal/qaas/send_messages/consumer/usecase"
@@ -24,18 +25,13 @@ type messageHandler struct {
 	upgrader        websocket.Upgrader
 	clients         map[uint64]*websocket.Conn
 	centrifugo      *centrifuge.Client
+	channelName     string
 }
 
 func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
-	sub, _ := u.centrifugo.GetSubscription("channel")
+	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		log.Info("centrifugo publication")
-		//msg, err := u.messageUsecase.PullFromConsumer(context.TODO())
-		//if err != nil {
-		//	log.Error(err)
-		//	return
-		//}
 		msg := e.Data
 
 		var producerMessage model.ProducerMessage
@@ -44,7 +40,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			log.Error(err)
 			return
 		}
-		log.Info(producerMessage)
+
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
 			log.Error("nil client")
@@ -74,41 +70,41 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			return err
 		}
 
-		err = u.messageUsecase.SwitchMessageType(context.TODO(), message)
+		err = u.messageUsecase.PutInProducer(context.TODO(), message)
 		if err != nil {
 			log.Error(err)
 		}
 	}
 }
 
-func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHandler {
-	c := centrifuge.NewJsonClient("ws://localhost:8900/connection/websocket", centrifuge.Config{})
+func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo configs.Centrifugo) (messageHandler, error) {
+	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
 
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
 		<-signals
-		_ = c.Close
+		c.Close()
 		log.Fatal()
 	}()
 
 	err := c.Connect()
 	if err != nil {
-		log.Error(err)
+		return messageHandler{}, err
 	}
 
-	sub, err := c.NewSubscription("channel", centrifuge.SubscriptionConfig{
+	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
 		Recoverable: true,
 		JoinLeave:   true,
 	})
 	if err != nil {
-		log.Error(err)
+		return messageHandler{}, err
 	}
 
 	err = sub.Subscribe()
 	if err != nil {
-		log.Error(err)
+		return messageHandler{}, err
 	}
 
 	handler := messageHandler{
@@ -121,8 +117,9 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHa
 			},
 			HandshakeTimeout: time.Second * 3600,
 		},
-		clients:    make(map[uint64]*websocket.Conn),
-		centrifugo: c,
+		clients:     make(map[uint64]*websocket.Conn),
+		centrifugo:  c,
+		channelName: centrifugo.ChannelName,
 	}
 
 	sendMessagesUrl := "/message/"
@@ -130,5 +127,5 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase) messageHa
 	sendMessages := api.Group(sendMessagesUrl)
 	sendMessages.GET("", handler.SendMessagesHandler)
 
-	return handler
+	return handler, nil
 }

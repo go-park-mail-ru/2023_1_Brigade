@@ -9,6 +9,7 @@ type Config struct {
 	VkCloud         VkCloud         `yaml:"VkCloud"`
 	Kafka           Kafka           `yaml:"Kafka"`
 	RabbitMQ        RabbitMQ        `yaml:"RabbitMQ"`
+	Centrifugo      Centrifugo      `yaml:"Centrifugo"`
 	ChatsService    ChatsService    `yaml:"ChatsService"`
 	UsersService    UsersService    `yaml:"UsersService"`
 	MessagesService MessagesService `yaml:"MessagesService"`
@@ -67,6 +68,11 @@ type Kafka struct {
 type RabbitMQ struct {
 	ConnAddr  string `yaml:"connAddr"`
 	QueueName string `yaml:"queueName"`
+}
+
+type Centrifugo struct {
+	ConnAddr    string `yaml:"connAddr"`
+	ChannelName string `yaml:"channelName"`
 }
 
 type ChatsService struct {

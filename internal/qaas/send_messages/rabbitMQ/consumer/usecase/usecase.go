@@ -8,6 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
+	"project/internal/configs"
 	consumer "project/internal/qaas/send_messages/consumer/usecase"
 )
 
@@ -17,17 +18,18 @@ type usecase struct {
 	queue        *amqp.Queue
 	messagesChan chan []byte
 	client       *centrifuge.Client
+	channelName  string
 }
 
-func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
-	c := centrifuge.NewJsonClient("ws://localhost:8900/connection/websocket", centrifuge.Config{})
+func NewConsumer(connAddr string, queueName string, centrifugo configs.Centrifugo) (consumer.Usecase, error) {
+	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
 
 	err := c.Connect()
 	if err != nil {
 		log.Error(err)
 	}
 
-	sub, err := c.NewSubscription("channel", centrifuge.SubscriptionConfig{
+	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
 		Recoverable: true,
 		JoinLeave:   true,
 	})
@@ -75,7 +77,7 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 		}
 	}()
 
-	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: c}
+	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: c, channelName: centrifugo.ChannelName}
 
 	go func() {
 		consumerUsecase.StartConsumeMessages(context.TODO())
@@ -84,20 +86,18 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 	return &consumerUsecase, nil
 }
 
-func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
-	//msg := <-u.messagesChan
-	//return msg
-	return nil
-}
-
 func (u *usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
-	sub, subscribed := u.client.GetSubscription("channel")
+	sub, subscribed := u.client.GetSubscription(u.channelName)
 	if !subscribed {
 		return errors.New("не подписан")
 	}
 
 	_, err := sub.Publish(context.Background(), jsonWebSocketMessage)
-	return err
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u *usecase) StartConsumeMessages(ctx context.Context) {
@@ -117,8 +117,6 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		}
 
 		for msg := range msgs {
-			log.Info("Consumed message: ", string(msg.Body))
-			//u.messagesChan <- msg.Body
 			err := u.centrifugePublication(msg.Body)
 			if err != nil {
 				log.Error(err)

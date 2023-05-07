@@ -1,12 +1,16 @@
 package main
 
 import (
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
 	"project/internal/configs"
+	repositoryMessages "project/internal/messages/repository"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
 	serverProducer "project/internal/qaas/send_messages/producer/delivery/grpc"
@@ -48,7 +52,18 @@ func main() {
 		log.Error(err)
 	}
 
-	producerUsecase, err := usecase.NewProducer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName)
+	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
+	if err != nil {
+		log.Error(err)
+	}
+	defer db.Close()
+
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
+
+	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
+
+	producerUsecase, err := usecase.NewProducer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName, messagesRepo)
 	if err != nil {
 		log.Fatal(err)
 	}

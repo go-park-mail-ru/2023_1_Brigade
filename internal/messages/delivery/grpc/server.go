@@ -33,21 +33,7 @@ func (c *messagesServiceGRPCServer) StartGRPCServer(listenURL string) error {
 	return c.grpcServer.Serve(lis)
 }
 
-func (c *messagesServiceGRPCServer) SwitchMessageType(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
-	err := c.messagesUsecase.SwitchMessageType(ctx, bytes.Bytes)
+func (c *messagesServiceGRPCServer) PutInProducer(ctx context.Context, bytes *generated.Bytes) (*empty.Empty, error) {
+	err := c.messagesUsecase.PutInProducer(ctx, model_conversion.FromProtoBytesToBytes(bytes))
 	return new(empty.Empty), err
-}
-
-func (c *messagesServiceGRPCServer) PutInProducer(ctx context.Context, message *generated.ProducerMessage) (*empty.Empty, error) {
-	err := c.messagesUsecase.PutInProducer(ctx, model_conversion.FromProtoProducerMessageToProducerMessage(message))
-	return new(empty.Empty), err
-}
-
-func (c *messagesServiceGRPCServer) PullFromConsumer(ctx context.Context, empty *empty.Empty) (*generated.Bytes, error) {
-	bytes, err := c.messagesUsecase.PullFromConsumer(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return &generated.Bytes{Bytes: bytes}, err
 }

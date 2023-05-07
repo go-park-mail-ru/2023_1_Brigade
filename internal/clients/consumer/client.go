@@ -19,15 +19,6 @@ func NewConsumerServiceGRPCClient(con *grpc.ClientConn) consumer.Usecase {
 	}
 }
 
-func (c consumerServiceGRPCClient) ConsumeMessage(ctx context.Context) []byte {
-	bytes, err := c.consumerClient.ConsumeMessage(ctx, new(empty.Empty))
-	if err != nil {
-		return []byte{}
-	}
-
-	return bytes.Bytes
-}
-
 func (c consumerServiceGRPCClient) StartConsumeMessages(ctx context.Context) {
 	c.consumerClient.StartConsumeMessages(ctx, new(empty.Empty))
 }

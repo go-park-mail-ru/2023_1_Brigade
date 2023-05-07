@@ -48,7 +48,7 @@ func main() {
 		log.Error(err)
 	}
 
-	consumerUsecase, err := usecase.NewConsumer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName)
+	consumerUsecase, err := usecase.NewConsumer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName, config.Centrifugo)
 	if err != nil {
 		log.Fatal(err)
 	}

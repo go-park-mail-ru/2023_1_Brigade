@@ -34,11 +34,6 @@ func (c *consumerServiceGRPCServer) StartGRPCServer(listenURL string) error {
 	return c.grpcServer.Serve(lis)
 }
 
-func (c *consumerServiceGRPCServer) ConsumeMessage(ctx context.Context, _ *emptypb.Empty) (*generated.Bytes, error) {
-	msg := c.consumerUsecase.ConsumeMessage(ctx)
-	return &generated.Bytes{Bytes: msg}, nil
-}
-
 func (c *consumerServiceGRPCServer) StartConsumeMessages(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
 	go func() {
 		c.consumerUsecase.StartConsumeMessages(ctx)

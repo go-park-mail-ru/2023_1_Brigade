@@ -3,6 +3,8 @@ package producer
 import (
 	"context"
 	"project/internal/generated"
+	"project/internal/model"
+	"project/internal/pkg/model_conversion"
 	producer "project/internal/qaas/send_messages/producer/usecase"
 
 	"google.golang.org/grpc"
@@ -18,9 +20,11 @@ func NewProducerServiceGRPCClient(con *grpc.ClientConn) producer.Usecase {
 	}
 }
 
-func (p producerServiceGRPCClient) ProduceMessage(ctx context.Context, message []byte) error {
-	_, err := p.producerClient.ProduceMessage(ctx, &generated.Bytes{
-		Bytes: message,
-	})
-	return err
+func (p producerServiceGRPCClient) ProduceMessage(ctx context.Context, message model.ProducerMessage) error {
+	_, err := p.producerClient.ProduceMessage(ctx, model_conversion.FromProducerMessageToProtoProducerMessage(message))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

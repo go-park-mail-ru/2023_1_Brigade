@@ -52,6 +52,11 @@ RabbitMQ:
   connAddr: "amqp://user:password@rabbitmq:5672/"
   queueName: "messages"
 
+Centrifugo:
+  connAddr: "ws://localhost:8900/connection/websocket"
+  channelName: "channel"
+
+
 ChatsService:
   addr: "localhost:9000"
   addrMetrics: "localhost:9091"

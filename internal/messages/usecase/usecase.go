@@ -141,6 +141,7 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 		//	continue
 		//}
 
+		log.Info("do OK")
 		producerMessage.ReceiverID = member.MemberId
 		jsonProducerMessage, err := json.Marshal(producerMessage)
 		if err != nil {
@@ -151,6 +152,7 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 		if err != nil {
 			return err
 		}
+		log.Info("posle OK")
 
 		jsonWebSocketMessage, err := json.Marshal(producerMessage)
 		if err != nil {
@@ -169,7 +171,7 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 func (u usecase) PullFromConsumer(ctx context.Context) ([]byte, error) {
 	var message model.ProducerMessage
 	jsonMessage := u.consumer.ConsumeMessage(ctx)
-
+	log.Info("Pull OK")
 	err := json.Unmarshal(jsonMessage, &message)
 	if err != nil {
 		return nil, err

@@ -28,10 +28,10 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 
 	queue, err := channel.QueueDeclare(
 		queueName,
-		true,
 		false,
 		false,
-		true,
+		false,
+		false,
 		nil,
 	)
 	if err != nil {
@@ -58,7 +58,7 @@ func (u *usecase) ProduceMessage(ctx context.Context, message []byte) error {
 		ctx,
 		"",
 		u.queue.Name,
-		true,
+		false,
 		false,
 		amqp.Publishing{
 			ContentType: "text/plain",

@@ -29,10 +29,10 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 
 	queue, err := channel.QueueDeclare(
 		queueName,
-		true,
 		false,
 		false,
-		true,
+		false,
+		false,
 		nil,
 	)
 	if err != nil {
@@ -61,28 +61,48 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
-	msg := <-u.messagesChan
-	return msg
+	//msg := <-u.messagesChan
+	//return msg
+	log.Info("Consume message")
+	msgs, err := u.channel.Consume(
+		u.queue.Name,
+		"",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+
+	if err != nil {
+		log.Error(err)
+	}
+	log.Info(msgs)
+	for msg := range msgs {
+		return msg.Body		
+	}
+	
+	return nil
 }
 
 func (u *usecase) StartConsumeMessages(ctx context.Context) {
-	for {
-		msgs, err := u.channel.Consume(
-			u.queue.Name,
-			"",
-			true,
-			false,
-			false,
-			false,
-			nil,
-		)
-
-		if err != nil {
-			log.Error(err)
-		}
-
-		for msg := range msgs {
-			u.messagesChan <- msg.Body
-		}
-	}
+	//for {
+	//	msgs, err := u.channel.Consume(
+	//		u.queue.Name,
+	//		"",
+	//		true,
+	//		false,
+	//		false,
+	//		false,
+	//		nil,
+	//	)
+	//
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//
+	//	for msg := range msgs {
+	//		u.messagesChan <- msg.Body
+	//	}
+	//}
 }

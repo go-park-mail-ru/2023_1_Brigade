@@ -30,19 +30,20 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	sub, _ := u.centrifugo.GetSubscription("channel")
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
+		log.Info("centrifugo publication")
 		msg, err := u.messageUsecase.PullFromConsumer(context.TODO())
 		if err != nil {
 			log.Error(err)
 			return
 		}
-
+		
 		var producerMessage model.ProducerMessage
 		err = json.Unmarshal(msg, &producerMessage)
 		if err != nil {
 			log.Error(err)
 			return
 		}
-
+		log.Info(producerMessage)
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
 			log.Error("nil client")

@@ -1,0 +1,3 @@
+time="2023-05-06T21:50:10Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-06T21:50:10Z" level=error msg="listen tcp 127.0.0.1:9092: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/user/main.go:111"
+signal: killed

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/centrifugal/centrifuge-go"
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"os"
@@ -23,49 +22,18 @@ type usecase struct {
 	messagesRepo messages.Repository
 	producer     producer.Usecase
 	consumer     consumer.Usecase
-	client       *centrifuge.Client
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
-	c := centrifuge.NewJsonClient("ws://localhost:8900/connection/websocket", centrifuge.Config{})
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
 		<-signals
-		_ = c.Close
 		log.Fatal()
 	}()
 
-	err := c.Connect()
-	if err != nil {
-		log.Error(err)
-	}
-
-	sub, err := c.NewSubscription("channel", centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	if err != nil {
-		log.Error(err)
-	}
-
-	err = sub.Subscribe()
-	if err != nil {
-		log.Error(err)
-	}
-
-	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer, client: c}
-}
-
-func (u usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
-	sub, subscribed := u.client.GetSubscription("channel")
-	if !subscribed {
-		return errors.New("не подписан")
-	}
-
-	_, err := sub.Publish(context.Background(), jsonWebSocketMessage)
-	return err
+	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer}
 }
 
 func (u usecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
@@ -137,9 +105,6 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 	}
 
 	for _, member := range members {
-		//if member.MemberId == producerMessage.AuthorId {
-		//	continue
-		//}
 
 		log.Info("do OK")
 		producerMessage.ReceiverID = member.MemberId
@@ -153,16 +118,6 @@ func (u usecase) PutInProducer(ctx context.Context, producerMessage model.Produc
 			return err
 		}
 		log.Info("posle OK")
-
-		jsonWebSocketMessage, err := json.Marshal(producerMessage)
-		if err != nil {
-			return err
-		}
-
-		err = u.centrifugePublication(jsonWebSocketMessage)
-		if err != nil {
-			return err
-		}
 	}
 
 	return nil

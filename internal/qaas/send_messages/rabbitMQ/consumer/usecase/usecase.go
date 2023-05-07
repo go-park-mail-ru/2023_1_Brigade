@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"errors"
+	"github.com/centrifugal/centrifuge-go"
 	amqp "github.com/rabbitmq/amqp091-go"
 	log "github.com/sirupsen/logrus"
 	"os"
@@ -14,9 +16,30 @@ type usecase struct {
 	channel      *amqp.Channel
 	queue        *amqp.Queue
 	messagesChan chan []byte
+	client       *centrifuge.Client
 }
 
 func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
+	c := centrifuge.NewJsonClient("ws://localhost:8900/connection/websocket", centrifuge.Config{})
+
+	err := c.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := c.NewSubscription("channel", centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
 	consumer, err := amqp.Dial(connAddr)
 	if err != nil {
 		return nil, err
@@ -47,6 +70,7 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 		case <-signals:
 			consumer.Close()
 			channel.Close()
+			c.Close()
 			log.Fatal()
 		}
 	}()
@@ -61,48 +85,43 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {
-	//msg := <-u.messagesChan
-	//return msg
-	log.Info("Consume message")
-	msgs, err := u.channel.Consume(
-		u.queue.Name,
-		"",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
+	msg := <-u.messagesChan
+	return msg
+}
 
-	if err != nil {
-		log.Error(err)
+func (u *usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
+	sub, subscribed := u.client.GetSubscription("channel")
+	if !subscribed {
+		return errors.New("не подписан")
 	}
-	log.Info(msgs)
-	for msg := range msgs {
-		return msg.Body		
-	}
-	
-	return nil
+
+	_, err := sub.Publish(context.Background(), jsonWebSocketMessage)
+	return err
 }
 
 func (u *usecase) StartConsumeMessages(ctx context.Context) {
-	//for {
-	//	msgs, err := u.channel.Consume(
-	//		u.queue.Name,
-	//		"",
-	//		true,
-	//		false,
-	//		false,
-	//		false,
-	//		nil,
-	//	)
-	//
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//
-	//	for msg := range msgs {
-	//		u.messagesChan <- msg.Body
-	//	}
-	//}
+	for {
+		msgs, err := u.channel.Consume(
+			u.queue.Name,
+			"",
+			true,
+			false,
+			false,
+			false,
+			nil,
+		)
+
+		if err != nil {
+			log.Error(err)
+		}
+
+		for msg := range msgs {
+			log.Info("Consumed message: ", string(msg.Body))
+			u.messagesChan <- msg.Body
+			err := u.centrifugePublication(msg.Body)
+			if err != nil {
+				log.Error(err)
+			}
+		}
+	}
 }

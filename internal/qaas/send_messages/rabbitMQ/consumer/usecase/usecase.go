@@ -75,13 +75,13 @@ func NewConsumer(connAddr string, queueName string) (consumer.Usecase, error) {
 		}
 	}()
 
-	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue}
+	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: c}
 
 	go func() {
 		consumerUsecase.StartConsumeMessages(context.TODO())
 	}()
 
-	return &usecase{consumer: consumer, channel: channel, queue: &queue}, nil
+	return &consumerUsecase, nil
 }
 
 func (u *usecase) ConsumeMessage(ctx context.Context) []byte {

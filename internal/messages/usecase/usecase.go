@@ -16,13 +16,12 @@ import (
 )
 
 type usecase struct {
-	chatRepo     chat.Repository
-	messagesRepo messages.Repository
-	producer     producer.Usecase
-	consumer     consumer.Usecase
+	chatRepo chat.Repository
+	producer producer.Usecase
+	consumer consumer.Usecase
 }
 
-func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
+func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 
@@ -31,7 +30,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, messagesRepo messages.Reposito
 		log.Fatal()
 	}()
 
-	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer}
+	return &usecase{chatRepo: chatRepo, producer: producer, consumer: consumer}
 }
 
 func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte) error {

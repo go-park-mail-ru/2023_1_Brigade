@@ -18,7 +18,6 @@ import (
 	"project/internal/configs"
 	repositoryImages "project/internal/images/repository"
 	serverMessages "project/internal/messages/delivery/grpc"
-	repositoryMessages "project/internal/messages/repository"
 	usecaseMessages "project/internal/messages/usecase"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
@@ -95,7 +94,6 @@ func main() {
 	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
 
 	chatRepo := repositoryChat.NewChatMemoryRepository(db, imagesRepository)
-	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
 	grpcConnConsumer, err := grpc.Dial(
 		config.ConsumerService.Addr,
@@ -120,7 +118,7 @@ func main() {
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)
 
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerService)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, consumerService, producerService)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.MessagesService.ServiceName)
 	if err != nil {

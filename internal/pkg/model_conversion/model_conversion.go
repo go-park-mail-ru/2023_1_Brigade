@@ -3,6 +3,7 @@ package model_conversion
 import (
 	protobuf "project/internal/generated"
 	"project/internal/model"
+	"time"
 )
 
 func FromRegistrationUserToProtoRegistrationUser(registrationUser model.RegistrationUser) *protobuf.RegistrationUser {
@@ -103,7 +104,7 @@ func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage
 		AuthorId:   message.AuthorId,
 		ChatID:     message.ChatId,
 		ReceiverID: message.ReceiverID,
-		//CreatedAt:  time,
+		CreatedAt:  time.Now(),
 	}
 }
 
@@ -127,21 +128,21 @@ func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
 	//}
 
 	return model.Message{
-		Id:       message.Id,
-		Body:     message.Body,
-		AuthorId: message.AuthorId,
-		ChatId:   message.ChatId,
-		//CreatedAt: time,
+		Id:        message.Id,
+		Body:      message.Body,
+		AuthorId:  message.AuthorId,
+		ChatId:    message.ChatId,
+		CreatedAt: time.Now(),
 	}
 }
 
 func FromMessageToProtoMessage(message model.Message) *protobuf.Message {
 	return &protobuf.Message{
-		Id:       message.Id,
-		Body:     message.Body,
-		AuthorId: message.AuthorId,
-		ChatId:   message.ChatId,
-		//CreatedAt: message.CreatedAt.String(),
+		Id:        message.Id,
+		Body:      message.Body,
+		AuthorId:  message.AuthorId,
+		ChatId:    message.ChatId,
+		CreatedAt: message.CreatedAt.String(),
 	}
 }
 

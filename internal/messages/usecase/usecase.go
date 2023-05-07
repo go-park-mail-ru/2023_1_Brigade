@@ -3,11 +3,13 @@ package usecase
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"project/internal/chat"
+	"project/internal/configs"
 	"project/internal/messages"
 	"project/internal/model"
 	consumer "project/internal/qaas/send_messages/consumer/usecase"
@@ -16,12 +18,13 @@ import (
 )
 
 type usecase struct {
-	chatRepo chat.Repository
-	producer producer.Usecase
-	consumer consumer.Usecase
+	chatRepo     chat.Repository
+	messagesRepo messages.Repository
+	producer     producer.Usecase
+	consumer     consumer.Usecase
 }
 
-func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, producer producer.Usecase) messages.Usecase {
+func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, producer producer.Usecase, messagesRepo messages.Repository) messages.Usecase {
 	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 
@@ -30,7 +33,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, pro
 		log.Fatal()
 	}()
 
-	return &usecase{chatRepo: chatRepo, producer: producer, consumer: consumer}
+	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer}
 }
 
 func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte) error {
@@ -58,6 +61,38 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 
 	if id == "" {
 		producerMessage.CreatedAt = createdAt
+	}
+
+	switch producerMessage.Type {
+	case configs.Create:
+		go func() {
+			_, err := u.messagesRepo.InsertMessageInDB(ctx, model.Message{
+				Id:        producerMessage.Id,
+				Body:      producerMessage.Body,
+				AuthorId:  producerMessage.AuthorId,
+				ChatId:    producerMessage.ChatID,
+				CreatedAt: producerMessage.CreatedAt,
+			})
+			if err != nil {
+				log.Error(err)
+			}
+		}()
+	case configs.Edit:
+		go func() {
+			_, err := u.messagesRepo.EditMessageById(ctx, producerMessage)
+			if err != nil {
+				log.Error(err)
+			}
+		}()
+	case configs.Delete:
+		go func() {
+			err := u.messagesRepo.DeleteMessageById(ctx, producerMessage.Id)
+			if err != nil {
+				log.Error(err)
+			}
+		}()
+	default:
+		return errors.New("не выбран ни один из трех 0, 1, 2")
 	}
 
 	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), webSocketMessage.ChatID)

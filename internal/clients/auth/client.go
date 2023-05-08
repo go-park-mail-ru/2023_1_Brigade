@@ -2,12 +2,11 @@ package auth
 
 import (
 	"context"
+	"google.golang.org/grpc"
 	authUser "project/internal/auth/user"
 	"project/internal/generated"
 	"project/internal/model"
 	"project/internal/pkg/model_conversion"
-
-	"google.golang.org/grpc"
 )
 
 type authUserServiceGRPCClient struct {
@@ -34,5 +33,9 @@ func (au authUserServiceGRPCClient) Signup(ctx context.Context, user model.Regis
 		Email:    user.Email,
 		Password: user.Password,
 	})
-	return model_conversion.FromProtoUserToUser(result), err
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return model_conversion.FromProtoUserToUser(result), nil
 }

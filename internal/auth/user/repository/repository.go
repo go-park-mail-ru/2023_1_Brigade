@@ -19,8 +19,15 @@ type repository struct {
 
 func (r repository) createTechnogrammChat(user model.AuthorizedUser) {
 	var chat model.DBChat
-	err := r.db.QueryRow(`INSERT INTO chat (type, avatar, title) VALUES (0, 'https://technogramm.ru/avatars/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
+	err := r.db.QueryRow(`INSERT INTO chat (type, avatar, title) VALUES (0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
+	if err != nil {
+		log.Error(err)
+	}
 
+	_, err = r.db.Exec(`INSERT INTO message (id, body, id_chat, author_id, created_at)
+	VALUES ('1337', 'Привет, это технограмм!', (SELECT id FROM chat
+	WHERE id = $1), (SELECT id FROM profile
+	WHERE id = $2), now() at time zone 'Europe/Moscow');`, chat.Id, 0)
 	if err != nil {
 		log.Error(err)
 	}
@@ -57,7 +64,7 @@ func (r repository) CreateUser(ctx context.Context, user model.AuthorizedUser) (
 		}
 	}
 
-	//r.createTechnogrammChat(user)
+	r.createTechnogrammChat(user)
 
 	return user, nil
 }

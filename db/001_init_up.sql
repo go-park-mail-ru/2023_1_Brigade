@@ -54,9 +54,9 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     FOREIGN KEY (id_message) REFERENCES message(id)
 );
 
--- INSERT INTO profile (id, avatar, username, nickname, email, status, password)
--- VALUES (0, 'https://technogramm.ru/avatars/logo.png', 'Technogramm', 'Technogramm', '', 'Technogramm', '123');
---
+INSERT INTO profile (id, avatar, username, nickname, email, status, password)
+VALUES (0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm', 'Technogramm', '', 'Technogramm', '123');
+
 -- INSERT INTO message (id, body, id_chat, author_id, created_at)
 -- VALUES (1337, 'Привет, это технограмм!', (SELECT id FROM chat
 --                                           WHERE id = 0), (SELECT id FROM profile

@@ -24,6 +24,11 @@ func (au authUserServiceGRPCClient) Login(ctx context.Context, user model.LoginU
 		Email:    user.Email,
 		Password: user.Password,
 	})
+
+	if err != nil {
+		return model.User{}, err
+	}
+
 	return model_conversion.FromProtoUserToUser(result), err
 }
 
@@ -33,6 +38,7 @@ func (au authUserServiceGRPCClient) Signup(ctx context.Context, user model.Regis
 		Email:    user.Email,
 		Password: user.Password,
 	})
+
 	if err != nil {
 		return model.User{}, err
 	}

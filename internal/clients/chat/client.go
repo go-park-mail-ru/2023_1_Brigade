@@ -30,6 +30,7 @@ func (c chatServiceGRPCClient) CheckExistUserInChat(ctx context.Context, chat mo
 
 func (c chatServiceGRPCClient) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
 	chat, err := c.chatClient.GetChatById(ctx, model_conversion.FromChatIDToProtoChatID(chatID))
+
 	if err != nil {
 		return model.Chat{}, err
 	}
@@ -68,6 +69,7 @@ func (c chatServiceGRPCClient) DeleteChatById(ctx context.Context, chatID uint64
 
 func (c chatServiceGRPCClient) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	chats, err := c.chatClient.GetListUserChats(ctx, model_conversion.FromUserIDToProtoUserID(userID))
+
 	if err != nil {
 		return nil, err
 	}
@@ -80,6 +82,7 @@ func (c chatServiceGRPCClient) GetSearchChatsMessagesChannels(ctx context.Contex
 		UserID:  userID,
 		String_: string,
 	})
+
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}

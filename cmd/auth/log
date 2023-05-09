@@ -1,0 +1,11 @@
+time="2023-05-08T11:29:29Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+signal: killed
+time="2023-05-08T11:55:34Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+signal: killed
+time="2023-05-08T12:27:18Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-09T07:07:01Z" level=error msg="pq: duplicate key value violates unique constraint \"message_id_key\"" func=project/internal/auth/user/repository.repository.createTechnogrammChat file="/home/ubuntu/2023_1_Brigade/internal/auth/user/repository/repository.go:32"
+time="2023-05-09T07:08:14Z" level=error msg="pq: duplicate key value violates unique constraint \"message_id_key\"" func=project/internal/auth/user/repository.repository.createTechnogrammChat file="/home/ubuntu/2023_1_Brigade/internal/auth/user/repository/repository.go:32"
+signal: killed
+time="2023-05-09T09:18:10Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-09T09:21:12Z" level=error msg="pq: duplicate key value violates unique constraint \"message_id_key\"" func=project/internal/auth/user/repository.repository.createTechnogrammChat file="/home/ubuntu/2023_1_Brigade/internal/auth/user/repository/repository.go:32"
+time="2023-05-09T09:45:06Z" level=error msg="pq: duplicate key value violates unique constraint \"message_id_key\"" func=project/internal/auth/user/repository.repository.createTechnogrammChat file="/home/ubuntu/2023_1_Brigade/internal/auth/user/repository/repository.go:32"

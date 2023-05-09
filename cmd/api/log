@@ -1,0 +1,933 @@
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+time="2023-05-08T11:36:32Z" level=error msg="listen tcp :9090: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/api/main.go:186"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-08T11:36:35Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 2870088975356941283" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:36:35Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2870088975356941283" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:36:46Z" level=info msg="Incoming request: /api/v1/signup/, ip: 195.239.169.108, method: POST, request_id: 9143822528428080718" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:36:47Z" level=error msg="HTTP code: 409, Error: rpc error: code = Unknown desc = такой email уже зарегистрирован, request_id: 9143822528428080718" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:36:59Z" level=info msg="Incoming request: /api/v1/signup/, ip: 195.239.169.108, method: POST, request_id: 8530535920030984211" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:36:59Z" level=info msg="HTTP code: 201, request_id: 8530535920030984211" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:36:59Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 8936056055556454565" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:36:59Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 400064281527915229" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:36:59Z" level=info msg="HTTP code: 200, request_id: 8936056055556454565" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:37:04Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 195.239.169.108, method: GET, request_id: 8568405665809792080" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:37:04Z" level=info msg="HTTP code: 200, request_id: 8568405665809792080" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:37:13Z" level=info msg="Incoming request: /api/v1/logout/, ip: 195.239.169.108, method: DELETE, request_id: 1990642034538526" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:37:13Z" level=info msg="HTTP code: 204, request_id: 1990642034538526" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:37:13Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T11:37:13Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 400064281527915229" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T11:37:16Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 8890969301509486804" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+echo: http: panic serving 127.0.0.1:51034: runtime error: invalid memory address or nil pointer dereference
+goroutine 79 [running]:
+net/http.(*conn).serve.func1()
+	/usr/lib/go-1.18/src/net/http/server.go:1825 +0xbf
+panic({0xcf4520, 0x14dc440})
+	/usr/lib/go-1.18/src/runtime/panic.go:844 +0x258
+project/internal/pkg/model_conversion.FromProtoUserToUser(...)
+	/home/ubuntu/2023_1_Brigade/internal/pkg/model_conversion/model_conversion.go:67
+project/internal/clients/auth.authUserServiceGRPCClient.Login({{0xf5cc50?, 0xc0003f2270?}}, {0xf5f198, 0xc000036080}, {{0xc000186090?, 0xc000449a10?}, {0xc0001860a8?, 0xb3e8f1?}})
+	/home/ubuntu/2023_1_Brigade/internal/clients/auth/client.go:27 +0x153
+project/internal/auth/user/delivery/http.authHandler.LoginHandler({{0xf625f8, 0xc0003f22c0}, {0xf5cc28, 0xc0003f2280}, {0xf5e7c0, 0xc0003f22f0}}, {0xf67a98, 0xc000349040})
+	/home/ubuntu/2023_1_Brigade/internal/auth/user/delivery/http/handler.go:53 +0x1e2
+github.com/labstack/echo/v4.(*Echo).add.func1({0xf67a98, 0xc000349040})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xf67a98, 0xc000349040})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo-contrib@v0.14.1/prometheus/prometheus.go:417 +0x230
+project/internal/middleware.AuthMiddleware.func1.1({0xf67a98, 0xc000349040})
+	/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:64 +0x137
+project/internal/middleware.LoggerMiddleware.func1({0xf67a98, 0xc000349040})
+	/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:39 +0x206
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xf67a98, 0xc000349040})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:249 +0x5a8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc000350fc0, {0xf5e6a0?, 0xc0001bed20}, 0xc0000f6f00)
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3bc
+net/http.serverHandler.ServeHTTP({0xf5c750?}, {0xf5e6a0, 0xc0001bed20}, 0xc0000f6f00)
+	/usr/lib/go-1.18/src/net/http/server.go:2916 +0x43b
+net/http.(*conn).serve(0xc0000b9e00, {0xf5f208, 0xc000414c90})
+	/usr/lib/go-1.18/src/net/http/server.go:1966 +0x5d7
+created by net/http.(*Server).Serve
+	/usr/lib/go-1.18/src/net/http/server.go:3071 +0x4db
+time="2023-05-08T11:37:19Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 2000733344189321274" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+echo: http: panic serving 127.0.0.1:51042: runtime error: invalid memory address or nil pointer dereference
+goroutine 81 [running]:
+net/http.(*conn).serve.func1()
+	/usr/lib/go-1.18/src/net/http/server.go:1825 +0xbf
+panic({0xcf4520, 0x14dc440})
+	/usr/lib/go-1.18/src/runtime/panic.go:844 +0x258
+project/internal/pkg/model_conversion.FromProtoUserToUser(...)
+	/home/ubuntu/2023_1_Brigade/internal/pkg/model_conversion/model_conversion.go:67
+project/internal/clients/auth.authUserServiceGRPCClient.Login({{0xf5cc50?, 0xc0003f2270?}}, {0xf5f198, 0xc000036080}, {{0xc0001877c0?, 0xc000449f90?}, {0xc0001877d8?, 0xb3e8f1?}})
+	/home/ubuntu/2023_1_Brigade/internal/clients/auth/client.go:27 +0x153
+project/internal/auth/user/delivery/http.authHandler.LoginHandler({{0xf625f8, 0xc0003f22c0}, {0xf5cc28, 0xc0003f2280}, {0xf5e7c0, 0xc0003f22f0}}, {0xf67a98, 0xc0004df680})
+	/home/ubuntu/2023_1_Brigade/internal/auth/user/delivery/http/handler.go:53 +0x1e2
+github.com/labstack/echo/v4.(*Echo).add.func1({0xf67a98, 0xc0004df680})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xf67a98, 0xc0004df680})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo-contrib@v0.14.1/prometheus/prometheus.go:417 +0x230
+project/internal/middleware.AuthMiddleware.func1.1({0xf67a98, 0xc0004df680})
+	/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:64 +0x137
+project/internal/middleware.LoggerMiddleware.func1({0xf67a98, 0xc0004df680})
+	/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:39 +0x206
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xf67a98, 0xc0004df680})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:249 +0x5a8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc000350fc0, {0xf5e6a0?, 0xc0001bee00}, 0xc0000f7100)
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3bc
+net/http.serverHandler.ServeHTTP({0xf5c750?}, {0xf5e6a0, 0xc0001bee00}, 0xc0000f7100)
+	/usr/lib/go-1.18/src/net/http/server.go:2916 +0x43b
+net/http.(*conn).serve(0xc000176000, {0xf5f208, 0xc000414c90})
+	/usr/lib/go-1.18/src/net/http/server.go:1966 +0x5d7
+created by net/http.(*Server).Serve
+	/usr/lib/go-1.18/src/net/http/server.go:3071 +0x4db
+time="2023-05-08T11:37:28Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 2149408705362111104" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:37:28Z" level=info msg="HTTP code: 200, request_id: 2149408705362111104" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:37:28Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 2799897287307842296" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:37:28Z" level=info msg="HTTP code: 200, request_id: 2799897287307842296" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:37:28Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 6454884134685349756" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:37:30Z" level=info msg="Incoming request: /api/v1/logout/, ip: 195.239.169.108, method: DELETE, request_id: 1350219896380774888" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:37:30Z" level=info msg="HTTP code: 204, request_id: 1350219896380774888" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:37:30Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T11:37:30Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 6454884134685349756" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T11:37:38Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 2620229509658351429" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+echo: http: panic serving 127.0.0.1:34850: runtime error: invalid memory address or nil pointer dereference
+goroutine 91 [running]:
+net/http.(*conn).serve.func1()
+	/usr/lib/go-1.18/src/net/http/server.go:1825 +0xbf
+panic({0xcf4520, 0x14dc440})
+	/usr/lib/go-1.18/src/runtime/panic.go:844 +0x258
+project/internal/pkg/model_conversion.FromProtoUserToUser(...)
+	/home/ubuntu/2023_1_Brigade/internal/pkg/model_conversion/model_conversion.go:67
+project/internal/clients/auth.authUserServiceGRPCClient.Login({{0xf5cc50?, 0xc0003f2270?}}, {0xf5f198, 0xc000036080}, {{0xc000290cb0?, 0xc000075330?}, {0xc000290cf0?, 0xb3e8f1?}})
+	/home/ubuntu/2023_1_Brigade/internal/clients/auth/client.go:27 +0x153
+project/internal/auth/user/delivery/http.authHandler.LoginHandler({{0xf625f8, 0xc0003f22c0}, {0xf5cc28, 0xc0003f2280}, {0xf5e7c0, 0xc0003f22f0}}, {0xf67a98, 0xc000259540})
+	/home/ubuntu/2023_1_Brigade/internal/auth/user/delivery/http/handler.go:53 +0x1e2
+github.com/labstack/echo/v4.(*Echo).add.func1({0xf67a98, 0xc000259540})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xf67a98, 0xc000259540})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo-contrib@v0.14.1/prometheus/prometheus.go:417 +0x230
+project/internal/middleware.AuthMiddleware.func1.1({0xf67a98, 0xc000259540})
+	/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:64 +0x137
+project/internal/middleware.LoggerMiddleware.func1({0xf67a98, 0xc000259540})
+	/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:39 +0x206
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xf67a98, 0xc000259540})
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:249 +0x5a8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc000350fc0, {0xf5e6a0?, 0xc0001bf340}, 0xc0000f7b00)
+	/home/ubuntu/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3bc
+net/http.serverHandler.ServeHTTP({0xf5c750?}, {0xf5e6a0, 0xc0001bf340}, 0xc0000f7b00)
+	/usr/lib/go-1.18/src/net/http/server.go:2916 +0x43b
+net/http.(*conn).serve(0xc000259f40, {0xf5f208, 0xc000414c90})
+	/usr/lib/go-1.18/src/net/http/server.go:1966 +0x5d7
+created by net/http.(*Server).Serve
+	/usr/lib/go-1.18/src/net/http/server.go:3071 +0x4db
+time="2023-05-08T11:38:31Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 2431485450151185514" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:38:31Z" level=info msg="HTTP code: 401, request_id: 2431485450151185514" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+time="2023-05-08T11:46:14Z" level=error msg="listen tcp :9090: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/api/main.go:186"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-08T11:46:17Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 7178894587224268178" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:46:17Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7178894587224268178" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:46:20Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 4942784069404924533" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:46:20Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = email не найден, request_id: 4942784069404924533" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:46:25Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 2859194415377590618" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:46:25Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 2859194415377590618" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:53:47Z" level=info msg="Incoming request: /api/v1/login/, ip: 195.239.169.108, method: POST, request_id: 5771481358466866772" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:53:47Z" level=info msg="HTTP code: 200, request_id: 5771481358466866772" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:53:47Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 1257109353748943328" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:53:47Z" level=info msg="HTTP code: 200, request_id: 1257109353748943328" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:53:47Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 1772843946696397515" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:36Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T11:55:36Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 1772843946696397515" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T11:55:36Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 6514988877429151657" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:36Z" level=info msg="HTTP code: 200, request_id: 6514988877429151657" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:55:36Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 6121503674290441560" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:36Z" level=info msg="HTTP code: 200, request_id: 6121503674290441560" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:55:37Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 4220702492219408918" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:37Z" level=info msg="Incoming request: /api/v1/logout/, ip: 195.239.169.108, method: DELETE, request_id: 1860405347759466887" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:37Z" level=info msg="HTTP code: 204, request_id: 1860405347759466887" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:55:37Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T11:55:37Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 4220702492219408918" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T11:55:53Z" level=info msg="Incoming request: /api/v1/signup/, ip: 195.239.169.108, method: POST, request_id: 1739911377218942375" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:54Z" level=info msg="HTTP code: 201, request_id: 1739911377218942375" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:55:54Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 9093678142630496075" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:54Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 1, name \"id_member\": converting NULL to uint64 is unsupported, request_id: 9093678142630496075" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:55:54Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 7965350015792528479" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:58Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 195.239.169.108, method: GET, request_id: 4844691816654244736" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:58Z" level=info msg="HTTP code: 200, request_id: 4844691816654244736" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:55:59Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 8276683884108464393" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:55:59Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 1, name \"id_member\": converting NULL to uint64 is unsupported, request_id: 8276683884108464393" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:58:46Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T11:58:46Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 7965350015792528479" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T11:58:46Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 3795810355873039796" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:58:46Z" level=error msg="HTTP code: 500, Error: sql: no rows in result set, request_id: 3795810355873039796" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:58:52Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 7695839272300513940" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:58:52Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7695839272300513940" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:59:04Z" level=info msg="Incoming request: /api/v1/signup/, ip: 195.239.169.108, method: POST, request_id: 4110923678011778862" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:05Z" level=info msg="HTTP code: 201, request_id: 4110923678011778862" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:59:06Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 3263438430180972541" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:06Z" level=info msg="HTTP code: 200, request_id: 3263438430180972541" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T11:59:06Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 2032513096203223504" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:09Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 598290146525185288" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:09Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 598290146525185288" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:59:10Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 4263266169040423370" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:10Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 4263266169040423370" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:59:11Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 8901099682721727797" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:11Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 8901099682721727797" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T11:59:16Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 5022844011814273733" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T11:59:16Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 5022844011814273733" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+time="2023-05-08T12:04:15Z" level=error msg="listen tcp :9090: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/api/main.go:186"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-08T12:04:15Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 1933478777780762275" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:15Z" level=info msg="HTTP code: 200, request_id: 1933478777780762275" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:04:15Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 1192658007999827432" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:15Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 5002725343264548367" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:15Z" level=info msg="HTTP code: 200, request_id: 1192658007999827432" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:04:15Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 5002725343264548367" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T12:04:15Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 8440967991311799219" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:16Z" level=info msg="Incoming request: /api/v1/logout/, ip: 195.239.169.108, method: DELETE, request_id: 7559209357639640949" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:16Z" level=info msg="HTTP code: 204, request_id: 7559209357639640949" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:04:16Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:04:16Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 8440967991311799219" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:04:25Z" level=info msg="Incoming request: /api/v1/signup/, ip: 195.239.169.108, method: POST, request_id: 6648655108714044290" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:25Z" level=info msg="HTTP code: 201, request_id: 6648655108714044290" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:04:26Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 6695565788494362240" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:26Z" level=info msg="HTTP code: 200, request_id: 6695565788494362240" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:04:26Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 4166883907737289624" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:37Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 195.239.169.108, method: GET, request_id: 3304953974761920134" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:04:37Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 3304953974761920134" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T12:06:33Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 1042958233056317967" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:06:38Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:06:38Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 1042958233056317967" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:06:38Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 6047600468459931832" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:10:42Z" level=error msg="websocket: close 1006 (abnormal closure): unexpected EOF" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:10:42Z" level=error msg="HTTP code: 500, Error: websocket: close 1006 (abnormal closure): unexpected EOF, request_id: 6047600468459931832" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:10:42Z" level=error msg="websocket: close 1006 (abnormal closure): unexpected EOF" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:10:42Z" level=error msg="HTTP code: 500, Error: websocket: close 1006 (abnormal closure): unexpected EOF, request_id: 4166883907737289624" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:11:04Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 5035666436145965431" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:11:05Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:11:05Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 5035666436145965431" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:11:15Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 7481536881392368745" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:16:28Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:16:28Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 7481536881392368745" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:16:28Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 8770046814124630793" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:16:34Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:16:34Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 8770046814124630793" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:16:44Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 9191691698674542314" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:17:40Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:17:40Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 9191691698674542314" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:17:52Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 562681564843433542" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:18:34Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:18:34Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 562681564843433542" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:18:44Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 2901529151172271992" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:19:41Z" level=info msg="Incoming request: /, ip: 164.92.106.15, method: GET, request_id: 6097511237938767132" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:19:41Z" level=info msg="HTTP code: 401, request_id: 6097511237938767132" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:22:40Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 6068486445873747104" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:22:40Z" level=info msg="HTTP code: 200, request_id: 6068486445873747104" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:22:40Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 3672742377094591894" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:22:40Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 195.239.169.108, method: GET, request_id: 3659380460598407061" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:22:40Z" level=info msg="HTTP code: 200, request_id: 3672742377094591894" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:22:40Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = sql: Scan error on column index 2, name \"id_chat\": converting NULL to uint64 is unsupported, request_id: 3659380460598407061" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T12:22:40Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 976287375789170670" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:22:41Z" level=info msg="Incoming request: /api/v1/logout/, ip: 195.239.169.108, method: DELETE, request_id: 7518590241632930742" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:22:41Z" level=info msg="HTTP code: 204, request_id: 7518590241632930742" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:22:41Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:22:41Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 976287375789170670" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:23:09Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 8198361525780553155" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:23:09Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8198361525780553155" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T12:23:13Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:23:13Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 2901529151172271992" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T12:23:34Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 7023125753592101220" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:23:34Z" level=info msg="HTTP code: 401, request_id: 7023125753592101220" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:23:37Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 129108557142831298" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:23:37Z" level=info msg="HTTP code: 401, request_id: 129108557142831298" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+time="2023-05-08T12:27:54Z" level=error msg="listen tcp :9090: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/api/main.go:186"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-08T12:28:35Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 4526939740382303354" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:28:35Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4526939740382303354" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T12:28:44Z" level=info msg="Incoming request: /api/v1/signup/, ip: 195.239.169.108, method: POST, request_id: 7834872915203108016" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:28:44Z" level=info msg="HTTP code: 201, request_id: 7834872915203108016" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:28:44Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 3567282429229954057" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:28:44Z" level=info msg="HTTP code: 200, request_id: 3567282429229954057" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:28:45Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 2314454972125615104" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:28:49Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 3968137996722737868" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:28:49Z" level=info msg="HTTP code: 200, request_id: 3968137996722737868" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:28:52Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 195.239.169.108, method: GET, request_id: 1649127976082811494" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T12:28:52Z" level=info msg="HTTP code: 200, request_id: 1649127976082811494" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T12:29:06Z" level=error msg="websocket: close 1006 (abnormal closure): unexpected EOF" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-08T12:29:06Z" level=error msg="HTTP code: 500, Error: websocket: close 1006 (abnormal closure): unexpected EOF, request_id: 2314454972125615104" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-08T13:57:08Z" level=info msg="Incoming request: /, ip: 167.248.133.51, method: GET, request_id: 404398563848894733" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T13:57:08Z" level=info msg="HTTP code: 401, request_id: 404398563848894733" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T13:57:08Z" level=info msg="Incoming request: *, ip: 167.248.133.51, method: PRI, request_id: 3619855456628541261" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T13:57:08Z" level=info msg="HTTP code: 401, request_id: 3619855456628541261" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T14:50:18Z" level=info msg="Incoming request: /, ip: 147.182.202.179, method: GET, request_id: 244788759588451518" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T14:50:18Z" level=info msg="HTTP code: 401, request_id: 244788759588451518" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T15:40:27Z" level=info msg="Incoming request: /, ip: 109.120.188.100, method: GET, request_id: 2403606303807123036" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T15:40:27Z" level=info msg="HTTP code: 401, request_id: 2403606303807123036" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T18:16:06Z" level=info msg="Incoming request: /, ip: 35.233.62.116, method: GET, request_id: 8218307496998287880" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T18:16:06Z" level=info msg="HTTP code: 401, request_id: 8218307496998287880" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T18:55:24Z" level=info msg="Incoming request: /, ip: 205.210.31.194, method: GET, request_id: 2548393345918952085" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T18:55:24Z" level=info msg="HTTP code: 401, request_id: 2548393345918952085" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T19:25:32Z" level=info msg="Incoming request: /api/v1/auth/, ip: 91.193.176.166, method: GET, request_id: 45280092980832891" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T19:25:32Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 45280092980832891" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-08T20:28:18Z" level=info msg="Incoming request: /, ip: 130.211.54.158, method: GET, request_id: 8811978609445234047" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T20:28:18Z" level=info msg="HTTP code: 401, request_id: 8811978609445234047" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T20:37:02Z" level=info msg="Incoming request: /, ip: 66.175.213.4, method: GET, request_id: 1170661630921677436" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T20:37:02Z" level=info msg="HTTP code: 401, request_id: 1170661630921677436" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T20:48:32Z" level=info msg="Incoming request: /, ip: 159.89.124.112, method: GET, request_id: 2373938139815701544" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T20:48:32Z" level=info msg="HTTP code: 401, request_id: 2373938139815701544" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T23:09:23Z" level=info msg="Incoming request: /, ip: 198.235.24.113, method: GET, request_id: 2589152954758942693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T23:09:23Z" level=info msg="HTTP code: 401, request_id: 2589152954758942693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T23:56:38Z" level=info msg="Incoming request: /, ip: 162.142.125.12, method: GET, request_id: 9032718994839469979" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T23:56:38Z" level=info msg="HTTP code: 401, request_id: 9032718994839469979" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T23:56:38Z" level=info msg="Incoming request: /, ip: 162.142.125.12, method: GET, request_id: 5491216491707108907" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T23:56:38Z" level=info msg="HTTP code: 401, request_id: 5491216491707108907" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-08T23:56:38Z" level=info msg="Incoming request: *, ip: 162.142.125.12, method: PRI, request_id: 727185951119444093" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-08T23:56:38Z" level=info msg="HTTP code: 401, request_id: 727185951119444093" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T02:52:27Z" level=info msg="Incoming request: /, ip: 147.182.241.81, method: GET, request_id: 5650816520435192931" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T02:52:27Z" level=info msg="HTTP code: 401, request_id: 5650816520435192931" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T06:29:26Z" level=info msg="Incoming request: /, ip: 142.93.80.17, method: GET, request_id: 2881679353706239191" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T06:29:26Z" level=info msg="HTTP code: 401, request_id: 2881679353706239191" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T06:51:35Z" level=info msg="Incoming request: /, ip: 109.120.188.100, method: GET, request_id: 3873122040247381721" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T06:51:35Z" level=info msg="HTTP code: 401, request_id: 3873122040247381721" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T06:54:58Z" level=info msg="Incoming request: /, ip: 35.233.62.116, method: GET, request_id: 6967011399708816091" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T06:54:58Z" level=info msg="HTTP code: 401, request_id: 6967011399708816091" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:06:05Z" level=info msg="Incoming request: /api/v1/auth/, ip: 89.208.187.209, method: GET, request_id: 8038504651161814151" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:06:05Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8038504651161814151" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T07:06:33Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 7553775894759441389" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:06:33Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = email не найден, request_id: 7553775894759441389" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T07:06:38Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 7116455261030048412" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:06:38Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = email не найден, request_id: 7116455261030048412" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T07:07:01Z" level=info msg="Incoming request: /api/v1/signup/, ip: 89.208.187.209, method: POST, request_id: 3996294490671931506" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:07:01Z" level=info msg="HTTP code: 201, request_id: 3996294490671931506" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:07:02Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 3097717545531547964" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:07:02Z" level=info msg="HTTP code: 200, request_id: 3097717545531547964" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:07:02Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 9196337664176069321" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:07:27Z" level=info msg="Incoming request: /api/v1/auth/, ip: 193.39.160.34, method: GET, request_id: 9156391335681078501" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:07:27Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 9156391335681078501" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T07:07:35Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 89.208.187.209, method: GET, request_id: 2274587997649797374" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:07:35Z" level=info msg="HTTP code: 200, request_id: 2274587997649797374" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:14Z" level=info msg="Incoming request: /api/v1/signup/, ip: 193.39.160.34, method: POST, request_id: 5503109737844712370" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:14Z" level=info msg="HTTP code: 201, request_id: 5503109737844712370" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:14Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: GET, request_id: 6066758605812546162" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:14Z" level=info msg="HTTP code: 200, request_id: 6066758605812546162" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:14Z" level=info msg="Incoming request: /api/v1/message/, ip: 193.39.160.34, method: GET, request_id: 5439524304004613115" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:17Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 193.39.160.34, method: GET, request_id: 2391523771522646435" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:17Z" level=info msg="HTTP code: 200, request_id: 2391523771522646435" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:18Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: POST, request_id: 4489712230643410318" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:18Z" level=info msg="HTTP code: 201, request_id: 4489712230643410318" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:19Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: GET, request_id: 32391395337318892" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:19Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 8453167926355905140" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:19Z" level=info msg="HTTP code: 200, request_id: 32391395337318892" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:19Z" level=info msg="HTTP code: 200, request_id: 8453167926355905140" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:46Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 193.39.160.34, method: GET, request_id: 2006978929319093298" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:46Z" level=info msg="HTTP code: 200, request_id: 2006978929319093298" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:51Z" level=info msg="Incoming request: /api/v1/logout/, ip: 89.208.187.209, method: DELETE, request_id: 4199784329062301414" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:51Z" level=info msg="HTTP code: 204, request_id: 4199784329062301414" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:08:51Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T07:08:51Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 9196337664176069321" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T07:08:53Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: GET, request_id: 2231774458279976701" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:08:53Z" level=info msg="HTTP code: 200, request_id: 2231774458279976701" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:00Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 7499948656753588823" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:00Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 7499948656753588823" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T07:09:04Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 2349792484375940686" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:04Z" level=info msg="HTTP code: 200, request_id: 2349792484375940686" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:04Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 5110736229714257316" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:04Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 3556685922095465586" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:04Z" level=info msg="HTTP code: 200, request_id: 5110736229714257316" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:07Z" level=info msg="Incoming request: /api/v1/logout/, ip: 89.208.187.209, method: DELETE, request_id: 8456454947420425917" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:07Z" level=info msg="HTTP code: 204, request_id: 8456454947420425917" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:07Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T07:09:07Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 3556685922095465586" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T07:09:11Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 7601025499479382517" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:11Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 7601025499479382517" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T07:09:13Z" level=info msg="Incoming request: /api/v1/logout/, ip: 193.39.160.34, method: DELETE, request_id: 3675425810809971109" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:13Z" level=info msg="HTTP code: 204, request_id: 3675425810809971109" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:13Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T07:09:13Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 5439524304004613115" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T07:09:17Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 6314263512453546717" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:17Z" level=info msg="HTTP code: 200, request_id: 6314263512453546717" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:17Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 5818034984500995791" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:17Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 1121450407056902037" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:17Z" level=info msg="HTTP code: 200, request_id: 1121450407056902037" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:45Z" level=info msg="Incoming request: /api/v1/login/, ip: 193.39.160.34, method: POST, request_id: 6848172965558517398" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:45Z" level=info msg="HTTP code: 200, request_id: 6848172965558517398" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:45Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: GET, request_id: 4117572957475527334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:45Z" level=info msg="HTTP code: 200, request_id: 4117572957475527334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:45Z" level=info msg="Incoming request: /api/v1/message/, ip: 193.39.160.34, method: GET, request_id: 4722662488506640200" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:57Z" level=info msg="Incoming request: /api/v1/chats/search/r/, ip: 89.208.187.209, method: GET, request_id: 4748268606653575889" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:57Z" level=info msg="HTTP code: 200, request_id: 4748268606653575889" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:57Z" level=info msg="Incoming request: /api/v1/chats/search/rf/, ip: 89.208.187.209, method: GET, request_id: 8108180812082725720" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:57Z" level=info msg="HTTP code: 200, request_id: 8108180812082725720" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:57Z" level=info msg="Incoming request: /api/v1/chats/search/rfe/, ip: 89.208.187.209, method: GET, request_id: 64616514606672507" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:57Z" level=info msg="HTTP code: 200, request_id: 64616514606672507" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:59Z" level=info msg="Incoming request: /api/v1/chats/search/rf/, ip: 89.208.187.209, method: GET, request_id: 7070489622434351965" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:59Z" level=info msg="HTTP code: 200, request_id: 7070489622434351965" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:09:59Z" level=info msg="Incoming request: /api/v1/chats/search/r/, ip: 89.208.187.209, method: GET, request_id: 5485508790493922804" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:09:59Z" level=info msg="HTTP code: 200, request_id: 5485508790493922804" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:02Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF/, ip: 89.208.187.209, method: GET, request_id: 8847095544454235551" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:02Z" level=info msg="HTTP code: 200, request_id: 8847095544454235551" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:02Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF%D1%80/, ip: 89.208.187.209, method: GET, request_id: 8797397124765175084" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:02Z" level=info msg="HTTP code: 200, request_id: 8797397124765175084" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:03Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF%D1%80%D0%B8/, ip: 89.208.187.209, method: GET, request_id: 8097114223012110498" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:03Z" level=info msg="HTTP code: 200, request_id: 8097114223012110498" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:04Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF%D1%80/, ip: 89.208.187.209, method: GET, request_id: 8990650488010135915" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:04Z" level=info msg="HTTP code: 200, request_id: 8990650488010135915" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:05Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF/, ip: 89.208.187.209, method: GET, request_id: 6867284718639981197" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:05Z" level=info msg="HTTP code: 200, request_id: 6867284718639981197" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:07Z" level=info msg="Incoming request: /api/v1/chats/3/, ip: 193.39.160.34, method: GET, request_id: 258484826417455215" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:07Z" level=info msg="HTTP code: 200, request_id: 258484826417455215" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:08Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 7934164550555387131" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:08Z" level=info msg="HTTP code: 200, request_id: 7934164550555387131" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:09Z" level=info msg="Incoming request: /api/v1/chats/3/, ip: 193.39.160.34, method: GET, request_id: 8635475925791298053" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:09Z" level=info msg="HTTP code: 200, request_id: 8635475925791298053" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:14Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF/, ip: 89.208.187.209, method: GET, request_id: 1895106447545905452" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:14Z" level=info msg="HTTP code: 200, request_id: 1895106447545905452" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:15Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF%D1%80/, ip: 89.208.187.209, method: GET, request_id: 1655012956774350427" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:15Z" level=info msg="HTTP code: 200, request_id: 1655012956774350427" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:15Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF%D1%80%D0%BC/, ip: 89.208.187.209, method: GET, request_id: 6143046492385550240" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:15Z" level=info msg="HTTP code: 200, request_id: 6143046492385550240" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:16Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF%D1%80/, ip: 89.208.187.209, method: GET, request_id: 2663416179314314760" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:16Z" level=info msg="HTTP code: 200, request_id: 2663416179314314760" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:16Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%BF/, ip: 89.208.187.209, method: GET, request_id: 3958160242898871676" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:16Z" level=info msg="HTTP code: 200, request_id: 3958160242898871676" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:17Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 2426180466375346999" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:17Z" level=info msg="HTTP code: 200, request_id: 2426180466375346999" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:20Z" level=info msg="Incoming request: /api/v1/chats/search/d/, ip: 193.39.160.34, method: GET, request_id: 1970864208169978597" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:20Z" level=info msg="HTTP code: 200, request_id: 1970864208169978597" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:20Z" level=info msg="Incoming request: /api/v1/chats/search/dd/, ip: 193.39.160.34, method: GET, request_id: 5729545692227579790" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:20Z" level=info msg="HTTP code: 200, request_id: 5729545692227579790" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:21Z" level=info msg="Incoming request: /api/v1/chats/search/ddd/, ip: 193.39.160.34, method: GET, request_id: 1142020218655395266" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:21Z" level=info msg="HTTP code: 200, request_id: 1142020218655395266" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:21Z" level=info msg="Incoming request: /api/v1/chats/search/dddf/, ip: 193.39.160.34, method: GET, request_id: 8510351039002969464" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:21Z" level=info msg="HTTP code: 200, request_id: 8510351039002969464" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:21Z" level=info msg="Incoming request: /api/v1/chats/search/dddfd/, ip: 193.39.160.34, method: GET, request_id: 5275932425331883951" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:21Z" level=info msg="HTTP code: 200, request_id: 5275932425331883951" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:21Z" level=info msg="Incoming request: /api/v1/chats/search/dddfdf/, ip: 193.39.160.34, method: GET, request_id: 1933780265110970451" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:21Z" level=info msg="HTTP code: 200, request_id: 1933780265110970451" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:22Z" level=info msg="Incoming request: /api/v1/chats/search/dddfdfd/, ip: 193.39.160.34, method: GET, request_id: 8374339990695947182" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:22Z" level=info msg="HTTP code: 200, request_id: 8374339990695947182" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:23Z" level=info msg="Incoming request: /api/v1/chats/search/dddfdf/, ip: 193.39.160.34, method: GET, request_id: 4688484473846557208" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:23Z" level=info msg="HTTP code: 200, request_id: 4688484473846557208" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:23Z" level=info msg="Incoming request: /api/v1/chats/search/dddfd/, ip: 193.39.160.34, method: GET, request_id: 5777618179405661710" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:23Z" level=info msg="HTTP code: 200, request_id: 5777618179405661710" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:24Z" level=info msg="Incoming request: /api/v1/chats/search/dddf/, ip: 193.39.160.34, method: GET, request_id: 760735458398127228" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:24Z" level=info msg="HTTP code: 200, request_id: 760735458398127228" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:24Z" level=info msg="Incoming request: /api/v1/chats/search/ddd/, ip: 193.39.160.34, method: GET, request_id: 2338384266980315089" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:24Z" level=info msg="HTTP code: 200, request_id: 2338384266980315089" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:24Z" level=info msg="Incoming request: /api/v1/chats/search/dd/, ip: 193.39.160.34, method: GET, request_id: 2172639559978850383" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:24Z" level=info msg="HTTP code: 200, request_id: 2172639559978850383" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:25Z" level=info msg="Incoming request: /api/v1/chats/search/d/, ip: 193.39.160.34, method: GET, request_id: 2111349882334928527" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:25Z" level=info msg="HTTP code: 200, request_id: 2111349882334928527" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:31Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2/, ip: 89.208.187.209, method: GET, request_id: 3903467503075865985" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:31Z" level=info msg="HTTP code: 200, request_id: 3903467503075865985" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:32Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 8292836513974672853" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:32Z" level=info msg="HTTP code: 200, request_id: 8292836513974672853" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:32Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 2434197972307836139" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:32Z" level=info msg="HTTP code: 200, request_id: 2434197972307836139" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:32Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 2349861660612272374" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:32Z" level=info msg="HTTP code: 200, request_id: 2349861660612272374" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:33Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 4093119907731953362" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:33Z" level=info msg="HTTP code: 200, request_id: 4093119907731953362" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:33Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 3596030781316801682" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:33Z" level=info msg="HTTP code: 200, request_id: 3596030781316801682" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:33Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 5559741511350131473" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:33Z" level=info msg="HTTP code: 200, request_id: 5559741511350131473" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:33Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 1543665499672628341" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:33Z" level=info msg="HTTP code: 200, request_id: 1543665499672628341" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:33Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 2350125406064281546" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:33Z" level=info msg="HTTP code: 200, request_id: 2350125406064281546" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:33Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 7957432215970333172" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:33Z" level=info msg="HTTP code: 200, request_id: 7957432215970333172" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:34Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 7883923307152208148" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:34Z" level=info msg="HTTP code: 200, request_id: 7883923307152208148" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:34Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 4725494952284609394" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:34Z" level=info msg="HTTP code: 200, request_id: 4725494952284609394" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:34Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 9137641403892048851" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:34Z" level=info msg="HTTP code: 200, request_id: 9137641403892048851" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:35Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 9170735788392031649" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:35Z" level=info msg="HTTP code: 200, request_id: 9170735788392031649" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:35Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 7991789092826344754" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:35Z" level=info msg="HTTP code: 200, request_id: 7991789092826344754" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:35Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 1741637155065195349" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:35Z" level=info msg="HTTP code: 200, request_id: 1741637155065195349" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:35Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 2433898921617924453" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:35Z" level=info msg="HTTP code: 200, request_id: 2433898921617924453" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:35Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 3370496745565595127" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:35Z" level=info msg="HTTP code: 200, request_id: 3370496745565595127" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:36Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 2325352626503638772" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:36Z" level=info msg="HTTP code: 200, request_id: 2325352626503638772" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:36Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 7766169473372096247" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:36Z" level=info msg="HTTP code: 200, request_id: 7766169473372096247" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:36Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4/, ip: 193.39.160.34, method: GET, request_id: 3735745855915252329" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:36Z" level=info msg="HTTP code: 200, request_id: 3735745855915252329" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:36Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 367417914831862541" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:36Z" level=info msg="HTTP code: 200, request_id: 367417914831862541" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:36Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0/, ip: 193.39.160.34, method: GET, request_id: 1882129570191314697" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:36Z" level=info msg="HTTP code: 200, request_id: 1882129570191314697" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:36Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 2860973444924808005" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:36Z" level=info msg="HTTP code: 200, request_id: 2860973444924808005" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:37Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 230199751874544576" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:37Z" level=info msg="HTTP code: 200, request_id: 230199751874544576" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:37Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2%D0%B0/, ip: 89.208.187.209, method: GET, request_id: 6131805769956925090" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:37Z" level=info msg="HTTP code: 200, request_id: 6131805769956925090" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:37Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B2/, ip: 89.208.187.209, method: GET, request_id: 4936302492600639861" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:37Z" level=info msg="HTTP code: 200, request_id: 4936302492600639861" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:38Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0%D1%80/, ip: 193.39.160.34, method: GET, request_id: 7573891688651117840" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:38Z" level=info msg="HTTP code: 200, request_id: 7573891688651117840" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:40Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0%D1%80%D0%BE/, ip: 193.39.160.34, method: GET, request_id: 5871680894684310084" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:40Z" level=info msg="HTTP code: 200, request_id: 5871680894684310084" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:40Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0%D1%80%D0%BE%D0%B0/, ip: 193.39.160.34, method: GET, request_id: 5443629799606978300" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:40Z" level=info msg="HTTP code: 200, request_id: 5443629799606978300" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:41Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0%D1%80%D0%BE/, ip: 193.39.160.34, method: GET, request_id: 725714892611225163" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:41Z" level=info msg="HTTP code: 200, request_id: 725714892611225163" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:41Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0%D1%80%D0%BE%D0%B2/, ip: 193.39.160.34, method: GET, request_id: 320250479115786585" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:41Z" level=info msg="HTTP code: 200, request_id: 320250479115786585" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:41Z" level=info msg="Incoming request: /api/v1/chats/search/%D0%B4%D0%B0%D1%80%D0%BE%D0%B2%D0%B0/, ip: 193.39.160.34, method: GET, request_id: 3360314274201224371" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:41Z" level=info msg="HTTP code: 200, request_id: 3360314274201224371" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:43Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 3753995536231423705" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:43Z" level=info msg="HTTP code: 200, request_id: 3753995536231423705" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:44Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 3711801379688816270" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:44Z" level=info msg="HTTP code: 200, request_id: 3711801379688816270" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:10:48Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 89.208.187.209, method: GET, request_id: 4475243293666082041" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:10:48Z" level=info msg="HTTP code: 200, request_id: 4475243293666082041" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:11:01Z" level=info msg="Incoming request: /api/v1/logout/, ip: 89.208.187.209, method: DELETE, request_id: 8233358801363789192" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:11:01Z" level=info msg="HTTP code: 204, request_id: 8233358801363789192" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:11:01Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T07:11:01Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 5818034984500995791" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T07:11:02Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 2370918299131779603" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:11:02Z" level=info msg="HTTP code: 200, request_id: 2370918299131779603" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:11:02Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 3414408464605005476" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:11:02Z" level=info msg="HTTP code: 200, request_id: 3414408464605005476" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:11:02Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 5394699021791565147" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:14:16Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 9041841699268229585" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:14:16Z" level=info msg="HTTP code: 200, request_id: 9041841699268229585" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:14:18Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 5099426640750844048" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:14:18Z" level=info msg="HTTP code: 200, request_id: 5099426640750844048" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:14:23Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 302233268100056618" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:14:23Z" level=info msg="HTTP code: 200, request_id: 302233268100056618" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:14:23Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 8362640806743698960" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:14:23Z" level=info msg="HTTP code: 200, request_id: 8362640806743698960" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:14:24Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 2469031807109256482" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:14:24Z" level=info msg="HTTP code: 200, request_id: 2469031807109256482" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:19:15Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 8939201086513317766" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:19:15Z" level=info msg="HTTP code: 200, request_id: 8939201086513317766" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:19:15Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 593511508757162347" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:19:15Z" level=info msg="HTTP code: 200, request_id: 593511508757162347" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:21:47Z" level=info msg="Incoming request: /api/v1/logout/, ip: 89.208.187.209, method: DELETE, request_id: 1088616118532700135" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:21:47Z" level=info msg="HTTP code: 204, request_id: 1088616118532700135" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:21:47Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T07:21:47Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 5394699021791565147" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T07:21:48Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 5092924777918815681" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:21:48Z" level=info msg="HTTP code: 200, request_id: 5092924777918815681" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:21:48Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 635689055206998700" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:21:48Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 8290478205137684196" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:21:48Z" level=info msg="HTTP code: 200, request_id: 635689055206998700" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:22:38Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 6585152843700689102" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:22:38Z" level=info msg="HTTP code: 200, request_id: 6585152843700689102" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:22:50Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 89.208.187.209, method: GET, request_id: 8066011587450221153" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:22:50Z" level=info msg="HTTP code: 200, request_id: 8066011587450221153" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:23:01Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 924054616818719543" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:23:01Z" level=info msg="HTTP code: 200, request_id: 924054616818719543" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:25:28Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T07:25:28Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 8290478205137684196" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T07:25:28Z" level=info msg="Incoming request: /api/v1/auth/, ip: 89.208.187.209, method: GET, request_id: 5197315787175073508" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:25:28Z" level=info msg="HTTP code: 200, request_id: 5197315787175073508" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:25:28Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 35648899361663264" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:25:28Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 8195291082891932243" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:25:28Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 8979047832812026937" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:25:28Z" level=info msg="HTTP code: 200, request_id: 8979047832812026937" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:25:28Z" level=info msg="HTTP code: 200, request_id: 8195291082891932243" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:26:58Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 8738121388625592482" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:26:58Z" level=info msg="HTTP code: 200, request_id: 8738121388625592482" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:27:01Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 2696594262207719693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:27:01Z" level=info msg="HTTP code: 200, request_id: 2696594262207719693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:27:03Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 1063305963368909261" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:27:03Z" level=info msg="HTTP code: 200, request_id: 1063305963368909261" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:49:06Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 8586943163826005482" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:49:06Z" level=info msg="HTTP code: 200, request_id: 8586943163826005482" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:49:07Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 7234996647661483982" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:49:07Z" level=info msg="HTTP code: 200, request_id: 7234996647661483982" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:49:08Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 6920048366918045360" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:49:08Z" level=info msg="HTTP code: 200, request_id: 6920048366918045360" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:49:13Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 89.208.187.209, method: GET, request_id: 7644536292611751099" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:49:13Z" level=info msg="HTTP code: 200, request_id: 7644536292611751099" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:49:16Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 5049109007506261080" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:49:16Z" level=info msg="HTTP code: 200, request_id: 5049109007506261080" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:52:56Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 89.208.187.209, method: GET, request_id: 8630002559355278112" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:52:56Z" level=info msg="HTTP code: 200, request_id: 8630002559355278112" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:52:56Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 89.208.187.209, method: GET, request_id: 5805166158077296901" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:52:56Z" level=info msg="HTTP code: 200, request_id: 5805166158077296901" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:53:16Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 89.208.187.209, method: GET, request_id: 6540293133984425933" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:53:16Z" level=info msg="HTTP code: 200, request_id: 6540293133984425933" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:53:16Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 89.208.187.209, method: GET, request_id: 2680733926296420684" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:53:16Z" level=info msg="HTTP code: 200, request_id: 2680733926296420684" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:53:18Z" level=info msg="Incoming request: /api/v1/chats/2/, ip: 89.208.187.209, method: GET, request_id: 1763235822190125189" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:53:18Z" level=info msg="HTTP code: 200, request_id: 1763235822190125189" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T07:59:52Z" level=info msg="Incoming request: /, ip: 134.209.95.237, method: GET, request_id: 1315208274240465039" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T07:59:52Z" level=info msg="HTTP code: 401, request_id: 1315208274240465039" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:04Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 193.39.160.34, method: GET, request_id: 9148391946223049201" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:04Z" level=info msg="HTTP code: 200, request_id: 9148391946223049201" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:35Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: POST, request_id: 6979231045830101967" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:36Z" level=info msg="HTTP code: 201, request_id: 6979231045830101967" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:36Z" level=info msg="Incoming request: /api/v1/chats/5/, ip: 193.39.160.34, method: GET, request_id: 1421206141693743405" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:36Z" level=info msg="HTTP code: 200, request_id: 1421206141693743405" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:45Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 193.39.160.34, method: GET, request_id: 9023861115367950022" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:45Z" level=info msg="HTTP code: 200, request_id: 9023861115367950022" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:47Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: PUT, request_id: 1571619214094861077" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:47Z" level=info msg="HTTP code: 201, request_id: 1571619214094861077" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:47Z" level=info msg="Incoming request: /api/v1/chats/5/, ip: 193.39.160.34, method: GET, request_id: 3269156794293909044" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:47Z" level=info msg="HTTP code: 200, request_id: 3269156794293909044" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:53Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 3095050001601985217" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:53Z" level=info msg="HTTP code: 200, request_id: 3095050001601985217" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:55Z" level=info msg="Incoming request: /api/v1/chats/3/, ip: 193.39.160.34, method: GET, request_id: 131065780081488528" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:55Z" level=info msg="HTTP code: 200, request_id: 131065780081488528" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:55Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 454478679596785334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:55Z" level=info msg="HTTP code: 200, request_id: 454478679596785334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:56Z" level=info msg="Incoming request: /api/v1/chats/5/, ip: 193.39.160.34, method: GET, request_id: 426864636532030993" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:56Z" level=info msg="HTTP code: 200, request_id: 426864636532030993" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:56Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 4239655590545068324" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:56Z" level=info msg="HTTP code: 200, request_id: 4239655590545068324" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:56Z" level=info msg="Incoming request: /api/v1/chats/3/, ip: 193.39.160.34, method: GET, request_id: 7683327971327416772" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:56Z" level=info msg="HTTP code: 200, request_id: 7683327971327416772" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:57Z" level=info msg="Incoming request: /api/v1/chats/5/, ip: 193.39.160.34, method: GET, request_id: 3353103706795430661" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:57Z" level=info msg="HTTP code: 200, request_id: 3353103706795430661" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:45:57Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 2043203534705037703" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:45:57Z" level=info msg="HTTP code: 200, request_id: 2043203534705037703" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T08:48:50Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 89.208.187.209, method: GET, request_id: 6143189628069505650" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T08:48:50Z" level=info msg="HTTP code: 200, request_id: 6143189628069505650" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+time="2023-05-09T09:00:08Z" level=error msg="listen tcp :9090: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/api/main.go:186"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:9090
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-09T09:11:43Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 9195863917664806109" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:43Z" level=info msg="HTTP code: 200, request_id: 9195863917664806109" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:43Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 1661133326989128277" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:43Z" level=info msg="HTTP code: 200, request_id: 1661133326989128277" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:43Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 8952970453290322599" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:44Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 7455416789409399506" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:44Z" level=info msg="HTTP code: 200, request_id: 7455416789409399506" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T09:11:46Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 8952970453290322599" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 4834546776513943305" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 4834546776513943305" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 7739221230046998017" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 7739221230046998017" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 3712120885185296051" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 3712120885185296051" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 2215627629736668756" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T09:11:46Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 2215627629736668756" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 541485344273068444" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 541485344273068444" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 7511738601003023490" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 2470162625005602754" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 7511738601003023490" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 2470162625005602754" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 5253650537065101977" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T09:11:46Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 5253650537065101977" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 5873416364968924255" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 5873416364968924255" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 8344468449020191248" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 2901380418452665576" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 8344468449020191248" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="HTTP code: 200, request_id: 2901380418452665576" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:11:46Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 2994302020652929630" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:18:46Z" level=info msg="Incoming request: /api/v1/users/settings/, ip: 193.39.160.34, method: PUT, request_id: 3859258002591187222" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:18:46Z" level=info msg="HTTP code: 200, request_id: 3859258002591187222" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:18:53Z" level=info msg="Incoming request: /api/v1/users/settings/, ip: 193.39.160.34, method: PUT, request_id: 2668691353767014465" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:18:53Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 2668691353767014465" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:18:53Z" level=info msg="Incoming request: /api/v1/images/, ip: 193.39.160.34, method: POST, request_id: 6845400419239963210" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:18:53Z" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 6845400419239963210" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:18:56Z" level=info msg="Incoming request: /api/v1/chats/4/, ip: 193.39.160.34, method: GET, request_id: 6724438501021880510" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:18:56Z" level=info msg="Incoming request: /api/v1/message/, ip: 193.39.160.34, method: GET, request_id: 2583299127391559910" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:18:56Z" level=info msg="HTTP code: 200, request_id: 6724438501021880510" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-09T09:20:38Z" level=info msg="Incoming request: /api/v1/login/, ip: 193.39.160.34, method: POST, request_id: 5391721836569593724" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:20:38Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 5391721836569593724" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:20:45Z" level=info msg="Incoming request: /api/v1/auth/, ip: 89.208.187.209, method: GET, request_id: 8268135129011632147" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:20:45Z" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8268135129011632147" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:21:04Z" level=info msg="Incoming request: /api/v1/signup/, ip: 193.39.160.34, method: POST, request_id: 7052394064221671522" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:04Z" level=error msg="HTTP code: 409, Error: rpc error: code = Unknown desc = такой email уже зарегистрирован, request_id: 7052394064221671522" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:21:12Z" level=info msg="Incoming request: /api/v1/login/, ip: 89.208.187.209, method: POST, request_id: 2535464931269900578" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:12Z" level=info msg="HTTP code: 200, request_id: 2535464931269900578" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:21:12Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 4701882532101137261" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:12Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 397745914324562303" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:12Z" level=info msg="HTTP code: 200, request_id: 4701882532101137261" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:21:12Z" level=info msg="Incoming request: /api/v1/signup/, ip: 193.39.160.34, method: POST, request_id: 3871955885446892251" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:13Z" level=info msg="HTTP code: 201, request_id: 3871955885446892251" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:21:13Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: GET, request_id: 9148315145546571831" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:13Z" level=info msg="HTTP code: 200, request_id: 9148315145546571831" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:21:13Z" level=info msg="Incoming request: /api/v1/message/, ip: 193.39.160.34, method: GET, request_id: 1796725768360732807" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:15Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 193.39.160.34, method: GET, request_id: 9023419608873346886" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:21:15Z" level=info msg="HTTP code: 200, request_id: 9023419608873346886" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:22:12Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 2555755240273234936" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:22:12Z" level=info msg="HTTP code: 200, request_id: 2555755240273234936" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:22:12Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 360637201053791248" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:22:12Z" level=info msg="Incoming request: /api/v1/chats/1/, ip: 195.239.169.108, method: GET, request_id: 3991494216601970925" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:22:12Z" level=info msg="HTTP code: 200, request_id: 360637201053791248" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:22:12Z" level=info msg="HTTP code: 200, request_id: 3991494216601970925" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:22:12Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 5099595948561102194" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:22:14Z" level=info msg="Incoming request: /api/v1/auth/, ip: 195.239.169.108, method: GET, request_id: 4760524473320577432" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:22:14Z" level=info msg="HTTP code: 200, request_id: 4760524473320577432" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:22:14Z" level=info msg="Incoming request: /api/v1/chats/, ip: 195.239.169.108, method: GET, request_id: 1691835981625785129" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:22:14Z" level=info msg="HTTP code: 200, request_id: 1691835981625785129" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:24:15Z" level=info msg="Incoming request: /api/v1/users/settings/, ip: 193.39.160.34, method: PUT, request_id: 9117562283319143419" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:15Z" level=info msg="HTTP code: 200, request_id: 9117562283319143419" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:24:19Z" level=info msg="Incoming request: /api/v1/logout/, ip: 193.39.160.34, method: DELETE, request_id: 7192299083826432009" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:19Z" level=info msg="HTTP code: 204, request_id: 7192299083826432009" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:24:19Z" level=error msg="websocket: close 1005 (no status)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T09:24:19Z" level=error msg="HTTP code: 500, Error: websocket: close 1005 (no status), request_id: 1796725768360732807" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T09:24:22Z" level=error msg="websocket: close 1001 (going away)" func="project/internal/messages/delivery/ws.(*messageHandler).SendMessagesHandler" file="/home/ubuntu/2023_1_Brigade/internal/messages/delivery/ws/handler.go:69"
+time="2023-05-09T09:24:22Z" level=error msg="HTTP code: 500, Error: websocket: close 1001 (going away), request_id: 397745914324562303" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+echo: http: response.WriteHeader on hijacked connection from github.com/labstack/echo/v4.(*Response).WriteHeader (response.go:63)
+echo: http: response.Write on hijacked connection from github.com/labstack/echo/v4.(*Response).Write (response.go:75)
+time="2023-05-09T09:24:22Z" level=info msg="Incoming request: /api/v1/auth/, ip: 89.208.187.209, method: GET, request_id: 8811210277407415722" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:22Z" level=info msg="HTTP code: 200, request_id: 8811210277407415722" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:24:22Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: GET, request_id: 6410251354837845712" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:22Z" level=info msg="HTTP code: 200, request_id: 6410251354837845712" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:24:22Z" level=info msg="Incoming request: /api/v1/message/, ip: 89.208.187.209, method: GET, request_id: 5689198451532263535" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:33Z" level=info msg="Incoming request: /api/v1/login/, ip: 193.39.160.34, method: POST, request_id: 6019750476360379269" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:33Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 6019750476360379269" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:24:36Z" level=info msg="Incoming request: /api/v1/login/, ip: 193.39.160.34, method: POST, request_id: 6191446095073901266" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:24:36Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 6191446095073901266" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-09T09:30:45Z" level=info msg="Incoming request: /api/v1/login/, ip: 193.39.160.34, method: POST, request_id: 8842455326264561195" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:30:45Z" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = неправильный пароль, request_id: 8842455326264561195" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:39:42Z" level=info msg="Incoming request: /, ip: 127.0.0.1, method: GET, request_id: 5197847065071509345" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:39:42Z" level=info msg="HTTP code: 401, request_id: 5197847065071509345" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:44:56Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: POST, request_id: 1905342743926754691" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:44:57Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unavailable desc = error reading from server: EOF, request_id: 1905342743926754691" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:44:57Z" level=info msg="Incoming request: /api/v1/chats/, ip: 89.208.187.209, method: POST, request_id: 3192164712534326666" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:44:57Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:9000: connect: connection refused\", request_id: 3192164712534326666" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:45:06Z" level=info msg="Incoming request: /api/v1/signup/, ip: 193.39.160.34, method: POST, request_id: 4616373608320007394" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:45:07Z" level=info msg="HTTP code: 201, request_id: 4616373608320007394" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+time="2023-05-09T09:45:07Z" level=info msg="Incoming request: /api/v1/chats/, ip: 193.39.160.34, method: GET, request_id: 675936955791145713" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:45:07Z" level=error msg="HTTP code: 500, Error: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:9000: connect: connection refused\", request_id: 675936955791145713" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-09T09:45:07Z" level=info msg="Incoming request: /api/v1/message/, ip: 193.39.160.34, method: GET, request_id: 4701517050597481908" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:45:13Z" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 193.39.160.34, method: GET, request_id: 8226104724454686970" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
+time="2023-05-09T09:45:13Z" level=info msg="HTTP code: 200, request_id: 8226104724454686970" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"

@@ -8,6 +8,6 @@ FROM builder AS build
 
 COPY . .
 
-RUN go build -o ./../../producer cmd/producer/main.go
+RUN go build -o ./../../producer cmd/producer/rabbitMQ/main.go
 
 CMD ["/producer"]

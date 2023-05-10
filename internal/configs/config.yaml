@@ -53,7 +53,7 @@ RabbitMQ:
   queueName: "messages"
 
 Centrifugo:
-  connAddr: "ws://centrifugo:8900/connection/websocket"
+  connAddr: "ws://localhost:8900/connection/websocket"
   channelName: "channel"
 
 

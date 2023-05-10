@@ -22,7 +22,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o user cmd/user/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o user cmd/user/main.go
 
 FROM scratch
 

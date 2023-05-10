@@ -22,7 +22,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o consumer cmd/consumer/rabbitMQ/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o consumer cmd/consumer/rabbitMQ/main.go
 
 FROM scratch
 

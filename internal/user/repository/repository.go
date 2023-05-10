@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -22,75 +21,91 @@ type repository struct {
 }
 
 func (r repository) DeleteUserById(ctx context.Context, userID uint64) error {
-	rows, err := r.db.Query("DELETE FROM profile WHERE id=$1", userID)
-	defer rows.Close()
-	if errors.Is(err, sql.ErrNoRows) {
-		return myErrors.ErrUserNotFound
+	_, err := r.db.ExecContext(ctx, "DELETE FROM profile WHERE id=$1", userID)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return myErrors.ErrUserNotFound
+		}
+
+		return err
 	}
 
-	return err
+	return nil
 }
 
 func (r repository) GetUserById(ctx context.Context, userID uint64) (model.AuthorizedUser, error) {
 	var user model.AuthorizedUser
-	err := r.db.Get(&user, "SELECT * FROM profile WHERE id=$1", userID)
+	err := r.db.GetContext(ctx, &user, "SELECT * FROM profile WHERE id=$1", userID)
 
-	if errors.Is(err, sql.ErrNoRows) {
-		return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+		}
+
+		return model.AuthorizedUser{}, err
 	}
 
-	return user, err
+	return user, nil
 }
 
 func (r repository) GetUserByEmail(ctx context.Context, email string) (model.AuthorizedUser, error) {
 	var user model.AuthorizedUser
-	err := r.db.Get(&user, "SELECT * FROM profile WHERE email=$1", email)
+	err := r.db.GetContext(ctx, &user, "SELECT * FROM profile WHERE email=$1", email)
 
-	if errors.Is(err, sql.ErrNoRows) {
-		return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+		}
+
+		return model.AuthorizedUser{}, err
 	}
 
 	return user, err
 }
 
 func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
-	var contacts []model.UserContact
-	err := r.db.Select(&contacts, "SELECT * FROM user_contacts WHERE id_user=$1", userID)
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
 
-	if errors.Is(err, sql.ErrNoRows) {
-		return []model.AuthorizedUser{}, myErrors.ErrUserNotFound
+	var contacts []model.UserContact
+	err = r.db.SelectContext(ctx, &contacts, "SELECT * FROM user_contacts WHERE id_user=$1", userID)
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
 	}
 
 	var contactsInfo []model.AuthorizedUser
 	for _, contact := range contacts {
 		contactInfo, err := r.GetUserById(ctx, contact.IdContact)
 		if err != nil {
-			log.Error(err)
+			tx.Rollback()
+			return nil, err
 		}
 
 		contactsInfo = append(contactsInfo, contactInfo)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return nil, err
 	}
 
 	return contactsInfo, nil
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	result, err := r.db.Exec("UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5", user.Username, user.Nickname, user.Status, user.Password, user.Id)
-	if err != nil {
-		return model.AuthorizedUser{}, err
-	}
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5`,
+		user.Username, user.Nickname, user.Status, user.Password, user.Id)
 
-	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return model.AuthorizedUser{}, err
-	}
+		if err == sql.ErrNoRows {
+			return model.AuthorizedUser{}, myErrors.ErrChatNotFound
+		}
 
-	if rowsAffected == 0 {
-		return model.AuthorizedUser{}, err
-	}
-
-	err = r.db.Get(&user, "SELECT * FROM profile WHERE id=$1", user.Id)
-	if err != nil {
 		return model.AuthorizedUser{}, err
 	}
 
@@ -98,18 +113,16 @@ func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUse
 }
 
 func (r repository) CheckUserIsContact(ctx context.Context, contact model.UserContact) error {
-	rows, err := r.db.NamedQuery("SELECT * FROM user_contacts WHERE id_user=:id_user AND id_contact=:id_contact", contact)
-	defer rows.Close()
-	if err == nil && rows.Next() {
-		return myErrors.ErrUserIsAlreadyContact
+	_, err := r.db.ExecContext(ctx, `SELECT * FROM user_contacts WHERE id_user=$1 AND id_contact=$2`, contact.IdUser, contact.IdContact)
+	if err != nil {
+		return err
 	}
 
-	return err
+	return myErrors.ErrUserIsAlreadyContact
 }
 
 func (r repository) AddUserInContact(ctx context.Context, contact model.UserContact) error {
-	rows, err := r.db.NamedQuery("INSERT INTO user_contacts (id_user, id_contact) VALUES (:id_user, :id_contact)", contact)
-	defer rows.Close()
+	_, err := r.db.ExecContext(ctx, `INSERT INTO user_contacts (id_user, id_contact) VALUES ($1, $2)`, contact.IdUser, contact.IdContact)
 	if err != nil {
 		return err
 	}
@@ -133,8 +146,7 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	var users []model.AuthorizedUser
-	rows, err := r.db.Query("SELECT * FROM profile WHERE id != $1", userID)
-	defer rows.Close()
+	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1", userID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -143,17 +155,7 @@ func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uin
 		return nil, err
 	}
 
-	for rows.Next() {
-		var user model.AuthorizedUser
-		err := rows.Scan(&user.Id, &user.Avatar, &user.Username, &user.Nickname, &user.Email, &user.Status, &user.Password)
-		if err != nil {
-			return nil, err
-		}
-
-		users = append(users, user)
-	}
-
-	return users, err
+	return users, nil
 }
 
 func (r repository) GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error) {

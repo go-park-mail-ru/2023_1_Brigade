@@ -34,6 +34,7 @@ var (
 	ErrImageNotFound     = status.New(codes.Unknown, errors.New("изображение не найдено").Error()).Err()
 	ErrMessageNotFound   = status.New(codes.Unknown, errors.New("сообщение не найдено").Error()).Err()
 	ErrMembersNotFound   = status.New(codes.Unknown, errors.New("участники не найдены").Error()).Err()
+	ErrContactsNotFound  = status.New(codes.Unknown, errors.New("контакты не найдены").Error()).Err()
 
 	ErrInternal = errors.New("внутренняя ошибка сервера")
 )

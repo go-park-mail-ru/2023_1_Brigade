@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"project/internal/messages"
 	"project/internal/model"
+	log "github.com/sirupsen/logrus"
 	myErrors "project/internal/pkg/errors"
 )
 
@@ -92,7 +93,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 
 	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, body, id_chat, author_id, created_at) `+
 		`VALUES (:id, :body, :id_chat, :author_id, :created_at)`, message)
-
+	log.Info(err)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -102,13 +103,14 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		ChatId:    message.ChatId,
 		MessageId: message.Id,
 	})
-
+	log.Info(err)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	err = tx.Commit()
+	log.Info(err)
 	if err != nil {
 		return err
 	}

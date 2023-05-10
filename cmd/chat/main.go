@@ -92,7 +92,7 @@ func main() {
 	}
 
 	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
-	chatRepo := repositoryChat.NewChatMemoryRepository(db, imagesRepository)
+	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db, imagesRepository)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 

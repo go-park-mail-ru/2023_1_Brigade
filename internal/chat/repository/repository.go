@@ -8,77 +8,61 @@ import (
 	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
-	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 )
 
 type repository struct {
 	db *sqlx.DB
-	s3 images.Repository
 }
 
-func NewChatMemoryRepository(db *sqlx.DB, s3 images.Repository) chat.Repository {
-	return &repository{db: db, s3: s3}
+func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
+	return &repository{db: db}
 }
 
 func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
-	rows, err := r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
-	defer rows.Close()
+	_, err := r.db.ExecContext(ctx, "DELETE FROM chat_members WHERE id_chat=$1", chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrUserNotFound
 	}
 
 	return err
+
 }
 
 func (r repository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
 	var chat model.DBChat
-	rows, err := r.db.Query(`UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
-	defer rows.Close()
-
+	err := r.db.GetContext(ctx, &chat, `UPDATE chat SET title=$1 WHERE id=$2`, title, chatID)
 	if err != nil {
-		return model.DBChat{}, err
-	}
-	if rows.Next() {
-		err = rows.Scan(&chat.Id, &chat.Title, &chat.Type, &chat.Avatar)
-		if err != nil {
-			return model.DBChat{}, err
+		if err == sql.ErrNoRows {
+			return model.DBChat{}, myErrors.ErrChatNotFound
 		}
+		return model.DBChat{}, err
 	}
 
 	return chat, nil
 }
 
 func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]model.ChatMembers, error) {
-	var chat []model.ChatMembers
-	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_member=$1", userID)
-	defer rows.Close()
+	var chatMembers []model.ChatMembers
+	err := r.db.SelectContext(ctx, &chatMembers, "SELECT * FROM chat_members WHERE id_member=$1", userID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, myErrors.ErrChatNotFound
 		}
+
 		return nil, err
 	}
 
-	for rows.Next() {
-		var memberChat model.ChatMembers
-		err := rows.Scan(&memberChat.ChatId, &memberChat.MemberId)
-		if err != nil {
-			return nil, err
-		}
-		chat = append(chat, memberChat)
-	}
+	return chatMembers, nil
 
-	return chat, err
 }
 
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
 	var chatMembers []model.ChatMembers
-	rows, err := r.db.Query("SELECT * FROM chat_members WHERE id_chat=$1", chatID)
-	defer rows.Close()
+	err := r.db.SelectContext(ctx, &chatMembers, "SELECT * FROM chat_members WHERE id_chat=$1", chatID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -87,17 +71,7 @@ func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) (
 		return nil, err
 	}
 
-	for rows.Next() {
-		var chatMember model.ChatMembers
-		err := rows.Scan(&chatMember.ChatId, &chatMember.MemberId)
-		if err != nil {
-			return nil, err
-		}
-
-		chatMembers = append(chatMembers, chatMember)
-	}
-
-	return chatMembers, err
+	return chatMembers, nil
 }
 
 func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
@@ -130,61 +104,76 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
-	rows, err := r.db.Query(`INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
-		chat.MasterID, chat.Type, chat.Avatar, chat.Title)
-	defer rows.Close()
-
+	tx, err := r.db.BeginTxx(ctx, nil)
 	if err != nil {
 		return model.Chat{}, err
 	}
-	if rows.Next() {
-		err = rows.Scan(&chat.Id)
+
+	var chatDB model.DBChat
+	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
+		chat.MasterID, chat.Type, "", chat.Title).Scan(&chatDB.Id)
+	if err != nil {
+		tx.Rollback()
+		return model.Chat{}, err
+	}
+	chat.Id = chatDB.Id
+
+	for _, members := range chat.Members {
+		err = r.AddUserInChatDB(ctx, chat.Id, members.Id)
 		if err != nil {
+			tx.Rollback()
 			return model.Chat{}, err
 		}
 	}
 
-	for _, members := range chat.Members {
-		err = r.AddUserInChatDB(context.TODO(), chat.Id, members.Id)
-		if err != nil {
-			return model.Chat{}, err
-		}
+	err = tx.Commit()
+	if err != nil {
+		return model.Chat{}, err
 	}
 
 	return chat, nil
 }
 
 func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
-	rows, err := r.db.Query("DELETE FROM chat_messages WHERE id_chat=$1", chatID)
-	defer rows.Close()
-	if errors.Is(err, sql.ErrNoRows) {
-		return myErrors.ErrChatNotFound
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
 	}
 
-	rows, err = r.db.Query("DELETE FROM chat_members WHERE id_chat=$1", chatID)
-	defer rows.Close()
-	if errors.Is(err, sql.ErrNoRows) {
-		return myErrors.ErrChatNotFound
+	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_messages WHERE id_chat=$1", chatID)
+	if err != nil {
+		tx.Rollback()
+		return err
 	}
 
-	rows, err = r.db.Query("DELETE FROM message WHERE id_chat=$1", chatID)
-	defer rows.Close()
-	if errors.Is(err, sql.ErrNoRows) {
-		return myErrors.ErrMessageNotFound
+	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	if err != nil {
+		tx.Rollback()
+		return err
 	}
 
-	rows, err = r.db.Query("DELETE FROM chat WHERE id=$1", chatID)
-	defer rows.Close()
-	if errors.Is(err, sql.ErrNoRows) {
-		return myErrors.ErrChatNotFound
+	_, err = r.db.ExecContext(ctx, "DELETE FROM message WHERE id_chat=$1", chatID)
+	if err != nil {
+		tx.Rollback()
+		return err
 	}
 
-	return err
+	_, err = r.db.ExecContext(ctx, "DELETE FROM chat WHERE id=$1", chatID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID uint64) error {
-	rows, err := r.db.Query("INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
-	defer rows.Close()
+	_, err := r.db.ExecContext(ctx, "INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
 	if err != nil {
 		return err
 	}
@@ -212,7 +201,21 @@ func (r repository) UpdateChatAvatar(ctx context.Context, url string, chatID uin
 }
 
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
-	return nil, nil
+	var groups []model.Chat
+	err := r.db.SelectContext(ctx, &groups, `
+		SELECT id, type, avatar, title 
+		FROM chat WHERE type != $1 AND title ILIKE $2 AND 
+		EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
+		configs.Chat, "%"+string+"%", userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, myErrors.ErrChatNotFound
+		}
+
+		return nil, err
+	}
+
+	return groups, nil
 }
 
 func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {

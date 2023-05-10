@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/chat"
 	"project/internal/configs"
 	"project/internal/model"
@@ -75,32 +74,24 @@ func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) (
 }
 
 func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
-	var chat []model.Chat
-	rows, err := r.db.Query("SELECT * FROM chat WHERE id=$1", chatID)
-	defer rows.Close()
+	var chat model.DBChat
+	err := r.db.GetContext(ctx, &chat, "SELECT * FROM chat WHERE id=$1", chatID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return model.Chat{}, myErrors.ErrChatNotFound
+			return model.Chat{}, myErrors.ErrMembersNotFound
 		}
+
 		return model.Chat{}, err
 	}
 
-	for rows.Next() {
-		var chatFromDB model.Chat
-		rows.Scan(&chatFromDB.Id, &chatFromDB.MasterID, &chatFromDB.Type, &chatFromDB.Avatar, &chatFromDB.Title)
-		if err != nil {
-			return model.Chat{}, err
-		}
-
-		chat = append(chat, chatFromDB)
-	}
-	log.Info(chat)
-	if len(chat) == 0 {
-		return model.Chat{}, nil
-	}
-
-	return chat[0], nil
+	return model.Chat{
+		Id:       chat.Id,
+		MasterID: chat.MasterID,
+		Type:     chat.Type,
+		Title:    chat.Title,
+		Avatar:   chat.Avatar,
+	}, nil
 }
 
 func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat, error) {
@@ -220,7 +211,7 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 
 func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {
 	var channels []model.Chat
-	err := r.db.Select(&channels, `
+	err := r.db.SelectContext(ctx, &channels, `
 		SELECT id, type, avatar, title 
 		FROM chat WHERE type = $1 AND title ILIKE $2 AND 
 		NOT EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,

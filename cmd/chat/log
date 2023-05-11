@@ -120,3 +120,8 @@ signal: killed
 ../../internal/chat/repository/repository.go:8:2: imported and not used: "github.com/sirupsen/logrus" as log
 note: module requires Go 1.19
 time="2023-05-10T22:20:05Z" level=info msg="chat: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-11T08:35:37Z" level=info msg="chat: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-11T08:35:37Z" level=error msg="listen tcp 127.0.0.1:9091: bind: address already in use" func=main.main.func2 file="/home/ubuntu/2023_1_Brigade/cmd/chat/main.go:115"
+time="2023-05-11T08:35:37Z" level=error msg="listen tcp 127.0.0.1:9000: bind: address already in use" func=main.main file="/home/ubuntu/2023_1_Brigade/cmd/chat/main.go:123"
+signal: killed
+time="2023-05-11T08:36:02Z" level=info msg="chat: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"

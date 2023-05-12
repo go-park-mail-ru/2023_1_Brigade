@@ -15,3 +15,5 @@ time="2023-05-06T23:03:50Z" level=error msg="listen tcp 127.0.0.1:9092: bind: ad
 time="2023-05-09T09:20:17Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
 time="2023-05-10T21:15:57Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
 time="2023-05-11T08:37:47Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+signal: killed
+time="2023-05-11T17:27:22Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"

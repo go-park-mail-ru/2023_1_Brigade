@@ -36,27 +36,25 @@ func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, er
 }
 
 func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
-	oldUser := model.AuthorizedUser{
-		Id:       userID,
-		Username: updateUser.Username,
-		Nickname: updateUser.Nickname,
-		Status:   updateUser.Status,
-		Password: updateUser.CurrentPassword,
-	}
-
-	password := security.Hash([]byte(oldUser.Password))
-	oldUser.Password = password
+	currentPassword := security.Hash([]byte(updateUser.CurrentPassword))
 
 	userFromDB, err := u.userRepo.GetUserById(context.Background(), userID)
 	if err != nil {
 		return model.User{}, err
 	}
 
-	if userFromDB.Password != password {
+	if userFromDB.Password != currentPassword {
 		return model.User{}, myErrors.ErrIncorrectPassword
 	}
-	newPassword := security.Hash([]byte(oldUser.Password))
-	oldUser.Password = newPassword
+
+	newPassword := security.Hash([]byte(updateUser.NewPassword))
+	oldUser := model.AuthorizedUser{
+		Id:       userID,
+		Username: updateUser.Username,
+		Nickname: updateUser.Nickname,
+		Status:   updateUser.Status,
+		Password: newPassword,
+	}
 
 	user, err := u.userRepo.UpdateUserById(context.Background(), oldUser)
 	return model_conversion.FromAuthorizedUserToUser(user), err

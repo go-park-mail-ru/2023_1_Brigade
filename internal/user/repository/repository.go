@@ -103,7 +103,7 @@ func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUse
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return model.AuthorizedUser{}, myErrors.ErrChatNotFound
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
 		}
 
 		return model.AuthorizedUser{}, err

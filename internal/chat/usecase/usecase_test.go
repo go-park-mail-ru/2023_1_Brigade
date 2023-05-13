@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	chatMock "project/internal/chat/repository/mocks"
 	"project/internal/configs"
+	imagesMock "project/internal/images/usecase/mocks"
 	messageMock "project/internal/messages/repository/mocks"
 	"project/internal/model"
 	"project/internal/pkg/model_conversion"
@@ -39,9 +40,10 @@ func Test_CreateChat_OK(t *testing.T) {
 	chatRepository := chatMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	messagesRepository := messageMock.NewMockRepository(ctl)
-	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
-	chatRepository.EXPECT().CreateChat(context.Background(), createdChat).Return(expectedChat, nil).Times(1)
+	chatRepository.EXPECT().CreateChat(context.TODO(), createdChat).Return(expectedChat, nil).Times(1)
 
 	chat, err := usecase.CreateChat(context.TODO(), newChat, 1)
 
@@ -56,7 +58,8 @@ func Test_DeleteChat_OK(t *testing.T) {
 	chatRepository := chatMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	messagesRepository := messageMock.NewMockRepository(ctl)
-	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
 	chatRepository.EXPECT().DeleteChatById(context.Background(), uint64(1)).Return(nil).Times(1)
 
@@ -66,9 +69,12 @@ func Test_DeleteChat_OK(t *testing.T) {
 }
 
 func Test_GetChat_OK(t *testing.T) {
+	chatID := uint64(1)
+	userID := uint64(1)
 	expectedChat := model.Chat{
-		Id:    1,
-		Title: "",
+		Id:      chatID,
+		Title:   "",
+		Members: []model.User{{}},
 	}
 
 	ctl := gomock.NewController(t)
@@ -77,13 +83,20 @@ func Test_GetChat_OK(t *testing.T) {
 	chatRepository := chatMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	messagesRepository := messageMock.NewMockRepository(ctl)
-	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
-	chatRepository.EXPECT().GetChatById(context.Background(), uint64(1)).Return(expectedChat, nil).Times(1)
-	chatRepository.EXPECT().GetChatMembersByChatId(context.Background(), uint64(1)).Return([]model.ChatMembers{}, nil).Times(1)
-	messagesRepository.EXPECT().GetChatMessages(context.Background(), uint64(1)).Times(1)
+	chatRepository.EXPECT().GetChatById(context.TODO(), chatID).Return(expectedChat, nil).Times(1)
+	chatRepository.EXPECT().GetChatMembersByChatId(context.TODO(), chatID).Return([]model.ChatMembers{
+		{
+			ChatId:   chatID,
+			MemberId: userID,
+		},
+	}, nil).Times(1)
+	userRepository.EXPECT().GetUserById(context.TODO(), userID).Return(model.AuthorizedUser{}, nil).Times(1)
+	messagesRepository.EXPECT().GetChatMessages(context.TODO(), chatID).Times(1)
 
-	chat, err := usecase.GetChatById(context.TODO(), uint64(1))
+	chat, err := usecase.GetChatById(context.TODO(), chatID, userID)
 
 	require.NoError(t, err)
 	require.Equal(t, chat, expectedChat)
@@ -122,7 +135,8 @@ func Test_GetListUserChats_OK(t *testing.T) {
 	chatRepository := chatMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	messagesRepository := messageMock.NewMockRepository(ctl)
-	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
 	chatRepository.EXPECT().GetChatsByUserId(context.Background(), uint64(1)).Return(userChats, nil).Times(1)
 	chatRepository.EXPECT().GetChatById(context.Background(), uint64(1)).Return(chat, nil).Times(1)
@@ -175,7 +189,8 @@ func Test_EditChat_OK(t *testing.T) {
 	chatRepository := chatMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	messagesRepository := messageMock.NewMockRepository(ctl)
-	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
 	chatRepository.EXPECT().UpdateChatById(context.TODO(), editChat.Title, editChat.Id).Return(dbChat, nil).Times(1)
 	chatRepository.EXPECT().DeleteChatMembers(context.TODO(), editChat.Id).Return(nil).Times(1)
@@ -191,6 +206,7 @@ func Test_EditChat_OK(t *testing.T) {
 
 func Test_GetSearchChatsMessagesChannels_OK(t *testing.T) {
 	userID := uint64(1)
+	chatID := uint64(1)
 	string := "ba"
 	expectedChats := model.FoundedChatsMessagesChannels{}
 
@@ -200,11 +216,13 @@ func Test_GetSearchChatsMessagesChannels_OK(t *testing.T) {
 	chatRepository := chatMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	messagesRepository := messageMock.NewMockRepository(ctl)
-	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
 	chatRepository.EXPECT().GetSearchChannels(context.TODO(), string, userID).Return([]model.Chat{}, nil).Times(1)
-	chatRepository.EXPECT().GetChatsByUserId(context.TODO(), userID).Return([]model.ChatMembers{}, nil).Times(1)
-	userRepository.EXPECT().GetAllUsersExceptCurrentUser(context.TODO(), userID).Return([]model.AuthorizedUser{}, nil).Times(1)
+	chatRepository.EXPECT().GetSearchChats(context.TODO(), chatID, string).Return([]model.Chat{}, nil).Times(1)
+	messagesRepository.EXPECT().GetSearchMessages(context.TODO(), chatID, string).Return([]model.Message{}, nil).Times(1)
+	userRepository.EXPECT().GetSearchUsers(context.TODO(), string).Return([]model.AuthorizedUser{}, nil).Times(1)
 
 	chats, err := usecase.GetSearchChatsMessagesChannels(context.TODO(), userID, string)
 

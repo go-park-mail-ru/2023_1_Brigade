@@ -28,8 +28,8 @@ func (c chatServiceGRPCClient) CheckExistUserInChat(ctx context.Context, chat mo
 	return err
 }
 
-func (c chatServiceGRPCClient) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
-	chat, err := c.chatClient.GetChatById(ctx, model_conversion.FromChatIDToProtoChatID(chatID))
+func (c chatServiceGRPCClient) GetChatById(ctx context.Context, chatID uint64, userID uint64) (model.Chat, error) {
+	chat, err := c.chatClient.GetChatById(ctx, &generated.GetChatArguments{ChatID: chatID, UserID: userID})
 
 	if err != nil {
 		return model.Chat{}, err

@@ -8,6 +8,7 @@ import (
 	"project/internal/images"
 	"project/internal/model"
 	"project/internal/user"
+	"strconv"
 )
 
 type imagesHandler struct {
@@ -17,7 +18,7 @@ type imagesHandler struct {
 
 func (h imagesHandler) UploadUserAvatarsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
-	userID := session.UserId
+	userID := strconv.FormatUint(session.UserId, 10)
 
 	maxSize := int64(64 << 20)
 	err := ctx.Request().ParseMultipartForm(maxSize)

@@ -6,7 +6,6 @@ package mock_messages
 
 import (
 	context "context"
-	model "project/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -35,45 +34,16 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 	return m.recorder
 }
 
-// PullFromConsumer mocks base method.
-func (m *MockUsecase) PullFromConsumer(ctx context.Context) ([]byte, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PullFromConsumer", ctx)
-	ret0, _ := ret[0].([]byte)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// PullFromConsumer indicates an expected call of PullFromConsumer.
-func (mr *MockUsecaseMockRecorder) PullFromConsumer(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PullFromConsumer", reflect.TypeOf((*MockUsecase)(nil).PullFromConsumer), ctx)
-}
-
 // PutInProducer mocks base method.
-func (m *MockUsecase) PutInProducer(ctx context.Context, producerMessage model.ProducerMessage) error {
+func (m *MockUsecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PutInProducer", ctx, producerMessage)
+	ret := m.ctrl.Call(m, "PutInProducer", ctx, jsonWebSocketMessage)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // PutInProducer indicates an expected call of PutInProducer.
-func (mr *MockUsecaseMockRecorder) PutInProducer(ctx, producerMessage interface{}) *gomock.Call {
+func (mr *MockUsecaseMockRecorder) PutInProducer(ctx, jsonWebSocketMessage interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PutInProducer", reflect.TypeOf((*MockUsecase)(nil).PutInProducer), ctx, producerMessage)
-}
-
-// SwitchMessageType mocks base method.
-func (m *MockUsecase) SwitchMessageType(ctx context.Context, jsonWebSocketMessage []byte) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SwitchMessageType", ctx, jsonWebSocketMessage)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// SwitchMessageType indicates an expected call of SwitchMessageType.
-func (mr *MockUsecaseMockRecorder) SwitchMessageType(ctx, jsonWebSocketMessage interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SwitchMessageType", reflect.TypeOf((*MockUsecase)(nil).SwitchMessageType), ctx, jsonWebSocketMessage)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PutInProducer", reflect.TypeOf((*MockUsecase)(nil).PutInProducer), ctx, jsonWebSocketMessage)
 }

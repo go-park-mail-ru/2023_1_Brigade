@@ -5,23 +5,21 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	"project/internal/images"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/user"
 )
 
-func NewUserMemoryRepository(db *sqlx.DB, s3 images.Repository) user.Repository {
-	return &repository{db: db, s3: s3}
+func NewUserMemoryRepository(db *sqlx.DB) user.Repository {
+	return &repository{db: db}
 }
 
 type repository struct {
 	db *sqlx.DB
-	s3 images.Repository
 }
 
 func (r repository) DeleteUserById(ctx context.Context, userID uint64) error {
-	_, err := r.db.ExecContext(ctx, "DELETE FROM profile WHERE id=$1", userID)
+	_, err := r.db.QueryxContext(ctx, "DELETE FROM profile WHERE id=$1", userID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

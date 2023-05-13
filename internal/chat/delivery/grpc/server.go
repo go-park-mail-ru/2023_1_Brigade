@@ -33,8 +33,8 @@ func (c *chatsServiceGRPCServer) StartGRPCServer(listenURL string) error {
 	return c.grpcServer.Serve(lis)
 }
 
-func (c *chatsServiceGRPCServer) GetChatById(ctx context.Context, chatID *generated.ChatID) (*generated.Chat, error) {
-	chat, err := c.chatUsecase.GetChatById(ctx, model_conversion.FromProtoChatIDToChatID(chatID))
+func (c *chatsServiceGRPCServer) GetChatById(ctx context.Context, getChatArguments *generated.GetChatArguments) (*generated.Chat, error) {
+	chat, err := c.chatUsecase.GetChatById(ctx, getChatArguments.ChatID, getChatArguments.UserID)
 	if err != nil {
 		return nil, err
 	}

@@ -4,8 +4,7 @@ import (
 	"context"
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
-	"os"
-	"os/signal"
+	"project/internal/model"
 	producer "project/internal/qaas/send_messages/producer/usecase"
 )
 
@@ -29,33 +28,37 @@ func NewProducer(brokerList []string) (producer.Usecase, error) {
 	return &usecase{producer: producer}, nil
 }
 
-func (u *usecase) ProduceMessage(ctx context.Context, message []byte) error {
-	msg := &sarama.ProducerMessage{
-		Topic: "messages",
-		Value: sarama.ByteEncoder(message),
-	}
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt)
-
-	go func() {
-		for {
-			select {
-			case err := <-u.producer.Errors():
-				log.Error(err)
-				u.producer.Input() <- msg
-			case <-signals:
-				if !u.closed {
-					u.closed = true
-					u.producer.AsyncClose()
-				}
-				log.Fatal()
-			}
-		}
-	}()
-
-	u.producer.Input() <- msg
-	_ = <-u.producer.Successes()
-
+func (u *usecase) ProduceMessage(ctx context.Context, message model.ProducerMessage) error {
 	return nil
 }
+
+//func (u *usecase) ProduceMessage(ctx context.Context, message []byte) error {
+//	msg := &sarama.ProducerMessage{
+//		Topic: "messages",
+//		Value: sarama.ByteEncoder(message),
+//	}
+//
+//	signals := make(chan os.Signal, 1)
+//	signal.Notify(signals, os.Interrupt)
+//
+//	go func() {
+//		for {
+//			select {
+//			case err := <-u.producer.Errors():
+//				log.Error(err)
+//				u.producer.Input() <- msg
+//			case <-signals:
+//				if !u.closed {
+//					u.closed = true
+//					u.producer.AsyncClose()
+//				}
+//				log.Fatal()
+//			}
+//		}
+//	}()
+//
+//	u.producer.Input() <- msg
+//	_ = <-u.producer.Successes()
+//
+//	return nil
+//}

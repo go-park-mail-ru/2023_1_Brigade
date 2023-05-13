@@ -6,46 +6,60 @@ package mock_images
 
 import (
 	context "context"
-	multipart "mime/multipart"
+	io "io"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockRepostiory is a mock of Repostiory interface.
-type MockRepostiory struct {
+// MockRepository is a mock of Repository interface.
+type MockRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockRepostioryMockRecorder
+	recorder *MockRepositoryMockRecorder
 }
 
-// MockRepostioryMockRecorder is the mock recorder for MockRepostiory.
-type MockRepostioryMockRecorder struct {
-	mock *MockRepostiory
+// MockRepositoryMockRecorder is the mock recorder for MockRepository.
+type MockRepositoryMockRecorder struct {
+	mock *MockRepository
 }
 
-// NewMockRepostiory creates a new mock instance.
-func NewMockRepostiory(ctrl *gomock.Controller) *MockRepostiory {
-	mock := &MockRepostiory{ctrl: ctrl}
-	mock.recorder = &MockRepostioryMockRecorder{mock}
+// NewMockRepository creates a new mock instance.
+func NewMockRepository(ctrl *gomock.Controller) *MockRepository {
+	mock := &MockRepository{ctrl: ctrl}
+	mock.recorder = &MockRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockRepostiory) EXPECT() *MockRepostioryMockRecorder {
+func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
-// LoadImage mocks base method.
-func (m *MockRepostiory) LoadImage(ctx context.Context, file multipart.File, filename string, userID uint64) (string, error) {
+// GetImage mocks base method.
+func (m *MockRepository) GetImage(ctx context.Context, bucketName, filename string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LoadImage", ctx, file, filename, userID)
+	ret := m.ctrl.Call(m, "GetImage", ctx, bucketName, filename)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// LoadImage indicates an expected call of LoadImage.
-func (mr *MockRepostioryMockRecorder) LoadImage(ctx, file, filename, userID interface{}) *gomock.Call {
+// GetImage indicates an expected call of GetImage.
+func (mr *MockRepositoryMockRecorder) GetImage(ctx, bucketName, filename interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadImage", reflect.TypeOf((*MockRepostiory)(nil).LoadImage), ctx, file, filename, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetImage", reflect.TypeOf((*MockRepository)(nil).GetImage), ctx, bucketName, filename)
+}
+
+// UploadImage mocks base method.
+func (m *MockRepository) UploadImage(ctx context.Context, file io.Reader, bucketName, filename string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UploadImage", ctx, file, bucketName, filename)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UploadImage indicates an expected call of UploadImage.
+func (mr *MockRepositoryMockRecorder) UploadImage(ctx, file, bucketName, filename interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UploadImage", reflect.TypeOf((*MockRepository)(nil).UploadImage), ctx, file, bucketName, filename)
 }

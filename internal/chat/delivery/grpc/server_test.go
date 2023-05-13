@@ -23,6 +23,7 @@ func TestServer_GetChatByID_OK(t *testing.T) {
 	chatsService := NewChatsServiceGRPCServer(grpcServer, chatUsecase)
 
 	chatID := uint64(1)
+	userID := uint64(1)
 
 	expectedChat := model.Chat{
 		Id:    1,
@@ -39,9 +40,9 @@ func TestServer_GetChatByID_OK(t *testing.T) {
 		Messages: []model.Message{},
 	}
 
-	chatUsecase.EXPECT().GetChatById(context.TODO(), chatID).Return(expectedChat, nil).Times(1)
+	chatUsecase.EXPECT().GetChatById(context.TODO(), chatID, userID).Return(expectedChat, nil).Times(1)
 
-	chat, err := chatsService.GetChatById(context.TODO(), model_conversion.FromChatIDToProtoChatID(1))
+	chat, err := chatsService.GetChatById(context.TODO(), &protobuf.GetChatArguments{ChatID: chatID, UserID: userID})
 
 	require.NoError(t, err)
 	require.Equal(t, expectedChat, model_conversion.FromProtoChatToChat(chat))

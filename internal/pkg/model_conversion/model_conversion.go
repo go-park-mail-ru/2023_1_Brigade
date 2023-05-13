@@ -85,18 +85,6 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 }
 
 func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
-	//layout := "2023-04-30 20:28:57.465635051 +0300 MSK m=+0.001514907"
-	//time, err := time.Parse(time.Now().String(), message.CreatedAt)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//str := message.CreatedAt
-	////layout := "2023-04-30 20:35:39.45856491 +0300 MSK m=+0.001436522"
-	//time, err := time.Parse(time.RFC3339, str)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
 	return model.ProducerMessage{
 		Id:         message.Id,
 		Type:       message.Type,
@@ -104,7 +92,7 @@ func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage
 		AuthorId:   message.AuthorId,
 		ChatID:     message.ChatId,
 		ReceiverID: message.ReceiverID,
-		CreatedAt:  time.Now(),
+		CreatedAt:  time.Time{},
 	}
 }
 
@@ -121,18 +109,12 @@ func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *p
 }
 
 func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
-	//layout := "2006-01-02 15:04:05.000000 -0700 UTC"
-	//time, err := time.Parse(layout, message.CreatedAt)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-
 	return model.Message{
 		Id:        message.Id,
 		Body:      message.Body,
 		AuthorId:  message.AuthorId,
 		ChatId:    message.ChatId,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Time{},
 	}
 }
 

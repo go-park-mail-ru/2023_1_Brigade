@@ -5,11 +5,14 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	authUserMock "project/internal/auth/user/repository/mocks"
+	"project/internal/configs"
+	imagesMock "project/internal/images/usecase/mocks"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
 	userMock "project/internal/user/repository/mocks"
+	"strconv"
 	"testing"
 )
 
@@ -21,6 +24,9 @@ type testUserCase struct {
 
 func Test_Signup_OK(t *testing.T) {
 	hashedPassword := security.Hash([]byte("password"))
+	filename := strconv.FormatUint(1, 10)
+	url := "https://vk.com/avatars/1"
+	ctx := context.TODO()
 
 	user := model.RegistrationUser{
 		Nickname: "marcussss",
@@ -40,7 +46,7 @@ func Test_Signup_OK(t *testing.T) {
 	test := testUserCase{
 		expectedUser: model.AuthorizedUser{
 			Id:       1,
-			Avatar:   "",
+			Avatar:   url,
 			Nickname: "marcussss",
 			Email:    "marcussss@gmail.com",
 			Status:   "Привет, я использую технограм!",
@@ -55,12 +61,17 @@ func Test_Signup_OK(t *testing.T) {
 
 	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
-	usecase := NewAuthUserUsecase(authRepository, userRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewAuthUserUsecase(authRepository, userRepository, imagesUsecase)
 
-	authRepository.EXPECT().CheckExistEmail(context.Background(), user.Email).Return(test.expectedError).Times(1)
-	authRepository.EXPECT().CreateUser(context.Background(), hashedUser).Return(test.expectedUser, nil).Times(1)
+	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(test.expectedError).Times(1)
+	authRepository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, nil).Times(1)
+	imagesUsecase.EXPECT().UploadGeneratedImage(ctx, configs.User_avatars_bucket, filename, string(test.expectedUser.Nickname[0])).
+		Return(nil).Times(1)
+	imagesUsecase.EXPECT().GetImage(ctx, configs.User_avatars_bucket, filename).Return(url, nil).Times(1)
+	authRepository.EXPECT().UpdateUserAvatar(ctx, url, test.expectedUser.Id).Return(test.expectedUser, nil).Times(1)
 
-	myUser, err := usecase.Signup(context.TODO(), user)
+	myUser, err := usecase.Signup(ctx, user)
 
 	require.NoError(t, err)
 	require.Equal(t, model_conversion.FromAuthorizedUserToUser(test.expectedUser), myUser, test.name)
@@ -68,6 +79,7 @@ func Test_Signup_OK(t *testing.T) {
 
 func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 	hashedPassword := security.Hash([]byte("password"))
+	ctx := context.TODO()
 
 	user := model.RegistrationUser{
 		Nickname: "marcussss",
@@ -92,15 +104,17 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 
 	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
-	usecase := NewAuthUserUsecase(authRepository, userRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewAuthUserUsecase(authRepository, userRepository, imagesUsecase)
 
-	authRepository.EXPECT().CheckExistEmail(context.Background(), user.Email).Return(nil).Times(1)
-	_, err := usecase.Signup(context.TODO(), user)
+	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(nil).Times(1)
+	_, err := usecase.Signup(ctx, user)
 	require.Error(t, err, test.expectedError)
 }
 
 func Test_Login_OK(t *testing.T) {
 	hashedPassword := security.Hash([]byte("password"))
+	ctx := context.TODO()
 
 	user := model.LoginUser{
 		Email:    "marcussss@gmail.com",
@@ -124,13 +138,14 @@ func Test_Login_OK(t *testing.T) {
 
 	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
-	usecase := NewAuthUserUsecase(authRepository, userRepository)
+	imagesUsecase := imagesMock.NewMockUsecase(ctl)
+	usecase := NewAuthUserUsecase(authRepository, userRepository, imagesUsecase)
 
-	authRepository.EXPECT().CheckExistEmail(context.Background(), user.Email).Return(nil).Times(1)
-	authRepository.EXPECT().CheckCorrectPassword(context.Background(), user.Email, hashedPassword).Return(nil).Times(1)
-	userRepository.EXPECT().GetUserByEmail(context.Background(), user.Email).Return(test.expectedUser, test.expectedError).Times(1)
+	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(nil).Times(1)
+	authRepository.EXPECT().CheckCorrectPassword(ctx, user.Email, hashedPassword).Return(nil).Times(1)
+	userRepository.EXPECT().GetUserByEmail(ctx, user.Email).Return(test.expectedUser, test.expectedError).Times(1)
 
-	myUser, err := usecase.Login(context.TODO(), user)
+	myUser, err := usecase.Login(ctx, user)
 	require.NoError(t, err)
 	require.Equal(t, myUser, model_conversion.FromAuthorizedUserToUser(test.expectedUser), test.name)
 }

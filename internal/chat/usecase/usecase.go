@@ -36,7 +36,7 @@ func (u usecase) CheckExistUserInChat(ctx context.Context, chat model.Chat, user
 	return nil
 }
 
-func (u usecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, error) {
+func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) (model.Chat, error) {
 	chat, err := u.chatRepo.GetChatById(ctx, chatID)
 	if err != nil {
 		return model.Chat{}, err
@@ -45,6 +45,18 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64) (model.Chat, er
 	chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chatID)
 	if err != nil {
 		return model.Chat{}, err
+	}
+
+	userInChat := false
+	for _, chatMember := range chatMembers {
+		if chatMember.MemberId == userID {
+			userInChat = true
+			continue
+		}
+	}
+
+	if !userInChat {
+		return model.Chat{}, myErrors.ErrNotChatAccess
 	}
 
 	var members []model.User

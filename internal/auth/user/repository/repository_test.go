@@ -35,7 +35,7 @@ func TestPostgres_CheckExistUserByEmail_True(t *testing.T) {
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistEmail(context.Background(), inputEmail)
+	err = repo.CheckExistEmail(context.TODO(), inputEmail)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -65,7 +65,7 @@ func TestPostgres_CheckExistUserByEmail_False(t *testing.T) {
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistEmail(context.Background(), inputEmail)
+	err = repo.CheckExistEmail(context.TODO(), inputEmail)
 	require.Error(t, err, myErrors.ErrEmailNotFound)
 
 	err = mock.ExpectationsWereMet()
@@ -95,7 +95,7 @@ func TestPostgres_CheckExistUserByUsername_True(t *testing.T) {
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistUsername(context.Background(), username)
+	err = repo.CheckExistUsername(context.TODO(), username)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -125,7 +125,7 @@ func TestPostgres_CheckExistUserByUsername_False(t *testing.T) {
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckExistUsername(context.Background(), username)
+	err = repo.CheckExistUsername(context.TODO(), username)
 	require.Error(t, err, myErrors.ErrUsernameNotFound)
 
 	err = mock.ExpectationsWereMet()
@@ -156,7 +156,7 @@ func TestPostgres_CheckCorrectPassword_True(t *testing.T) {
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckCorrectPassword(context.Background(), email, password)
+	err = repo.CheckCorrectPassword(context.TODO(), email, password)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -187,7 +187,7 @@ func TestPostgres_CheckCorrectPassword_False(t *testing.T) {
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthUserMemoryRepository(dbx)
 
-	err = repo.CheckCorrectPassword(context.Background(), email, password)
+	err = repo.CheckCorrectPassword(context.TODO(), email, password)
 	require.Error(t, err, myErrors.ErrIncorrectPassword)
 
 	err = mock.ExpectationsWereMet()

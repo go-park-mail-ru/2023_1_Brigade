@@ -167,6 +167,21 @@ func (mr *MockRepositoryMockRecorder) GetSearchChats(ctx, userID, string interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchChats", reflect.TypeOf((*MockRepository)(nil).GetSearchChats), ctx, userID, string)
 }
 
+// UpdateChatAvatar mocks base method.
+func (m *MockRepository) UpdateChatAvatar(ctx context.Context, url string, chatID uint64) (model.Chat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateChatAvatar", ctx, url, chatID)
+	ret0, _ := ret[0].(model.Chat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateChatAvatar indicates an expected call of UpdateChatAvatar.
+func (mr *MockRepositoryMockRecorder) UpdateChatAvatar(ctx, url, chatID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateChatAvatar", reflect.TypeOf((*MockRepository)(nil).UpdateChatAvatar), ctx, url, chatID)
+}
+
 // UpdateChatById mocks base method.
 func (m *MockRepository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
 	m.ctrl.T.Helper()

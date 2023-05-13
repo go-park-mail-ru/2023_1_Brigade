@@ -25,16 +25,15 @@ type chatHandler struct {
 
 func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 	chatID, err := strconv.ParseUint(ctx.Param("chatID"), 10, 64)
-
 	if err != nil {
 		return err
 	}
 
-	chat, err := u.chatUsecase.GetChatById(context.TODO(), chatID)
-	if err != nil {
-		return err
-	}
 	session := ctx.Get("session").(model.Session)
+	chat, err := u.chatUsecase.GetChatById(context.TODO(), chatID, session.UserId)
+	if err != nil {
+		return err
+	}
 
 	if chat.Type == configs.Chat {
 		if len(chat.Members) > 0 {

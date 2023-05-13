@@ -109,13 +109,27 @@ func (mr *MockRepositoryMockRecorder) GetMessageById(ctx, messageID interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMessageById", reflect.TypeOf((*MockRepository)(nil).GetMessageById), ctx, messageID)
 }
 
-// InsertMessageInDB mocks base method.
-func (m *MockRepository) InsertMessageInDB(ctx context.Context, message model.Message) (model.Message, error) {
+// GetSearchMessages mocks base method.
+func (m *MockRepository) GetSearchMessages(ctx context.Context, userID uint64, string string) ([]model.Message, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "InsertMessageInDB", ctx, message)
-	ret0, _ := ret[0].(model.Message)
+	ret := m.ctrl.Call(m, "GetSearchMessages", ctx, userID, string)
+	ret0, _ := ret[0].([]model.Message)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
+}
+
+// GetSearchMessages indicates an expected call of GetSearchMessages.
+func (mr *MockRepositoryMockRecorder) GetSearchMessages(ctx, userID, string interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSearchMessages", reflect.TypeOf((*MockRepository)(nil).GetSearchMessages), ctx, userID, string)
+}
+
+// InsertMessageInDB mocks base method.
+func (m *MockRepository) InsertMessageInDB(ctx context.Context, message model.Message) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InsertMessageInDB", ctx, message)
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // InsertMessageInDB indicates an expected call of InsertMessageInDB.

@@ -30,6 +30,11 @@ message CreateChat {
   repeated uint64 Members = 3;
 }
 
+message GetChatArguments {
+  uint64 ChatID = 1;
+  uint64 UserID = 2;
+}
+
 message ChatID {
   uint64 ChatID = 1;
 }

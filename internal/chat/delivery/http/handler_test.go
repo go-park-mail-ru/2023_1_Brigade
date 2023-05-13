@@ -68,7 +68,7 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	ctx := e.NewContext(r, w)
-	ctx.Set("session", model.Session{})
+	ctx.Set("session", model.Session{UserId: uint64(1)})
 	ctx.SetParamNames("chatID")
 	ctx.SetParamValues("1")
 
@@ -77,7 +77,7 @@ func TestHandlers_GetChat_OK(t *testing.T) {
 	userUsecase := userMock.NewMockUsecase(ctl)
 	handler := NewChatHandler(e, chatUsecase, userUsecase)
 
-	chatUsecase.EXPECT().GetChatById(context.TODO(), uint64(1)).Return(chat, nil).Times(1)
+	chatUsecase.EXPECT().GetChatById(context.TODO(), uint64(1), uint64(1)).Return(chat, nil).Times(1)
 
 	err := handler.GetChatHandler(ctx)
 

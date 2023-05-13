@@ -6,7 +6,7 @@ import (
 )
 
 type Usecase interface {
-	GetChatById(ctx context.Context, chatID uint64) (model.Chat, error)
+	GetChatById(ctx context.Context, chatID uint64, userID uint64) (model.Chat, error)
 	EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error)
 	CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error)
 	DeleteChatById(ctx context.Context, chatID uint64) error

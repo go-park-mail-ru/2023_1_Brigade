@@ -21,35 +21,17 @@ type testUserCase struct {
 func Test_GetUserById(t *testing.T) {
 	tests := []testUserCase{
 		{
-			expectedUser: model.AuthorizedUser{
-				Id:       1,
-				Username: "marcussss",
-				Email:    "marcussss@gmail.com",
-				Status:   "cool",
-				Password: "password",
-			},
+			expectedUser:  model.AuthorizedUser{},
 			expectedError: myErrors.ErrUserIsAlreadyCreated,
 			name:          "Successfull getting user",
 		},
 		{
-			expectedUser: model.AuthorizedUser{
-				Id:       1,
-				Username: "marcussss",
-				Email:    "marcussss@gmail.com",
-				Status:   "cool",
-				Password: "password",
-			},
+			expectedUser:  model.AuthorizedUser{},
 			expectedError: myErrors.ErrUserNotFound,
 			name:          "User not found",
 		},
 		{
-			expectedUser: model.AuthorizedUser{
-				Id:       1,
-				Username: "marcussss",
-				Email:    "marcussss@gmail.com",
-				Status:   "cool",
-				Password: "password",
-			},
+			expectedUser:  model.AuthorizedUser{},
 			expectedError: myErrors.ErrInternal,
 			name:          "Internal error",
 		},
@@ -63,11 +45,11 @@ func Test_GetUserById(t *testing.T) {
 	usecase := NewUserUsecase(userRepository, authRepository)
 
 	for _, test := range tests {
-		userRepository.EXPECT().GetUserById(context.Background(), uint64(1)).Return(test.expectedUser, test.expectedError).Times(1)
+		userRepository.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(test.expectedUser, test.expectedError).Times(1)
 		user, err := usecase.GetUserById(context.TODO(), uint64(1))
 
 		require.Error(t, err, test.expectedError)
-		require.Equal(t, user, model_conversion.FromAuthorizedUserToUser(test.expectedUser), test.name)
+		require.Equal(t, model_conversion.FromAuthorizedUserToUser(test.expectedUser), user, test.name)
 	}
 }
 

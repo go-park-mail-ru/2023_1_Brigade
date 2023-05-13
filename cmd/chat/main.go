@@ -67,7 +67,7 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	user_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+	userAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
 		Secure: config.VkCloud.Ssl,
 	})
@@ -75,7 +75,7 @@ func main() {
 		log.Error(err)
 	}
 
-	chat_avatars_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+	chatAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
 		Secure: config.VkCloud.Ssl,
 	})
@@ -83,7 +83,7 @@ func main() {
 		log.Error(err)
 	}
 
-	chat_images_client, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+	chatImagesClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
 		Secure: config.VkCloud.Ssl,
 	})
@@ -91,7 +91,7 @@ func main() {
 		log.Error(err)
 	}
 
-	imagesRepository := repositoryImages.NewImagesMemoryRepository(user_avatars_client, chat_avatars_client, chat_images_client)
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)

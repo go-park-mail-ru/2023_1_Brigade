@@ -57,12 +57,12 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	filename := strconv.FormatUint(sessionUser.Id, 10)
 	firstCharacterName := string(sessionUser.Nickname[0])
 
-	err = u.imagesUsecase.UploadGeneratedImage(ctx, configs.User_avatars_bucket, filename, firstCharacterName)
+	err = u.imagesUsecase.UploadGeneratedImage(ctx, configs.UserAvatarsBucket, filename, firstCharacterName)
 	if err != nil {
 		log.Error(err)
 	}
 
-	url, err := u.imagesUsecase.GetImage(ctx, configs.User_avatars_bucket, filename)
+	url, err := u.imagesUsecase.GetImage(ctx, configs.UserAvatarsBucket, filename)
 	if err != nil {
 		log.Error(err)
 	}

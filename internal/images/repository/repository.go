@@ -24,11 +24,11 @@ type repository struct {
 func (r repository) UploadImage(ctx context.Context, file io.Reader, bucketName string, filename string) error {
 	err := errors.New("")
 	switch bucketName {
-	case configs.User_avatars_bucket:
+	case configs.UserAvatarsBucket:
 		_, err = r.s3_user_avatars.PutObject(context.Background(), bucketName, filename, file, -1, minio.PutObjectOptions{})
-	case configs.Chat_avatars_bucket:
+	case configs.ChatAvatarsBucket:
 		_, err = r.s3_chat_avatars.PutObject(context.Background(), bucketName, filename, file, -1, minio.PutObjectOptions{})
-	case configs.Chat_images_bucket:
+	case configs.ChatImagesBucket:
 		_, err = r.s3_chat_images.PutObject(context.Background(), bucketName, filename, file, -1, minio.PutObjectOptions{})
 	}
 
@@ -41,11 +41,11 @@ func (r repository) GetImage(ctx context.Context, bucketName string, filename st
 	err := errors.New("")
 
 	switch bucketName {
-	case configs.User_avatars_bucket:
+	case configs.UserAvatarsBucket:
 		url, err = r.s3_user_avatars.PresignedGetObject(ctx, bucketName, filename, expires, nil)
-	case configs.Chat_avatars_bucket:
+	case configs.ChatAvatarsBucket:
 		url, err = r.s3_chat_avatars.PresignedGetObject(ctx, bucketName, filename, expires, nil)
-	case configs.Chat_images_bucket:
+	case configs.ChatImagesBucket:
 		url, err = r.s3_chat_images.PresignedGetObject(ctx, bucketName, filename, expires, nil)
 	}
 	if err != nil {

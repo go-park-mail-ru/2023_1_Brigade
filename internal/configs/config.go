@@ -119,6 +119,6 @@ const Create = 0
 const Edit = 1
 const Delete = 2
 
-const User_avatars_bucket = "brigade_user_avatars"
-const Chat_avatars_bucket = "brigade_chat_avatars"
-const Chat_images_bucket = "brigade_chat_images"
+const UserAvatarsBucket = "brigade_user_avatars"
+const ChatAvatarsBucket = "brigade_chat_avatars"
+const ChatImagesBucket = "brigade_chat_images"

@@ -19,9 +19,9 @@ func Test_GetChat_OK(t *testing.T) {
 
 	usecase := NewImagesUsecase(imagesRepository)
 
-	imagesRepository.EXPECT().UploadImage(context.TODO(), nil, configs.User_avatars_bucket, filename+`.png`).Return(nil).Times(1)
+	imagesRepository.EXPECT().UploadImage(context.TODO(), nil, configs.UserAvatarsBucket, filename+`.png`).Return(nil).Times(1)
 
-	err := usecase.UploadImage(context.TODO(), nil, configs.User_avatars_bucket, filename)
+	err := usecase.UploadImage(context.TODO(), nil, configs.UserAvatarsBucket, filename)
 
 	require.NoError(t, err)
 }

@@ -66,9 +66,9 @@ func Test_Signup_OK(t *testing.T) {
 
 	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(test.expectedError).Times(1)
 	authRepository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, nil).Times(1)
-	imagesUsecase.EXPECT().UploadGeneratedImage(ctx, configs.User_avatars_bucket, filename, string(test.expectedUser.Nickname[0])).
+	imagesUsecase.EXPECT().UploadGeneratedImage(ctx, configs.UserAvatarsBucket, filename, string(test.expectedUser.Nickname[0])).
 		Return(nil).Times(1)
-	imagesUsecase.EXPECT().GetImage(ctx, configs.User_avatars_bucket, filename).Return(url, nil).Times(1)
+	imagesUsecase.EXPECT().GetImage(ctx, configs.UserAvatarsBucket, filename).Return(url, nil).Times(1)
 	authRepository.EXPECT().UpdateUserAvatar(ctx, url, test.expectedUser.Id).Return(test.expectedUser, nil).Times(1)
 
 	myUser, err := usecase.Signup(ctx, user)

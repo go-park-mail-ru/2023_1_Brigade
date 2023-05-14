@@ -20,7 +20,7 @@
 c.out
 tmp.out
 
-logs/
+logs
 data
 
 monitoring/grafana/data/*

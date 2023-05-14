@@ -17,3 +17,13 @@ time="2023-05-10T21:15:57Z" level=info msg="user: starting metrics server..." fu
 time="2023-05-11T08:37:47Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
 signal: killed
 time="2023-05-11T17:27:22Z" level=info msg="user: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-14T13:30:57+03:00" level=info msg="No .env file found"
+time="2023-05-14T13:30:57+03:00" level=error msg="Yaml path not found" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:42"
+time="2023-05-14T13:30:57+03:00" level=error msg="open : no such file or directory" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:47"
+time="2023-05-14T13:30:57+03:00" level=error msg="sql: unknown driver \"\" (forgotten import?)" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:58"
+time="2023-05-14T13:30:57+03:00" level=error msg="Panic occurred" func=main.main.func1 file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:36" error="runtime error: invalid memory address or nil pointer dereference"
+time="2023-05-14T13:31:18+03:00" level=info msg="No .env file found"
+time="2023-05-14T13:31:18+03:00" level=error msg="Yaml path not found" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:42"
+time="2023-05-14T13:31:18+03:00" level=error msg="open : no such file or directory" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:47"
+time="2023-05-14T13:31:18+03:00" level=error msg="sql: unknown driver \"\" (forgotten import?)" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:58"
+time="2023-05-14T13:31:18+03:00" level=error msg="Panic occurred" func=main.main.func1 file="/home/marcussss1/2023_1_Brigade/cmd/user/main.go:36" error="runtime error: invalid memory address or nil pointer dereference"

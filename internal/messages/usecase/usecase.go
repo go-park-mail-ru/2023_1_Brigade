@@ -60,7 +60,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	}
 
 	if id == "" {
-		producerMessage.CreatedAt = createdAt
+		producerMessage.CreatedAt = createdAt.String()
 	}
 
 	switch producerMessage.Type {

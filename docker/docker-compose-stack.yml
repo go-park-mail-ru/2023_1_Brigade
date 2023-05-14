@@ -52,7 +52,7 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     volumes:
-      - ./monitoring/prometheus:/etc/prometheus
+      - ./../monitoring/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -66,13 +66,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./monitoring/grafana/data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./../monitoring/grafana/data:/var/lib/grafana
+      - ./../monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./../monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     restart: always
     networks:
       - backend-network
     depends_on:
       - prometheus
+    user: "472"
 
   node-exporter:
     hostname: node-exporter
@@ -101,7 +103,7 @@ services:
     networks:
       - sentry
     volumes:
-      - './data/sentry/redis/data:/data'
+      - './var/sentry/redis/data:/data'
 
   sentry-postgres:
     image: postgres:latest
@@ -113,7 +115,7 @@ services:
     networks:
       - sentry
     volumes:
-      - './data/sentry/postgres:/var/lib/postgresql/data'
+      - './var/sentry/postgres:/var/lib/postgresql/data'
 
   sentry-base:
     image: sentry:latest
@@ -130,7 +132,7 @@ services:
     networks:
       - sentry
     volumes:
-      - './data/sentry/sentry:/var/lib/sentry/files'
+      - './var/sentry/sentry:/var/lib/sentry/files'
 
   sentry-cron:
     image: sentry:latest
@@ -146,7 +148,7 @@ services:
     networks:
       - sentry
     volumes:
-      - './data/sentry/sentry:/var/lib/sentry/files'
+      - './var/sentry/sentry:/var/lib/sentry/files'
 
   sentry-worker:
     image: sentry:latest
@@ -162,7 +164,7 @@ services:
     networks:
       - sentry
     volumes:
-      - './data/sentry/sentry:/var/lib/sentry/files'
+      - './var/sentry/sentry:/var/lib/sentry/files'
 
 networks:
   backend-network:

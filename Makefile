@@ -1,8 +1,17 @@
-all: clean run
+all: clean run_prod
 
-.PHONY: run
-run:
-	cd docker && docker compose up -d
+.PHONY: run_stack
+run_stack:
+	cd docker && docker compose -f docker-compose-stack.yml up -d
+
+.PHONY: run_prod
+run_prod:
+	cd docker && docker compose -f docker-compose-prod.yml up -d
+
+.PHONY: run_sentry
+run_sentry: |
+	cd docker && docker compose -f docker-compose-stack.yml run --rm sentry-base config generate-secret-key
+	cd docker && docker compose -f docker-compose-stack.yml run --rm sentry-base upgrade
 
 .PHONY: clean_microservices
 clean: |

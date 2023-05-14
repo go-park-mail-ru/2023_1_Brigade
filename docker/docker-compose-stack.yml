@@ -6,9 +6,8 @@ services:
     hostname: rabbitmq
     container_name: rabbitmq
     restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=password
+    env_file:
+      - ../.env
     ports:
       - "5672:5672"
     networks:
@@ -17,10 +16,8 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres
-    environment:
-      POSTGRES_DB: "brigade"
-      POSTGRES_USER: "brigade"
-      POSTGRES_PASSWORD: "123"
+    env_file:
+      - ../.env
     ports:
       - "5432:5432"
     volumes:
@@ -55,8 +52,7 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     volumes:
-      - prometheus_data:/prometheus
-      - ./../internal/configs/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -65,13 +61,13 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=myuser
-      - GF_SECURITY_ADMIN_PASSWORD=mypassword
+    env_file:
+      - ../.env
     ports:
       - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     restart: always
     networks:
       - backend-network
@@ -112,10 +108,8 @@ services:
     container_name: sentry-postgres
     hostname: sentry-postgres
     restart: always
-    environment:
-      POSTGRES_USER: sentry
-      POSTGRES_PASSWORD: 89PsZXyRStOT2
-      POSTGRES_DB: sentry
+    env_file:
+      - ../.env
     networks:
       - sentry
     volumes:
@@ -180,5 +174,3 @@ networks:
 volumes:
   postgres_data: {}
   redis_data: {}
-  prometheus_data: {}
-  grafana_data: {}

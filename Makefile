@@ -9,13 +9,13 @@ run_local_microservices:
 #	sudo kill -9 $(sudo lsof -t -i:9004) &
 #	sudo kill -9 $(sudo lsof -t -i:9005) &
 #	sudo kill -9 $(sudo lsof -t -i:8081)
-	go run cmd/consumer/rabbitMQ/main.go >> cmd/consumer/rabbitMQ/log 2>&1 &
-	go run cmd/producer/rabbitMQ/main.go >> cmd/producer/rabbitMQ/log 2>&1 &
-	go run cmd/auth/main.go >> cmd/auth/log 2>&1 &
-	go run cmd/chat/main.go >> cmd/chat/log 2>&1 &
-	go run cmd/messages/main.go >> cmd/messages/log 2>&1 &
-	go run cmd/user/main.go >> cmd/user/log 2>&1 &
-	go run cmd/api/main.go >> cmd/api/log 2>&1 &
+	go run cmd/consumer/rabbitMQ/main.go >> logs/consumer 2>&1 &
+	go run cmd/producer/rabbitMQ/main.go >> logs/producer 2>&1 &
+	go run cmd/auth/main.go >> logs/auth 2>&1 &
+	go run cmd/chat/main.go >> logs/chat 2>&1 &
+	go run cmd/messages/main.go >> logs/messages 2>&1 &
+	go run cmd/user/main.go >> logs/user 2>&1 &
+	go run cmd/api/main.go >> logs/api 2>&1 &
 
 .PHONY: run_stack
 run_stack:

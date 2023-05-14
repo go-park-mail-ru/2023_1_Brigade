@@ -202,6 +202,18 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 		})
 	}
 
+	for ind := range chatsInListUser {
+		if chatsInListUser[ind].Type == configs.Chat {
+			if chatsInListUser[ind].Members[0].Id == userID {
+				chatsInListUser[ind].Title = chatsInListUser[ind].Members[1].Nickname
+				chatsInListUser[ind].Avatar = chatsInListUser[ind].Members[1].Avatar
+			} else {
+				chatsInListUser[ind].Title = chatsInListUser[ind].Members[0].Nickname
+				chatsInListUser[ind].Avatar = chatsInListUser[ind].Members[0].Avatar
+			}
+		}
+	}
+
 	return chatsInListUser, nil
 }
 

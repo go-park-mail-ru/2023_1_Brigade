@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
 	"project/internal/chat"
@@ -57,18 +56,6 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	listUserChats, err := u.chatUsecase.GetListUserChats(context.TODO(), session.UserId)
 	if err != nil {
 		return err
-	}
-
-	for ind := range listUserChats {
-		if listUserChats[ind].Type == configs.Chat {
-			if listUserChats[ind].Members[0].Id == session.UserId {
-				listUserChats[ind].Title = listUserChats[ind].Members[1].Nickname
-				listUserChats[ind].Avatar = listUserChats[ind].Members[1].Avatar
-			} else {
-				listUserChats[ind].Title = listUserChats[ind].Members[0].Nickname
-				listUserChats[ind].Avatar = listUserChats[ind].Members[0].Avatar
-			}
-		}
 	}
 
 	return ctx.JSON(http.StatusOK, listUserChats)
@@ -138,7 +125,7 @@ func (u chatHandler) GetChatsMessagesHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
 	string, err := url.QueryUnescape(string)
 	if err != nil {
-		log.Error(err)
+		return err
 	}
 
 	searchChats, err := u.chatUsecase.GetSearchChatsMessagesChannels(context.TODO(), session.UserId, string)

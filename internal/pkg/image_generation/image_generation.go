@@ -9,11 +9,17 @@ import (
 	"image/png"
 	"math"
 	"math/big"
+	"net/url"
 	"os"
 	"strings"
 )
 
 func GenerateAvatar(firstCharacterName string) error {
+	firstCharacterName, err := url.QueryUnescape(firstCharacterName)
+	if err != nil {
+		return err
+	}
+
 	firstCharacterName = strings.ToUpper(firstCharacterName)
 	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))
 
@@ -36,7 +42,7 @@ func GenerateAvatar(firstCharacterName string) error {
 
 	draw.Draw(img, img.Bounds(), &image.Uniform{color}, image.Point{}, draw.Src)
 
-	file, err := os.Create("avatars/background.png")
+	file, err := os.Create("../background.png")
 	if err != nil {
 		return err
 	}
@@ -46,7 +52,7 @@ func GenerateAvatar(firstCharacterName string) error {
 	}
 
 	const S = 1024
-	im, err := gg.LoadImage("avatars/background.png")
+	im, err := gg.LoadImage("../background.png")
 	if err != nil {
 		return err
 	}
@@ -55,7 +61,7 @@ func GenerateAvatar(firstCharacterName string) error {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
-	if err := dc.LoadFontFace("avatars/Go-Mono.ttf", 728); err != nil {
+	if err := dc.LoadFontFace("../Go-Mono.ttf", 728); err != nil {
 		return err
 	}
 
@@ -64,7 +70,7 @@ func GenerateAvatar(firstCharacterName string) error {
 	dc.DrawStringAnchored(firstCharacterName, S/2, S/2, 0.5, 0.5)
 	dc.Clip()
 
-	err = dc.SavePNG("avatars/background.png")
+	err = dc.SavePNG("../background.png")
 	if err != nil {
 		return err
 	}

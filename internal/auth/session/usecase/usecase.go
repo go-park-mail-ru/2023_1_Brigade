@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"project/internal/auth/session"
 	"project/internal/model"
+	"project/internal/pkg/security"
 )
 
 type usecase struct {
@@ -21,7 +22,7 @@ func (u usecase) GetSessionByCookie(ctx context.Context, cookie string) (model.S
 }
 
 func (u usecase) CreateSessionById(ctx context.Context, userID uint64) (model.Session, error) {
-	session := model.Session{UserId: userID, Cookie: uuid.New().String()}
+	session := model.Session{UserId: userID, Cookie: security.Hash([]byte(uuid.New().String()))}
 	err := u.sessionRepo.CreateSession(ctx, session)
 	return session, err
 }

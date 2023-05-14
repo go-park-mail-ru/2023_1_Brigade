@@ -32,10 +32,8 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		msg := e.Data
-
 		var producerMessage model.ProducerMessage
-		err := json.Unmarshal(msg, &producerMessage)
+		err := json.Unmarshal(e.Data, &producerMessage)
 		if err != nil {
 			log.Error(err)
 			return
@@ -47,7 +45,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 			return
 		}
 
-		err = client.WriteMessage(websocket.TextMessage, msg)
+		err = client.WriteMessage(websocket.TextMessage, e.Data)
 		if err != nil {
 			log.Error(err)
 		}
@@ -64,9 +62,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	for {
 		_, message, err := ws.ReadMessage()
-
 		if err != nil {
-			log.Error(err)
 			return err
 		}
 

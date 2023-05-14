@@ -1,0 +1,2108 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/DANILAKALASH60/rk-1/1.0.0"
+    },
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/DANILAKALASH60/231/1.0.0"
+    },
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/DANILAKALASH60/Sample/1.0.0"
+    },
+    {
+      "description": "Websocket connection",
+      "url": "ws://technogramm.com"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "home-iot-api",
+    "description": "The API for the EatBacon IOT project"
+  },
+  "paths": {
+    "/api/v1/auth": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "The user is logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nickname, email, nickname, password validity check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/logout": {
+      "delete": {
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "204": {
+            "description": "The user successfully logged out",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSuccessDeleted"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully signup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email, nick, password validity check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidNickname"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidEmail"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidPassword"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Checking whether such an email and username is registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrEmailIsAlreadyRegistred"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationForm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Сhecking the correctness of the data and logging in to the account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrUserEmailNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrIncorrectPassword"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Checking whether such an session is created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionIsAlreadyRegistred"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginForm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/settings": {
+      "get": {
+        "description": "Getting current user info and info for changes.",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such cookie or user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrUserNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Putting current user info and info for changes.",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully putting user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username, email, password, status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidUsername"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidEmail"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidPassword"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrInvalidStatus"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrIncorrectPassword"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Username is already registred",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrUsernameIsAlreadyRegistred"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutUser"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/contacts": {
+      "get": {
+        "description": "Getting current user info and info for changes.",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting user contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contacts"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userID}": {
+      "parameters": [
+        {
+          "name": "userID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "description": "Getting user info and info for changes.",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such cookie or user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrUserNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userID}/add": {
+      "parameters": [
+        {
+          "name": "userID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "post": {
+        "description": "Add user in contacts.",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully adding user in contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contacts"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such cookie or user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrUserNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The user is already a friend",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrUserIsAlreadyContact"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chats": {
+      "get": {
+        "description": "Getting chat info and info for changes.",
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserChats"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user does not have access to this chat",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrNotChatAccess"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chat or session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrChatNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully creating chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatingChatForm"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully creating chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutChatForm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chats/{chatID}": {
+      "parameters": [
+        {
+          "name": "chatID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "description": "Getting chat info and info for changes.",
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user does not have access to this chat",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrNotChatAccess"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chat or session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrChatNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "204": {
+            "description": "The chat successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatSuccessDeleted"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user does not have access to this chat",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrNotChatAccess"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User session or chat not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrChatNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/message": {
+      "post": {
+        "tags": [
+          "ws messages"
+        ],
+        "servers": [
+          {
+            "url": "ws://technogramm.com"
+          }
+        ],
+        "responses": {
+          "101": {
+            "description": "Sending message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MessageDelivered"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrNotChatAccess"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrChatNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrInternal"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SentMessage"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chats/{chatID}/add": {
+      "parameters": [
+        {
+          "name": "chatID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully added user in chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user does not have access to this chat",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrNotChatAccess"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such session or user or chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrUserNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrChatNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The user does not have access to this chat",
+            "content": {
+              "error": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrUserIsAlreadyInChat"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUsersInGroupForm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chats/search/{string}/": {
+      "parameters": [
+        {
+          "name": "string",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "description": "Getting found chats, messages.",
+        "tags": [
+          "chats"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting chats, messages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FoundedChatsMessagesChannels"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images/user/": {
+      "post": {
+        "tags": [
+          "images"
+        ],
+        "summary": "Upload an avatar current user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Avatar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The avatar successfully uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrAvatarNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images/user/images/": {
+      "post": {
+        "tags": [
+          "images"
+        ],
+        "summary": "Upload an chat avatar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Avatar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The avatar successfully uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrAvatarNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images/chat/images/": {
+      "post": {
+        "tags": [
+          "images"
+        ],
+        "summary": "Upload an chat image",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Avatar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The avatar successfully uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrAvatarNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/search/{string}/": {
+      "parameters": [
+        {
+          "name": "string",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "description": "Getting found contacts.",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully getting chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contacts"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Cookie not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrCookieNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrSessionNotFound"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/csrf": {
+      "get": {
+        "summary": "Получить CSRF токен",
+        "description": "Возвращает новый CSRF токен для защиты от CSRF-атак",
+        "responses": {
+          "200": {
+            "description": "CSRF",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CSRF"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SentMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "body": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "integer"
+          },
+          "chat_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "body": {
+            "type": "string"
+          },
+          "chat_id": {
+            "type": "integer"
+          },
+          "author_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "FoundedChatsMessagesChannels": {
+        "type": "object",
+        "properties": {
+          "founded_messages": {
+            "items": {
+              "$ref": "#/components/schemas/UserFoundedChats"
+            }
+          },
+          "founded_chats": {
+            "items": {
+              "$ref": "#/components/schemas/UserFoundedChats"
+            }
+          },
+          "founded_channels": {
+            "items": {
+              "$ref": "#/components/schemas/UserFoundedChats"
+            }
+          },
+          "founded_contacts": {
+            "items": {
+              "$ref": "#/components/schemas/Contacts"
+            }
+          }
+        }
+      },
+      "UserFoundedChats": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "last_message": {
+            "$ref": "#/components/schemas/Message"
+          },
+          "last_message_author": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "AllChatMessages": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          }
+        }
+      },
+      "AddUsersInGroupForm": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "PutChatForm": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "CreatingChatForm": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "Avatar": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string"
+          }
+        }
+      },
+      "UserChats": {
+        "type": "object",
+        "properties": {
+          "chats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatInListUser"
+            }
+          }
+        }
+      },
+      "Chat": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "master_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          }
+        }
+      },
+      "ChatInListUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "last_message": {
+            "$ref": "#/components/schemas/Message"
+          },
+          "last_message_author": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Contacts": {
+        "type": "object",
+        "properties": {
+          "contacts": {
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "username": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        },
+        "description": "Contact"
+      },
+      "PutUser": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "current_password": {
+            "type": "string"
+          },
+          "new_password": {
+            "type": "string"
+          }
+        },
+        "description": "User model"
+      },
+      "LoginForm": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "description": "Login form"
+      },
+      "RegistrationForm": {
+        "type": "object",
+        "properties": {
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "description": "Registration form"
+      },
+      "MessageDelivered": {
+        "type": "object",
+        "properties": {
+          "string": {
+            "example": "The message was successfully delivered",
+            "type": "string"
+          }
+        }
+      },
+      "CSRF": {
+        "type": "object",
+        "properties": {
+          "csrf": {
+            "type": "string"
+          }
+        },
+        "description": "CSRF"
+      },
+      "UserSuccessDeleted": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "User success deleted",
+            "type": "string"
+          }
+        }
+      },
+      "ChatSuccessDeleted": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Chat success deleted",
+            "type": "string"
+          }
+        }
+      },
+      "SessionSuccessDeleted": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Session success deleted",
+            "type": "string"
+          }
+        }
+      },
+      "ErrCookieNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Cookie not found",
+            "type": "string"
+          }
+        }
+      },
+      "ErrInvalidUsername": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Invalid username",
+            "type": "string"
+          }
+        }
+      },
+      "ErrInvalidEmail": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Invalid email",
+            "type": "string"
+          }
+        }
+      },
+      "ErrInvalidNickname": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Invalid nick",
+            "type": "string"
+          }
+        }
+      },
+      "ErrInvalidPassword": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Invalid password",
+            "type": "string"
+          }
+        }
+      },
+      "ErrInvalidStatus": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Invalid status",
+            "type": "string"
+          }
+        }
+      },
+      "ErrUserIsAlreadyContact": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "The user is already contact",
+            "type": "string"
+          }
+        }
+      },
+      "ErrEmailIsAlreadyRegistred": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "The email is already registered",
+            "type": "string"
+          }
+        }
+      },
+      "ErrUsernameIsAlreadyRegistred": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "The username is already registered",
+            "type": "string"
+          }
+        }
+      },
+      "ErrSessionIsAlreadyRegistred": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "The session is already registered",
+            "type": "string"
+          }
+        }
+      },
+      "ErrUserIsAlreadyInChat": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "The user is already in chat",
+            "type": "string"
+          }
+        }
+      },
+      "ErrUserEmailNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Incorrect email",
+            "type": "string"
+          }
+        }
+      },
+      "ErrIncorrectPassword": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Incorrect password",
+            "type": "string"
+          }
+        }
+      },
+      "ErrNotMessagesAccess": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "This user have access to this messages"
+          }
+        }
+      },
+      "ErrNotMessageAccess": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "This user have access to this message",
+            "type": "string"
+          }
+        }
+      },
+      "ErrNotChatAccess": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "This user have access to this chat",
+            "type": "string"
+          }
+        }
+      },
+      "ErrMessageNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Message not found",
+            "type": "string"
+          }
+        }
+      },
+      "ErrSessionNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Session not found",
+            "type": "string"
+          }
+        }
+      },
+      "ErrUserNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "User not found",
+            "type": "string"
+          }
+        }
+      },
+      "ErrChatNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Chat not found",
+            "type": "string"
+          }
+        }
+      },
+      "ErrAvatarNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Avatar not found",
+            "type": "string"
+          }
+        }
+      },
+      "ErrInternal": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "example": "Internal error",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

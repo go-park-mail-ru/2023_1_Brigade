@@ -47,16 +47,18 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 		return model.Chat{}, err
 	}
 
-	userInChat := false
-	for _, chatMember := range chatMembers {
-		if chatMember.MemberId == userID {
-			userInChat = true
-			continue
+	if chat.Type != configs.Channel {
+		userInChat := false
+		for _, chatMember := range chatMembers {
+			if chatMember.MemberId == userID {
+				userInChat = true
+				continue
+			}
 		}
-	}
 
-	if !userInChat {
-		return model.Chat{}, myErrors.ErrNotChatAccess
+		if !userInChat {
+			return model.Chat{}, myErrors.ErrNotChatAccess
+		}
 	}
 
 	var members []model.User

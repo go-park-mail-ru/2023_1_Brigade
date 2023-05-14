@@ -1,14 +1,15 @@
-all: clean run_prod
+.PHONY: clean_local_microservices
+clean_local_microservices:
+	sudo kill -9 $(sudo lsof -t -i:9000) &
+	sudo kill -9 $(sudo lsof -t -i:9001) &
+	sudo kill -9 $(sudo lsof -t -i:9002) &
+	sudo kill -9 $(sudo lsof -t -i:9003) &
+	sudo kill -9 $(sudo lsof -t -i:9004) &
+	sudo kill -9 $(sudo lsof -t -i:9005) &
+	sudo kill -9 $(sudo lsof -t -i:8081) &
 
 .PHONY: run_local_microservices
 run_local_microservices:
-#	sudo kill -9 $(sudo lsof -t -i:9000) &
-#	sudo kill -9 $(sudo lsof -t -i:9001) &
-#	sudo kill -9 $(sudo lsof -t -i:9002) &
-#	sudo kill -9 $(sudo lsof -t -i:9003) &
-#	sudo kill -9 $(sudo lsof -t -i:9004) &
-#	sudo kill -9 $(sudo lsof -t -i:9005) &
-#	sudo kill -9 $(sudo lsof -t -i:8081)
 	go run cmd/consumer/rabbitMQ/main.go >> logs/consumer 2>&1 &
 	go run cmd/producer/rabbitMQ/main.go >> logs/producer 2>&1 &
 	go run cmd/auth/main.go >> logs/auth 2>&1 &
@@ -29,32 +30,6 @@ run_prod:
 run_sentry: |
 	cd docker && docker compose -f docker-compose-stack.yml run --rm sentry-base config generate-secret-key
 	cd docker && docker compose -f docker-compose-stack.yml run --rm sentry-base upgrade
-
-.PHONY: clean_microservices
-clean: |
-	docker stop api || true
-	docker stop chat || true
-	docker stop user || true
-	docker stop auth || true
-	docker stop consumer || true
-	docker stop producer || true
-	docker stop messages || true
-
-	docker rm api || true
-	docker rm chat || true
-	docker rm user || true
-	docker rm auth || true
-	docker rm consumer || true
-	docker rm producer || true
-	docker rm messages || true
-
-	docker rmi docker-api || true
-	docker rmi docker-chat || true
-	docker rmi docker-user || true
-	docker rmi docker-auth || true
-	docker rmi docker-consumer || true
-	docker rmi docker-producer || true
-	docker rmi docker-messages || true
 
 .PHONY: clean_images_containers
 clean_images_containers: |

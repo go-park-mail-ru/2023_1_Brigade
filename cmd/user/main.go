@@ -9,13 +9,13 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	repositoryAuthUser "project/internal/auth/user/repository"
-	"project/internal/configs"
+	"project/internal/config"
+	repositoryAuthUser "project/internal/microservices/auth/repository"
+	serverUser "project/internal/microservices/user/delivery/grpc/server"
+	repositoryUser "project/internal/microservices/user/repository"
+	usecaseUser "project/internal/microservices/user/usecase"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
-	clientUser "project/internal/user/delivery/grpc"
-	repositoryUser "project/internal/user/repository"
-	usecaseUser "project/internal/user/usecase"
 )
 
 func init() {
@@ -47,7 +47,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)
@@ -84,7 +84,7 @@ func main() {
 		}
 	}()
 
-	service := clientUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
+	service := serverUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
 
 	err = service.StartGRPCServer(config.UsersService.Addr)
 	if err != nil {

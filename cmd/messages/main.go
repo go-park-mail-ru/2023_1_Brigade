@@ -10,13 +10,13 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
-	repositoryChat "project/internal/chat/repository"
-	"project/internal/clients/consumer"
-	"project/internal/clients/producer"
-	"project/internal/configs"
-	serverMessages "project/internal/messages/delivery/grpc"
-	repositoryMessages "project/internal/messages/repository"
-	usecaseMessages "project/internal/messages/usecase"
+	"project/internal/config"
+	repositoryChat "project/internal/microservices/chat/repository"
+	consumer "project/internal/microservices/consumer/delivery/grpc/client"
+	serverMessages "project/internal/microservices/messages/delivery/grpc/server"
+	repositoryMessages "project/internal/microservices/messages/repository"
+	usecaseMessages "project/internal/microservices/messages/usecase"
+	producer "project/internal/microservices/producer/delivery/grpc/client"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
 )
@@ -50,7 +50,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)

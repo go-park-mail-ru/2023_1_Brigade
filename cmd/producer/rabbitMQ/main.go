@@ -8,11 +8,11 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	"project/internal/configs"
+	"project/internal/config"
+	serverProducer "project/internal/microservices/producer/delivery/grpc/server"
 	"project/internal/middleware"
+	"project/internal/monolithic_services/qaas/send_messages/rabbitMQ/producer/usecase"
 	metrics "project/internal/pkg/metrics/prometheus"
-	serverProducer "project/internal/qaas/send_messages/producer/delivery/grpc"
-	"project/internal/qaas/send_messages/rabbitMQ/producer/usecase"
 )
 
 func init() {
@@ -44,7 +44,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)

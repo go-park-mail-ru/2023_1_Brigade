@@ -14,27 +14,27 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
-	clientAuth "project/internal/clients/auth"
-	clientChat "project/internal/clients/chat"
-	clientMessages "project/internal/clients/messages"
-	clientUser "project/internal/clients/user"
+	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
+	clientChat "project/internal/microservices/chat/delivery/grpc/client"
+	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
+	clientUser "project/internal/microservices/user/delivery/grpc/client"
 
-	httpUser "project/internal/user/delivery/http"
+	httpUser "project/internal/microservices/user/delivery/http"
 
-	"project/internal/configs"
-	wsMessages "project/internal/messages/delivery/ws"
+	"project/internal/config"
+	wsMessages "project/internal/microservices/messages/delivery/ws"
 	myMiddleware "project/internal/middleware"
 
 	log "github.com/sirupsen/logrus"
 
-	usecaseAuthSession "project/internal/auth/session/usecase"
-	httpAuthUser "project/internal/auth/user/delivery/http"
-	httpChat "project/internal/chat/delivery/http"
-	httpImages "project/internal/images/delivery/http"
-	usecaseImages "project/internal/images/usecase"
+	httpAuthUser "project/internal/microservices/auth/delivery/http"
+	httpChat "project/internal/microservices/chat/delivery/http"
+	httpImages "project/internal/monolithic_services/images/delivery/http"
+	usecaseImages "project/internal/monolithic_services/images/usecase"
+	usecaseAuthSession "project/internal/monolithic_services/session/usecase"
 
-	repositoryAuthSession "project/internal/auth/session/repository/postgres"
-	repositoryImages "project/internal/images/repository"
+	repositoryImages "project/internal/monolithic_services/images/repository"
+	repositoryAuthSession "project/internal/monolithic_services/session/repository/postgres"
 )
 
 func init() {
@@ -66,7 +66,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)

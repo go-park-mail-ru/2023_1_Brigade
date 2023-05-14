@@ -11,16 +11,16 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	serverChat "project/internal/chat/delivery/grpc"
-	repositoryChat "project/internal/chat/repository"
-	usecaseChat "project/internal/chat/usecase"
-	"project/internal/configs"
-	repositoryImages "project/internal/images/repository"
-	usecaseImages "project/internal/images/usecase"
-	repositoryMessages "project/internal/messages/repository"
+	"project/internal/config"
+	serverChat "project/internal/microservices/chat/delivery/grpc/server"
+	repositoryChat "project/internal/microservices/chat/repository"
+	usecaseChat "project/internal/microservices/chat/usecase"
+	repositoryMessages "project/internal/microservices/messages/repository"
+	repositoryUser "project/internal/microservices/user/repository"
 	"project/internal/middleware"
+	repositoryImages "project/internal/monolithic_services/images/repository"
+	usecaseImages "project/internal/monolithic_services/images/usecase"
 	metrics "project/internal/pkg/metrics/prometheus"
-	repositoryUser "project/internal/user/repository"
 )
 
 func init() {
@@ -52,7 +52,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)

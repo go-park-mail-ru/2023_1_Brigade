@@ -6,11 +6,11 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	"project/internal/configs"
+	"project/internal/config"
+	serverConsumer "project/internal/microservices/consumer/delivery/grpc/server"
 	"project/internal/middleware"
+	"project/internal/monolithic_services/qaas/send_messages/kafka/consumer/usecase"
 	metrics "project/internal/pkg/metrics/prometheus"
-	serverConsumer "project/internal/qaas/send_messages/consumer/delivery/grpc"
-	"project/internal/qaas/send_messages/kafka/consumer/usecase"
 )
 
 func init() {
@@ -42,7 +42,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)

@@ -11,17 +11,17 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	authSessionRepository "project/internal/auth/session/repository/postgres"
-	authSessionUsecase "project/internal/auth/session/usecase"
-	serverAuthUser "project/internal/auth/user/delivery/grpc"
-	authUserRepository "project/internal/auth/user/repository"
-	authUserUsecase "project/internal/auth/user/usecase"
-	"project/internal/configs"
-	repositoryImages "project/internal/images/repository"
-	usecaseImages "project/internal/images/usecase"
+	"project/internal/config"
+	serverAuthUser "project/internal/microservices/auth/delivery/grpc/server"
+	authUserRepository "project/internal/microservices/auth/repository"
+	authUserUsecase "project/internal/microservices/auth/usecase"
+	userRepository "project/internal/microservices/user/repository"
 	"project/internal/middleware"
+	repositoryImages "project/internal/monolithic_services/images/repository"
+	usecaseImages "project/internal/monolithic_services/images/usecase"
+	authSessionRepository "project/internal/monolithic_services/session/repository/postgres"
+	authSessionUsecase "project/internal/monolithic_services/session/usecase"
 	metrics "project/internal/pkg/metrics/prometheus"
-	userRepository "project/internal/user/repository"
 )
 
 func init() {
@@ -53,7 +53,7 @@ func main() {
 		log.Error(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Error(err)

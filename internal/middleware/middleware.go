@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
 	"math/rand"
-	authSession "project/internal/auth/session"
+	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	metrics "project/internal/pkg/metrics/prometheus"

@@ -43,24 +43,18 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		return err
 	}
 
-	id := webSocketMessage.Id
-	createdAt := time.Now()
+	producerMessage := model.ProducerMessage{
+		Id:        webSocketMessage.Id,
+		Type:      webSocketMessage.Type,
+		Body:      webSocketMessage.Body,
+		AuthorId:  webSocketMessage.AuthorID,
+		ChatID:    webSocketMessage.ChatID,
+		CreatedAt: time.Now().String(),
+	}
 
 	// если пришел ивент на создание сообщения (0)
-	if id == "" {
-		id = uuid.New().String()
-	}
-
-	producerMessage := model.ProducerMessage{
-		Id:       id,
-		Type:     webSocketMessage.Type,
-		Body:     webSocketMessage.Body,
-		AuthorId: webSocketMessage.AuthorID,
-		ChatID:   webSocketMessage.ChatID,
-	}
-
-	if id == "" {
-		producerMessage.CreatedAt = createdAt.String()
+	if producerMessage.Id == "" {
+		producerMessage.Id = uuid.New().String()
 	}
 
 	switch producerMessage.Type {

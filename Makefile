@@ -2,20 +2,20 @@ all: clean run_prod
 
 .PHONY: run_local_microservices
 run_local_microservices:
-	sudo kill -9 $(sudo lsof -t -i:9000) &
-	sudo kill -9 $(sudo lsof -t -i:9001) &
-	sudo kill -9 $(sudo lsof -t -i:9002) &
-	sudo kill -9 $(sudo lsof -t -i:9003) &
-	sudo kill -9 $(sudo lsof -t -i:9004) &
-	sudo kill -9 $(sudo lsof -t -i:9005) &
-	sudo kill -9 $(sudo lsof -t -i:8081) &
-	cd cmd/consumer/rabbitMQ && go run . >> ../log 2>&1 &
-	cd cmd/producer/rabbitMQ && go run . >> ../log 2>&1 &
-	cd cmd/auth && go run . >> log 2>&1 &
-	cd cmd/chat && go run . >> log 2>&1 &
-	cd cmd/messages && go run . >> log 2>&1 &
-	cd cmd/user && go run . >> log 2>&1 &
-	cd cmd/api && go run . >> log 2>&1
+#	sudo kill -9 $(sudo lsof -t -i:9000) &
+#	sudo kill -9 $(sudo lsof -t -i:9001) &
+#	sudo kill -9 $(sudo lsof -t -i:9002) &
+#	sudo kill -9 $(sudo lsof -t -i:9003) &
+#	sudo kill -9 $(sudo lsof -t -i:9004) &
+#	sudo kill -9 $(sudo lsof -t -i:9005) &
+#	sudo kill -9 $(sudo lsof -t -i:8081)
+	go run cmd/consumer/rabbitMQ/main.go >> cmd/consumer/rabbitMQ/log 2>&1 &
+	go run cmd/producer/rabbitMQ/main.go >> cmd/producer/rabbitMQ/log 2>&1 &
+	go run cmd/auth/main.go >> cmd/auth/log 2>&1 &
+	go run cmd/chat/main.go >> cmd/chat/log 2>&1 &
+	go run cmd/messages/main.go >> cmd/messages/log 2>&1 &
+	go run cmd/user/main.go >> cmd/user/log 2>&1 &
+	go run cmd/api/main.go >> cmd/api/log 2>&1 &
 
 .PHONY: run_stack
 run_stack:

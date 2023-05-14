@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS message (
     body       VARCHAR(1024), -- валидация, со стороны приложения
     id_chat    INTEGER,
     author_id  INTEGER,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at VARCHAR(255),
     FOREIGN KEY (author_id) REFERENCES profile(id),
     FOREIGN KEY (id_chat)   REFERENCES chat(id)
 );

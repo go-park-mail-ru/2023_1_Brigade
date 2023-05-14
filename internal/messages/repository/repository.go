@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/messages"
 	"project/internal/model"
-	log "github.com/sirupsen/logrus"
 	myErrors "project/internal/pkg/errors"
 )
 
@@ -21,7 +21,7 @@ func NewMessagesMemoryRepository(db *sqlx.DB) messages.Repository {
 
 func (r repository) EditMessageById(ctx context.Context, producerMessage model.ProducerMessage) (model.Message, error) {
 	var message model.Message
-	err := r.db.GetContext(ctx, &message, "UPDATE message SET body = $1, created_at = $2 WHERE id = $3 RETURNING *", producerMessage.Body, producerMessage.CreatedAt, producerMessage.Id)
+	err := r.db.GetContext(ctx, &message, "UPDATE message SET body = $1 WHERE id = $ RETURNING *", producerMessage.Body, producerMessage.Id)
 	if err != nil {
 		return model.Message{}, err
 	}

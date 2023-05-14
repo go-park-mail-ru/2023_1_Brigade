@@ -15,3 +15,13 @@
 # vendor/
 
 *.idea
+*.log
+
+c.out
+tmp.out
+
+logs/
+data
+
+monitoring/grafana/data/*
+

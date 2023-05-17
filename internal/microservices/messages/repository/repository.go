@@ -90,8 +90,8 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		return err
 	}
 
-	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, body, id_chat, author_id, created_at) `+
-		`VALUES (:id, :body, :id_chat, :author_id, :created_at)`, message)
+	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at) `+
+		`VALUES (:id, :image_url, :type, :body, :id_chat, :author_id, :created_at)`, message)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -120,7 +120,7 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return model.Message{}, myErrors.ErrMessageNotFound
+			return model.Message{}, nil
 		}
 
 		return model.Message{}, err

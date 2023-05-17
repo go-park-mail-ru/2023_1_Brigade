@@ -6,6 +6,7 @@ import (
 )
 
 type Repository interface {
+	CreateTechnogrammChat(ctx context.Context, user model.AuthorizedUser) error
 	DeleteChatMembers(ctx context.Context, chatID uint64) error
 	UpdateChatAvatar(ctx context.Context, url string, chatID uint64) (model.Chat, error)
 	UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error)

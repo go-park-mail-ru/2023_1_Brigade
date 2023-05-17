@@ -15,6 +15,7 @@ import (
 	serverAuthUser "project/internal/microservices/auth/delivery/grpc/server"
 	authUserRepository "project/internal/microservices/auth/repository"
 	authUserUsecase "project/internal/microservices/auth/usecase"
+	chatRepository "project/internal/microservices/chat/repository"
 	userRepository "project/internal/microservices/user/repository"
 	"project/internal/middleware"
 	repositoryImages "project/internal/monolithic_services/images/repository"
@@ -96,10 +97,11 @@ func main() {
 	userRepository := userRepository.NewUserMemoryRepository(db)
 	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
 	authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
+	chatRepository := chatRepository.NewChatMemoryRepository(db)
 
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
 	authSessionUsecase := authSessionUsecase.NewAuthUserUsecase(authSessionRepository)
-	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository, imagesUsecase)
+	authUserUsecase := authUserUsecase.NewAuthUserUsecase(authUserRepository, userRepository, chatRepository, imagesUsecase)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.AuthService.ServiceName)
 	if err != nil {

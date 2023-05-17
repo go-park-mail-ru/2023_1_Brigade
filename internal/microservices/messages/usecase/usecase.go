@@ -45,6 +45,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 
 	producerMessage := model.ProducerMessage{
 		Id:       webSocketMessage.Id,
+		Action:   webSocketMessage.Action,
 		Type:     webSocketMessage.Type,
 		Body:     webSocketMessage.Body,
 		AuthorId: webSocketMessage.AuthorID,
@@ -62,6 +63,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		go func() {
 			err := u.messagesRepo.InsertMessageInDB(context.TODO(), model.Message{
 				Id:        producerMessage.Id,
+				Type:      producerMessage.Type,
 				Body:      producerMessage.Body,
 				AuthorId:  producerMessage.AuthorId,
 				ChatId:    producerMessage.ChatID,

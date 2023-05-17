@@ -10,25 +10,6 @@ import (
 	"testing"
 )
 
-//func TestServer_SwitchMessageType_OK(t *testing.T) {
-//	ctl := gomock.NewController(t)
-//	defer ctl.Finish()
-//
-//	bytes := []byte(`"msg":"hello world"}`)
-//
-//	grpcServer := grpc.NewServer()
-//
-//	messagesUsecase := mockMessages.NewMockUsecase(ctl)
-//
-//	messagesSerivce := NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
-//
-//	messagesUsecase.EXPECT().SwitchMessageType(context.TODO(), bytes).Return(nil).Times(1)
-//
-//	_, err := messagesSerivce.SwitchMessageType(context.TODO(), model_conversion.FromBytesToProtoBytes(bytes))
-//
-//	require.NoError(t, err)
-//}
-
 func TestServer_PutInProducer_OK(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
@@ -54,23 +35,3 @@ func TestServer_PutInProducer_OK(t *testing.T) {
 
 	require.NoError(t, err)
 }
-
-//func TestServer_PullFromConsumer_OK(t *testing.T) {
-//	ctl := gomock.NewController(t)
-//	defer ctl.Finish()
-//
-//	expectedBytes := []byte(`"msg":"hello world"}`)
-//
-//	grpcServer := grpc.NewServer()
-//
-//	messagesUsecase := mockMessages.NewMockUsecase(ctl)
-//
-//	messagesSerivce := NewMessagesServiceGRPCServer(grpcServer, messagesUsecase)
-//
-//	messagesUsecase.EXPECT().PullFromConsumer(context.TODO()).Return(expectedBytes, nil).Times(1)
-//
-//	bytes, err := messagesSerivce.PullFromConsumer(context.TODO(), nil)
-//
-//	require.NoError(t, err)
-//	require.Equal(t, expectedBytes, model_conversion.FromProtoBytesToBytes(bytes))
-//}

@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS chat (
 
 CREATE TABLE IF NOT EXISTS message (
     id         VARCHAR(255) UNIQUE,
+    image_url  VARCHAR(1024),
+    type       INTEGER,
     body       VARCHAR(1024), -- валидация, со стороны приложения
     id_chat    INTEGER,
     author_id  INTEGER,

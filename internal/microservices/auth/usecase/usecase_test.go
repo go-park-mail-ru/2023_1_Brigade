@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"project/internal/config"
 	authUserMock "project/internal/microservices/auth/repository/mocks"
+	chatMock "project/internal/microservices/chat/repository/mocks"
 	userMock "project/internal/microservices/user/repository/mocks"
 	"project/internal/model"
 	imagesMock "project/internal/monolithic_services/images/usecase/mocks"
@@ -62,7 +63,8 @@ func Test_Signup_OK(t *testing.T) {
 	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	imagesUsecase := imagesMock.NewMockUsecase(ctl)
-	usecase := NewAuthUserUsecase(authRepository, userRepository, imagesUsecase)
+	chatRepository := chatMock.NewMockRepository(ctl)
+	usecase := NewAuthUserUsecase(authRepository, userRepository, chatRepository, imagesUsecase)
 
 	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(test.expectedError).Times(1)
 	authRepository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, nil).Times(1)
@@ -105,7 +107,8 @@ func Test_Signup_UserIsAlreadyRegistred(t *testing.T) {
 	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	imagesUsecase := imagesMock.NewMockUsecase(ctl)
-	usecase := NewAuthUserUsecase(authRepository, userRepository, imagesUsecase)
+	chatRepository := chatMock.NewMockRepository(ctl)
+	usecase := NewAuthUserUsecase(authRepository, userRepository, chatRepository, imagesUsecase)
 
 	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(nil).Times(1)
 	_, err := usecase.Signup(ctx, user)
@@ -139,7 +142,8 @@ func Test_Login_OK(t *testing.T) {
 	authRepository := authUserMock.NewMockRepository(ctl)
 	userRepository := userMock.NewMockRepository(ctl)
 	imagesUsecase := imagesMock.NewMockUsecase(ctl)
-	usecase := NewAuthUserUsecase(authRepository, userRepository, imagesUsecase)
+	chatRepository := chatMock.NewMockRepository(ctl)
+	usecase := NewAuthUserUsecase(authRepository, userRepository, chatRepository, imagesUsecase)
 
 	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(nil).Times(1)
 	authRepository.EXPECT().CheckCorrectPassword(ctx, user.Email, hashedPassword).Return(nil).Times(1)

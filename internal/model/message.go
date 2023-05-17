@@ -2,6 +2,8 @@ package model
 
 type Message struct {
 	Id        string `json:"id"         db:"id"`
+	ImageUrl  string `json:"image_url"  db:"image_url"`
+	Type      uint64 `json:"type"       db:"type"`
 	Body      string `json:"body"       db:"body"`
 	AuthorId  uint64 `json:"author_id"  db:"author_id"`
 	ChatId    uint64 `json:"id_chat"    db:"id_chat"`
@@ -10,6 +12,8 @@ type Message struct {
 
 type WebSocketMessage struct {
 	Id       string `json:"id"        db:"id"`
+	ImageUrl string `json:"image_url" db:"image_url"`
+	Action   uint64 `json:"action"    db:"action"`
 	Type     uint64 `json:"type"      db:"type"`
 	Body     string `json:"body"      db:"body"`
 	AuthorID uint64 `json:"author_id" db:"author_id"`
@@ -18,6 +22,8 @@ type WebSocketMessage struct {
 
 type ProducerMessage struct {
 	Id         string `json:"id"          db:"id"`
+	ImageUrl   string `json:"image_url"   db:"image_url"`
+	Action     uint64 `json:"action"      db:"action"`
 	Type       uint64 `json:"type"        db:"type"`
 	Body       string `json:"body"        db:"body"`
 	AuthorId   uint64 `json:"author_id"   db:"author_id"`

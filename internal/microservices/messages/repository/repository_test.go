@@ -103,88 +103,6 @@ func TestDeleteMessageById(t *testing.T) {
 	require.NoError(t, err)
 }
 
-//func TestPostgres_DeleteMessageById_OK(t *testing.T) {
-//	messageID := uuid.New().String()
-//	//chatID := uint64(1)
-//	//chatID := uint64(1)
-//	//authorID := uint64(1)
-//	//expectedMessage := model.Message{
-//	//	Id:        "1",
-//	//	Body:      "Hello world!",
-//	//	AuthorId:  authorID,
-//	//	ChatId:    chatID,
-//	//	CreatedAt: "",
-//	//}
-//
-//	db, mock, err := sqlmock.New()
-//	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	defer func() {
-//		err := db.Close()
-//		if err != nil {
-//			log.Error(err)
-//		}
-//	}()
-//
-//	//rowMessage := sqlmock.NewRows([]string{"id"}).
-//	//	AddRow(messageID)
-//	//
-//	//rowChatMessage := sqlmock.NewRows([]string{"id_chat", "id_message"}).
-//	//	AddRow(chatID, messageID)
-//
-//	mock.ExpectBegin()
-//	mock.ExpectExec("DELETE FROM message WHERE id=$1").
-//		WithArgs(messageID).
-//		WillReturnResult(sqlmock.NewResult(1, 1))
-//
-//	mock.ExpectExec("DELETE FROM chat_messages WHERE id_message=$1").
-//		WithArgs(messageID).
-//		WillReturnResult(sqlmock.NewResult(1, 1))
-//	mock.ExpectCommit()
-//
-//	//mock.ExpectBegin()
-//	//mock.
-//	//	ExpectExec(regexp.QuoteMeta(`DELETE FROM message WHERE id=$1`)).
-//	//	WithArgs(messageID).
-//	//	WillReturnRows(rowMessage)
-//	//
-//	//mock.
-//	//	ExpectQuery(regexp.QuoteMeta(`DELETE FROM chat_messages WHERE id_message=$1`)).
-//	//	WithArgs(messageID).
-//	//	WillReturnRows(rowChatMessage)
-//	//mock.ExpectCommit()
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewMessagesMemoryRepository(dbx)
-//
-//	err = repo.DeleteMessageById(context.TODO(), messageID)
-//	require.NoError(t, err)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//
-//	//message, err := repo.EditMessageById(context.TODO(), model.ProducerMessage{
-//	//	Id:         expectedMessage.Id,
-//	//	Type:       config.Edit,
-//	//	Body:       expectedMessage.Body,
-//	//	AuthorId:   expectedMessage.AuthorId,
-//	//	ChatID:     expectedMessage.ChatId,
-//	//	ReceiverID: 1,
-//	//	CreatedAt:  expectedMessage.CreatedAt,
-//	//})
-//	//require.NoError(t, err)
-//	//
-//	//expectedMessage.Id = message.Id
-//	//expectedMessage.Body = message.Body
-//	//expectedMessage.AuthorId = message.AuthorId
-//	//expectedMessage.ChatId = message.ChatId
-//	//expectedMessage.CreatedAt = message.CreatedAt
-//	//
-//	//require.Equal(t, expectedMessage, message)
-//	//
-//	//err = mock.ExpectationsWereMet()
-//	//require.NoError(t, err)
-//}
-
 func TestPostgres_GetMessageByID_OK(t *testing.T) {
 	expectedMessage := model.Message{
 		Id:        uuid.New().String(),
@@ -259,46 +177,6 @@ func TestPostgres_GetChatMessages_OK(t *testing.T) {
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err)
 }
-
-//func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
-//	message := model.Message{
-//		Id:        uuid.New().String(),
-//		Body:      "Hello world!",
-//		AuthorId:  1,
-//		ChatId:    1,
-//		CreatedAt: time.Now().String(),
-//	}
-//
-//	db, mock, err := sqlmock.New()
-//	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	defer func() {
-//		err := db.Close()
-//		if err != nil {
-//			log.Error(err)
-//		}
-//	}()
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewMessagesMemoryRepository(dbx)
-//
-//	mock.ExpectBegin()
-//
-//	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO message (id, body, id_chat, author_id, created_at) VALUES ($1, $2, $3, $4, $5)`)).
-//		WithArgs(message.Id, message.Body, message.AuthorId, message.ChatId, message.CreatedAt).
-//		WillReturnResult(sqlmock.NewResult(1, 1))
-//
-//	//mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM chat_messages WHERE id_message=$1`)).
-//	//	WithArgs(messageID).
-//	//	WillReturnResult(sqlmock.NewResult(1, 1))
-//
-//	mock.ExpectCommit()
-//
-//	err = repo.InsertMessageInDB(context.Background(), message)
-//	require.NoError(t, err)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//}
 
 func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 	message := model.Message{

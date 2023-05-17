@@ -64,6 +64,20 @@ func (mr *MockRepositoryMockRecorder) CreateChat(ctx, chat interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChat", reflect.TypeOf((*MockRepository)(nil).CreateChat), ctx, chat)
 }
 
+// CreateTechnogrammChat mocks base method.
+func (m *MockRepository) CreateTechnogrammChat(ctx context.Context, user model.AuthorizedUser) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTechnogrammChat", ctx, user)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTechnogrammChat indicates an expected call of CreateTechnogrammChat.
+func (mr *MockRepositoryMockRecorder) CreateTechnogrammChat(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTechnogrammChat", reflect.TypeOf((*MockRepository)(nil).CreateTechnogrammChat), ctx, user)
+}
+
 // DeleteChatById mocks base method.
 func (m *MockRepository) DeleteChatById(ctx context.Context, chatID uint64) error {
 	m.ctrl.T.Helper()

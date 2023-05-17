@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	"project/internal/microservices/auth"
+	"project/internal/microservices/chat"
 	"project/internal/microservices/user"
 	"project/internal/model"
 	"project/internal/monolithic_services/images"
@@ -19,11 +20,12 @@ import (
 type usecase struct {
 	authRepo      auth.Repository
 	userRepo      user.Repository
+	chatRepo      chat.Repository
 	imagesUsecase images.Usecase
 }
 
-func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository, imagesUsecase images.Usecase) auth.Usecase {
-	return &usecase{authRepo: authRepo, userRepo: userRepo, imagesUsecase: imagesUsecase}
+func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository, chatRepo chat.Repository, imagesUsecase images.Usecase) auth.Usecase {
+	return &usecase{authRepo: authRepo, userRepo: userRepo, chatRepo: chatRepo, imagesUsecase: imagesUsecase}
 }
 
 func (u usecase) Signup(ctx context.Context, registrationUser model.RegistrationUser) (model.User, error) {
@@ -50,6 +52,11 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	user.Password = hashedPassword
 
 	sessionUser, err := u.authRepo.CreateUser(ctx, user)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	err = u.chatRepo.CreateTechnogrammChat(ctx, sessionUser)
 	if err != nil {
 		return model.User{}, err
 	}

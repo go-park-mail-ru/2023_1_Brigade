@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"project/internal/config"
 	"project/internal/microservices/chat"
@@ -19,9 +20,59 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 	return &repository{db: db}
 }
 
+func (r repository) CreateTechnogrammChat(ctx context.Context, user model.AuthorizedUser) error {
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	var chat model.DBChat
+	err = tx.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)
+   VALUES (0, 0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	id := uuid.New().String()
+	_, err = tx.ExecContext(ctx, `INSERT INTO message (id, body, id_chat, author_id, created_at)
+   VALUES ($1, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $2), (SELECT id FROM profile WHERE id = $3), '0001-01-01 00:00:00+00');`, id, chat.Id, 0)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, `INSERT INTO chat_messages (id_chat, id_message)
+   VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM message WHERE id = $2));`, chat.Id, id)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, `INSERT INTO chat_members (id_chat, id_member)
+   VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM profile WHERE id = $2));`, chat.Id, user.Id)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, `INSERT INTO chat_members (id_chat, id_member)
+   VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM profile WHERE id = 0));`, chat.Id)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
 	_, err := r.db.ExecContext(ctx, "DELETE FROM chat_members WHERE id_chat=$1", chatID)
-
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrUserNotFound
 	}

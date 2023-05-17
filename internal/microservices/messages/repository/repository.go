@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
 	"project/internal/microservices/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -21,7 +20,7 @@ func NewMessagesMemoryRepository(db *sqlx.DB) messages.Repository {
 
 func (r repository) EditMessageById(ctx context.Context, producerMessage model.ProducerMessage) (model.Message, error) {
 	var message model.Message
-	err := r.db.GetContext(ctx, &message, "UPDATE message SET body = $1 WHERE id = $ RETURNING *", producerMessage.Body, producerMessage.Id)
+	err := r.db.GetContext(ctx, &message, "UPDATE message SET body = $1 WHERE id = $2 RETURNING *", producerMessage.Body, producerMessage.Id)
 	if err != nil {
 		return model.Message{}, err
 	}
@@ -93,7 +92,6 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 
 	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, body, id_chat, author_id, created_at) `+
 		`VALUES (:id, :body, :id_chat, :author_id, :created_at)`, message)
-	log.Info(err)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -103,14 +101,12 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		ChatId:    message.ChatId,
 		MessageId: message.Id,
 	})
-	log.Info(err)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	err = tx.Commit()
-	log.Info(err)
 	if err != nil {
 		return err
 	}
@@ -120,11 +116,11 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 
 func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (model.Message, error) {
 	var lastMessage model.Message
-	err := r.db.Get(&lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND created_at = (SELECT MAX(created_at) FROM message WHERE id_chat = $1)`, chatID)
+	err := r.db.GetContext(ctx, &lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND created_at = (SELECT MAX(created_at) FROM message WHERE id_chat = $1)`, chatID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return model.Message{}, nil
+			return model.Message{}, myErrors.ErrMessageNotFound
 		}
 
 		return model.Message{}, err

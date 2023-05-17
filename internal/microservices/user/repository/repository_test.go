@@ -25,13 +25,16 @@ func TestPostgres_DeleteUserById_OK(t *testing.T) {
 		}
 	}()
 
-	row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
-		AddRow(1, "", "marcussss", "marcussss", "marcussss@mail.ru", "Cool status!", "password")
-
-	mock.
-		ExpectQuery(regexp.QuoteMeta(`DELETE FROM profile WHERE id=$1`)).
+	//row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
+	//	AddRow(1, "", "marcussss", "marcussss", "marcussss@mail.ru", "Cool status!", "password")
+	//
+	//mock.
+	//	ExpectQuery(regexp.QuoteMeta(`DELETE FROM profile WHERE id=$1`)).
+	//	WithArgs(userID).
+	//	WillReturnRows(row)
+	mock.ExpectExec(regexp.QuoteMeta("DELETE FROM profile WHERE id=$1")).
 		WithArgs(userID).
-		WillReturnRows(row)
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewUserMemoryRepository(dbx)

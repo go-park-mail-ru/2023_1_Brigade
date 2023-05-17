@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"project/internal/microservices/user"
 	"project/internal/model"
@@ -57,7 +56,6 @@ func (u userHandler) PutUserHandler(ctx echo.Context) error {
 	var updateUser model.UpdateUser
 	err := ctx.Bind(&updateUser)
 	if err != nil {
-		log.Warn(err)
 		return err
 	}
 

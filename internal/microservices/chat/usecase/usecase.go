@@ -204,7 +204,7 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 
 	for ind := range chatsInListUser {
 		if chatsInListUser[ind].Type == config.Chat {
-			if chatsInListUser[ind].Members[0].Id == userID {
+			if chatsInListUser[ind].Members[0].Id == userID && len(chatsInListUser[ind].Members) > 1 {
 				chatsInListUser[ind].Title = chatsInListUser[ind].Members[1].Nickname
 				chatsInListUser[ind].Avatar = chatsInListUser[ind].Members[1].Avatar
 			} else {
@@ -344,7 +344,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 
 				members = append(members, model_conversion.FromAuthorizedUserToUser(member))
 			}
-			if len(members) > 0 {
+			if len(members) > 1 {
 				if members[0].Id == userID {
 					foundedChat.Title = members[1].Nickname
 					foundedChat.Avatar = members[1].Avatar

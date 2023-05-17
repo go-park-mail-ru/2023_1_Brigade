@@ -44,17 +44,17 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	}
 
 	producerMessage := model.ProducerMessage{
-		Id:        webSocketMessage.Id,
-		Type:      webSocketMessage.Type,
-		Body:      webSocketMessage.Body,
-		AuthorId:  webSocketMessage.AuthorID,
-		ChatID:    webSocketMessage.ChatID,
-		CreatedAt: time.Now().String(),
+		Id:       webSocketMessage.Id,
+		Type:     webSocketMessage.Type,
+		Body:     webSocketMessage.Body,
+		AuthorId: webSocketMessage.AuthorID,
+		ChatID:   webSocketMessage.ChatID,
 	}
 
 	// если пришел ивент на создание сообщения (0)
 	if producerMessage.Id == "" {
 		producerMessage.Id = uuid.New().String()
+		producerMessage.CreatedAt = time.Now().String()
 	}
 
 	switch producerMessage.Type {
@@ -89,7 +89,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		return errors.New("не выбран ни один из трех 0, 1, 2")
 	}
 
-	members, err := u.chatRepo.GetChatMembersByChatId(context.Background(), webSocketMessage.ChatID)
+	members, err := u.chatRepo.GetChatMembersByChatId(context.TODO(), webSocketMessage.ChatID)
 	if err != nil {
 		return err
 	}

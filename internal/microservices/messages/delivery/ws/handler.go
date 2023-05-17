@@ -11,21 +11,17 @@ import (
 	"os"
 	"os/signal"
 	"project/internal/config"
-	consumer "project/internal/microservices/consumer/usecase"
 	"project/internal/microservices/messages"
-	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
 	"time"
 )
 
 type messageHandler struct {
-	messageUsecase  messages.Usecase
-	consumerUsecase consumer.Usecase
-	producerUsecase producer.Usecase
-	upgrader        websocket.Upgrader
-	clients         map[uint64]*websocket.Conn
-	centrifugo      *centrifuge.Client
-	channelName     string
+	messageUsecase messages.Usecase
+	upgrader       websocket.Upgrader
+	clients        map[uint64]*websocket.Conn
+	centrifugo     *centrifuge.Client
+	channelName    string
 }
 
 func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
@@ -68,7 +64,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 		err = u.messageUsecase.PutInProducer(context.TODO(), message)
 		if err != nil {
-			log.Error(err)
+			return err
 		}
 	}
 }

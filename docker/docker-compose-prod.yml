@@ -121,21 +121,18 @@ services:
     hostname: rabbitmq
     container_name: rabbitmq
     restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=password
+    env_file:
+      - ../.env
     ports:
       - "5672:5672"
     networks:
       - backend-network
 
   postgres:
-    image: postgres
+    image: postgres:latest
     container_name: postgres
-    environment:
-      POSTGRES_DB: "brigade"
-      POSTGRES_USER: "brigade"
-      POSTGRES_PASSWORD: "123"
+    env_file:
+      - ../.env
     ports:
       - "5432:5432"
     volumes:
@@ -170,8 +167,7 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     volumes:
-      - prometheus_data:/prometheus
-#      - monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./../monitoring/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -180,18 +176,20 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=myuser
-      - GF_SECURITY_ADMIN_PASSWORD=mypassword
+    env_file:
+      - ../.env
     ports:
       - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./../monitoring/grafana/data:/var/lib/grafana
+      - ./../monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./../monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     restart: always
     networks:
       - backend-network
     depends_on:
       - prometheus
+    user: "472"
 
   node-exporter:
     hostname: node-exporter
@@ -218,51 +216,79 @@ services:
     hostname: sentry-redis
     restart: always
     networks:
-      - backend-network
+      - sentry
     volumes:
-      - sentry_redis_data:/data'
+      - './var/sentry/redis/data:/data'
 
   sentry-postgres:
     image: postgres:latest
     container_name: sentry-postgres
     hostname: sentry-postgres
     restart: always
-    environment:
-      POSTGRES_USER: sentry
-      POSTGRES_PASSWORD: 89PsZXyRStOT2
-      POSTGRES_DB: sentry
+    env_file:
+      - ../.env
     networks:
-      - backend-network
+      - sentry
     volumes:
-      - sentry_postgres_data:/var/lib/postgresql/data
+      - './var/sentry/postgres:/var/lib/postgresql/data'
 
-  sentry:
+  sentry-base:
     image: sentry:latest
-    container_name: sentry
-    hostname: sentry
+    container_name: sentry-base
+    hostname: sentry-base
     restart: always
     ports:
-      - '9000:9000'
+      - '9321:9000'
     env_file:
       - ../.env
     depends_on:
       - sentry-redis
       - sentry-postgres
     networks:
-      - backend-network
+      - sentry
     volumes:
-      - sentry_data:/var/lib/sentry/files
+      - './var/sentry/sentry:/var/lib/sentry/files'
 
-volumes:
-  postgres_data: {}
-  redis_data: {}
-  prometheus_data: {}
-  grafana_data: {}
-  sentry_postgres_data: {}
-  sentry_redis_data: {}
-  sentry_data: {}
+  sentry-cron:
+    image: sentry:latest
+    container_name: sentry-cron
+    hostname: sentry-cron
+    restart: always
+    env_file:
+      - ../.env
+    depends_on:
+      - sentry-redis
+      - sentry-postgres
+    command: "sentry run cron"
+    networks:
+      - sentry
+    volumes:
+      - './var/sentry/sentry:/var/lib/sentry/files'
+
+  sentry-worker:
+    image: sentry:latest
+    container_name: sentry-worker
+    hostname: sentry-worker
+    restart: always
+    env_file:
+      - ../.env
+    depends_on:
+      - sentry-redis
+      - sentry-postgres
+    command: "sentry run worker"
+    networks:
+      - sentry
+    volumes:
+      - './var/sentry/sentry:/var/lib/sentry/files'
 
 networks:
   backend-network:
     name: "backend-network"
     driver: bridge
+  sentry:
+    driver: bridge
+
+volumes:
+  postgres_data: { }
+  redis_data: { }
+

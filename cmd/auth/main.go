@@ -27,7 +27,7 @@ import (
 func init() {
 	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 }
 
@@ -45,23 +45,23 @@ func main() {
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
-		log.Error("Yaml path not found")
+		log.Fatal("Yaml path not found")
 	}
 
 	yamlFile, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 	defer db.Close()
 
@@ -73,7 +73,7 @@ func main() {
 		Secure: config.VkCloud.Ssl,
 	})
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	chatAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
@@ -81,7 +81,7 @@ func main() {
 		Secure: config.VkCloud.Ssl,
 	})
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	chatImagesClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
@@ -89,7 +89,7 @@ func main() {
 		Secure: config.VkCloud.Ssl,
 	})
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
@@ -122,6 +122,6 @@ func main() {
 
 	err = service.StartGRPCServer(config.AuthService.Addr)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 }

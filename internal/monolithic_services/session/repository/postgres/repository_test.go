@@ -64,13 +64,9 @@ func TestPostgres_CreateSession_OK(t *testing.T) {
 		}
 	}()
 
-	row := sqlmock.NewRows([]string{"session", "cookie"}).
-		AddRow(session.UserId, session.Cookie)
-
-	mock.
-		ExpectQuery(regexp.QuoteMeta(`INSERT INTO session (cookie, profile_id) VALUES ($1, $2)`)).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO session (cookie, profile_id) VALUES ($1, $2)`)).
 		WithArgs(session.Cookie, session.UserId).
-		WillReturnRows(row)
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthSessionMemoryRepository(dbx)
@@ -83,7 +79,6 @@ func TestPostgres_CreateSession_OK(t *testing.T) {
 }
 
 func TestPostgres_DeleteSession_OK(t *testing.T) {
-	userID := uint64(1)
 	cookie := uuid.New().String()
 
 	db, mock, err := sqlmock.New()
@@ -95,13 +90,16 @@ func TestPostgres_DeleteSession_OK(t *testing.T) {
 		}
 	}()
 
-	row := sqlmock.NewRows([]string{"session", "cookie"}).
-		AddRow(userID, cookie)
-
-	mock.
-		ExpectQuery(regexp.QuoteMeta(`DELETE FROM session WHERE cookie=$1`)).
+	//row := sqlmock.NewRows([]string{"session", "cookie"}).
+	//	AddRow(userID, cookie)
+	//
+	//mock.
+	//	ExpectQuery(regexp.QuoteMeta(`DELETE FROM session WHERE cookie=$1`)).
+	//	WithArgs(cookie).
+	//	WillReturnRows(row)
+	mock.ExpectExec(regexp.QuoteMeta("DELETE FROM session WHERE cookie=$1")).
 		WithArgs(cookie).
-		WillReturnRows(row)
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewAuthSessionMemoryRepository(dbx)

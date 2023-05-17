@@ -56,7 +56,6 @@ Centrifugo:
   connAddr: "ws://localhost:8900/connection/websocket"
   channelName: "channel"
 
-
 ChatsService:
   addr: "localhost:9000"
   addrMetrics: "localhost:9091"

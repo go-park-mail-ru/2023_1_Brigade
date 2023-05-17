@@ -4,11 +4,11 @@ import (
 	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	authUserMock "project/internal/auth/user/repository/mocks"
+	authUserMock "project/internal/microservices/auth/repository/mocks"
+	userMock "project/internal/microservices/user/repository/mocks"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
-	userMock "project/internal/user/repository/mocks"
 	"testing"
 )
 

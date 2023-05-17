@@ -16,7 +16,7 @@ import (
 func init() {
 	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 }
 
@@ -34,18 +34,18 @@ func main() {
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
-		log.Error("Yaml path not found")
+		log.Fatal("Yaml path not found")
 	}
 
 	yamlFile, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	consumerUsecase, err := usecase.NewConsumer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName, config.Centrifugo)

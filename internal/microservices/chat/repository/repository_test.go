@@ -25,13 +25,9 @@ func TestPostgres_DeleteChatMembers_OK(t *testing.T) {
 		}
 	}()
 
-	row := sqlmock.NewRows([]string{"id_chat"}).
-		AddRow(chatID)
-
-	mock.
-		ExpectQuery(regexp.QuoteMeta(`DELETE FROM chat_members WHERE id_chat=$1`)).
+	mock.ExpectExec(regexp.QuoteMeta("DELETE FROM chat_members WHERE id_chat=$1")).
 		WithArgs(chatID).
-		WillReturnRows(row)
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewChatMemoryRepository(dbx)

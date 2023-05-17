@@ -20,7 +20,7 @@ func NewChatMemoryRepository(db *sqlx.DB) chat.Repository {
 }
 
 func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error {
-	_, err := r.db.QueryxContext(ctx, "DELETE FROM chat_members WHERE id_chat=$1", chatID)
+	_, err := r.db.ExecContext(ctx, "DELETE FROM chat_members WHERE id_chat=$1", chatID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return myErrors.ErrUserNotFound

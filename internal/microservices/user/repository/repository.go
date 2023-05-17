@@ -19,7 +19,7 @@ type repository struct {
 }
 
 func (r repository) DeleteUserById(ctx context.Context, userID uint64) error {
-	_, err := r.db.QueryxContext(ctx, "DELETE FROM profile WHERE id=$1", userID)
+	_, err := r.db.ExecContext(ctx, "DELETE FROM profile WHERE id=$1", userID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -96,7 +96,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 }
 
 func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.GetContext(ctx, &user, `UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5`,
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5 RETURNING *`,
 		user.Username, user.Nickname, user.Status, user.Password, user.Id)
 
 	if err != nil {

@@ -86,6 +86,8 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
 	return model.ProducerMessage{
 		Id:         message.Id,
+		ImageUrl:   message.ImageUrl,
+		Action:     message.Action,
 		Type:       message.Type,
 		Body:       message.Body,
 		AuthorId:   message.AuthorId,
@@ -98,6 +100,8 @@ func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage
 func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *protobuf.ProducerMessage {
 	return &protobuf.ProducerMessage{
 		Id:         message.Id,
+		ImageUrl:   message.ImageUrl,
+		Action:     message.Action,
 		Type:       message.Type,
 		Body:       message.Body,
 		AuthorId:   message.AuthorId,
@@ -110,6 +114,8 @@ func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *p
 func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
 	return model.Message{
 		Id:        message.Id,
+		ImageUrl:  message.ImageUrl,
+		Type:      message.Type,
 		Body:      message.Body,
 		AuthorId:  message.AuthorId,
 		ChatId:    message.ChatId,
@@ -120,6 +126,8 @@ func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
 func FromMessageToProtoMessage(message model.Message) *protobuf.Message {
 	return &protobuf.Message{
 		Id:        message.Id,
+		ImageUrl:  message.ImageUrl,
+		Type:      message.Type,
 		Body:      message.Body,
 		AuthorId:  message.AuthorId,
 		ChatId:    message.ChatId,

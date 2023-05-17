@@ -10,26 +10,32 @@ message Bytes {
 
 message Message {
   string Id = 1;
-  string Body = 2;
-  uint64 AuthorId = 3;
-  uint64 ChatId = 4;
-  string CreatedAt = 5;
+  string ImageUrl = 2;
+  uint64 Type = 3;
+  string Body = 4;
+  uint64 AuthorId = 5;
+  uint64 ChatId = 6;
+  string CreatedAt = 7;
 }
 
 message WebSocketMessage {
   string Id = 1;
-  uint64 Type = 2;
-  string Body = 3;
-  uint64 AuthorID = 4;
-  uint64 ChatID = 5;
+  string ImageUrl = 2;
+  uint64 Action = 3;
+  uint64 Type = 4;
+  string Body = 5;
+  uint64 AuthorID = 6;
+  uint64 ChatID = 7;
 }
 
 message ProducerMessage {
   string Id = 1;
-  uint64 Type = 2;
-  string Body = 3;
-  uint64 AuthorId = 4;
-  uint64 ChatId = 5;
-  uint64 ReceiverID = 6;
-  string CreatedAt = 7;
+  string ImageUrl = 2;
+  uint64 Action = 3;
+  uint64 Type = 4;
+  string Body = 5;
+  uint64 AuthorId = 6;
+  uint64 ChatId = 7;
+  uint64 ReceiverID = 8;
+  string CreatedAt = 9;
 }

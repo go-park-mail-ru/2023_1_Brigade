@@ -58,7 +58,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		producerMessage.CreatedAt = time.Now().String()
 	}
 
-	switch producerMessage.Type {
+	switch producerMessage.Action {
 	case config.Create:
 		go func() {
 			err := u.messagesRepo.InsertMessageInDB(context.TODO(), model.Message{

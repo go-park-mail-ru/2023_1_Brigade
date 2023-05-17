@@ -35,8 +35,8 @@ func (r repository) CreateTechnogrammChat(ctx context.Context, user model.Author
 	}
 
 	id := uuid.New().String()
-	_, err = tx.ExecContext(ctx, `INSERT INTO message (id, body, id_chat, author_id, created_at)
-   VALUES ($1, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $2), (SELECT id FROM profile WHERE id = $3), '0001-01-01 00:00:00+00');`, id, chat.Id, 0)
+	_, err = tx.ExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)
+   VALUES ($1, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $2), (SELECT id FROM profile WHERE id = $3), '0001-01-01 00:00:00+00');`, id, "", config.NotSticker, chat.Id, 0)
 	if err != nil {
 		tx.Rollback()
 		return err

@@ -111,6 +111,9 @@ type AuthService struct {
 	ServiceName string `yaml:"serviceName"`
 }
 
+const Sticker = 0
+const NotSticker = 1
+
 const Chat = 0
 const Group = 1
 const Channel = 2

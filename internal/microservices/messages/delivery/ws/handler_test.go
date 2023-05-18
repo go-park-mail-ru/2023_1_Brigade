@@ -2,14 +2,6 @@ package ws
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/centrifugal/centrifuge-go"
-	"github.com/golang/mock/gomock"
-	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
-	"github.com/labstack/echo/v4"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"project/internal/config"
@@ -17,6 +9,15 @@ import (
 	"project/internal/model"
 	"strings"
 	"testing"
+
+	"github.com/centrifugal/centrifuge-go"
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
+	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type testCase struct {
@@ -77,10 +78,10 @@ func TestHandlers_WSHandler(t *testing.T) {
 		ReceiverID: 1,
 	}
 
-	wsMessageJson, err := json.Marshal(wsMessage)
+	wsMessageJson, err := easyjson.Marshal(wsMessage)
 	assert.NoError(t, err)
 
-	producerMessageJson, err := json.Marshal(producerMessage)
+	producerMessageJson, err := easyjson.Marshal(producerMessage)
 	assert.NoError(t, err)
 
 	tests := []testCase{

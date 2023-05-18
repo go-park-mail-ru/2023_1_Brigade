@@ -2,10 +2,7 @@ package usecase
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/require"
 	"project/internal/config"
 	chatMock "project/internal/microservices/chat/repository/mocks"
 	consumerMock "project/internal/microservices/consumer/usecase/mocks"
@@ -14,6 +11,10 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/mailru/easyjson"
+	"github.com/stretchr/testify/require"
 )
 
 type testCase struct {
@@ -172,7 +173,7 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 			jsonMessages[idx] = []byte("fdafdafd")
 			continue
 		}
-		jsonMessages[idx], err = json.Marshal(message)
+		jsonMessages[idx], err = easyjson.Marshal(message)
 		require.NoError(t, err)
 	}
 
@@ -358,7 +359,7 @@ func Test_Messages_EditMessage(t *testing.T) {
 			jsonMessages[idx] = []byte("fdafdafd")
 			continue
 		}
-		jsonMessages[idx], err = json.Marshal(message)
+		jsonMessages[idx], err = easyjson.Marshal(message)
 		require.NoError(t, err)
 	}
 
@@ -544,7 +545,7 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 			jsonMessages[idx] = []byte("fdafdafd")
 			continue
 		}
-		jsonMessages[idx], err = json.Marshal(message)
+		jsonMessages[idx], err = easyjson.Marshal(message)
 		require.NoError(t, err)
 	}
 

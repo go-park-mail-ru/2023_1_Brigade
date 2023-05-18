@@ -2,11 +2,6 @@ package ws
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/centrifugal/centrifuge-go"
-	"github.com/gorilla/websocket"
-	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,6 +9,12 @@ import (
 	"project/internal/microservices/messages"
 	"project/internal/model"
 	"time"
+
+	"github.com/centrifugal/centrifuge-go"
+	"github.com/gorilla/websocket"
+	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
+	log "github.com/sirupsen/logrus"
 )
 
 type messageHandler struct {
@@ -29,7 +30,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
 		var producerMessage model.ProducerMessage
-		err := json.Unmarshal(e.Data, &producerMessage)
+		err := easyjson.Unmarshal(e.Data, &producerMessage)
 		if err != nil {
 			log.Error(err)
 			return

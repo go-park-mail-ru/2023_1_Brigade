@@ -2,7 +2,6 @@ package http
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
@@ -10,6 +9,8 @@ import (
 	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
+
+	"github.com/labstack/echo/v4"
 )
 
 type authHandler struct {

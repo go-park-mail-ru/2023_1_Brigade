@@ -3,11 +3,6 @@ package http
 import (
 	"bytes"
 	"context"
-	"encoding/json"
-	"github.com/golang/mock/gomock"
-	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	authUserMock "project/internal/microservices/auth/usecase/mocks"
@@ -17,6 +12,12 @@ import (
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/http_utils"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
+	"github.com/stretchr/testify/require"
 )
 
 type testCase struct {
@@ -48,7 +49,7 @@ func TestHandlers_Signup_Created(t *testing.T) {
 	var registrationUser model.RegistrationUser
 	var user model.User
 
-	err := json.Unmarshal(test.body, &registrationUser)
+	err := easyjson.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, nil).Times(1)
@@ -82,7 +83,7 @@ func TestHandlers_Signup_EmailRegistered(t *testing.T) {
 	var registrationUser model.RegistrationUser
 	var user model.User
 
-	err := json.Unmarshal(test.body, &registrationUser)
+	err := easyjson.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrEmailIsAlreadyRegistered).Times(1)
@@ -114,7 +115,7 @@ func TestHandlers_Signup_UsernameRegistered(t *testing.T) {
 	var registrationUser model.RegistrationUser
 	var user model.User
 
-	err := json.Unmarshal(test.body, &registrationUser)
+	err := easyjson.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrUsernameIsAlreadyRegistered).Times(1)
@@ -146,7 +147,7 @@ func TestHandlers_Signup_InvalidEmail(t *testing.T) {
 	var registrationUser model.RegistrationUser
 	var user model.User
 
-	err := json.Unmarshal(test.body, &registrationUser)
+	err := easyjson.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrInvalidEmail).Times(1)
@@ -178,7 +179,7 @@ func TestHandlers_Signup_InvalidUsername(t *testing.T) {
 	var registrationUser model.RegistrationUser
 	var user model.User
 
-	err := json.Unmarshal(test.body, &registrationUser)
+	err := easyjson.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrInvalidUsername).Times(1)
@@ -210,7 +211,7 @@ func TestHandlers_Signup_InvalidPassword(t *testing.T) {
 	var registrationUser model.RegistrationUser
 	var user model.User
 
-	err := json.Unmarshal(test.body, &registrationUser)
+	err := easyjson.Unmarshal(test.body, &registrationUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Signup(context.TODO(), registrationUser).Return(user, myErrors.ErrInvalidPassword).Times(1)
@@ -264,7 +265,7 @@ func TestHandlers_Login_OK(t *testing.T) {
 	loginUser := model.LoginUser{}
 	user := model.User{}
 
-	err := json.Unmarshal(test.body, &loginUser)
+	err := easyjson.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Login(context.TODO(), loginUser).Return(user, nil).Times(1)
@@ -297,7 +298,7 @@ func TestHandlers_Login_UserNotFound(t *testing.T) {
 	loginUser := model.LoginUser{}
 	user := model.User{}
 
-	err := json.Unmarshal(test.body, &loginUser)
+	err := easyjson.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Login(context.TODO(), loginUser).Return(user, myErrors.ErrEmailNotFound).Times(1)
@@ -328,7 +329,7 @@ func TestHandlers_Login_IncorrectPassword(t *testing.T) {
 	loginUser := model.LoginUser{}
 	user := model.User{}
 
-	err := json.Unmarshal(test.body, &loginUser)
+	err := easyjson.Unmarshal(test.body, &loginUser)
 	require.NoError(t, err)
 
 	authUserUsecase.EXPECT().Login(context.TODO(), loginUser).Return(user, myErrors.ErrIncorrectPassword).Times(1)

@@ -2,13 +2,14 @@ package usecase
 
 import (
 	"context"
-	"encoding/json"
-	amqp "github.com/rabbitmq/amqp091-go"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+
+	"github.com/mailru/easyjson"
+	amqp "github.com/rabbitmq/amqp091-go"
+	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -56,7 +57,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 }
 
 func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.ProducerMessage) error {
-	message, err := json.Marshal(producerMessage)
+	message, err := easyjson.Marshal(producerMessage)
 	if err != nil {
 		return err
 	}

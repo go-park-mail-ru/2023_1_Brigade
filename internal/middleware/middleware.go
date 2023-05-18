@@ -3,16 +3,17 @@ package middleware
 import (
 	"context"
 	"encoding/json"
-	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/status"
 	"math/rand"
 	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	metrics "project/internal/pkg/metrics/prometheus"
 	"time"
+
+	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 type jsonError struct {

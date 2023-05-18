@@ -20,7 +20,7 @@ type repository struct {
 
 func (r repository) GetSessionByCookie(ctx context.Context, cookie string) (model.Session, error) {
 	var session model.Session
-	result, err := r.db.Get(context.Background(), cookie).Result()
+	result, err := r.db.Get(context.TODO(), cookie).Result()
 	if err == redis.Nil {
 		return model.Session{}, myErrors.ErrSessionNotFound
 	}
@@ -37,12 +37,12 @@ func (r repository) GetSessionByCookie(ctx context.Context, cookie string) (mode
 }
 
 func (r repository) CreateSession(ctx context.Context, session model.Session) error {
-	err := r.db.Set(context.Background(), session.Cookie, session.UserId, 0).Err()
+	err := r.db.Set(context.TODO(), session.Cookie, session.UserId, 0).Err()
 	return err
 }
 
 func (r repository) DeleteSession(ctx context.Context, cookie string) error {
-	err := r.db.Del(context.Background(), cookie).Err()
+	err := r.db.Del(context.TODO(), cookie).Err()
 	if err == redis.Nil {
 		return myErrors.ErrSessionNotFound
 	}

@@ -9,6 +9,7 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
+	"project/internal/pkg/security"
 	"testing"
 )
 
@@ -53,6 +54,69 @@ func Test_GetUserById(t *testing.T) {
 	}
 }
 
+func Test_DeleteUserById_OK(t *testing.T) {
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+
+	userRepository.EXPECT().DeleteUserById(context.TODO(), uint64(1)).Return(nil).Times(1)
+
+	err := usecase.DeleteUserById(context.TODO(), uint64(1))
+
+	require.NoError(t, err)
+}
+
+func Test_PutUserById_OK(t *testing.T) {
+	oldPassword := security.Hash([]byte("12345678"))
+	newPassword := security.Hash([]byte("87654321"))
+
+	updateUser := model.UpdateUser{
+		Username:        "marcussss",
+		Nickname:        "marcussss",
+		Status:          "Hello world!",
+		CurrentPassword: "12345678",
+		NewPassword:     "87654321",
+	}
+
+	userFromDB := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss",
+		Nickname: "marcussss",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: oldPassword,
+	}
+
+	expectedUser := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss",
+		Nickname: "marcussss",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: newPassword,
+	}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+
+	userRepository.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(userFromDB, nil).Times(1)
+	userRepository.EXPECT().UpdateUserById(context.TODO(), expectedUser).Return(expectedUser, nil).Times(1)
+
+	user, err := usecase.PutUserById(context.TODO(), updateUser, uint64(1))
+
+	require.NoError(t, err)
+	require.Equal(t, model_conversion.FromAuthorizedUserToUser(expectedUser), user)
+}
+
 func Test_GetUserContacts_OK(t *testing.T) {
 	var expectedContacts []model.User
 
@@ -63,7 +127,7 @@ func Test_GetUserContacts_OK(t *testing.T) {
 	userRepository := userMock.NewMockRepository(ctl)
 	usecase := NewUserUsecase(userRepository, authRepository)
 
-	userRepository.EXPECT().GetUserContacts(context.Background(), uint64(1)).Return([]model.AuthorizedUser{}, nil).Times(1)
+	userRepository.EXPECT().GetUserContacts(context.TODO(), uint64(1)).Return([]model.AuthorizedUser{}, nil).Times(1)
 
 	contacts, err := usecase.GetUserContacts(context.TODO(), uint64(1))
 
@@ -92,12 +156,64 @@ func Test_AddUserInContacts_OK(t *testing.T) {
 	userRepository := userMock.NewMockRepository(ctl)
 	usecase := NewUserUsecase(userRepository, authRepository)
 
-	userRepository.EXPECT().CheckExistUserById(context.Background(), uint64(2)).Return(nil).Times(1)
-	userRepository.EXPECT().CheckUserIsContact(context.Background(), contact).Return(nil).Times(1)
-	userRepository.EXPECT().AddUserInContact(context.Background(), contact).Return(nil).Times(1)
-	userRepository.EXPECT().GetUserContacts(context.Background(), uint64(1)).Return(expectedContacts, nil).Times(1)
+	userRepository.EXPECT().CheckExistUserById(context.TODO(), uint64(2)).Return(nil).Times(1)
+	userRepository.EXPECT().CheckUserIsContact(context.TODO(), contact).Return(nil).Times(1)
+	userRepository.EXPECT().AddUserInContact(context.TODO(), contact).Return(nil).Times(1)
+	userRepository.EXPECT().GetUserContacts(context.TODO(), uint64(1)).Return(expectedContacts, nil).Times(1)
 
 	contacts, err := usecase.AddUserContact(context.TODO(), uint64(1), uint64(2))
+
+	require.NoError(t, err)
+	require.Equal(t, model_conversion.FromAuthorizedUserArrayToUserArray(expectedContacts), contacts)
+}
+
+func Test_CheckExistUserById_OK(t *testing.T) {
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+
+	userRepository.EXPECT().CheckExistUserById(context.TODO(), uint64(1)).Return(nil).Times(1)
+
+	err := usecase.CheckExistUserById(context.TODO(), uint64(1))
+
+	require.NoError(t, err)
+}
+
+func Test_GetAllUsersExceptCurrentUser_OK(t *testing.T) {
+	var expectedContacts []model.AuthorizedUser
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+
+	userRepository.EXPECT().GetAllUsersExceptCurrentUser(context.TODO(), uint64(1)).Return([]model.AuthorizedUser{}, nil).Times(1)
+
+	contacts, err := usecase.GetAllUsersExceptCurrentUser(context.TODO(), uint64(1))
+
+	require.NoError(t, err)
+	require.Equal(t, model_conversion.FromAuthorizedUserArrayToUserArray(expectedContacts), contacts)
+}
+
+func Test_GetSearchUsers_OK(t *testing.T) {
+	searchString := "abc"
+	var expectedContacts []model.AuthorizedUser
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+
+	userRepository.EXPECT().GetSearchUsers(context.TODO(), searchString).Return([]model.AuthorizedUser{}, nil).Times(1)
+
+	contacts, err := usecase.GetSearchUsers(context.TODO(), searchString)
 
 	require.NoError(t, err)
 	require.Equal(t, model_conversion.FromAuthorizedUserArrayToUserArray(expectedContacts), contacts)

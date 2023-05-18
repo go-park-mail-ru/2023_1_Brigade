@@ -61,7 +61,7 @@ func Test_DeleteChat_OK(t *testing.T) {
 	imagesUsecase := imagesMock.NewMockUsecase(ctl)
 	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
-	chatRepository.EXPECT().DeleteChatById(context.Background(), uint64(1)).Return(nil).Times(1)
+	chatRepository.EXPECT().DeleteChatById(context.TODO(), uint64(1)).Return(nil).Times(1)
 
 	err := usecase.DeleteChatById(context.TODO(), uint64(1))
 
@@ -138,11 +138,11 @@ func Test_GetListUserChats_OK(t *testing.T) {
 	imagesUsecase := imagesMock.NewMockUsecase(ctl)
 	usecase := NewChatUsecase(chatRepository, userRepository, messagesRepository, imagesUsecase)
 
-	chatRepository.EXPECT().GetChatsByUserId(context.Background(), uint64(1)).Return(userChats, nil).Times(1)
-	chatRepository.EXPECT().GetChatById(context.Background(), uint64(1)).Return(chat, nil).Times(1)
-	chatRepository.EXPECT().GetChatMembersByChatId(context.Background(), uint64(1)).Return(chatMembers, nil).Times(1)
-	userRepository.EXPECT().GetUserById(context.Background(), uint64(1)).Return(model.AuthorizedUser{Id: 1}, nil).Times(1)
-	messagesRepository.EXPECT().GetLastChatMessage(context.Background(), uint64(1)).Return(model.Message{}, nil).Times(1)
+	chatRepository.EXPECT().GetChatsByUserId(context.TODO(), uint64(1)).Return(userChats, nil).Times(1)
+	chatRepository.EXPECT().GetChatById(context.TODO(), uint64(1)).Return(chat, nil).Times(1)
+	chatRepository.EXPECT().GetChatMembersByChatId(context.TODO(), uint64(1)).Return(chatMembers, nil).Times(1)
+	userRepository.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(model.AuthorizedUser{Id: 1}, nil).Times(1)
+	messagesRepository.EXPECT().GetLastChatMessage(context.TODO(), uint64(1)).Return(model.Message{}, nil).Times(1)
 
 	listChats, err := usecase.GetListUserChats(context.TODO(), uint64(1))
 
@@ -196,7 +196,7 @@ func Test_EditChat_OK(t *testing.T) {
 	chatRepository.EXPECT().DeleteChatMembers(context.TODO(), editChat.Id).Return(nil).Times(1)
 	userRepository.EXPECT().CheckExistUserById(context.TODO(), uint64(1)).Return(nil).Times(1)
 	chatRepository.EXPECT().AddUserInChatDB(context.TODO(), editChat.Id, uint64(1)).Return(nil).Times(1)
-	userRepository.EXPECT().GetUserById(context.Background(), uint64(1)).Return(user, nil).Times(1)
+	userRepository.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(user, nil).Times(1)
 
 	chat, err := usecase.EditChat(context.TODO(), editChat)
 

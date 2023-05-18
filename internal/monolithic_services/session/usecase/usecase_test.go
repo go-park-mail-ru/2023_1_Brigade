@@ -52,7 +52,7 @@ func Test_GetSessionByCookie(t *testing.T) {
 	usecase := NewAuthUserUsecase(authRepository)
 
 	for _, test := range tests {
-		authRepository.EXPECT().GetSessionByCookie(context.Background(), "").Return(test.expectedSession, test.expectedError).Times(1)
+		authRepository.EXPECT().GetSessionByCookie(context.TODO(), "").Return(test.expectedSession, test.expectedError).Times(1)
 		session, err := usecase.GetSessionByCookie(context.TODO(), "")
 
 		require.Error(t, err, test.expectedError)

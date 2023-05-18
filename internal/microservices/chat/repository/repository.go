@@ -36,7 +36,7 @@ func (r repository) CreateTechnogrammChat(ctx context.Context, user model.Author
 
 	id := uuid.New().String()
 	_, err = tx.ExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)
-   VALUES ($1, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $2), (SELECT id FROM profile WHERE id = $3), '0001-01-01 00:00:00+00');`, id, "", config.NotSticker, chat.Id, 0)
+   VALUES ($1, $2, $3, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $4), (SELECT id FROM profile WHERE id = $5), '0001-01-01 00:00:00+00');`, id, "", config.NotSticker, chat.Id, 0)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -215,8 +215,7 @@ func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
 }
 
 func (r repository) AddUserInChatDB(ctx context.Context, chatID uint64, memberID uint64) error {
-	rows, err := r.db.QueryxContext(ctx, "INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
-	defer rows.Close()
+	_, err := r.db.ExecContext(ctx, "INSERT INTO chat_members (id_chat, id_member) VALUES ($1, $2)", chatID, memberID)
 	if err != nil {
 		return err
 	}

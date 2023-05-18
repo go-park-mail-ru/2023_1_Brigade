@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
+func TestPostgres_Signup_OK(t *testing.T) {
 	user := model.AuthorizedUser{
 		Avatar:   "",
 		Username: "marcussss",
@@ -53,7 +53,7 @@ func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 		WithArgs(user.Avatar, user.Username, user.Nickname, user.Email, user.Status, user.Password).
 		WillReturnRows(rowMain)
 
-	userFromDB, err := repo.CreateUser(context.Background(), user)
+	userFromDB, err := repo.CreateUser(context.TODO(), user)
 	require.NoError(t, err)
 	require.Equal(t, expectedUser, userFromDB)
 

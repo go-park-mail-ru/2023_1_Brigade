@@ -92,7 +92,7 @@ func (u *usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
 		return errors.New("не подписан")
 	}
 
-	_, err := sub.Publish(context.Background(), jsonWebSocketMessage)
+	_, err := sub.Publish(context.TODO(), jsonWebSocketMessage)
 	if err != nil {
 		return err
 	}

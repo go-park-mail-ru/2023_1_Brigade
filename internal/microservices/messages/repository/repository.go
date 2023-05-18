@@ -90,7 +90,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		return err
 	}
 
-	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at) `+
+	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)`+
 		`VALUES (:id, :image_url, :type, :body, :id_chat, :author_id, :created_at)`, message)
 	if err != nil {
 		tx.Rollback()

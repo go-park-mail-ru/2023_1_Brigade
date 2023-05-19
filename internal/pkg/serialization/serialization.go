@@ -10,8 +10,8 @@ import (
 type EasyJsonSerializer struct{}
 
 func (ejs EasyJsonSerializer) Serialize(ctx echo.Context, data interface{}, indent string) error {
-	suitable := data.(easyjson.Marshaler)
-	blob, err := easyjson.Marshal(suitable)
+	marshable := data.(easyjson.Marshaler)
+	blob, err := easyjson.Marshal(marshable)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,13 @@
 package main
 
 import (
+	"os"
+	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
+	clientChat "project/internal/microservices/chat/delivery/grpc/client"
+	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
+	clientUser "project/internal/microservices/user/delivery/grpc/client"
+	"project/internal/pkg/serialization"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/prometheus"
@@ -13,11 +20,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
-	"os"
-	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
-	clientChat "project/internal/microservices/chat/delivery/grpc/client"
-	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
-	clientUser "project/internal/microservices/user/delivery/grpc/client"
 
 	httpUser "project/internal/microservices/user/delivery/http"
 
@@ -186,6 +188,8 @@ func main() {
 			log.Error(err)
 		}
 	}()
+
+	e.JSONSerializer = serialization.EasyJsonSerializer{}
 
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)

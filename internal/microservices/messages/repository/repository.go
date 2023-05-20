@@ -34,13 +34,13 @@ func (r repository) DeleteMessageById(ctx context.Context, messageID string) err
 		return err
 	}
 
-	_, err = r.db.ExecContext(ctx, "DELETE FROM message WHERE id=$1", messageID)
+	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_messages WHERE id_message=$1", messageID)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_messages WHERE id_message=$1", messageID)
+	_, err = r.db.ExecContext(ctx, "DELETE FROM message WHERE id=$1", messageID)
 	if err != nil {
 		tx.Rollback()
 		return err

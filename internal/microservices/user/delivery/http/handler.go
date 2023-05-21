@@ -78,7 +78,7 @@ func (u userHandler) GetUserContactsHandler(ctx echo.Context) error {
 		return err
 	}
 
-	return ctx.JSON(http.StatusOK, contacts)
+	return ctx.JSON(http.StatusOK, model.Contacts{Contacts: contacts})
 }
 
 func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
@@ -93,7 +93,7 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 		return err
 	}
 
-	return ctx.JSON(http.StatusCreated, contacts)
+	return ctx.JSON(http.StatusCreated, model.Contacts{Contacts: contacts})
 }
 
 func (u userHandler) SearchUsersHandler(ctx echo.Context) error {
@@ -104,7 +104,7 @@ func (u userHandler) SearchUsersHandler(ctx echo.Context) error {
 		return err
 	}
 
-	return ctx.JSON(http.StatusOK, searchContacts)
+	return ctx.JSON(http.StatusOK, model.Contacts{Contacts: searchContacts})
 }
 
 func NewUserHandler(e *echo.Echo, us user.Usecase) userHandler {

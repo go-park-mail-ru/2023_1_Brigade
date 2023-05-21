@@ -115,7 +115,12 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
 
-	return nil
+	for {
+		_, _, err := ws.ReadMessage()
+		if err != nil {
+			return err
+		}
+	}
 }
 
 func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo config.Centrifugo) (notificationsHandler, error) {

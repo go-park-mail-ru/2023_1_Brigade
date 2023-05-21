@@ -18,6 +18,7 @@ import (
 	myErrors "project/internal/pkg/errors"
 	"strings"
 	"testing"
+	"time"
 )
 
 type testCase struct {
@@ -133,25 +134,23 @@ func TestHandlers_WSHandler(t *testing.T) {
 		err = ws.WriteMessage(websocket.TextMessage, test.wsBody)
 		require.NoError(t, err, test.name)
 
-		//if test.producerResult != nil {
-		//	continue
-		//}
-		//
-		//if test.consumerResult != nil {
-		//	continue
-		//}
-		//
-		//sub, subscribed := c.GetSubscription(centrifugo.ChannelName)
-		//require.Equal(t, true, subscribed)
-		//
-		//_, err := sub.Publish(context.TODO(), test.producerBody)
-		//require.NoError(t, err)
-		//
-		////_, err = sub.Publish(context.TODO(), test.producerBody)
-		////require.NoError(t, err)
-		//
-		//_, msg, err := ws.ReadMessage()
-		//require.Equal(t, test.producerBody, msg)
-		//require.NoError(t, err)
+		if test.producerResult != nil {
+			continue
+		}
+
+		if test.consumerResult != nil {
+			continue
+		}
+
+		sub, subscribed := c.GetSubscription(centrifugo.ChannelName)
+		require.Equal(t, true, subscribed)
+
+		_, err := sub.Publish(context.TODO(), test.producerBody)
+		require.NoError(t, err)
+		time.Sleep(100 * time.Millisecond)
+
+		_, msg, err := ws.ReadMessage()
+		require.Equal(t, test.producerBody, msg)
+		require.NoError(t, err)
 	}
 }

@@ -75,7 +75,7 @@ func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
 		}
 	}()
 
-	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.UserAvatarsBucket, string(userID))
+	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.ChatAvatarsBucket, string(userID))
 	if err != nil {
 		return err
 	}

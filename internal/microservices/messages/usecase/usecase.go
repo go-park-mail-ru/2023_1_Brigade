@@ -54,8 +54,8 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	}
 
 	// если пришел ивент на создание сообщения (0)
-	if producerMessage.Id == "" {
-		producerMessage.Id = uuid.New().String()
+	if producerMessage.Action == config.Create {
+		producerMessage.Id = uuid.NewString()
 		producerMessage.CreatedAt = time.Now().String()
 	}
 

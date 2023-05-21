@@ -124,7 +124,7 @@ func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
 	//	}
 	//	user.Avatar = url
 	//
-	//	return ctx.JSON(http.StatusCreated, user)
+	//	return ctx.JSON(ws.StatusCreated, user)
 }
 
 func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {

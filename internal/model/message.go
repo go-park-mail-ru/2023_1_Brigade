@@ -31,3 +31,10 @@ type ProducerMessage struct {
 	ReceiverID uint64 `json:"receiver_id" db:"receiver_id"`
 	CreatedAt  string `json:"created_at"  db:"created_at"`
 }
+
+type Notification struct {
+	ChatName       string `json:"chat_name" db:"chat_name"`
+	ChatAvatar     string `json:"chat_avatar" db:"chat_avatar"`
+	AuthorNickname string `json:"author_nickname" db:"author_nickname"`
+	Body           string `json:"body" db:"body"`
+}

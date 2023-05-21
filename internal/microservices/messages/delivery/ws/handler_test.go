@@ -123,7 +123,7 @@ func TestHandlers_WSHandler(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(h.ServeHTTP))
 	defer server.Close()
 
-	wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/message/"
+	wsURL := "ws" + strings.TrimPrefix(server.URL, "ws") + "/message/"
 	ws, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
 	assert.NoError(t, err, err)
 	defer ws.Close()

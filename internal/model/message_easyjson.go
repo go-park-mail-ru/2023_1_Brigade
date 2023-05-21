@@ -247,7 +247,94 @@ func (v *ProducerMessage) UnmarshalJSON(data []byte) error {
 func (v *ProducerMessage) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjson4086215fDecodeProjectInternalModel1(l, v)
 }
-func easyjson4086215fDecodeProjectInternalModel2(in *jlexer.Lexer, out *Message) {
+func easyjson4086215fDecodeProjectInternalModel2(in *jlexer.Lexer, out *Notification) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "chat_name":
+			out.ChatName = string(in.String())
+		case "chat_avatar":
+			out.ChatAvatar = string(in.String())
+		case "author_nickname":
+			out.AuthorNickname = string(in.String())
+		case "body":
+			out.Body = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjson4086215fEncodeProjectInternalModel2(out *jwriter.Writer, in Notification) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	{
+		const prefix string = ",\"chat_name\":"
+		out.RawString(prefix[1:])
+		out.String(string(in.ChatName))
+	}
+	{
+		const prefix string = ",\"chat_avatar\":"
+		out.RawString(prefix)
+		out.String(string(in.ChatAvatar))
+	}
+	{
+		const prefix string = ",\"author_nickname\":"
+		out.RawString(prefix)
+		out.String(string(in.AuthorNickname))
+	}
+	{
+		const prefix string = ",\"body\":"
+		out.RawString(prefix)
+		out.String(string(in.Body))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v Notification) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjson4086215fEncodeProjectInternalModel2(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v Notification) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjson4086215fEncodeProjectInternalModel2(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *Notification) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjson4086215fDecodeProjectInternalModel2(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *Notification) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjson4086215fDecodeProjectInternalModel2(l, v)
+}
+func easyjson4086215fDecodeProjectInternalModel3(in *jlexer.Lexer, out *Message) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -290,7 +377,7 @@ func easyjson4086215fDecodeProjectInternalModel2(in *jlexer.Lexer, out *Message)
 		in.Consumed()
 	}
 }
-func easyjson4086215fEncodeProjectInternalModel2(out *jwriter.Writer, in Message) {
+func easyjson4086215fEncodeProjectInternalModel3(out *jwriter.Writer, in Message) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -335,23 +422,23 @@ func easyjson4086215fEncodeProjectInternalModel2(out *jwriter.Writer, in Message
 // MarshalJSON supports json.Marshaler interface
 func (v Message) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson4086215fEncodeProjectInternalModel2(&w, v)
+	easyjson4086215fEncodeProjectInternalModel3(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v Message) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson4086215fEncodeProjectInternalModel2(w, v)
+	easyjson4086215fEncodeProjectInternalModel3(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *Message) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson4086215fDecodeProjectInternalModel2(&r, v)
+	easyjson4086215fDecodeProjectInternalModel3(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *Message) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson4086215fDecodeProjectInternalModel2(l, v)
+	easyjson4086215fDecodeProjectInternalModel3(l, v)
 }

@@ -33,6 +33,7 @@ import (
 	httpChat "project/internal/microservices/chat/delivery/http"
 	httpImages "project/internal/monolithic_services/images/delivery/http"
 	usecaseImages "project/internal/monolithic_services/images/usecase"
+	wsNotifications "project/internal/monolithic_services/notifications/delivery/ws"
 	usecaseAuthSession "project/internal/monolithic_services/session/usecase"
 
 	repositoryImages "project/internal/monolithic_services/images/repository"
@@ -196,6 +197,7 @@ func main() {
 	httpChat.NewChatHandler(e, chatService, userService)
 	wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
+	wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

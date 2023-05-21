@@ -86,17 +86,17 @@ func TestDeleteMessageById(t *testing.T) {
 
 	mock.ExpectBegin()
 
-	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM message WHERE id=$1`)).
+	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM chat_messages WHERE id_message=$1`)).
 		WithArgs(messageID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM chat_messages WHERE id_message=$1`)).
+	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM message WHERE id=$1`)).
 		WithArgs(messageID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectCommit()
 
-	err = repo.DeleteMessageById(context.Background(), messageID)
+	err = repo.DeleteMessageById(context.TODO(), messageID)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()
@@ -181,6 +181,8 @@ func TestPostgres_GetChatMessages_OK(t *testing.T) {
 func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 	message := model.Message{
 		Id:        uuid.New().String(),
+		ImageUrl:  "",
+		Type:      config.NotSticker,
 		Body:      "Hello world!",
 		AuthorId:  1,
 		ChatId:    1,
@@ -201,8 +203,8 @@ func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 
 	mock.ExpectBegin()
 
-	mock.ExpectExec(regexp.QuoteMeta("INSERT INTO message (id, body, id_chat, author_id, created_at) VALUES (?, ?, ?, ?, ?)")).
-		WithArgs(message.Id, message.Body, message.ChatId, message.AuthorId, message.CreatedAt).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)`+`VALUES (?, ?, ?, ?, ?, ?, ?)`)).
+		WithArgs(message.Id, message.ImageUrl, message.Type, message.Body, message.ChatId, message.AuthorId, message.CreatedAt).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectExec(regexp.QuoteMeta("INSERT INTO chat_messages (id_chat, id_message) VALUES (?, ?)")).
@@ -211,7 +213,7 @@ func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 
 	mock.ExpectCommit()
 
-	err = repo.InsertMessageInDB(context.Background(), message)
+	err = repo.InsertMessageInDB(context.TODO(), message)
 	require.NoError(t, err)
 
 	err = mock.ExpectationsWereMet()

@@ -7,17 +7,10 @@ import (
 	"project/internal/config"
 	messagesMock "project/internal/microservices/messages/usecase/mocks"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 	"strings"
 	"testing"
-
-	"github.com/centrifugal/centrifuge-go"
-	"github.com/golang/mock/gomock"
-	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
-	"github.com/labstack/echo/v4"
-	"github.com/mailru/easyjson"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"time"
 )
 
 type testCase struct {
@@ -92,20 +85,20 @@ func TestHandlers_WSHandler(t *testing.T) {
 			producerResult: nil,
 			consumerResult: nil,
 		},
-		//{
-		//	name:           "producer return error",
-		//	wsBody:         wsMessageJson,
-		//	producerBody:   producerMessageJson,
-		//	producerResult: myErrors.ErrInternal,
-		//	consumerResult: nil,
-		//},
-		//{
-		//	name:           "consumer return error",
-		//	wsBody:         wsMessageJson,
-		//	producerBody:   producerMessageJson,
-		//	producerResult: myErrors.ErrInternal,
-		//	consumerResult: nil,
-		//},
+		{
+			name:           "producer return error",
+			wsBody:         wsMessageJson,
+			producerBody:   producerMessageJson,
+			producerResult: myErrors.ErrInternal,
+			consumerResult: nil,
+		},
+		{
+			name:           "consumer return error",
+			wsBody:         wsMessageJson,
+			producerBody:   producerMessageJson,
+			producerResult: myErrors.ErrInternal,
+			consumerResult: nil,
+		},
 	}
 
 	ctl := gomock.NewController(t)
@@ -128,30 +121,28 @@ func TestHandlers_WSHandler(t *testing.T) {
 	defer ws.Close()
 
 	for _, test := range tests {
-		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).Times(1)
+		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).AnyTimes()
 
 		err = ws.WriteMessage(websocket.TextMessage, test.wsBody)
 		require.NoError(t, err, test.name)
 
-		//if test.producerResult != nil {
-		//	continue
-		//}
-		//
-		//if test.consumerResult != nil {
-		//	continue
-		//}
-		//
-		//sub, subscribed := c.GetSubscription(centrifugo.ChannelName)
-		//require.Equal(t, true, subscribed)
-		//
-		//_, err := sub.Publish(context.TODO(), test.producerBody)
-		//require.NoError(t, err)
-		//
-		////_, err = sub.Publish(context.TODO(), test.producerBody)
-		////require.NoError(t, err)
-		//
-		//_, msg, err := ws.ReadMessage()
-		//require.Equal(t, test.producerBody, msg)
-		//require.NoError(t, err)
+		if test.producerResult != nil {
+			continue
+		}
+
+		if test.consumerResult != nil {
+			continue
+		}
+
+		sub, subscribed := c.GetSubscription(centrifugo.ChannelName)
+		require.Equal(t, true, subscribed)
+
+		_, err := sub.Publish(context.TODO(), test.producerBody)
+		require.NoError(t, err)
+		time.Sleep(100 * time.Millisecond)
+
+		_, msg, err := ws.ReadMessage()
+		require.Equal(t, test.producerBody, msg)
+		require.NoError(t, err)
 	}
 }

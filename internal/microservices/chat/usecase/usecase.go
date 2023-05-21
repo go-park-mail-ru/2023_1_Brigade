@@ -145,32 +145,32 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 }
 
 func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
-	err := u.chatRepo.DeleteChatById(context.Background(), chatID)
+	err := u.chatRepo.DeleteChatById(ctx, chatID)
 	return err
 }
 
 func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
-	userChats, err := u.chatRepo.GetChatsByUserId(context.Background(), userID)
+	userChats, err := u.chatRepo.GetChatsByUserId(ctx, userID)
 
 	if err != nil {
 		return nil, err
 	}
 
 	for _, userChat := range userChats {
-		chat, err := u.chatRepo.GetChatById(context.Background(), userChat.ChatId)
+		chat, err := u.chatRepo.GetChatById(ctx, userChat.ChatId)
 		if err != nil {
 			return nil, err
 		}
 
-		chatMembers, err := u.chatRepo.GetChatMembersByChatId(context.Background(), chat.Id)
+		chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chat.Id)
 		if err != nil {
 			return nil, err
 		}
 
 		var members []model.User
 		for _, chatMember := range chatMembers {
-			user, err := u.userRepo.GetUserById(context.Background(), chatMember.MemberId)
+			user, err := u.userRepo.GetUserById(ctx, chatMember.MemberId)
 			if err != nil {
 				return nil, err
 			}
@@ -178,14 +178,14 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 			members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 		}
 
-		lastMessage, err := u.messagesRepo.GetLastChatMessage(context.Background(), chat.Id)
+		lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chat.Id)
 		if err != nil {
 			return nil, err
 		}
 
 		var lastMessageAuthor model.AuthorizedUser
 		if lastMessage.AuthorId != 0 {
-			lastMessageAuthor, err = u.userRepo.GetUserById(context.Background(), lastMessage.AuthorId)
+			lastMessageAuthor, err = u.userRepo.GetUserById(ctx, lastMessage.AuthorId)
 			if err != nil {
 				return nil, err
 			}
@@ -229,24 +229,24 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 		Avatar: chatFromDB.Avatar,
 	}
 
-	err = u.chatRepo.DeleteChatMembers(context.Background(), editChat.Id)
+	err = u.chatRepo.DeleteChatMembers(context.TODO(), editChat.Id)
 	if err != nil {
 		return model.Chat{}, err
 	}
 
 	var members []model.User
 	for _, memberID := range editChat.Members {
-		err := u.userRepo.CheckExistUserById(context.Background(), memberID)
+		err := u.userRepo.CheckExistUserById(context.TODO(), memberID)
 		if err != nil {
 			log.Error(err)
 		}
 
-		err = u.chatRepo.AddUserInChatDB(context.Background(), editChat.Id, memberID)
+		err = u.chatRepo.AddUserInChatDB(context.TODO(), editChat.Id, memberID)
 		if err != nil {
 			log.Error(err)
 		}
 
-		user, err := u.userRepo.GetUserById(context.Background(), memberID)
+		user, err := u.userRepo.GetUserById(context.TODO(), memberID)
 		if err != nil {
 			log.Error(err)
 		}

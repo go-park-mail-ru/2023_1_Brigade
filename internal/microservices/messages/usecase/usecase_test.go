@@ -11,10 +11,7 @@ import (
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"testing"
-
-	"github.com/golang/mock/gomock"
-	"github.com/mailru/easyjson"
-	"github.com/stretchr/testify/require"
+	"time"
 )
 
 type testCase struct {
@@ -204,6 +201,7 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 		}).AnyTimes()
 
 		err := usecase.PutInProducer(context.TODO(), test.body)
+		time.Sleep(100 * time.Millisecond)
 		if test.result == nil {
 			require.NoError(t, err)
 			continue
@@ -316,14 +314,16 @@ func Test_Messages_EditMessage(t *testing.T) {
 	messages := []model.WebSocketMessage{
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -331,21 +331,24 @@ func Test_Messages_EditMessage(t *testing.T) {
 		{},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1337,
 		},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -390,6 +393,7 @@ func Test_Messages_EditMessage(t *testing.T) {
 		}).AnyTimes()
 
 		err := usecase.PutInProducer(context.TODO(), test.body)
+		time.Sleep(100 * time.Millisecond)
 		if test.result == nil {
 			require.NoError(t, err)
 			continue
@@ -502,14 +506,16 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 	messages := []model.WebSocketMessage{
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -517,21 +523,24 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 		{},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1337,
 		},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -576,6 +585,76 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 		}).AnyTimes()
 
 		err := usecase.PutInProducer(context.TODO(), test.body)
+		time.Sleep(100 * time.Millisecond)
+		if test.result == nil {
+			require.NoError(t, err)
+			continue
+		}
+
+		require.Equal(t, test.result.Error(), err.Error())
+	}
+}
+
+func Test_Messages_UndefinedAction(t *testing.T) {
+	tests := []testCase{
+		{
+			name: `undefined message; 
+                      OK; 
+                      zero members`,
+			dbError:       nil,
+			members:       []model.ChatMembers{},
+			membersError:  nil,
+			producerError: nil,
+			result:        errors.New("не выбран ни один из трех 0, 1, 2"),
+		},
+	}
+
+	messages := []model.WebSocketMessage{
+		{
+			Id:       "1",
+			Action:   1337,
+			Type:     config.NotSticker,
+			Body:     "Hello world!",
+			AuthorID: 1,
+			ChatID:   1,
+		},
+	}
+
+	var err error
+	jsonMessages := make([][]byte, len(messages))
+	for idx, message := range messages {
+		if idx == 2 {
+			jsonMessages[idx] = []byte("fdafdafd")
+			continue
+		}
+		jsonMessages[idx], err = json.Marshal(message)
+		require.NoError(t, err)
+	}
+
+	for idx, _ := range messages {
+		tests[idx].body = jsonMessages[idx]
+	}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	chatRepository := chatMock.NewMockRepository(ctl)
+	consumerUsecase := consumerMock.NewMockUsecase(ctl)
+	producerUsecase := producerMock.NewMockUsecase(ctl)
+	messagesRepository := messagesMock.NewMockRepository(ctl)
+	usecase := NewMessagesUsecase(chatRepository, consumerUsecase, producerUsecase, messagesRepository)
+
+	for _, test := range tests {
+		chatRepository.EXPECT().GetChatMembersByChatId(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {
+			return test.members, test.membersError
+		}).AnyTimes()
+
+		producerUsecase.EXPECT().ProduceMessage(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, message model.ProducerMessage) error {
+			return test.producerError
+		}).AnyTimes()
+
+		err := usecase.PutInProducer(context.TODO(), test.body)
+		time.Sleep(100 * time.Millisecond)
 		if test.result == nil {
 			require.NoError(t, err)
 			continue

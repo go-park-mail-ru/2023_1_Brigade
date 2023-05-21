@@ -22,12 +22,12 @@ func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user
 }
 
 func (u usecase) DeleteUserById(ctx context.Context, userID uint64) error {
-	err := u.userRepo.DeleteUserById(context.Background(), userID)
+	err := u.userRepo.DeleteUserById(context.TODO(), userID)
 	return err
 }
 
 func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
-	user, err := u.userRepo.GetUserById(context.Background(), userID)
+	user, err := u.userRepo.GetUserById(context.TODO(), userID)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -38,7 +38,7 @@ func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, er
 func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
 	currentPassword := security.Hash([]byte(updateUser.CurrentPassword))
 
-	userFromDB, err := u.userRepo.GetUserById(context.Background(), userID)
+	userFromDB, err := u.userRepo.GetUserById(context.TODO(), userID)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -50,13 +50,15 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 	newPassword := security.Hash([]byte(updateUser.NewPassword))
 	oldUser := model.AuthorizedUser{
 		Id:       userID,
+		Avatar:   userFromDB.Avatar,
 		Username: updateUser.Username,
 		Nickname: updateUser.Nickname,
+		Email:    userFromDB.Email,
 		Status:   updateUser.Status,
 		Password: newPassword,
 	}
 
-	user, err := u.userRepo.UpdateUserById(context.Background(), oldUser)
+	user, err := u.userRepo.UpdateUserById(context.TODO(), oldUser)
 	return model_conversion.FromAuthorizedUserToUser(user), err
 }
 
@@ -79,32 +81,32 @@ func (u usecase) AddUserContact(ctx context.Context, userID uint64, contactID ui
 		IdContact: contactID,
 	}
 
-	err := u.userRepo.CheckExistUserById(context.Background(), contactID)
+	err := u.userRepo.CheckExistUserById(context.TODO(), contactID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = u.userRepo.CheckUserIsContact(context.Background(), userContact)
+	err = u.userRepo.CheckUserIsContact(context.TODO(), userContact)
 	if err != nil {
 		return nil, err
 	}
 
-	err = u.userRepo.AddUserInContact(context.Background(), userContact)
+	err = u.userRepo.AddUserInContact(context.TODO(), userContact)
 	if err != nil {
 		return nil, err
 	}
 
-	contacts, err := u.userRepo.GetUserContacts(context.Background(), userID)
+	contacts, err := u.userRepo.GetUserContacts(context.TODO(), userID)
 	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), err
 }
 
 func (u usecase) CheckExistUserById(ctx context.Context, userID uint64) error {
-	err := u.userRepo.CheckExistUserById(context.Background(), userID)
+	err := u.userRepo.CheckExistUserById(context.TODO(), userID)
 	return err
 }
 
 func (u usecase) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.User, error) {
-	users, err := u.userRepo.GetAllUsersExceptCurrentUser(context.Background(), userID)
+	users, err := u.userRepo.GetAllUsersExceptCurrentUser(context.TODO(), userID)
 	if err != nil {
 		return nil, err
 	}

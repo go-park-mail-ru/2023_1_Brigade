@@ -3,7 +3,7 @@ package model
 type AuthorizedUser struct {
 	Id       uint64 `json:"id"       valid:"type(int)"         db:"id"`
 	Avatar   string `json:"avatar"                             db:"avatar"`
-	Username string `json:"username" valid:"usernameValidator" db:"username"`
+	Username string `json:"username"                           db:"username"`
 	Nickname string `json:"nickname" valid:"nicknameValidator" db:"nickname"`
 	Email    string `json:"email"    valid:"emailValidator"    db:"email"`
 	Status   string `json:"status"   valid:"type(string)"      db:"status"`

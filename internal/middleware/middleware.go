@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"encoding/json"
 	"math/rand"
 	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
@@ -14,6 +15,14 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
 )
+
+type jsonError struct {
+	Err error `json:"error"`
+}
+
+func (j jsonError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(j.Err.Error())
+}
 
 type GRPCMiddleware struct {
 	metric *metrics.MetricsGRPC
@@ -32,10 +41,20 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			statusCode := httpUtils.StatusCode(err)
 			log.Error("HTTP code: ", statusCode, ", Error: ", err, ", request_id: ", requestId)
 			if statusCode == 500 {
-				return ctx.JSON(statusCode, myErrors.ErrInternal)
+				jsonErr, err := json.Marshal(jsonError{Err: myErrors.ErrInternal})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(statusCode, jsonErr)
 			}
 
-			return ctx.JSON(statusCode, err)
+			jsonErr, err := json.Marshal(jsonError{Err: err})
+			if err != nil {
+				log.Error(err)
+			}
+
+			return ctx.JSONBlob(statusCode, jsonErr)
 		}
 
 		log.Info("HTTP code: ", ctx.Response().Status, ", request_id: ", requestId)
@@ -58,12 +77,22 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 
 			session, err := ctx.Cookie("session_id")
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), myErrors.ErrCookieNotFound)
+				jsonErr, err := json.Marshal(jsonError{Err: myErrors.ErrCookieNotFound})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonErr)
 			}
 
 			authSession, err := authSessionUsecase.GetSessionByCookie(context.TODO(), session.Value)
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(err), err)
+				jsonErr, err := json.Marshal(jsonError{Err: err})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(httpUtils.StatusCode(err), jsonErr)
 			}
 
 			ctx.Set("session", authSession)

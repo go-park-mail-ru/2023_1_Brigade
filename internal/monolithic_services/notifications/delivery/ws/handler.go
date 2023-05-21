@@ -45,7 +45,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		if session.UserId != producerMessage.ReceiverID {
+		if session.UserId == producerMessage.AuthorId {
 			return
 		}
 
@@ -79,11 +79,9 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 				if chat.Members[0].Id == session.UserId {
 					notification.ChatName = chat.Members[1].Nickname
 					notification.ChatAvatar = chat.Members[1].Avatar
-					notification.AuthorNickname = chat.Members[1].Avatar
 				} else {
 					notification.ChatName = chat.Members[0].Nickname
 					notification.ChatAvatar = chat.Members[0].Avatar
-					notification.AuthorNickname = chat.Members[0].Avatar
 				}
 			}
 		}

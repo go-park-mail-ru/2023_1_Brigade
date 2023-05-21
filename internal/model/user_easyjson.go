@@ -210,8 +210,10 @@ func easyjson9e1087fdDecodeProjectInternalModel2(in *jlexer.Lexer, out *UpdateUs
 			continue
 		}
 		switch key {
-		case "username":
-			out.Username = string(in.String())
+		case "email":
+			out.Email = string(in.String())
+		case "new_avatar_url":
+			out.NewAvatarUrl = string(in.String())
 		case "nickname":
 			out.Nickname = string(in.String())
 		case "status":
@@ -235,9 +237,14 @@ func easyjson9e1087fdEncodeProjectInternalModel2(out *jwriter.Writer, in UpdateU
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"username\":"
+		const prefix string = ",\"email\":"
 		out.RawString(prefix[1:])
-		out.String(string(in.Username))
+		out.String(string(in.Email))
+	}
+	{
+		const prefix string = ",\"new_avatar_url\":"
+		out.RawString(prefix)
+		out.String(string(in.NewAvatarUrl))
 	}
 	{
 		const prefix string = ",\"nickname\":"

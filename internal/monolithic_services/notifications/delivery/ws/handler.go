@@ -40,6 +40,11 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
+		if producerMessage.Action != config.Create {
+			log.Error("action don't create")
+			return
+		}
+
 		if session.UserId == producerMessage.AuthorId {
 			return
 		}

@@ -36,30 +36,43 @@ func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, er
 }
 
 func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
-	currentPassword := security.Hash([]byte(updateUser.CurrentPassword))
+	switch updateUser.CurrentPassword {
+	case "":
+		userFromDB, err := u.userRepo.GetUserById(context.TODO(), userID)
+		if err != nil {
+			return model.User{}, err
+		}
 
-	userFromDB, err := u.userRepo.GetUserById(context.TODO(), userID)
-	if err != nil {
-		return model.User{}, err
+		currentPassword := security.Hash([]byte(updateUser.CurrentPassword))
+		if currentPassword != userFromDB.Password {
+			return model.User{}, myErrors.ErrIncorrectPassword
+		}
+
+		newPassword := security.Hash([]byte(updateUser.NewPassword))
+
+		userFromDB.Password = newPassword
+		user, err := u.userRepo.UpdateUserPasswordById(ctx, userFromDB)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		return model_conversion.FromAuthorizedUserToUser(user), nil
+	default:
+		user := model.AuthorizedUser{
+			Id:       userID,
+			Avatar:   updateUser.NewAvatarUrl,
+			Email:    updateUser.Email,
+			Nickname: updateUser.Nickname,
+			Status:   updateUser.Status,
+		}
+
+		user, err := u.userRepo.UpdateUserInfoById(ctx, user)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		return model_conversion.FromAuthorizedUserToUser(user), nil
 	}
-
-	if userFromDB.Password != currentPassword {
-		return model.User{}, myErrors.ErrIncorrectPassword
-	}
-
-	newPassword := security.Hash([]byte(updateUser.NewPassword))
-	oldUser := model.AuthorizedUser{
-		Id:       userID,
-		Avatar:   userFromDB.Avatar,
-		Username: updateUser.Username,
-		Nickname: updateUser.Nickname,
-		Email:    userFromDB.Email,
-		Status:   updateUser.Status,
-		Password: newPassword,
-	}
-
-	user, err := u.userRepo.UpdateUserById(context.TODO(), oldUser)
-	return model_conversion.FromAuthorizedUserToUser(user), err
 }
 
 func (u usecase) GetUserContacts(ctx context.Context, userID uint64) ([]model.User, error) {

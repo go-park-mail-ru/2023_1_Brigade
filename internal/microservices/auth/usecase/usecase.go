@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	log "github.com/sirupsen/logrus"
+	"math/rand"
 	"project/internal/config"
 	"project/internal/microservices/auth"
 	"project/internal/microservices/chat"
@@ -29,7 +30,9 @@ func NewAuthUserUsecase(authRepo auth.Repository, userRepo user.Repository, chat
 }
 
 func (u usecase) Signup(ctx context.Context, registrationUser model.RegistrationUser) (model.User, error) {
+	username := "id" + strconv.Itoa(rand.Int())
 	user := model.AuthorizedUser{
+		Username: username,
 		Nickname: registrationUser.Nickname,
 		Email:    registrationUser.Email,
 		Status:   "Привет, я использую технограм!",

@@ -24,11 +24,12 @@ message AuthorizedUser {
 }
 
 message UpdateUser {
-  string username = 1;
-  string nickname = 2;
-  string status = 3;
-  string current_password = 4;
-  string new_password = 5;
+  string email = 1;
+  string new_avatar_url = 2;
+  string nickname = 3;
+  string status = 4;
+  string current_password = 5;
+  string new_password = 6;
 }
 
 message UserID {

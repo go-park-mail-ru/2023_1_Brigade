@@ -35,7 +35,8 @@ type RegistrationUser struct {
 }
 
 type UpdateUser struct {
-	Username        string `json:"username"         valid:"usernameValidator" db:"username"`
+	Email           string `json:"email"            valid:"emailValidator"    db:"email"`
+	NewAvatarUrl    string `json:"new_avatar_url"                             db:"new_avatar_url"`
 	Nickname        string `json:"nickname"         valid:"nicknameValidator" db:"nickname"`
 	Status          string `json:"status"           valid:"type(string)"      db:"status"`
 	CurrentPassword string `json:"current_password" valid:"passwordValidator" db:"current_password"`

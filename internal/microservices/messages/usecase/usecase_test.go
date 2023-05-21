@@ -2,7 +2,11 @@ package usecase
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"github.com/golang/mock/gomock"
+	"github.com/mailru/easyjson"
+	"github.com/stretchr/testify/require"
 	"project/internal/config"
 	chatMock "project/internal/microservices/chat/repository/mocks"
 	consumerMock "project/internal/microservices/consumer/usecase/mocks"

@@ -179,7 +179,8 @@ func FromEditChatToProtoEditChat(chat model.EditChat) *protobuf.EditChatModel {
 
 func FromProtoUpdateUserToUpdateUser(user *protobuf.UpdateUser) model.UpdateUser {
 	return model.UpdateUser{
-		Username:        user.Username,
+		Email:           user.Email,
+		NewAvatarUrl:    user.NewAvatarUrl,
 		Nickname:        user.Nickname,
 		Status:          user.Status,
 		CurrentPassword: user.CurrentPassword,
@@ -189,7 +190,8 @@ func FromProtoUpdateUserToUpdateUser(user *protobuf.UpdateUser) model.UpdateUser
 
 func FromUpdateUserToProtoUpdateUser(user model.UpdateUser) *protobuf.UpdateUser {
 	return &protobuf.UpdateUser{
-		Username:        user.Username,
+		Email:           user.Email,
+		NewAvatarUrl:    user.NewAvatarUrl,
 		Nickname:        user.Nickname,
 		Status:          user.Status,
 		CurrentPassword: user.CurrentPassword,

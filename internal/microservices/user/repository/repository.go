@@ -95,9 +95,24 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 	return contactsInfo, nil
 }
 
-func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.GetContext(ctx, &user, `UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5 RETURNING *`,
-		user.Username, user.Nickname, user.Status, user.Password, user.Id)
+func (r repository) UpdateUserPasswordById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET password=$1 WHERE id=$2 RETURNING *`,
+		user.Password, user.Id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+		}
+
+		return model.AuthorizedUser{}, err
+	}
+
+	return user, nil
+}
+
+func (r repository) UpdateUserInfoById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET avatar=$1, nickname=$2, email=$3, status=$4, WHERE id=$5 RETURNING *`,
+		user.Avatar, user.Nickname, user.Email, user.Status, user.Id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

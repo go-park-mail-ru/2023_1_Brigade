@@ -2,6 +2,14 @@ package ws
 
 import (
 	"context"
+	"github.com/centrifugal/centrifuge-go"
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
+	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"project/internal/config"

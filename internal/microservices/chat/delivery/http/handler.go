@@ -10,7 +10,6 @@ import (
 	"project/internal/microservices/user"
 	"project/internal/model"
 	httpUtils "project/internal/pkg/http_utils"
-	"project/internal/pkg/serialization"
 	"strconv"
 )
 
@@ -55,9 +54,11 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 		return err
 	}
 
-	//EasyJsonSerializer
-	abc := serialization.EasyJsonSerializer{}
+	return ctx.JSON(http.StatusOK, model.Chats{Chats: listUserChats})
 
+	//EasyJsonSerializer
+	//abc := serialization.EasyJsonSerializer{}
+	//
 	//var data []byte
 	//
 	//for _, chat := range listUserChats {
@@ -84,7 +85,7 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	//return ctx.JSONBlob(http.StatusOK, blob)
 	//serialization.Serialize
 
-	return abc.Serialize(ctx, listUserChats, "")
+	//return abc.Serialize(ctx, listUserChats, "")
 	//abc.Serialize()
 	//return ctx.JSON(http.StatusOK, model.Chats{Chats: listUserChats})
 }

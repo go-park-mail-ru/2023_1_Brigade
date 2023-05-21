@@ -576,6 +576,29 @@ func easyjson9b8f5552DecodeProjectInternalModel4(in *jlexer.Lexer, out *Chats) {
 			continue
 		}
 		switch key {
+		case "chats":
+			if in.IsNull() {
+				in.Skip()
+				out.Chats = nil
+			} else {
+				in.Delim('[')
+				if out.Chats == nil {
+					if !in.IsDelim(']') {
+						out.Chats = make([]ChatInListUser, 0, 0)
+					} else {
+						out.Chats = []ChatInListUser{}
+					}
+				} else {
+					out.Chats = (out.Chats)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v19 ChatInListUser
+					(v19).UnmarshalEasyJSON(in)
+					out.Chats = append(out.Chats, v19)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -590,6 +613,22 @@ func easyjson9b8f5552EncodeProjectInternalModel4(out *jwriter.Writer, in Chats) 
 	out.RawByte('{')
 	first := true
 	_ = first
+	{
+		const prefix string = ",\"chats\":"
+		out.RawString(prefix[1:])
+		if in.Chats == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v20, v21 := range in.Chats {
+				if v20 > 0 {
+					out.RawByte(',')
+				}
+				(v21).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
+	}
 	out.RawByte('}')
 }
 
@@ -805,9 +844,9 @@ func easyjson9b8f5552DecodeProjectInternalModel7(in *jlexer.Lexer, out *ChatInLi
 					out.Members = (out.Members)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v19 User
-					(v19).UnmarshalEasyJSON(in)
-					out.Members = append(out.Members, v19)
+					var v22 User
+					(v22).UnmarshalEasyJSON(in)
+					out.Members = append(out.Members, v22)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -857,11 +896,11 @@ func easyjson9b8f5552EncodeProjectInternalModel7(out *jwriter.Writer, in ChatInL
 			out.RawString("null")
 		} else {
 			out.RawByte('[')
-			for v20, v21 := range in.Members {
-				if v20 > 0 {
+			for v23, v24 := range in.Members {
+				if v23 > 0 {
 					out.RawByte(',')
 				}
-				(v21).MarshalEasyJSON(out)
+				(v24).MarshalEasyJSON(out)
 			}
 			out.RawByte(']')
 		}
@@ -947,9 +986,9 @@ func easyjson9b8f5552DecodeProjectInternalModel8(in *jlexer.Lexer, out *Chat) {
 					out.Members = (out.Members)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v22 User
-					(v22).UnmarshalEasyJSON(in)
-					out.Members = append(out.Members, v22)
+					var v25 User
+					(v25).UnmarshalEasyJSON(in)
+					out.Members = append(out.Members, v25)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -970,9 +1009,9 @@ func easyjson9b8f5552DecodeProjectInternalModel8(in *jlexer.Lexer, out *Chat) {
 					out.Messages = (out.Messages)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v23 Message
-					(v23).UnmarshalEasyJSON(in)
-					out.Messages = append(out.Messages, v23)
+					var v26 Message
+					(v26).UnmarshalEasyJSON(in)
+					out.Messages = append(out.Messages, v26)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -1023,11 +1062,11 @@ func easyjson9b8f5552EncodeProjectInternalModel8(out *jwriter.Writer, in Chat) {
 			out.RawString("null")
 		} else {
 			out.RawByte('[')
-			for v24, v25 := range in.Members {
-				if v24 > 0 {
+			for v27, v28 := range in.Members {
+				if v27 > 0 {
 					out.RawByte(',')
 				}
-				(v25).MarshalEasyJSON(out)
+				(v28).MarshalEasyJSON(out)
 			}
 			out.RawByte(']')
 		}
@@ -1039,11 +1078,11 @@ func easyjson9b8f5552EncodeProjectInternalModel8(out *jwriter.Writer, in Chat) {
 			out.RawString("null")
 		} else {
 			out.RawByte('[')
-			for v26, v27 := range in.Messages {
-				if v26 > 0 {
+			for v29, v30 := range in.Messages {
+				if v29 > 0 {
 					out.RawByte(',')
 				}
-				(v27).MarshalEasyJSON(out)
+				(v30).MarshalEasyJSON(out)
 			}
 			out.RawByte(']')
 		}

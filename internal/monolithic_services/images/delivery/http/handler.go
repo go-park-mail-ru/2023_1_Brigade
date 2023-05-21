@@ -198,6 +198,9 @@ func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
 	//return ctx.JSON(http.StatusCreated, user)
 }
 
+//curl -X 'POST' 'http://technogramm.ru/images/chat/images/' -H 'Cookie:' -d '{ "username": "sdsdds", "email": "danssssddsila22om", "name": "string", "password": "tests", "status":"i am star" }' session_id=T8+nIV0jmqlD9C2tkRuSWOiPyhCaNxHYWiBUWGplT+M=
+//curl -X 'POST' -H 'Cookie:session_id=T8+nIV0jmqlD9C2tkRuSWOiPyhCaNxHYWiBUWGplT+M=' -H "Content-Type: multipart/form-data" -F "image=@/home/marcussss1/Downloads/1avatara_ru_3D001.jpg"  http://technogramm.ru/images/chat/images/
+
 func NewImagesHandler(e *echo.Echo, userUsecase user.Usecase, imagesUsecase images.Usecase) imagesHandler {
 	handler := imagesHandler{userUsecase: userUsecase, imagesUsecase: imagesUsecase}
 	uploadUserAvatarsUrl := "/images/user/"

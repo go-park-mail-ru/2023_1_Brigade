@@ -145,32 +145,32 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 }
 
 func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
-	err := u.chatRepo.DeleteChatById(context.TODO(), chatID)
+	err := u.chatRepo.DeleteChatById(ctx, chatID)
 	return err
 }
 
 func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
-	userChats, err := u.chatRepo.GetChatsByUserId(context.TODO(), userID)
+	userChats, err := u.chatRepo.GetChatsByUserId(ctx, userID)
 
 	if err != nil {
 		return nil, err
 	}
 
 	for _, userChat := range userChats {
-		chat, err := u.chatRepo.GetChatById(context.TODO(), userChat.ChatId)
+		chat, err := u.chatRepo.GetChatById(ctx, userChat.ChatId)
 		if err != nil {
 			return nil, err
 		}
 
-		chatMembers, err := u.chatRepo.GetChatMembersByChatId(context.TODO(), chat.Id)
+		chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chat.Id)
 		if err != nil {
 			return nil, err
 		}
 
 		var members []model.User
 		for _, chatMember := range chatMembers {
-			user, err := u.userRepo.GetUserById(context.TODO(), chatMember.MemberId)
+			user, err := u.userRepo.GetUserById(ctx, chatMember.MemberId)
 			if err != nil {
 				return nil, err
 			}
@@ -178,14 +178,14 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 			members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 		}
 
-		lastMessage, err := u.messagesRepo.GetLastChatMessage(context.TODO(), chat.Id)
+		lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chat.Id)
 		if err != nil {
 			return nil, err
 		}
 
 		var lastMessageAuthor model.AuthorizedUser
 		if lastMessage.AuthorId != 0 {
-			lastMessageAuthor, err = u.userRepo.GetUserById(context.TODO(), lastMessage.AuthorId)
+			lastMessageAuthor, err = u.userRepo.GetUserById(ctx, lastMessage.AuthorId)
 			if err != nil {
 				return nil, err
 			}

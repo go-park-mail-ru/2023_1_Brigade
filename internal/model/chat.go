@@ -17,7 +17,7 @@ type Chat struct {
 }
 
 type Chats struct {
-	Chats []ChatInListUser
+	Chats []ChatInListUser `json:"chats"`
 }
 
 type ChatInListUser struct {

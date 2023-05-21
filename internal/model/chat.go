@@ -16,6 +16,10 @@ type Chat struct {
 	Messages []Message `json:"messages"  db:"messages"`
 }
 
+type Chats struct {
+	Chats []ChatInListUser
+}
+
 type ChatInListUser struct {
 	Id                uint64  `json:"id"                  db:"id"`
 	Type              uint64  `json:"type"                db:"type"`

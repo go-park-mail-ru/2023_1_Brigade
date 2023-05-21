@@ -70,3 +70,40 @@ time="2023-05-14T20:42:00Z" level=info msg="Incoming request: /, ip: 45.83.66.89
 time="2023-05-14T20:42:00Z" level=info msg="HTTP code: 401, request_id: 887277373652868220" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
 time="2023-05-14T20:42:01Z" level=info msg="Incoming request: /favicon.ico, ip: 45.83.64.169, method: GET, request_id: 3713916686156294536" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:37"
 time="2023-05-14T20:42:01Z" level=info msg="HTTP code: 401, request_id: 3713916686156294536" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:49"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+time="2023-05-21T19:01:55+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7313313661293908150" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:01:55+03:00" level=error msg="HTTP code: 500, Error: sql: no rows in result set, request_id: 7313313661293908150" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-21T19:02:03+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 349574962543144083" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:03+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 349574962543144083" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-21T19:02:14+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 5187320575450814597" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:14+03:00" level=info msg="HTTP code: 200, request_id: 5187320575450814597" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-21T19:02:19+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3474720255070339109" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:19+03:00" level=info msg="HTTP code: 200, request_id: 3474720255070339109" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-21T19:02:26+03:00" level=info msg="Incoming request: /api/v1/login/, ip: 127.0.0.1, method: POST, request_id: 3473092521786381264" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:26+03:00" level=info msg="HTTP code: 200, request_id: 3473092521786381264" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-21T19:02:26+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 7216037502551309873" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:26+03:00" level=info msg="HTTP code: 200, request_id: 7216037502551309873" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-21T19:02:32+03:00" level=info msg="Incoming request: /api/v1/chats/1/, ip: 127.0.0.1, method: GET, request_id: 381309979792513473" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:32+03:00" level=info msg="HTTP code: 200, request_id: 381309979792513473" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-21T19:02:35+03:00" level=info msg="Incoming request: /api/v1/logout/, ip: 127.0.0.1, method: DELETE, request_id: 1529083792139567298" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-21T19:02:35+03:00" level=info msg="HTTP code: 204, request_id: 1529083792139567298" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+signal: killed

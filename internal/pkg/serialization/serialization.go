@@ -2,11 +2,9 @@ package serialization
 
 import (
 	"errors"
-	"io/ioutil"
-	"net/http"
-
 	"github.com/labstack/echo/v4"
 	"github.com/mailru/easyjson"
+	"io/ioutil"
 )
 
 type EasyJsonSerializer struct{}
@@ -18,7 +16,7 @@ func (ejs EasyJsonSerializer) Serialize(ctx echo.Context, data interface{}, inde
 		return err
 	}
 
-	return ctx.JSONBlob(http.StatusOK, blob)
+	return ctx.JSONBlob(ctx.Response().Status, blob)
 }
 
 func (s EasyJsonSerializer) Deserialize(ctx echo.Context, i interface{}) error {

@@ -115,8 +115,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
 
-	for {
-	}
+	return nil
 }
 
 func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo config.Centrifugo) (notificationsHandler, error) {
@@ -166,7 +165,7 @@ func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase
 	}
 
 	sendMessagesUrl := "/notification/"
-	api := e.Group("ws/api/v1")
+	api := e.Group("api/v1")
 	sendMessages := api.Group(sendMessagesUrl)
 	sendMessages.GET("", handler.SendNotificationsHandler)
 

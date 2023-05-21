@@ -10,6 +10,10 @@ type AuthorizedUser struct {
 	Password string `json:"password" valid:"passwordValidator" db:"password"`
 }
 
+type Contacts struct {
+	Contacts []User `json:"contacts"`
+}
+
 type User struct {
 	Id       uint64 `json:"id"       valid:"type(int)"         db:"id"`
 	Username string `json:"username"         				   db:"username"`

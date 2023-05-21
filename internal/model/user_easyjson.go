@@ -438,7 +438,105 @@ func (v *LoginUser) UnmarshalJSON(data []byte) error {
 func (v *LoginUser) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjson9e1087fdDecodeProjectInternalModel4(l, v)
 }
-func easyjson9e1087fdDecodeProjectInternalModel5(in *jlexer.Lexer, out *AuthorizedUser) {
+func easyjson9e1087fdDecodeProjectInternalModel5(in *jlexer.Lexer, out *Contacts) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "contacts":
+			if in.IsNull() {
+				in.Skip()
+				out.Contacts = nil
+			} else {
+				in.Delim('[')
+				if out.Contacts == nil {
+					if !in.IsDelim(']') {
+						out.Contacts = make([]User, 0, 0)
+					} else {
+						out.Contacts = []User{}
+					}
+				} else {
+					out.Contacts = (out.Contacts)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v1 User
+					(v1).UnmarshalEasyJSON(in)
+					out.Contacts = append(out.Contacts, v1)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjson9e1087fdEncodeProjectInternalModel5(out *jwriter.Writer, in Contacts) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	{
+		const prefix string = ",\"contacts\":"
+		out.RawString(prefix[1:])
+		if in.Contacts == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v2, v3 := range in.Contacts {
+				if v2 > 0 {
+					out.RawByte(',')
+				}
+				(v3).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v Contacts) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjson9e1087fdEncodeProjectInternalModel5(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v Contacts) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjson9e1087fdEncodeProjectInternalModel5(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *Contacts) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjson9e1087fdDecodeProjectInternalModel5(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *Contacts) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjson9e1087fdDecodeProjectInternalModel5(l, v)
+}
+func easyjson9e1087fdDecodeProjectInternalModel6(in *jlexer.Lexer, out *AuthorizedUser) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -481,7 +579,7 @@ func easyjson9e1087fdDecodeProjectInternalModel5(in *jlexer.Lexer, out *Authoriz
 		in.Consumed()
 	}
 }
-func easyjson9e1087fdEncodeProjectInternalModel5(out *jwriter.Writer, in AuthorizedUser) {
+func easyjson9e1087fdEncodeProjectInternalModel6(out *jwriter.Writer, in AuthorizedUser) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -526,23 +624,23 @@ func easyjson9e1087fdEncodeProjectInternalModel5(out *jwriter.Writer, in Authori
 // MarshalJSON supports json.Marshaler interface
 func (v AuthorizedUser) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson9e1087fdEncodeProjectInternalModel5(&w, v)
+	easyjson9e1087fdEncodeProjectInternalModel6(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v AuthorizedUser) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9e1087fdEncodeProjectInternalModel5(w, v)
+	easyjson9e1087fdEncodeProjectInternalModel6(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *AuthorizedUser) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson9e1087fdDecodeProjectInternalModel5(&r, v)
+	easyjson9e1087fdDecodeProjectInternalModel6(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *AuthorizedUser) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9e1087fdDecodeProjectInternalModel5(l, v)
+	easyjson9e1087fdDecodeProjectInternalModel6(l, v)
 }

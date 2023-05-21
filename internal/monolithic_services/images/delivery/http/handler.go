@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -160,8 +161,12 @@ func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
 	//if err != nil {
 	//	return err
 	//}
+	data, err := json.Marshal(url)
+	if err != nil {
+		return err
+	}
 
-	return ctx.JSON(http.StatusCreated, url)
+	return ctx.JSONBlob(http.StatusCreated, data)
 	//return nil
 	//session := ctx.Get("session").(model.Session)
 	//userID := session.UserId

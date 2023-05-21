@@ -15,6 +15,7 @@ import (
 	"project/internal/config"
 	messagesMock "project/internal/microservices/messages/usecase/mocks"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 	"strings"
 	"testing"
 )
@@ -91,20 +92,20 @@ func TestHandlers_WSHandler(t *testing.T) {
 			producerResult: nil,
 			consumerResult: nil,
 		},
-		//{
-		//	name:           "producer return error",
-		//	wsBody:         wsMessageJson,
-		//	producerBody:   producerMessageJson,
-		//	producerResult: myErrors.ErrInternal,
-		//	consumerResult: nil,
-		//},
-		//{
-		//	name:           "consumer return error",
-		//	wsBody:         wsMessageJson,
-		//	producerBody:   producerMessageJson,
-		//	producerResult: myErrors.ErrInternal,
-		//	consumerResult: nil,
-		//},
+		{
+			name:           "producer return error",
+			wsBody:         wsMessageJson,
+			producerBody:   producerMessageJson,
+			producerResult: myErrors.ErrInternal,
+			consumerResult: nil,
+		},
+		{
+			name:           "consumer return error",
+			wsBody:         wsMessageJson,
+			producerBody:   producerMessageJson,
+			producerResult: myErrors.ErrInternal,
+			consumerResult: nil,
+		},
 	}
 
 	ctl := gomock.NewController(t)
@@ -127,7 +128,7 @@ func TestHandlers_WSHandler(t *testing.T) {
 	defer ws.Close()
 
 	for _, test := range tests {
-		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).Times(1)
+		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).AnyTimes()
 
 		err = ws.WriteMessage(websocket.TextMessage, test.wsBody)
 		require.NoError(t, err, test.name)

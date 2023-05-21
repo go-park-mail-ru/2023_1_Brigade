@@ -194,8 +194,29 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 			return test.members, test.membersError
 		}).AnyTimes()
 
+		//messagesRepository.EXPECT().InsertMessageInDB(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, message model.Message) error {
+		//	return test.dbError
+		//}).AnyTimes()
+
 		messagesRepository.EXPECT().InsertMessageInDB(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, message model.Message) error {
-			return test.dbError
+			// Создаем канал для синхронизации
+			done := make(chan error)
+
+			// Запускаем горутину
+			go func() {
+				// Код, который нужно выполнить в горутине
+				//err := insertMessageInDB(ctx, message)
+				//goErr := messagesRepository.EXPECT().InsertMessageInDB(gomock.Any(), gomock.Any()).Return(test.dbError).AnyTimes()
+				// Отправляем результат работы горутины в канал
+				_ = messagesRepository.InsertMessageInDB(ctx, message)
+				done <- test.dbError
+			}()
+
+			// Ждем завершения работы горутины
+			err := <-done
+
+			// Возвращаем результат работы функции
+			return err
 		}).AnyTimes()
 
 		producerUsecase.EXPECT().ProduceMessage(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, message model.ProducerMessage) error {
@@ -315,14 +336,16 @@ func Test_Messages_EditMessage(t *testing.T) {
 	messages := []model.WebSocketMessage{
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -330,21 +353,24 @@ func Test_Messages_EditMessage(t *testing.T) {
 		{},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1337,
 		},
 		{
 			Id:       "1",
-			Type:     config.Edit,
+			Action:   config.Edit,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -501,14 +527,16 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 	messages := []model.WebSocketMessage{
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
@@ -516,21 +544,24 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 		{},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,
 		},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1337,
 		},
 		{
 			Id:       "1",
-			Type:     config.Delete,
+			Action:   config.Delete,
+			Type:     config.NotSticker,
 			Body:     "Hello world!",
 			AuthorID: 1,
 			ChatID:   1,

@@ -86,11 +86,11 @@ func TestDeleteMessageById(t *testing.T) {
 
 	mock.ExpectBegin()
 
-	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM message WHERE id=$1`)).
+	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM chat_messages WHERE id_message=$1`)).
 		WithArgs(messageID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM chat_messages WHERE id_message=$1`)).
+	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM message WHERE id=$1`)).
 		WithArgs(messageID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 

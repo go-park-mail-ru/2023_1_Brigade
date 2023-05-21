@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
 	"net/http"
 	"net/url"
 	"project/internal/config"
@@ -54,7 +55,33 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 		return err
 	}
 
-	return ctx.JSON(http.StatusOK, listUserChats)
+	var data []byte
+
+	for _, chat := range listUserChats {
+		//marshable := chat.(easyjson.Marshaler)
+		jsonChat, err := easyjson.Marshal(chat)
+		//blob, err := easyjson.Marshal(marshable)
+		if err != nil {
+			return err
+		}
+
+		for _, jsonChatByte := range jsonChat {
+			data = append(data, jsonChatByte)
+		}
+		//data3 := append(data, []byte{})
+		//data = append(data, jsonChat)
+	}
+
+	//marshable := data.(easyjson.Marshaler)
+	//blob, err := easyjson.Marshal(marshable)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//return ctx.JSONBlob(http.StatusOK, blob)
+	//serialization.Serialize
+
+	return ctx.JSON(http.StatusOK, data)
 }
 
 func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {

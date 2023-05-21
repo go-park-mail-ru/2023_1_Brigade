@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"encoding/json"
 	"math/rand"
 	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
@@ -16,20 +15,12 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type jsonError struct {
-	Err error `json:"error"`
-}
-
 type GRPCMiddleware struct {
 	metric *metrics.MetricsGRPC
 }
 
 func NewGRPCMiddleware(metric *metrics.MetricsGRPC) *GRPCMiddleware {
 	return &GRPCMiddleware{metric: metric}
-}
-
-func (j jsonError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(j.Err.Error())
 }
 
 func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -41,10 +32,10 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			statusCode := httpUtils.StatusCode(err)
 			log.Error("HTTP code: ", statusCode, ", Error: ", err, ", request_id: ", requestId)
 			if statusCode == 500 {
-				return ctx.JSON(statusCode, jsonError{Err: myErrors.ErrInternal})
+				return ctx.JSON(statusCode, myErrors.ErrInternal)
 			}
 
-			return ctx.JSON(statusCode, jsonError{Err: err})
+			return ctx.JSON(statusCode, err)
 		}
 
 		log.Info("HTTP code: ", ctx.Response().Status, ", request_id: ", requestId)
@@ -67,12 +58,12 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 
 			session, err := ctx.Cookie("session_id")
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonError{Err: myErrors.ErrCookieNotFound})
+				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), myErrors.ErrCookieNotFound)
 			}
 
 			authSession, err := authSessionUsecase.GetSessionByCookie(context.TODO(), session.Value)
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(err), jsonError{Err: err})
+				return ctx.JSON(httpUtils.StatusCode(err), err)
 			}
 
 			ctx.Set("session", authSession)

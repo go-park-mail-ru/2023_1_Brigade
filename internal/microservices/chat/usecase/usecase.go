@@ -238,17 +238,17 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 	for _, memberID := range editChat.Members {
 		err := u.userRepo.CheckExistUserById(context.TODO(), memberID)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		err = u.chatRepo.AddUserInChatDB(context.TODO(), editChat.Id, memberID)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		user, err := u.userRepo.GetUserById(context.TODO(), memberID)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		members = append(members, model_conversion.FromAuthorizedUserToUser(user))

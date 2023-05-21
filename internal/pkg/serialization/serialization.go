@@ -17,11 +17,12 @@ func (ejs EasyJsonSerializer) Serialize(ctx echo.Context, data interface{}, inde
 	if err != nil {
 		return err
 	}
+
 	return ctx.JSONBlob(http.StatusOK, blob)
 }
 
-func (s EasyJsonSerializer) Deserialize(c echo.Context, i interface{}) error {
-	data, err := ioutil.ReadAll(c.Request().Body)
+func (s EasyJsonSerializer) Deserialize(ctx echo.Context, i interface{}) error {
+	data, err := ioutil.ReadAll(ctx.Request().Body)
 	if err != nil {
 		return err
 	}

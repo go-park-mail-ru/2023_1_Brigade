@@ -3,1176 +3,1176 @@
 package model
 
 import (
-	json "encoding/json"
-	easyjson "github.com/mailru/easyjson"
-	jlexer "github.com/mailru/easyjson/jlexer"
-	jwriter "github.com/mailru/easyjson/jwriter"
+json "encoding/json"
+easyjson "github.com/mailru/easyjson"
+jlexer "github.com/mailru/easyjson/jlexer"
+jwriter "github.com/mailru/easyjson/jwriter"
 )
 
 // suppress unused package warning
 var (
-	_ *json.RawMessage
-	_ *jlexer.Lexer
-	_ *jwriter.Writer
-	_ easyjson.Marshaler
+_ *json.RawMessage
+_ *jlexer.Lexer
+_ *jwriter.Writer
+_ easyjson.Marshaler
 )
 
 func easyjson9b8f5552DecodeProjectInternalModel(in *jlexer.Lexer, out *FoundedChatsMessagesChannels) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "founded_chats":
-			if in.IsNull() {
-				in.Skip()
-				out.FoundedChats = nil
-			} else {
-				in.Delim('[')
-				if out.FoundedChats == nil {
-					if !in.IsDelim(']') {
-						out.FoundedChats = make([]ChatInListUser, 0, 0)
-					} else {
-						out.FoundedChats = []ChatInListUser{}
-					}
-				} else {
-					out.FoundedChats = (out.FoundedChats)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v1 ChatInListUser
-					(v1).UnmarshalEasyJSON(in)
-					out.FoundedChats = append(out.FoundedChats, v1)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "founded_messages":
-			if in.IsNull() {
-				in.Skip()
-				out.FoundedMessages = nil
-			} else {
-				in.Delim('[')
-				if out.FoundedMessages == nil {
-					if !in.IsDelim(']') {
-						out.FoundedMessages = make([]ChatInListUser, 0, 0)
-					} else {
-						out.FoundedMessages = []ChatInListUser{}
-					}
-				} else {
-					out.FoundedMessages = (out.FoundedMessages)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v2 ChatInListUser
-					(v2).UnmarshalEasyJSON(in)
-					out.FoundedMessages = append(out.FoundedMessages, v2)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "founded_channels":
-			if in.IsNull() {
-				in.Skip()
-				out.FoundedChannels = nil
-			} else {
-				in.Delim('[')
-				if out.FoundedChannels == nil {
-					if !in.IsDelim(']') {
-						out.FoundedChannels = make([]ChatInListUser, 0, 0)
-					} else {
-						out.FoundedChannels = []ChatInListUser{}
-					}
-				} else {
-					out.FoundedChannels = (out.FoundedChannels)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v3 ChatInListUser
-					(v3).UnmarshalEasyJSON(in)
-					out.FoundedChannels = append(out.FoundedChannels, v3)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "founded_contacts":
-			if in.IsNull() {
-				in.Skip()
-				out.FoundedContacts = nil
-			} else {
-				in.Delim('[')
-				if out.FoundedContacts == nil {
-					if !in.IsDelim(']') {
-						out.FoundedContacts = make([]User, 0, 0)
-					} else {
-						out.FoundedContacts = []User{}
-					}
-				} else {
-					out.FoundedContacts = (out.FoundedContacts)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v4 User
-					easyjson9b8f5552DecodeProjectInternalModel1(in, &v4)
-					out.FoundedContacts = append(out.FoundedContacts, v4)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "founded_chats":
+if in.IsNull() {
+in.Skip()
+out.FoundedChats = nil
+} else {
+in.Delim('[')
+if out.FoundedChats == nil {
+if !in.IsDelim(']') {
+out.FoundedChats = make([]ChatInListUser, 0, 0)
+} else {
+out.FoundedChats = []ChatInListUser{}
+}
+} else {
+out.FoundedChats = (out.FoundedChats)[:0]
+}
+for !in.IsDelim(']') {
+var v1 ChatInListUser
+(v1).UnmarshalEasyJSON(in)
+out.FoundedChats = append(out.FoundedChats, v1)
+in.WantComma()
+}
+in.Delim(']')
+}
+case "founded_messages":
+if in.IsNull() {
+in.Skip()
+out.FoundedMessages = nil
+} else {
+in.Delim('[')
+if out.FoundedMessages == nil {
+if !in.IsDelim(']') {
+out.FoundedMessages = make([]ChatInListUser, 0, 0)
+} else {
+out.FoundedMessages = []ChatInListUser{}
+}
+} else {
+out.FoundedMessages = (out.FoundedMessages)[:0]
+}
+for !in.IsDelim(']') {
+var v2 ChatInListUser
+(v2).UnmarshalEasyJSON(in)
+out.FoundedMessages = append(out.FoundedMessages, v2)
+in.WantComma()
+}
+in.Delim(']')
+}
+case "founded_channels":
+if in.IsNull() {
+in.Skip()
+out.FoundedChannels = nil
+} else {
+in.Delim('[')
+if out.FoundedChannels == nil {
+if !in.IsDelim(']') {
+out.FoundedChannels = make([]ChatInListUser, 0, 0)
+} else {
+out.FoundedChannels = []ChatInListUser{}
+}
+} else {
+out.FoundedChannels = (out.FoundedChannels)[:0]
+}
+for !in.IsDelim(']') {
+var v3 ChatInListUser
+(v3).UnmarshalEasyJSON(in)
+out.FoundedChannels = append(out.FoundedChannels, v3)
+in.WantComma()
+}
+in.Delim(']')
+}
+case "founded_contacts":
+if in.IsNull() {
+in.Skip()
+out.FoundedContacts = nil
+} else {
+in.Delim('[')
+if out.FoundedContacts == nil {
+if !in.IsDelim(']') {
+out.FoundedContacts = make([]User, 0, 0)
+} else {
+out.FoundedContacts = []User{}
+}
+} else {
+out.FoundedContacts = (out.FoundedContacts)[:0]
+}
+for !in.IsDelim(']') {
+var v4 User
+easyjson9b8f5552DecodeProjectInternalModel1(in, &v4)
+out.FoundedContacts = append(out.FoundedContacts, v4)
+in.WantComma()
+}
+in.Delim(']')
+}
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel(out *jwriter.Writer, in FoundedChatsMessagesChannels) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"founded_chats\":"
-		out.RawString(prefix[1:])
-		if in.FoundedChats == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v5, v6 := range in.FoundedChats {
-				if v5 > 0 {
-					out.RawByte(',')
-				}
-				(v6).MarshalEasyJSON(out)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"founded_messages\":"
-		out.RawString(prefix)
-		if in.FoundedMessages == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v7, v8 := range in.FoundedMessages {
-				if v7 > 0 {
-					out.RawByte(',')
-				}
-				(v8).MarshalEasyJSON(out)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"founded_channels\":"
-		out.RawString(prefix)
-		if in.FoundedChannels == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v9, v10 := range in.FoundedChannels {
-				if v9 > 0 {
-					out.RawByte(',')
-				}
-				(v10).MarshalEasyJSON(out)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"founded_contacts\":"
-		out.RawString(prefix)
-		if in.FoundedContacts == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v11, v12 := range in.FoundedContacts {
-				if v11 > 0 {
-					out.RawByte(',')
-				}
-				easyjson9b8f5552EncodeProjectInternalModel1(out, v12)
-			}
-			out.RawByte(']')
-		}
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"founded_chats\":"
+out.RawString(prefix[1:])
+if in.FoundedChats == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v5, v6 := range in.FoundedChats {
+if v5 > 0 {
+out.RawByte(',')
+}
+(v6).MarshalEasyJSON(out)
+}
+out.RawByte(']')
+}
+}
+{
+const prefix string = ",\"founded_messages\":"
+out.RawString(prefix)
+if in.FoundedMessages == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v7, v8 := range in.FoundedMessages {
+if v7 > 0 {
+out.RawByte(',')
+}
+(v8).MarshalEasyJSON(out)
+}
+out.RawByte(']')
+}
+}
+{
+const prefix string = ",\"founded_channels\":"
+out.RawString(prefix)
+if in.FoundedChannels == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v9, v10 := range in.FoundedChannels {
+if v9 > 0 {
+out.RawByte(',')
+}
+(v10).MarshalEasyJSON(out)
+}
+out.RawByte(']')
+}
+}
+{
+const prefix string = ",\"founded_contacts\":"
+out.RawString(prefix)
+if in.FoundedContacts == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v11, v12 := range in.FoundedContacts {
+if v11 > 0 {
+out.RawByte(',')
+}
+easyjson9b8f5552EncodeProjectInternalModel1(out, v12)
+}
+out.RawByte(']')
+}
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v FoundedChatsMessagesChannels) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v FoundedChatsMessagesChannels) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel(w, v)
+easyjson9b8f5552EncodeProjectInternalModel(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *FoundedChatsMessagesChannels) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *FoundedChatsMessagesChannels) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel(l, v)
+easyjson9b8f5552DecodeProjectInternalModel(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel1(in *jlexer.Lexer, out *User) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id":
-			out.Id = uint64(in.Uint64())
-		case "username":
-			out.Username = string(in.String())
-		case "nickname":
-			out.Nickname = string(in.String())
-		case "email":
-			out.Email = string(in.String())
-		case "status":
-			out.Status = string(in.String())
-		case "avatar":
-			out.Avatar = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id":
+out.Id = uint64(in.Uint64())
+case "username":
+out.Username = string(in.String())
+case "nickname":
+out.Nickname = string(in.String())
+case "email":
+out.Email = string(in.String())
+case "status":
+out.Status = string(in.String())
+case "avatar":
+out.Avatar = string(in.String())
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel1(out *jwriter.Writer, in User) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.Id))
-	}
-	{
-		const prefix string = ",\"username\":"
-		out.RawString(prefix)
-		out.String(string(in.Username))
-	}
-	{
-		const prefix string = ",\"nickname\":"
-		out.RawString(prefix)
-		out.String(string(in.Nickname))
-	}
-	{
-		const prefix string = ",\"email\":"
-		out.RawString(prefix)
-		out.String(string(in.Email))
-	}
-	{
-		const prefix string = ",\"status\":"
-		out.RawString(prefix)
-		out.String(string(in.Status))
-	}
-	{
-		const prefix string = ",\"avatar\":"
-		out.RawString(prefix)
-		out.String(string(in.Avatar))
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.Id))
+}
+{
+const prefix string = ",\"username\":"
+out.RawString(prefix)
+out.String(string(in.Username))
+}
+{
+const prefix string = ",\"nickname\":"
+out.RawString(prefix)
+out.String(string(in.Nickname))
+}
+{
+const prefix string = ",\"email\":"
+out.RawString(prefix)
+out.String(string(in.Email))
+}
+{
+const prefix string = ",\"status\":"
+out.RawString(prefix)
+out.String(string(in.Status))
+}
+{
+const prefix string = ",\"avatar\":"
+out.RawString(prefix)
+out.String(string(in.Avatar))
+}
+out.RawByte('}')
 }
 func easyjson9b8f5552DecodeProjectInternalModel2(in *jlexer.Lexer, out *EditChat) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id":
-			out.Id = uint64(in.Uint64())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "title":
-			out.Title = string(in.String())
-		case "members":
-			if in.IsNull() {
-				in.Skip()
-				out.Members = nil
-			} else {
-				in.Delim('[')
-				if out.Members == nil {
-					if !in.IsDelim(']') {
-						out.Members = make([]uint64, 0, 8)
-					} else {
-						out.Members = []uint64{}
-					}
-				} else {
-					out.Members = (out.Members)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v13 uint64
-					v13 = uint64(in.Uint64())
-					out.Members = append(out.Members, v13)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id":
+out.Id = uint64(in.Uint64())
+case "type":
+out.Type = uint64(in.Uint64())
+case "title":
+out.Title = string(in.String())
+case "members":
+if in.IsNull() {
+in.Skip()
+out.Members = nil
+} else {
+in.Delim('[')
+if out.Members == nil {
+if !in.IsDelim(']') {
+out.Members = make([]uint64, 0, 8)
+} else {
+out.Members = []uint64{}
+}
+} else {
+out.Members = (out.Members)[:0]
+}
+for !in.IsDelim(']') {
+var v13 uint64
+v13 = uint64(in.Uint64())
+out.Members = append(out.Members, v13)
+in.WantComma()
+}
+in.Delim(']')
+}
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel2(out *jwriter.Writer, in EditChat) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.Id))
-	}
-	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"title\":"
-		out.RawString(prefix)
-		out.String(string(in.Title))
-	}
-	{
-		const prefix string = ",\"members\":"
-		out.RawString(prefix)
-		if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v14, v15 := range in.Members {
-				if v14 > 0 {
-					out.RawByte(',')
-				}
-				out.Uint64(uint64(v15))
-			}
-			out.RawByte(']')
-		}
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.Id))
+}
+{
+const prefix string = ",\"type\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.Type))
+}
+{
+const prefix string = ",\"title\":"
+out.RawString(prefix)
+out.String(string(in.Title))
+}
+{
+const prefix string = ",\"members\":"
+out.RawString(prefix)
+if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v14, v15 := range in.Members {
+if v14 > 0 {
+out.RawByte(',')
+}
+out.Uint64(uint64(v15))
+}
+out.RawByte(']')
+}
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v EditChat) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel2(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel2(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v EditChat) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel2(w, v)
+easyjson9b8f5552EncodeProjectInternalModel2(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *EditChat) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel2(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel2(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *EditChat) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel2(l, v)
+easyjson9b8f5552DecodeProjectInternalModel2(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel3(in *jlexer.Lexer, out *DBChat) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id":
-			out.Id = uint64(in.Uint64())
-		case "master_id":
-			out.MasterID = uint64(in.Uint64())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "title":
-			out.Title = string(in.String())
-		case "avatar":
-			out.Avatar = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id":
+out.Id = uint64(in.Uint64())
+case "master_id":
+out.MasterID = uint64(in.Uint64())
+case "type":
+out.Type = uint64(in.Uint64())
+case "title":
+out.Title = string(in.String())
+case "avatar":
+out.Avatar = string(in.String())
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel3(out *jwriter.Writer, in DBChat) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.Id))
-	}
-	{
-		const prefix string = ",\"master_id\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.MasterID))
-	}
-	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"title\":"
-		out.RawString(prefix)
-		out.String(string(in.Title))
-	}
-	{
-		const prefix string = ",\"avatar\":"
-		out.RawString(prefix)
-		out.String(string(in.Avatar))
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.Id))
+}
+{
+const prefix string = ",\"master_id\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.MasterID))
+}
+{
+const prefix string = ",\"type\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.Type))
+}
+{
+const prefix string = ",\"title\":"
+out.RawString(prefix)
+out.String(string(in.Title))
+}
+{
+const prefix string = ",\"avatar\":"
+out.RawString(prefix)
+out.String(string(in.Avatar))
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v DBChat) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel3(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel3(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v DBChat) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel3(w, v)
+easyjson9b8f5552EncodeProjectInternalModel3(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *DBChat) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel3(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel3(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *DBChat) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel3(l, v)
+easyjson9b8f5552DecodeProjectInternalModel3(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel4(in *jlexer.Lexer, out *CreateChat) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "title":
-			out.Title = string(in.String())
-		case "members":
-			if in.IsNull() {
-				in.Skip()
-				out.Members = nil
-			} else {
-				in.Delim('[')
-				if out.Members == nil {
-					if !in.IsDelim(']') {
-						out.Members = make([]uint64, 0, 8)
-					} else {
-						out.Members = []uint64{}
-					}
-				} else {
-					out.Members = (out.Members)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v16 uint64
-					v16 = uint64(in.Uint64())
-					out.Members = append(out.Members, v16)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "type":
+out.Type = uint64(in.Uint64())
+case "title":
+out.Title = string(in.String())
+case "members":
+if in.IsNull() {
+in.Skip()
+out.Members = nil
+} else {
+in.Delim('[')
+if out.Members == nil {
+if !in.IsDelim(']') {
+out.Members = make([]uint64, 0, 8)
+} else {
+out.Members = []uint64{}
+}
+} else {
+out.Members = (out.Members)[:0]
+}
+for !in.IsDelim(']') {
+var v16 uint64
+v16 = uint64(in.Uint64())
+out.Members = append(out.Members, v16)
+in.WantComma()
+}
+in.Delim(']')
+}
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel4(out *jwriter.Writer, in CreateChat) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"title\":"
-		out.RawString(prefix)
-		out.String(string(in.Title))
-	}
-	{
-		const prefix string = ",\"members\":"
-		out.RawString(prefix)
-		if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v17, v18 := range in.Members {
-				if v17 > 0 {
-					out.RawByte(',')
-				}
-				out.Uint64(uint64(v18))
-			}
-			out.RawByte(']')
-		}
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"type\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.Type))
+}
+{
+const prefix string = ",\"title\":"
+out.RawString(prefix)
+out.String(string(in.Title))
+}
+{
+const prefix string = ",\"members\":"
+out.RawString(prefix)
+if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v17, v18 := range in.Members {
+if v17 > 0 {
+out.RawByte(',')
+}
+out.Uint64(uint64(v18))
+}
+out.RawByte(']')
+}
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v CreateChat) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel4(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel4(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v CreateChat) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel4(w, v)
+easyjson9b8f5552EncodeProjectInternalModel4(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *CreateChat) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel4(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel4(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *CreateChat) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel4(l, v)
+easyjson9b8f5552DecodeProjectInternalModel4(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel5(in *jlexer.Lexer, out *ChatMessages) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id_chat":
-			out.ChatId = uint64(in.Uint64())
-		case "id_message":
-			out.MessageId = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id_chat":
+out.ChatId = uint64(in.Uint64())
+case "id_message":
+out.MessageId = string(in.String())
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel5(out *jwriter.Writer, in ChatMessages) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id_chat\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.ChatId))
-	}
-	{
-		const prefix string = ",\"id_message\":"
-		out.RawString(prefix)
-		out.String(string(in.MessageId))
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id_chat\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.ChatId))
+}
+{
+const prefix string = ",\"id_message\":"
+out.RawString(prefix)
+out.String(string(in.MessageId))
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v ChatMessages) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel5(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel5(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v ChatMessages) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel5(w, v)
+easyjson9b8f5552EncodeProjectInternalModel5(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *ChatMessages) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel5(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel5(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *ChatMessages) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel5(l, v)
+easyjson9b8f5552DecodeProjectInternalModel5(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel6(in *jlexer.Lexer, out *ChatMembers) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id_chat":
-			out.ChatId = uint64(in.Uint64())
-		case "id_member":
-			out.MemberId = uint64(in.Uint64())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id_chat":
+out.ChatId = uint64(in.Uint64())
+case "id_member":
+out.MemberId = uint64(in.Uint64())
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel6(out *jwriter.Writer, in ChatMembers) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id_chat\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.ChatId))
-	}
-	{
-		const prefix string = ",\"id_member\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.MemberId))
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id_chat\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.ChatId))
+}
+{
+const prefix string = ",\"id_member\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.MemberId))
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v ChatMembers) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel6(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel6(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v ChatMembers) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel6(w, v)
+easyjson9b8f5552EncodeProjectInternalModel6(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *ChatMembers) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel6(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel6(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *ChatMembers) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel6(l, v)
+easyjson9b8f5552DecodeProjectInternalModel6(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel7(in *jlexer.Lexer, out *ChatInListUser) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id":
-			out.Id = uint64(in.Uint64())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "title":
-			out.Title = string(in.String())
-		case "avatar":
-			out.Avatar = string(in.String())
-		case "members":
-			if in.IsNull() {
-				in.Skip()
-				out.Members = nil
-			} else {
-				in.Delim('[')
-				if out.Members == nil {
-					if !in.IsDelim(']') {
-						out.Members = make([]User, 0, 0)
-					} else {
-						out.Members = []User{}
-					}
-				} else {
-					out.Members = (out.Members)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v19 User
-					easyjson9b8f5552DecodeProjectInternalModel1(in, &v19)
-					out.Members = append(out.Members, v19)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "last_message":
-			easyjson9b8f5552DecodeProjectInternalModel8(in, &out.LastMessage)
-		case "last_message_author":
-			easyjson9b8f5552DecodeProjectInternalModel1(in, &out.LastMessageAuthor)
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id":
+out.Id = uint64(in.Uint64())
+case "type":
+out.Type = uint64(in.Uint64())
+case "title":
+out.Title = string(in.String())
+case "avatar":
+out.Avatar = string(in.String())
+case "members":
+if in.IsNull() {
+in.Skip()
+out.Members = nil
+} else {
+in.Delim('[')
+if out.Members == nil {
+if !in.IsDelim(']') {
+out.Members = make([]User, 0, 0)
+} else {
+out.Members = []User{}
+}
+} else {
+out.Members = (out.Members)[:0]
+}
+for !in.IsDelim(']') {
+var v19 User
+easyjson9b8f5552DecodeProjectInternalModel1(in, &v19)
+out.Members = append(out.Members, v19)
+in.WantComma()
+}
+in.Delim(']')
+}
+case "last_message":
+easyjson9b8f5552DecodeProjectInternalModel8(in, &out.LastMessage)
+case "last_message_author":
+easyjson9b8f5552DecodeProjectInternalModel1(in, &out.LastMessageAuthor)
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel7(out *jwriter.Writer, in ChatInListUser) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.Id))
-	}
-	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"title\":"
-		out.RawString(prefix)
-		out.String(string(in.Title))
-	}
-	{
-		const prefix string = ",\"avatar\":"
-		out.RawString(prefix)
-		out.String(string(in.Avatar))
-	}
-	{
-		const prefix string = ",\"members\":"
-		out.RawString(prefix)
-		if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v20, v21 := range in.Members {
-				if v20 > 0 {
-					out.RawByte(',')
-				}
-				easyjson9b8f5552EncodeProjectInternalModel1(out, v21)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"last_message\":"
-		out.RawString(prefix)
-		easyjson9b8f5552EncodeProjectInternalModel8(out, in.LastMessage)
-	}
-	{
-		const prefix string = ",\"last_message_author\":"
-		out.RawString(prefix)
-		easyjson9b8f5552EncodeProjectInternalModel1(out, in.LastMessageAuthor)
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.Id))
+}
+{
+const prefix string = ",\"type\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.Type))
+}
+{
+const prefix string = ",\"title\":"
+out.RawString(prefix)
+out.String(string(in.Title))
+}
+{
+const prefix string = ",\"avatar\":"
+out.RawString(prefix)
+out.String(string(in.Avatar))
+}
+{
+const prefix string = ",\"members\":"
+out.RawString(prefix)
+if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v20, v21 := range in.Members {
+if v20 > 0 {
+out.RawByte(',')
+}
+easyjson9b8f5552EncodeProjectInternalModel1(out, v21)
+}
+out.RawByte(']')
+}
+}
+{
+const prefix string = ",\"last_message\":"
+out.RawString(prefix)
+easyjson9b8f5552EncodeProjectInternalModel8(out, in.LastMessage)
+}
+{
+const prefix string = ",\"last_message_author\":"
+out.RawString(prefix)
+easyjson9b8f5552EncodeProjectInternalModel1(out, in.LastMessageAuthor)
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v ChatInListUser) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel7(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel7(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v ChatInListUser) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel7(w, v)
+easyjson9b8f5552EncodeProjectInternalModel7(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *ChatInListUser) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel7(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel7(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *ChatInListUser) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel7(l, v)
+easyjson9b8f5552DecodeProjectInternalModel7(l, v)
 }
 func easyjson9b8f5552DecodeProjectInternalModel8(in *jlexer.Lexer, out *Message) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id":
-			out.Id = string(in.String())
-		case "image_url":
-			out.ImageUrl = string(in.String())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "body":
-			out.Body = string(in.String())
-		case "author_id":
-			out.AuthorId = uint64(in.Uint64())
-		case "id_chat":
-			out.ChatId = uint64(in.Uint64())
-		case "created_at":
-			out.CreatedAt = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id":
+out.Id = string(in.String())
+case "image_url":
+out.ImageUrl = string(in.String())
+case "type":
+out.Type = uint64(in.Uint64())
+case "body":
+out.Body = string(in.String())
+case "author_id":
+out.AuthorId = uint64(in.Uint64())
+case "id_chat":
+out.ChatId = uint64(in.Uint64())
+case "created_at":
+out.CreatedAt = string(in.String())
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel8(out *jwriter.Writer, in Message) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id\":"
-		out.RawString(prefix[1:])
-		out.String(string(in.Id))
-	}
-	{
-		const prefix string = ",\"image_url\":"
-		out.RawString(prefix)
-		out.String(string(in.ImageUrl))
-	}
-	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"body\":"
-		out.RawString(prefix)
-		out.String(string(in.Body))
-	}
-	{
-		const prefix string = ",\"author_id\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.AuthorId))
-	}
-	{
-		const prefix string = ",\"id_chat\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.ChatId))
-	}
-	{
-		const prefix string = ",\"created_at\":"
-		out.RawString(prefix)
-		out.String(string(in.CreatedAt))
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id\":"
+out.RawString(prefix[1:])
+out.String(string(in.Id))
+}
+{
+const prefix string = ",\"image_url\":"
+out.RawString(prefix)
+out.String(string(in.ImageUrl))
+}
+{
+const prefix string = ",\"type\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.Type))
+}
+{
+const prefix string = ",\"body\":"
+out.RawString(prefix)
+out.String(string(in.Body))
+}
+{
+const prefix string = ",\"author_id\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.AuthorId))
+}
+{
+const prefix string = ",\"id_chat\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.ChatId))
+}
+{
+const prefix string = ",\"created_at\":"
+out.RawString(prefix)
+out.String(string(in.CreatedAt))
+}
+out.RawByte('}')
 }
 func easyjson9b8f5552DecodeProjectInternalModel9(in *jlexer.Lexer, out *Chat) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "id":
-			out.Id = uint64(in.Uint64())
-		case "master_id":
-			out.MasterID = uint64(in.Uint64())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "title":
-			out.Title = string(in.String())
-		case "avatar":
-			out.Avatar = string(in.String())
-		case "members":
-			if in.IsNull() {
-				in.Skip()
-				out.Members = nil
-			} else {
-				in.Delim('[')
-				if out.Members == nil {
-					if !in.IsDelim(']') {
-						out.Members = make([]User, 0, 0)
-					} else {
-						out.Members = []User{}
-					}
-				} else {
-					out.Members = (out.Members)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v22 User
-					easyjson9b8f5552DecodeProjectInternalModel1(in, &v22)
-					out.Members = append(out.Members, v22)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "messages":
-			if in.IsNull() {
-				in.Skip()
-				out.Messages = nil
-			} else {
-				in.Delim('[')
-				if out.Messages == nil {
-					if !in.IsDelim(']') {
-						out.Messages = make([]Message, 0, 0)
-					} else {
-						out.Messages = []Message{}
-					}
-				} else {
-					out.Messages = (out.Messages)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v23 Message
-					easyjson9b8f5552DecodeProjectInternalModel8(in, &v23)
-					out.Messages = append(out.Messages, v23)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
+isTopLevel := in.IsStart()
+if in.IsNull() {
+if isTopLevel {
+in.Consumed()
+}
+in.Skip()
+return
+}
+in.Delim('{')
+for !in.IsDelim('}') {
+key := in.UnsafeFieldName(false)
+in.WantColon()
+if in.IsNull() {
+in.Skip()
+in.WantComma()
+continue
+}
+switch key {
+case "id":
+out.Id = uint64(in.Uint64())
+case "master_id":
+out.MasterID = uint64(in.Uint64())
+case "type":
+out.Type = uint64(in.Uint64())
+case "title":
+out.Title = string(in.String())
+case "avatar":
+out.Avatar = string(in.String())
+case "members":
+if in.IsNull() {
+in.Skip()
+out.Members = nil
+} else {
+in.Delim('[')
+if out.Members == nil {
+if !in.IsDelim(']') {
+out.Members = make([]User, 0, 0)
+} else {
+out.Members = []User{}
+}
+} else {
+out.Members = (out.Members)[:0]
+}
+for !in.IsDelim(']') {
+var v22 User
+easyjson9b8f5552DecodeProjectInternalModel1(in, &v22)
+out.Members = append(out.Members, v22)
+in.WantComma()
+}
+in.Delim(']')
+}
+case "messages":
+if in.IsNull() {
+in.Skip()
+out.Messages = nil
+} else {
+in.Delim('[')
+if out.Messages == nil {
+if !in.IsDelim(']') {
+out.Messages = make([]Message, 0, 0)
+} else {
+out.Messages = []Message{}
+}
+} else {
+out.Messages = (out.Messages)[:0]
+}
+for !in.IsDelim(']') {
+var v23 Message
+easyjson9b8f5552DecodeProjectInternalModel8(in, &v23)
+out.Messages = append(out.Messages, v23)
+in.WantComma()
+}
+in.Delim(']')
+}
+default:
+in.SkipRecursive()
+}
+in.WantComma()
+}
+in.Delim('}')
+if isTopLevel {
+in.Consumed()
+}
 }
 func easyjson9b8f5552EncodeProjectInternalModel9(out *jwriter.Writer, in Chat) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"id\":"
-		out.RawString(prefix[1:])
-		out.Uint64(uint64(in.Id))
-	}
-	{
-		const prefix string = ",\"master_id\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.MasterID))
-	}
-	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix)
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"title\":"
-		out.RawString(prefix)
-		out.String(string(in.Title))
-	}
-	{
-		const prefix string = ",\"avatar\":"
-		out.RawString(prefix)
-		out.String(string(in.Avatar))
-	}
-	{
-		const prefix string = ",\"members\":"
-		out.RawString(prefix)
-		if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v24, v25 := range in.Members {
-				if v24 > 0 {
-					out.RawByte(',')
-				}
-				easyjson9b8f5552EncodeProjectInternalModel1(out, v25)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"messages\":"
-		out.RawString(prefix)
-		if in.Messages == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v26, v27 := range in.Messages {
-				if v26 > 0 {
-					out.RawByte(',')
-				}
-				easyjson9b8f5552EncodeProjectInternalModel8(out, v27)
-			}
-			out.RawByte(']')
-		}
-	}
-	out.RawByte('}')
+out.RawByte('{')
+first := true
+_ = first
+{
+const prefix string = ",\"id\":"
+out.RawString(prefix[1:])
+out.Uint64(uint64(in.Id))
+}
+{
+const prefix string = ",\"master_id\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.MasterID))
+}
+{
+const prefix string = ",\"type\":"
+out.RawString(prefix)
+out.Uint64(uint64(in.Type))
+}
+{
+const prefix string = ",\"title\":"
+out.RawString(prefix)
+out.String(string(in.Title))
+}
+{
+const prefix string = ",\"avatar\":"
+out.RawString(prefix)
+out.String(string(in.Avatar))
+}
+{
+const prefix string = ",\"members\":"
+out.RawString(prefix)
+if in.Members == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v24, v25 := range in.Members {
+if v24 > 0 {
+out.RawByte(',')
+}
+easyjson9b8f5552EncodeProjectInternalModel1(out, v25)
+}
+out.RawByte(']')
+}
+}
+{
+const prefix string = ",\"messages\":"
+out.RawString(prefix)
+if in.Messages == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+out.RawString("null")
+} else {
+out.RawByte('[')
+for v26, v27 := range in.Messages {
+if v26 > 0 {
+out.RawByte(',')
+}
+easyjson9b8f5552EncodeProjectInternalModel8(out, v27)
+}
+out.RawByte(']')
+}
+}
+out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v Chat) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjson9b8f5552EncodeProjectInternalModel9(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
+w := jwriter.Writer{}
+easyjson9b8f5552EncodeProjectInternalModel9(&w, v)
+return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v Chat) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson9b8f5552EncodeProjectInternalModel9(w, v)
+easyjson9b8f5552EncodeProjectInternalModel9(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *Chat) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjson9b8f5552DecodeProjectInternalModel9(&r, v)
-	return r.Error()
+r := jlexer.Lexer{Data: data}
+easyjson9b8f5552DecodeProjectInternalModel9(&r, v)
+return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *Chat) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson9b8f5552DecodeProjectInternalModel9(l, v)
+easyjson9b8f5552DecodeProjectInternalModel9(l, v)
 }

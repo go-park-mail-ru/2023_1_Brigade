@@ -81,7 +81,7 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	//return ctx.JSONBlob(http.StatusOK, blob)
 	//serialization.Serialize
 
-	return ctx.JSON(http.StatusOK, data)
+	return ctx.JSONBlob(http.StatusOK, data)
 }
 
 func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {

@@ -36,13 +36,15 @@ func (u usecase) UploadGeneratedImage(ctx context.Context, bucketName string, fi
 }
 
 func (u usecase) UploadImage(ctx context.Context, file io.Reader, bucketName string, filename string) error {
-	filename = filename + ".png"
 	err := u.imagesRepo.UploadImage(ctx, file, bucketName, filename)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 
 func (u usecase) GetImage(ctx context.Context, bucketName string, filename string) (string, error) {
-	filename = filename + ".png"
 	url, err := u.imagesRepo.GetImage(ctx, bucketName, filename)
 	if err != nil {
 		return "", err

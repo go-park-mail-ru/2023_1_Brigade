@@ -75,8 +75,13 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		}
 
 		if chat.Type == config.Chat {
-			notification.ChatAvatar = "https://brigade_chat_avatars.hb.bizmrg.com/logo.png"
 			notification.ChatName = notification.AuthorNickname
+
+			if notification.AuthorNickname == chat.Members[0].Nickname {
+				notification.ChatAvatar = chat.Members[0].Avatar
+			} else {
+				notification.ChatAvatar = chat.Members[1].Avatar
+			}
 		}
 
 		////members : [1, 2]
@@ -135,12 +140,12 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		//	//}
 		//}
 
-		if producerMessage.Type == config.Sticker {
-			notification.Body = "sticker"
+		if producerMessage.ImageUrl != "" {
+			notification.Body = "Картинка"
 		}
 
-		if producerMessage.ImageUrl != "" {
-			notification.Body = "image"
+		if producerMessage.Type == config.Sticker {
+			notification.Body = "Стикер"
 		}
 
 		data, err := easyjson.Marshal(notification)

@@ -76,6 +76,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 
 		if chat.Type == config.Chat {
 			notification.ChatAvatar = "https://brigade_chat_avatars.hb.bizmrg.com/logo.png"
+			notification.ChatName = notification.AuthorNickname
 		}
 
 		////members : [1, 2]

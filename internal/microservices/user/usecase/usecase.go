@@ -22,12 +22,12 @@ func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user
 }
 
 func (u usecase) DeleteUserById(ctx context.Context, userID uint64) error {
-	err := u.userRepo.DeleteUserById(context.TODO(), userID)
+	err := u.userRepo.DeleteUserById(ctx, userID)
 	return err
 }
 
 func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, error) {
-	user, err := u.userRepo.GetUserById(context.TODO(), userID)
+	user, err := u.userRepo.GetUserById(ctx, userID)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -94,32 +94,32 @@ func (u usecase) AddUserContact(ctx context.Context, userID uint64, contactID ui
 		IdContact: contactID,
 	}
 
-	err := u.userRepo.CheckExistUserById(context.TODO(), contactID)
+	err := u.userRepo.CheckExistUserById(ctx, contactID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = u.userRepo.CheckUserIsContact(context.TODO(), userContact)
+	err = u.userRepo.CheckUserIsContact(ctx, userContact)
 	if err != nil {
 		return nil, err
 	}
 
-	err = u.userRepo.AddUserInContact(context.TODO(), userContact)
+	err = u.userRepo.AddUserInContact(ctx, userContact)
 	if err != nil {
 		return nil, err
 	}
 
-	contacts, err := u.userRepo.GetUserContacts(context.TODO(), userID)
+	contacts, err := u.userRepo.GetUserContacts(ctx, userID)
 	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), err
 }
 
 func (u usecase) CheckExistUserById(ctx context.Context, userID uint64) error {
-	err := u.userRepo.CheckExistUserById(context.TODO(), userID)
+	err := u.userRepo.CheckExistUserById(ctx, userID)
 	return err
 }
 
 func (u usecase) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.User, error) {
-	users, err := u.userRepo.GetAllUsersExceptCurrentUser(context.TODO(), userID)
+	users, err := u.userRepo.GetAllUsersExceptCurrentUser(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

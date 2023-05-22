@@ -44,10 +44,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		//if session.UserId == producerMessage.AuthorId {
-		//	return
-		//}
-
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
 			log.Error("nil client")
@@ -73,21 +69,21 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			Body:           producerMessage.Body,
 		}
 
-		//if chat.Type == config.Chat {
-		//	userReceiver, err := u.userUsecase.GetUserById(context.TODO(), producerMessage.ReceiverID)
-		//	if err != nil {
-		//		log.Error(err)
-		//		return
-		//	}
-		//
-		//	if session.UserId == userReceiver.Id {
-		//		notification.ChatName = userAuthor.Nickname
-		//		notification.ChatAvatar = userAuthor.Avatar
-		//	} else {
-		//		notification.ChatName = userReceiver.Nickname
-		//		notification.ChatAvatar = userReceiver.Avatar
-		//	}
-		//}
+		if chat.Type == config.Chat {
+			userReceiver, err := u.userUsecase.GetUserById(context.TODO(), producerMessage.ReceiverID)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			if session.UserId == userReceiver.Id {
+				notification.ChatName = userAuthor.Nickname
+				notification.ChatAvatar = userAuthor.Avatar
+			} else {
+				notification.ChatName = userReceiver.Nickname
+				notification.ChatAvatar = userReceiver.Avatar
+			}
+		}
 
 		//if chat.Type == config.Chat {
 		//	if session.UserId == producerMessage.ReceiverID {
@@ -110,7 +106,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		//}
 
 		//if chat.Type == config.Chat {
-		//
 		//	//if len(chat.Members) > 0 {
 		//	//	if chat.M
 		//		//if chat.Members[0].Id == session.UserId {
@@ -125,7 +120,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		//	//if user.Id == producerMessage.AuthorId {
 		//	//
 		//	//}
-		//
 		//}
 
 		if producerMessage.Type == config.Sticker {

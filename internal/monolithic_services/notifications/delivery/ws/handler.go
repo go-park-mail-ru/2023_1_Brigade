@@ -31,7 +31,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		//session := ctx.Get("session").(model.Session)
+		session := ctx.Get("session").(model.Session)
 
 		var producerMessage model.ProducerMessage
 		err := easyjson.Unmarshal(e.Data, &producerMessage)
@@ -45,9 +45,9 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		//if session.UserId == producerMessage.AuthorId {
-		//	return
-		//}
+		if session.UserId == producerMessage.AuthorId {
+			return
+		}
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {

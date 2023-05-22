@@ -67,6 +67,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		}
 
 		notification := model.Notification{
+			AuthorID:       producerMessage.AuthorId,
 			ChatName:       chat.Title,
 			ChatAvatar:     chat.Avatar,
 			AuthorNickname: userAuthor.Nickname,

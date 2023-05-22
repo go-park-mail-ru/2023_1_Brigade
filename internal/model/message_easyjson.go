@@ -266,6 +266,8 @@ func easyjson4086215fDecodeProjectInternalModel2(in *jlexer.Lexer, out *Notifica
 			continue
 		}
 		switch key {
+		case "author_id":
+			out.AuthorID = uint64(in.Uint64())
 		case "chat_name":
 			out.ChatName = string(in.String())
 		case "chat_avatar":
@@ -289,8 +291,13 @@ func easyjson4086215fEncodeProjectInternalModel2(out *jwriter.Writer, in Notific
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"chat_name\":"
+		const prefix string = ",\"author_id\":"
 		out.RawString(prefix[1:])
+		out.Uint64(uint64(in.AuthorID))
+	}
+	{
+		const prefix string = ",\"chat_name\":"
+		out.RawString(prefix)
 		out.String(string(in.ChatName))
 	}
 	{

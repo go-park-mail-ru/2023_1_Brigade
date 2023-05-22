@@ -33,6 +33,7 @@ type ProducerMessage struct {
 }
 
 type Notification struct {
+	AuthorID       uint64 `json:"author_id"  db:"author_id"`
 	ChatName       string `json:"chat_name" db:"chat_name"`
 	ChatAvatar     string `json:"chat_avatar" db:"chat_avatar"`
 	AuthorNickname string `json:"author_nickname" db:"author_nickname"`

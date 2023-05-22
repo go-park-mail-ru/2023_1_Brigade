@@ -159,10 +159,10 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	u.clients[session.UserId] = ws
 
 	for {
-		_, _, err := ws.ReadMessage()
-		if err != nil {
-			return err
-		}
+		//_, _, err := ws.ReadMessage()
+		//if err != nil {
+		//	return err
+		//}
 	}
 }
 

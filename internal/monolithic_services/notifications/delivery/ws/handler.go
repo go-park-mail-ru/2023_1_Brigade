@@ -75,7 +75,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		}
 
 		//members : [1, 2]
-		log.Warn(chat)
+		log.Warn(chat.Members)
 		if len(chat.Members) == 2 {
 			if producerMessage.ReceiverID == chat.Members[0].Id {
 				notification.ChatName = chat.Members[0].Nickname

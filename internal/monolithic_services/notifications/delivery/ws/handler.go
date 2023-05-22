@@ -31,6 +31,8 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
+		session := ctx.Get("session").(model.Session)
+
 		var producerMessage model.ProducerMessage
 		err := easyjson.Unmarshal(e.Data, &producerMessage)
 		if err != nil {
@@ -72,17 +74,17 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			Body:           producerMessage.Body,
 		}
 
-		//if chat.Type == config.Chat {
-		//	if len(chat.Members) > 0 {
-		//		if chat.Members[0].Id == session.UserId {
-		//			notification.ChatName = chat.Members[1].Nickname
-		//			notification.ChatAvatar = chat.Members[1].Avatar
-		//		} else {
-		//			notification.ChatName = chat.Members[0].Nickname
-		//			notification.ChatAvatar = chat.Members[0].Avatar
-		//		}
-		//	}
-		//}
+		if chat.Type == config.Chat {
+			if len(chat.Members) > 0 {
+				if chat.Members[0].Id == session.UserId {
+					notification.ChatName = chat.Members[0].Nickname
+					notification.ChatAvatar = chat.Members[0].Avatar
+				} else {
+					notification.ChatName = chat.Members[1].Nickname
+					notification.ChatAvatar = chat.Members[1].Avatar
+				}
+			}
+		}
 
 		if producerMessage.Type == config.Sticker {
 			notification.Body = "sticker"

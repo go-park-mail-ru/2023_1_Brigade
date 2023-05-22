@@ -45,9 +45,9 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		if session.UserId == producerMessage.AuthorId {
-			return
-		}
+		//if session.UserId == producerMessage.AuthorId {
+		//	return
+		//}
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {

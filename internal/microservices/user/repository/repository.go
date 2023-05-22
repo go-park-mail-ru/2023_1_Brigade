@@ -111,7 +111,7 @@ func (r repository) UpdateUserPasswordById(ctx context.Context, user model.Autho
 }
 
 func (r repository) UpdateUserInfoById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.GetContext(ctx, &user, `UPDATE profile SET avatar=$1, nickname=$2, email=$3, status=$4, WHERE id=$5 RETURNING *`,
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET avatar=$1, nickname=$2, email=$3, status=$4 WHERE id=$5 RETURNING *`,
 		user.Avatar, user.Nickname, user.Email, user.Status, user.Id)
 
 	if err != nil {

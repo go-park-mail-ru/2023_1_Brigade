@@ -38,6 +38,21 @@ func (u usecase) GetUserById(ctx context.Context, userID uint64) (model.User, er
 func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, userID uint64) (model.User, error) {
 	switch updateUser.CurrentPassword {
 	case "":
+		user := model.AuthorizedUser{
+			Id:       userID,
+			Avatar:   updateUser.NewAvatarUrl,
+			Email:    updateUser.Email,
+			Nickname: updateUser.Nickname,
+			Status:   updateUser.Status,
+		}
+
+		user, err := u.userRepo.UpdateUserInfoById(ctx, user)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		return model_conversion.FromAuthorizedUserToUser(user), nil
+	default:
 		userFromDB, err := u.userRepo.GetUserById(context.TODO(), userID)
 		if err != nil {
 			return model.User{}, err
@@ -52,21 +67,6 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 
 		userFromDB.Password = newPassword
 		user, err := u.userRepo.UpdateUserPasswordById(ctx, userFromDB)
-		if err != nil {
-			return model.User{}, err
-		}
-
-		return model_conversion.FromAuthorizedUserToUser(user), nil
-	default:
-		user := model.AuthorizedUser{
-			Id:       userID,
-			Avatar:   updateUser.NewAvatarUrl,
-			Email:    updateUser.Email,
-			Nickname: updateUser.Nickname,
-			Status:   updateUser.Status,
-		}
-
-		user, err := u.userRepo.UpdateUserInfoById(ctx, user)
 		if err != nil {
 			return model.User{}, err
 		}

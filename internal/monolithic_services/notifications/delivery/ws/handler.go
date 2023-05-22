@@ -31,8 +31,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		session := ctx.Get("session").(model.Session)
-
 		var producerMessage model.ProducerMessage
 		err := easyjson.Unmarshal(e.Data, &producerMessage)
 		if err != nil {

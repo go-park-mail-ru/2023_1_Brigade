@@ -77,11 +77,11 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		if chat.Type == config.Chat {
 			if len(chat.Members) > 0 {
 				if session.UserId == chat.Members[0].Id {
-					notification.ChatName = chat.Members[1].Nickname
-					notification.ChatAvatar = chat.Members[1].Avatar
-				} else {
 					notification.ChatName = chat.Members[0].Nickname
 					notification.ChatAvatar = chat.Members[0].Avatar
+				} else {
+					notification.ChatName = chat.Members[1].Nickname
+					notification.ChatAvatar = chat.Members[1].Avatar
 				}
 			}
 		}

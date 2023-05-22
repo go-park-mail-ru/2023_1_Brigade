@@ -31,7 +31,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		//session := ctx.Get("session").(model.Session)
+		session := ctx.Get("session").(model.Session)
 
 		var producerMessage model.ProducerMessage
 		err := easyjson.Unmarshal(e.Data, &producerMessage)
@@ -61,7 +61,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		user, err := u.userUsecase.GetUserById(context.TODO(), producerMessage.AuthorId)
+		userAuthor, err := u.userUsecase.GetUserById(context.TODO(), producerMessage.AuthorId)
 		if err != nil {
 			log.Error(err)
 			return
@@ -70,8 +70,24 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		notification := model.Notification{
 			ChatName:       chat.Title,
 			ChatAvatar:     chat.Avatar,
-			AuthorNickname: user.Nickname,
+			AuthorNickname: userAuthor.Nickname,
 			Body:           producerMessage.Body,
+		}
+
+		if chat.Type == config.Chat {
+			userReceiver, err := u.userUsecase.GetUserById(context.TODO(), producerMessage.ReceiverID)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			if session.UserId == userReceiver.Id {
+				notification.ChatName = userAuthor.Nickname
+				notification.ChatAvatar = userAuthor.Avatar
+			} else {
+				notification.ChatName = userReceiver.Nickname
+				notification.ChatAvatar = userReceiver.Avatar
+			}
 		}
 
 		//if chat.Type == config.Chat {

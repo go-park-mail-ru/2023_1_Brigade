@@ -31,7 +31,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		session := ctx.Get("session").(model.Session)
+		//session := ctx.Get("session").(model.Session)
 
 		var producerMessage model.ProducerMessage
 		err := easyjson.Unmarshal(e.Data, &producerMessage)
@@ -45,9 +45,9 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		if session.UserId == producerMessage.AuthorId {
-			return
-		}
+		//if session.UserId == producerMessage.AuthorId {
+		//	return
+		//}
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
@@ -74,20 +74,25 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			Body:           producerMessage.Body,
 		}
 
-		if chat.Type == config.Chat {
-			if len(chat.Members) > 0 {
-				if chat.Members[0].Id == producerMessage.AuthorId {
-					notification.ChatName = chat.Members[0].Nickname
-					notification.AuthorNickname = chat.Members[0].Nickname
-				} else {
-					notification.ChatName = chat.Members[1].Nickname
-					notification.AuthorNickname = chat.Members[1].Nickname
-				}
-				//if notification.ChatName == user.Nickname {
-				//
-				//}
-			}
-		}
+		//if chat.Type == config.Chat {
+		//	if session.UserId == producerMessage.ReceiverID {
+		//		if len(chat.Members) > 0 {
+		//			if
+		//		}
+		//	}
+		//	//if len(chat.Members) > 0 {
+		//	//	if chat.Members[0].Id == producerMessage.AuthorId {
+		//	//		notification.ChatName = chat.Members[0].Nickname
+		//	//		notification.AuthorNickname = chat.Members[0].Nickname
+		//	//	} else {
+		//	//		notification.ChatName = chat.Members[1].Nickname
+		//	//		notification.AuthorNickname = chat.Members[1].Nickname
+		//	//	}
+		//	//	//if notification.ChatName == user.Nickname {
+		//	//	//
+		//	//	//}
+		//	//}
+		//}
 
 		//if chat.Type == config.Chat {
 		//

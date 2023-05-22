@@ -45,9 +45,9 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		//if session.UserId == producerMessage.AuthorId {
-		//	return
-		//}
+		if session.UserId == producerMessage.AuthorId {
+			return
+		}
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
@@ -76,15 +76,37 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 
 		if chat.Type == config.Chat {
 			if len(chat.Members) > 0 {
-				if chat.Members[0].Id == session.UserId {
+				if chat.Members[0].Id == producerMessage.AuthorId {
 					notification.ChatName = chat.Members[0].Nickname
-					notification.ChatAvatar = chat.Members[0].Avatar
+					notification.AuthorNickname = chat.Members[0].Nickname
 				} else {
 					notification.ChatName = chat.Members[1].Nickname
-					notification.ChatAvatar = chat.Members[1].Avatar
+					notification.AuthorNickname = chat.Members[1].Nickname
 				}
+				//if notification.ChatName == user.Nickname {
+				//
+				//}
 			}
 		}
+
+		//if chat.Type == config.Chat {
+		//
+		//	//if len(chat.Members) > 0 {
+		//	//	if chat.M
+		//		//if chat.Members[0].Id == session.UserId {
+		//		//	notification.ChatName = chat.Members[0].Nickname
+		//		//	notification.ChatAvatar = chat.Members[0].Avatar
+		//		//} else {
+		//		//	notification.ChatName = chat.Members[1].Nickname
+		//		//	notification.ChatAvatar = chat.Members[1].Avatar
+		//		//}
+		//	//}
+		//
+		//	//if user.Id == producerMessage.AuthorId {
+		//	//
+		//	//}
+		//
+		//}
 
 		if producerMessage.Type == config.Sticker {
 			notification.Body = "sticker"

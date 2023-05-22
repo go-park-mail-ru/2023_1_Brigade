@@ -29,10 +29,9 @@ type notificationsHandler struct {
 
 func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error {
 	sub, _ := u.centrifugo.GetSubscription(u.channelName)
+	session := ctx.Get("session").(model.Session)
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
-		//session := ctx.Get("session").(model.Session)
-
 		var producerMessage model.ProducerMessage
 		err := easyjson.Unmarshal(e.Data, &producerMessage)
 		if err != nil {
@@ -45,9 +44,9 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		//if session.UserId == producerMessage.AuthorId {
-		//	return
-		//}
+		if session.UserId == producerMessage.AuthorId {
+			return
+		}
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
@@ -155,7 +154,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	}
 	defer ws.Close()
 
-	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
 
 	for {

@@ -74,24 +74,28 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			Body:           producerMessage.Body,
 		}
 
-		//members : [1, 2]
-		log.Warn(chat.Members)
-		if len(chat.Members) == 2 {
-			if producerMessage.ReceiverID == chat.Members[0].Id {
-				notification.ChatName = chat.Members[0].Nickname
-				notification.ChatAvatar = chat.Members[0].Avatar
-			} else {
-				notification.ChatName = chat.Members[1].Nickname
-				notification.ChatAvatar = chat.Members[1].Avatar
-			}
-			//if session.UserId == chat.Members[0].Id {
-			//	notification.ChatName = chat.Members[0].Nickname
-			//	notification.ChatAvatar = chat.Members[0].Avatar
-			//} else {
-			//	notification.ChatName = chat.Members[1].Nickname
-			//	notification.ChatAvatar = chat.Members[1].Avatar
-			//}
+		if chat.Type == config.Chat {
+			notification.ChatAvatar = "https://brigade_chat_avatars.hb.bizmrg.com/logo.png"
 		}
+
+		////members : [1, 2]
+		//log.Warn(chat.Members)
+		//if len(chat.Members) == 2 {
+		//	if producerMessage.ReceiverID == chat.Members[0].Id {
+		//		notification.ChatName = chat.Members[0].Nickname
+		//		notification.ChatAvatar = chat.Members[0].Avatar
+		//	} else {
+		//		notification.ChatName = chat.Members[1].Nickname
+		//		notification.ChatAvatar = chat.Members[1].Avatar
+		//	}
+		//	//if session.UserId == chat.Members[0].Id {
+		//	//	notification.ChatName = chat.Members[0].Nickname
+		//	//	notification.ChatAvatar = chat.Members[0].Avatar
+		//	//} else {
+		//	//	notification.ChatName = chat.Members[1].Nickname
+		//	//	notification.ChatAvatar = chat.Members[1].Avatar
+		//	//}
+		//}
 
 		//if chat.Type == config.Chat {
 		//	if session.UserId == producerMessage.ReceiverID {

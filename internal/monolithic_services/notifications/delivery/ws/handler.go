@@ -75,23 +75,22 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		}
 
 		//members : [1, 2]
-		if chat.Type == config.Chat {
-			if len(chat.Members) > 0 {
-				if producerMessage.ReceiverID == chat.Members[0].Id {
-					notification.ChatName = chat.Members[0].Nickname
-					notification.ChatAvatar = chat.Members[0].Avatar
-				} else {
-					notification.ChatName = chat.Members[1].Nickname
-					notification.ChatAvatar = chat.Members[1].Avatar
-				}
-				//if session.UserId == chat.Members[0].Id {
-				//	notification.ChatName = chat.Members[0].Nickname
-				//	notification.ChatAvatar = chat.Members[0].Avatar
-				//} else {
-				//	notification.ChatName = chat.Members[1].Nickname
-				//	notification.ChatAvatar = chat.Members[1].Avatar
-				//}
+		log.Warn(chat)
+		if len(chat.Members) == 2 {
+			if producerMessage.ReceiverID == chat.Members[0].Id {
+				notification.ChatName = chat.Members[0].Nickname
+				notification.ChatAvatar = chat.Members[0].Avatar
+			} else {
+				notification.ChatName = chat.Members[1].Nickname
+				notification.ChatAvatar = chat.Members[1].Avatar
 			}
+			//if session.UserId == chat.Members[0].Id {
+			//	notification.ChatName = chat.Members[0].Nickname
+			//	notification.ChatAvatar = chat.Members[0].Avatar
+			//} else {
+			//	notification.ChatName = chat.Members[1].Nickname
+			//	notification.ChatAvatar = chat.Members[1].Avatar
+			//}
 		}
 
 		//if chat.Type == config.Chat {

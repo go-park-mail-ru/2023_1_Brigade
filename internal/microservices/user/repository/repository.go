@@ -110,9 +110,24 @@ func (r repository) UpdateUserPasswordById(ctx context.Context, user model.Autho
 	return user, nil
 }
 
-func (r repository) UpdateUserInfoById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.GetContext(ctx, &user, `UPDATE profile SET avatar=$1, nickname=$2, email=$3, status=$4 WHERE id=$5 RETURNING *`,
-		user.Avatar, user.Nickname, user.Email, user.Status, user.Id)
+func (r repository) UpdateUserEmailStatusById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET email=$1, status=$2 WHERE id=$3 RETURNING *`,
+		user.Email, user.Status, user.Id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+		}
+
+		return model.AuthorizedUser{}, err
+	}
+
+	return user, nil
+}
+
+func (r repository) UpdateUserAvatarNicknameById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET avatar=$1, nickname=$2 WHERE id=$3 RETURNING *`,
+		user.Avatar, user.Nickname, user.Id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

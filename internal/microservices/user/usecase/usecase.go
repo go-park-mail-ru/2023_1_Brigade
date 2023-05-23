@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"github.com/google/uuid"
+	"project/internal/config"
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
 	"project/internal/model"
@@ -46,7 +48,30 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 			Status:   updateUser.Status,
 		}
 
-		user, err := u.userRepo.UpdateUserInfoById(ctx, user)
+		user, err := u.userRepo.UpdateUserEmailStatusById(ctx, user)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		firstCharacterNameBefore := string([]rune(user.Nickname)[0])
+		firstCharacterNameAfter := string([]rune(updateUser.Nickname)[0])
+
+		if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
+			filename := uuid.NewString()
+			err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
+			if err != nil {
+				return model.User{}, err
+			}
+
+			url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
+			if err != nil {
+				return model.User{}, err
+			}
+
+			user.Avatar = url
+		}
+
+		user, err = u.userRepo.UpdateUserAvatarNicknameById(ctx, user)
 		if err != nil {
 			return model.User{}, err
 		}

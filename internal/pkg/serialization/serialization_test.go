@@ -27,7 +27,8 @@ func TestMarshal(t *testing.T) {
 	require.Equal(t, rec.Code, http.StatusOK)
 
 	received := Obj{}
-	easyjson.Unmarshal(rec.Body.Bytes(), &received)
+	err := easyjson.Unmarshal(rec.Body.Bytes(), &received)
+	require.NoError(t, err)
 	require.Equal(t, received, msg)
 }
 

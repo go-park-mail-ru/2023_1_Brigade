@@ -20,5 +20,6 @@ func NewConsumerServiceGRPCClient(con *grpc.ClientConn) consumer.Usecase {
 }
 
 func (c consumerServiceGRPCClient) StartConsumeMessages(ctx context.Context) {
+	// nolint: errcheck
 	c.consumerClient.StartConsumeMessages(ctx, new(empty.Empty))
 }

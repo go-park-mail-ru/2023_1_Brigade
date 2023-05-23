@@ -72,6 +72,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 	err = r.db.SelectContext(ctx, &contacts, "SELECT * FROM user_contacts WHERE id_user=$1", userID)
 
 	if err != nil {
+		// nolint: errcheck
 		tx.Rollback()
 		return nil, err
 	}
@@ -80,6 +81,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 	for _, contact := range contacts {
 		contactInfo, err := r.GetUserById(ctx, contact.IdContact)
 		if err != nil {
+			// nolint: errcheck
 			tx.Rollback()
 			return nil, err
 		}

@@ -38,6 +38,7 @@ func (h *WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := e.NewContext(r, w)
 	c.Set("session", model.Session{UserId: 1})
 	forever := make(chan struct{})
+	// nolint: errcheck
 	h.handler(c)
 	<-forever
 }

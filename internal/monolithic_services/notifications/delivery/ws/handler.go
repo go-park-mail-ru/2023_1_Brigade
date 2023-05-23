@@ -121,7 +121,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo config.Centrifugo) (notificationsHandler, error) {
 	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
 
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {

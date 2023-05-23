@@ -27,7 +27,7 @@ run_prod:
 	cd docker && docker compose -f docker-compose-prod.yml up -d
 
 .PHONY: stop_prod
-run_prod:
+stop_prod:
 	cd docker && docker compose -f docker-compose-prod.yml down
 
 .PHONY: run_sentry

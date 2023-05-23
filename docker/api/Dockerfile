@@ -1,17 +1,29 @@
-FROM golang:1.19-alpine as builder
+#FROM golang:1.19-alpine AS builder
+#
+#WORKDIR /app
+#
+#COPY go.mod go.sum ./
+#
+#RUN go mod download
+#
+#FROM builder AS build
+#
+#COPY . .
+#
+#RUN CGO_ENABLED=0 GOOS=linux go build -o ./../../auth cmd/auth/main.go
+#
+#CMD ["/auth"]
+
+FROM golang:1.19-alpine AS builder
 
 WORKDIR /app
-
-COPY go.mod go.sum /
-
+COPY go.mod go.sum ./
 RUN go mod download
+
+FROM builder AS build
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o api cmd/api/main.go
+RUN go build -o ./../../api cmd/api/main.go
 
-FROM scratch
-
-COPY --from=builder api /bin/api
-
-ENTRYPOINT ["/bin/api"]
+CMD ["/api"]

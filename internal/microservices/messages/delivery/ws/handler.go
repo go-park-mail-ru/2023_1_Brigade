@@ -3,9 +3,6 @@ package ws
 import (
 	"context"
 	"net/http"
-	"os"
-	"os/signal"
-	"project/internal/config"
 	"project/internal/microservices/messages"
 	"project/internal/model"
 	"time"
@@ -74,36 +71,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	}
 }
 
-func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo config.Centrifugo) (messageHandler, error) {
-	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt)
-
-	go func() {
-		<-signals
-		c.Close()
-		log.Fatal()
-	}()
-
-	err := c.Connect()
-	if err != nil {
-		return messageHandler{}, err
-	}
-
-	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	if err != nil {
-		return messageHandler{}, err
-	}
-
-	err = sub.Subscribe()
-	if err != nil {
-		return messageHandler{}, err
-	}
-
+func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo *centrifuge.Client, channelName string) (messageHandler, error) {
 	handler := messageHandler{
 		messageUsecase: messageUsecase,
 		upgrader: websocket.Upgrader{
@@ -115,8 +83,8 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifug
 			HandshakeTimeout: time.Second * 3600,
 		},
 		clients:     make(map[uint64]*websocket.Conn),
-		centrifugo:  c,
-		channelName: centrifugo.ChannelName,
+		centrifugo:  centrifugo,
+		channelName: channelName,
 	}
 
 	sendMessagesUrl := "/message/"

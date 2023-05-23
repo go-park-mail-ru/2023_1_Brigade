@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/centrifugal/centrifuge-go"
 	"os"
+	"os/signal"
 	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
 	clientChat "project/internal/microservices/chat/delivery/grpc/client"
 	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
@@ -113,6 +115,35 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
+	centrifugo := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugo.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugo.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := centrifugo.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
 	grpcConnChats, err := grpc.Dial(
 		config.ChatsService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -222,12 +253,12 @@ func main() {
 	httpChat.NewChatHandler(e, chatService, userService)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
 
-	_, err = wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
+	_, err = wsMessages.NewMessagesHandler(e, messagesService, centrifugo, config.Centrifugo.ChannelName)
 	if err != nil {
 		log.Error(err)
 	}
 
-	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
+	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, centrifugo, config.Centrifugo.ChannelName)
 	if err != nil {
 		log.Error(err)
 	}

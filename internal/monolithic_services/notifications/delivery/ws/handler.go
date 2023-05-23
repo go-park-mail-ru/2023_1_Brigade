@@ -3,8 +3,6 @@ package ws
 import (
 	"context"
 	"net/http"
-	"os"
-	"os/signal"
 	"project/internal/config"
 	"project/internal/microservices/chat"
 	"project/internal/microservices/user"
@@ -122,36 +120,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	}
 }
 
-func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo config.Centrifugo) (notificationsHandler, error) {
-	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt)
-
-	go func() {
-		<-signals
-		c.Close()
-		log.Fatal()
-	}()
-
-	err := c.Connect()
-	if err != nil {
-		return notificationsHandler{}, err
-	}
-
-	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	if err != nil {
-		return notificationsHandler{}, err
-	}
-
-	err = sub.Subscribe()
-	if err != nil {
-		return notificationsHandler{}, err
-	}
-
+func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo *centrifuge.Client, channelName string) (notificationsHandler, error) {
 	handler := notificationsHandler{
 		chatUsecase: chatUsecase,
 		userUsecase: userUsecase,
@@ -164,8 +133,8 @@ func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase
 			HandshakeTimeout: time.Second * 3600,
 		},
 		clients:     make(map[uint64]*websocket.Conn),
-		centrifugo:  c,
-		channelName: centrifugo.ChannelName,
+		centrifugo:  centrifugo,
+		channelName: channelName,
 	}
 
 	sendMessagesUrl := "/notification/"

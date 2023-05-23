@@ -26,6 +26,10 @@ run_stack:
 run_prod:
 	cd docker && docker compose -f docker-compose-prod.yml up -d
 
+.PHONY: stop_prod
+run_prod:
+	cd docker && docker compose -f docker-compose-prod.yml down
+
 .PHONY: run_sentry
 run_sentry: |
 	cd docker && docker compose -f docker-compose-stack.yml run --rm sentry-base config generate-secret-key

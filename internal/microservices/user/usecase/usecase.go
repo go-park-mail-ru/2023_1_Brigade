@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
@@ -55,6 +56,12 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 
 		firstCharacterNameBefore := string([]rune(user.Nickname)[0])
 		firstCharacterNameAfter := string([]rune(updateUser.Nickname)[0])
+		user.Nickname = updateUser.Nickname
+
+		log.Info(user.Avatar)
+		log.Info(updateUser.NewAvatarUrl)
+		log.Info(firstCharacterNameBefore)
+		log.Info(firstCharacterNameAfter)
 
 		if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
 			filename := uuid.NewString()

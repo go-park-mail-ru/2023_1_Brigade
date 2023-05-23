@@ -72,7 +72,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo config.Centrifugo) (messageHandler, error) {
 	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
 
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {

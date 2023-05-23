@@ -209,7 +209,9 @@ func TestServer_GetListUserChats_OK(t *testing.T) {
 				},
 			},
 			LastMessageAuthor: model.User{Id: userID},
-			LastMessage:       model.Message{},
+			LastMessage: model.Message{
+				Attachments: []model.File{},
+			},
 		},
 	}
 

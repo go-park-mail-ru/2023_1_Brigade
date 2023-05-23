@@ -38,8 +38,29 @@ func easyjson4086215fDecodeProjectInternalModel(in *jlexer.Lexer, out *WebSocket
 		switch key {
 		case "id":
 			out.Id = string(in.String())
-		case "image_url":
-			out.ImageUrl = string(in.String())
+		case "attachments":
+			if in.IsNull() {
+				in.Skip()
+				out.Attachments = nil
+			} else {
+				in.Delim('[')
+				if out.Attachments == nil {
+					if !in.IsDelim(']') {
+						out.Attachments = make([]File, 0, 2)
+					} else {
+						out.Attachments = []File{}
+					}
+				} else {
+					out.Attachments = (out.Attachments)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v1 File
+					(v1).UnmarshalEasyJSON(in)
+					out.Attachments = append(out.Attachments, v1)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		case "action":
 			out.Action = uint64(in.Uint64())
 		case "type":
@@ -70,9 +91,20 @@ func easyjson4086215fEncodeProjectInternalModel(out *jwriter.Writer, in WebSocke
 		out.String(string(in.Id))
 	}
 	{
-		const prefix string = ",\"image_url\":"
+		const prefix string = ",\"attachments\":"
 		out.RawString(prefix)
-		out.String(string(in.ImageUrl))
+		if in.Attachments == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v2, v3 := range in.Attachments {
+				if v2 > 0 {
+					out.RawByte(',')
+				}
+				(v3).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
 	}
 	{
 		const prefix string = ",\"action\":"
@@ -146,8 +178,29 @@ func easyjson4086215fDecodeProjectInternalModel1(in *jlexer.Lexer, out *Producer
 		switch key {
 		case "id":
 			out.Id = string(in.String())
-		case "image_url":
-			out.ImageUrl = string(in.String())
+		case "attachments":
+			if in.IsNull() {
+				in.Skip()
+				out.Attachments = nil
+			} else {
+				in.Delim('[')
+				if out.Attachments == nil {
+					if !in.IsDelim(']') {
+						out.Attachments = make([]File, 0, 2)
+					} else {
+						out.Attachments = []File{}
+					}
+				} else {
+					out.Attachments = (out.Attachments)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v4 File
+					(v4).UnmarshalEasyJSON(in)
+					out.Attachments = append(out.Attachments, v4)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		case "action":
 			out.Action = uint64(in.Uint64())
 		case "type":
@@ -182,9 +235,20 @@ func easyjson4086215fEncodeProjectInternalModel1(out *jwriter.Writer, in Produce
 		out.String(string(in.Id))
 	}
 	{
-		const prefix string = ",\"image_url\":"
+		const prefix string = ",\"attachments\":"
 		out.RawString(prefix)
-		out.String(string(in.ImageUrl))
+		if in.Attachments == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v5, v6 := range in.Attachments {
+				if v5 > 0 {
+					out.RawByte(',')
+				}
+				(v6).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
 	}
 	{
 		const prefix string = ",\"action\":"
@@ -362,8 +426,29 @@ func easyjson4086215fDecodeProjectInternalModel3(in *jlexer.Lexer, out *Message)
 		switch key {
 		case "id":
 			out.Id = string(in.String())
-		case "image_url":
-			out.ImageUrl = string(in.String())
+		case "attachments":
+			if in.IsNull() {
+				in.Skip()
+				out.Attachments = nil
+			} else {
+				in.Delim('[')
+				if out.Attachments == nil {
+					if !in.IsDelim(']') {
+						out.Attachments = make([]File, 0, 2)
+					} else {
+						out.Attachments = []File{}
+					}
+				} else {
+					out.Attachments = (out.Attachments)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v7 File
+					(v7).UnmarshalEasyJSON(in)
+					out.Attachments = append(out.Attachments, v7)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		case "type":
 			out.Type = uint64(in.Uint64())
 		case "body":
@@ -394,9 +479,20 @@ func easyjson4086215fEncodeProjectInternalModel3(out *jwriter.Writer, in Message
 		out.String(string(in.Id))
 	}
 	{
-		const prefix string = ",\"image_url\":"
+		const prefix string = ",\"attachments\":"
 		out.RawString(prefix)
-		out.String(string(in.ImageUrl))
+		if in.Attachments == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v8, v9 := range in.Attachments {
+				if v8 > 0 {
+					out.RawByte(',')
+				}
+				(v9).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
 	}
 	{
 		const prefix string = ",\"type\":"

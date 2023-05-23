@@ -36,13 +36,13 @@ func (r repository) DeleteMessageById(ctx context.Context, messageID string) err
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_messages WHERE id_message=$1", messageID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM message WHERE id=$1", messageID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -63,7 +63,7 @@ func (r repository) GetMessageById(ctx context.Context, messageID string) (model
 	var message model.Message
 	err = r.db.GetContext(ctx, &message, "SELECT * FROM message WHERE id=$1", messageID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		if errors.Is(err, sql.ErrNoRows) {
 			return model.Message{}, myErrors.ErrMessageNotFound
 		}
@@ -71,10 +71,10 @@ func (r repository) GetMessageById(ctx context.Context, messageID string) (model
 		return model.Message{}, err
 	}
 
-	var attachments []model.File
+	var attachments []model.Attachment
 	err = r.db.SelectContext(ctx, &attachments, `SELECT * FROM attachments WHERE id_message=$1`, messageID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		if err == sql.ErrNoRows {
 			return model.Message{}, myErrors.ErrMessageNotFound
 		}
@@ -87,7 +87,12 @@ func (r repository) GetMessageById(ctx context.Context, messageID string) (model
 		return model.Message{}, err
 	}
 
-	message.Attachments = attachments
+	for _, attachment := range attachments {
+		message.Attachments = append(message.Attachments, model.File{
+			Url:  attachment.Url,
+			Name: attachment.Name,
+		})
+	}
 
 	return message, nil
 }
@@ -116,15 +121,15 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, type, body, id_chat, author_id, created_at)`+
 		`VALUES (:id, :type, :body, :id_chat, :author_id, :created_at)`, message)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	for _, attachment := range message.Attachments {
-		_, err = r.db.NamedExecContext(ctx, `INSERT INTO attachments (id_message, url)`+
-			`VALUES (:id_message, :url)`, attachment)
+		_, err = r.db.ExecContext(ctx, `INSERT INTO attachments (id_message, url, name) VALUES (?, ?, ?)`,
+			message.Id, attachment.Url, attachment.Name)
 		if err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			return err
 		}
 	}
@@ -134,7 +139,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		MessageId: message.Id,
 	})
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -163,10 +168,10 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 		return model.Message{}, err
 	}
 
-	var attachments []model.File
+	var attachments []model.Attachment
 	err = r.db.SelectContext(ctx, &attachments, `SELECT * FROM attachments WHERE id_message=$1`, lastMessage.Id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		if err == sql.ErrNoRows {
 			return model.Message{}, myErrors.ErrMessageNotFound
 		}
@@ -179,7 +184,12 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 		return model.Message{}, err
 	}
 
-	lastMessage.Attachments = attachments
+	for _, attachment := range attachments {
+		lastMessage.Attachments = append(lastMessage.Attachments, model.File{
+			Url:  attachment.Url,
+			Name: attachment.Name,
+		})
+	}
 
 	return lastMessage, nil
 }

@@ -15,7 +15,9 @@ func TestServer_ProduceMessage_OK(t *testing.T) {
 	ctl := gomock.NewController(t)
 	defer ctl.Finish()
 
-	msg := model.ProducerMessage{}
+	msg := model.ProducerMessage{
+		Attachments: []model.File{},
+	}
 
 	grpcServer := grpc.NewServer()
 

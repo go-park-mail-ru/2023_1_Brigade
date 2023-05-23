@@ -62,7 +62,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)

@@ -26,7 +26,7 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, producer producer.Usecase, messagesRepo messages.Repository) messages.Usecase {
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {

@@ -45,3 +45,9 @@ type File struct {
 	Url  string `json:"url"  db:"url"`
 	Name string `json:"name" db:"name"`
 }
+
+type Attachment struct {
+	IdMessage string `json:"id_message"  db:"id_message"`
+	Url       string `json:"url"  db:"url"`
+	Name      string `json:"name" db:"name"`
+}

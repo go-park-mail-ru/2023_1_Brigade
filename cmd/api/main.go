@@ -230,6 +230,7 @@ func main() {
 	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
 	if err != nil {
 		log.Error(err)
+	}
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

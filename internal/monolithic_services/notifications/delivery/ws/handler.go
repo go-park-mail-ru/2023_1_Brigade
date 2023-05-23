@@ -39,10 +39,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			return
 		}
 
-		//if session.UserId == producerMessage.AuthorId {
-		//	return
-		//}
-
 		if producerMessage.Action != config.Create {
 			log.Error("action don't create")
 			return
@@ -77,68 +73,14 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 		if chat.Type == config.Chat {
 			notification.ChatName = notification.AuthorNickname
 
-			if notification.AuthorNickname == chat.Members[0].Nickname {
-				notification.ChatAvatar = chat.Members[0].Avatar
-			} else {
-				notification.ChatAvatar = chat.Members[1].Avatar
+			if len(chat.Members) > 0 {
+				if notification.AuthorNickname == chat.Members[0].Nickname {
+					notification.ChatAvatar = chat.Members[0].Avatar
+				} else {
+					notification.ChatAvatar = chat.Members[1].Avatar
+				}
 			}
 		}
-
-		////members : [1, 2]
-		//log.Warn(chat.Members)
-		//if len(chat.Members) == 2 {
-		//	if producerMessage.ReceiverID == chat.Members[0].Id {
-		//		notification.ChatName = chat.Members[0].Nickname
-		//		notification.ChatAvatar = chat.Members[0].Avatar
-		//	} else {
-		//		notification.ChatName = chat.Members[1].Nickname
-		//		notification.ChatAvatar = chat.Members[1].Avatar
-		//	}
-		//	//if session.UserId == chat.Members[0].Id {
-		//	//	notification.ChatName = chat.Members[0].Nickname
-		//	//	notification.ChatAvatar = chat.Members[0].Avatar
-		//	//} else {
-		//	//	notification.ChatName = chat.Members[1].Nickname
-		//	//	notification.ChatAvatar = chat.Members[1].Avatar
-		//	//}
-		//}
-
-		//if chat.Type == config.Chat {
-		//	if session.UserId == producerMessage.ReceiverID {
-		//		if len(chat.Members) > 0 {
-		//			if
-		//		}
-		//	}
-		//	//if len(chat.Members) > 0 {
-		//	//	if chat.Members[0].Id == producerMessage.AuthorId {
-		//	//		notification.ChatName = chat.Members[0].Nickname
-		//	//		notification.AuthorNickname = chat.Members[0].Nickname
-		//	//	} else {
-		//	//		notification.ChatName = chat.Members[1].Nickname
-		//	//		notification.AuthorNickname = chat.Members[1].Nickname
-		//	//	}
-		//	//	//if notification.ChatName == user.Nickname {
-		//	//	//
-		//	//	//}
-		//	//}
-		//}
-
-		//if chat.Type == config.Chat {
-		//	//if len(chat.Members) > 0 {
-		//	//	if chat.M
-		//		//if chat.Members[0].Id == session.UserId {
-		//		//	notification.ChatName = chat.Members[0].Nickname
-		//		//	notification.ChatAvatar = chat.Members[0].Avatar
-		//		//} else {
-		//		//	notification.ChatName = chat.Members[1].Nickname
-		//		//	notification.ChatAvatar = chat.Members[1].Avatar
-		//		//}
-		//	//}
-		//
-		//	//if user.Id == producerMessage.AuthorId {
-		//	//
-		//	//}
-		//}
 
 		if producerMessage.ImageUrl != "" {
 			notification.Body = "Картинка"
@@ -169,19 +111,11 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	u.clients[session.UserId] = ws
 
 	for {
-		_, bytes, err := ws.ReadMessage()
+		_, _, err = ws.ReadMessage()
 		if err != nil {
 			return err
 		}
-		log.Info(string(bytes))
 	}
-	//return nil
-	//for {
-	//	_, _, err := ws.ReadMessage()
-	//	if err != nil {
-	//		return err
-	//	}
-	//}
 }
 
 func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo config.Centrifugo) (notificationsHandler, error) {

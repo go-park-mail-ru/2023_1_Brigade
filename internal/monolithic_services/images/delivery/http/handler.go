@@ -9,9 +9,7 @@ import (
 	"net/http"
 	"project/internal/config"
 	"project/internal/microservices/user"
-	"project/internal/model"
 	"project/internal/monolithic_services/images"
-	"strconv"
 )
 
 type imagesHandler struct {
@@ -58,9 +56,6 @@ func (h imagesHandler) UploadUserAvatarsHandler(ctx echo.Context) error {
 }
 
 func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
-	session := ctx.Get("session").(model.Session)
-	userID := strconv.FormatUint(session.UserId, 10)
-
 	maxSize := int64(64 << 20)
 	err := ctx.Request().ParseMultipartForm(maxSize)
 	if err != nil {
@@ -79,52 +74,23 @@ func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
 		}
 	}()
 
-	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.ChatAvatarsBucket, string(userID))
+	filename := uuid.NewString()
+	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.ChatAvatarsBucket, filename)
 	if err != nil {
 		return err
 	}
 
-	user, err := h.userUsecase.GetUserById(context.TODO(), session.UserId)
+	url, err := h.imagesUsecase.GetImage(context.TODO(), config.ChatAvatarsBucket, filename)
 	if err != nil {
 		return err
 	}
 
-	return ctx.JSON(http.StatusCreated, user)
+	data, err := json.Marshal(url)
+	if err != nil {
+		return err
+	}
 
-	//return nil
-	//session := ctx.Get("session").(model.Session)
-	//	userID := session.UserId
-	//
-	//	maxSize := int64(64 << 20)
-	//	err := ctx.Request().ParseMultipartForm(maxSize)
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	file, header, err := ctx.Request().FormFile("image")
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	defer func() {
-	//		err := file.Close()
-	//		if err != nil {
-	//			log.Error(err)
-	//		}
-	//	}()
-	//
-	//	url, err := h.imagesUsecase.UploadImage(context.TODO(), file, header.Filename, userID)
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	user, err := h.userUsecase.GetUserById(context.TODO(), session.UserId)
-	//	if err != nil {
-	//		return err
-	//	}
-	//	user.Avatar = url
-	//
-	//	return ctx.JSON(ws.StatusCreated, user)
+	return ctx.JSONBlob(http.StatusCreated, data)
 }
 
 func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {

@@ -13,20 +13,20 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"project/internal/config"
-	messagesMock "project/internal/microservices/messages/usecase/mocks"
+	chatMock "project/internal/microservices/chat/usecase/mocks"
+	userMock "project/internal/microservices/user/usecase/mocks"
 	"project/internal/model"
-	myErrors "project/internal/pkg/errors"
 	"strings"
 	"testing"
 	"time"
 )
 
 type testCase struct {
-	name           string
-	wsBody         []byte
-	producerBody   []byte
-	producerResult error
-	consumerResult error
+	name             string
+	wsBody           []byte
+	producerBody     []byte
+	notificationBody []byte
+	result           error
 }
 
 type WsHandler struct {
@@ -72,40 +72,35 @@ func TestHandlers_WSHandler(t *testing.T) {
 
 	producerMessage := model.ProducerMessage{
 		Id:         uuid.New().String(),
-		Type:       config.Chat,
+		Action:     config.Create,
+		Type:       config.NotSticker,
 		Body:       "Hello world!",
 		AuthorId:   1,
 		ChatID:     1,
 		ReceiverID: 1,
 	}
 
+	notification := model.Notification{
+		AuthorID: 1,
+		Body:     "Hello world!",
+	}
+
 	wsMessageJson, err := easyjson.Marshal(wsMessage)
 	assert.NoError(t, err)
 
-	producerMessageJson, err := easyjson.Marshal(producerMessage)
+	producerJsonBody, err := easyjson.Marshal(producerMessage)
+	assert.NoError(t, err)
+
+	notificationJson, err := easyjson.Marshal(notification)
 	assert.NoError(t, err)
 
 	tests := []testCase{
 		{
-			name:           "handler ok worked",
-			wsBody:         wsMessageJson,
-			producerBody:   producerMessageJson,
-			producerResult: nil,
-			consumerResult: nil,
-		},
-		{
-			name:           "producer return error",
-			wsBody:         wsMessageJson,
-			producerBody:   producerMessageJson,
-			producerResult: myErrors.ErrInternal,
-			consumerResult: nil,
-		},
-		{
-			name:           "consumer return error",
-			wsBody:         wsMessageJson,
-			producerBody:   producerMessageJson,
-			producerResult: myErrors.ErrInternal,
-			consumerResult: nil,
+			name:             "handler ok worked",
+			producerBody:     producerJsonBody,
+			wsBody:           wsMessageJson,
+			notificationBody: notificationJson,
+			result:           nil,
 		},
 	}
 
@@ -114,12 +109,13 @@ func TestHandlers_WSHandler(t *testing.T) {
 
 	e := echo.New()
 
-	messagesUsecase := messagesMock.NewMockUsecase(ctl)
+	userUsecase := userMock.NewMockUsecase(ctl)
+	chatUsecase := chatMock.NewMockUsecase(ctl)
 
-	handler, err := NewMessagesHandler(e, messagesUsecase, centrifugo)
+	handler, err := NewNotificationsHandler(e, chatUsecase, userUsecase, centrifugo)
 	assert.NoError(t, err)
 
-	h := WsHandler{handler: handler.SendMessagesHandler}
+	h := WsHandler{handler: handler.SendNotificationsHandler}
 	server := httptest.NewServer(http.HandlerFunc(h.ServeHTTP))
 	defer server.Close()
 
@@ -129,28 +125,21 @@ func TestHandlers_WSHandler(t *testing.T) {
 	defer ws.Close()
 
 	for _, test := range tests {
-		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).AnyTimes()
+		chatUsecase.EXPECT().GetChatById(context.TODO(), uint64(1), uint64(1)).Return(model.Chat{}, nil).AnyTimes()
+		userUsecase.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(model.User{}, nil).AnyTimes()
 
 		err = ws.WriteMessage(websocket.TextMessage, test.wsBody)
 		require.NoError(t, err, test.name)
-
-		if test.producerResult != nil {
-			continue
-		}
-
-		if test.consumerResult != nil {
-			continue
-		}
 
 		sub, subscribed := c.GetSubscription(centrifugo.ChannelName)
 		require.Equal(t, true, subscribed)
 
 		_, err := sub.Publish(context.TODO(), test.producerBody)
 		require.NoError(t, err)
-		time.Sleep(250 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 
 		_, msg, err := ws.ReadMessage()
-		require.Equal(t, test.producerBody, msg)
+		require.Equal(t, test.notificationBody, msg)
 		require.NoError(t, err)
 	}
 }

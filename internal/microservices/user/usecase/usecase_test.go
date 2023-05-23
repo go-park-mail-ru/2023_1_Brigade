@@ -69,26 +69,16 @@ func Test_DeleteUserById_OK(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func Test_PutUserById_OK(t *testing.T) {
-	oldPassword := security.Hash([]byte("12345678"))
-	newPassword := security.Hash([]byte("87654321"))
-
+func Test_PutUserInfoById_OK(t *testing.T) {
 	updateUser := model.UpdateUser{
-		Username:        "marcussss",
-		Nickname:        "marcussss",
-		Status:          "Hello world!",
-		CurrentPassword: "12345678",
-		NewPassword:     "87654321",
+		Nickname: "marcussss",
+		Status:   "Hello world!",
 	}
 
-	userFromDB := model.AuthorizedUser{
+	updateAuthorizedUser := model.AuthorizedUser{
 		Id:       1,
-		Avatar:   "",
-		Username: "marcussss",
 		Nickname: "marcussss",
-		Email:    "marcussss@mail.ru",
 		Status:   "Hello world!",
-		Password: oldPassword,
 	}
 
 	expectedUser := model.AuthorizedUser{
@@ -98,7 +88,6 @@ func Test_PutUserById_OK(t *testing.T) {
 		Nickname: "marcussss",
 		Email:    "marcussss@mail.ru",
 		Status:   "Hello world!",
-		Password: newPassword,
 	}
 
 	ctl := gomock.NewController(t)
@@ -108,8 +97,52 @@ func Test_PutUserById_OK(t *testing.T) {
 	userRepository := userMock.NewMockRepository(ctl)
 	usecase := NewUserUsecase(userRepository, authRepository)
 
-	userRepository.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(userFromDB, nil).Times(1)
-	userRepository.EXPECT().UpdateUserById(context.TODO(), expectedUser).Return(expectedUser, nil).Times(1)
+	userRepository.EXPECT().UpdateUserInfoById(context.TODO(), updateAuthorizedUser).Return(expectedUser, nil).Times(1)
+
+	user, err := usecase.PutUserById(context.TODO(), updateUser, uint64(1))
+
+	require.NoError(t, err)
+	require.Equal(t, model_conversion.FromAuthorizedUserToUser(expectedUser), user)
+}
+
+func Test_PutUserPasswordById_OK(t *testing.T) {
+	hashedOldPassword := security.Hash([]byte("12345678"))
+	hashedNewPassword := security.Hash([]byte("87654321"))
+
+	updateUser := model.UpdateUser{
+		CurrentPassword: "12345678",
+		NewPassword:     "87654321",
+	}
+
+	expectedUser := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss",
+		Nickname: "marcussss",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: hashedOldPassword,
+	}
+
+	expectedNewUser := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss",
+		Nickname: "marcussss",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: hashedNewPassword,
+	}
+
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	authRepository := authUserMock.NewMockRepository(ctl)
+	userRepository := userMock.NewMockRepository(ctl)
+	usecase := NewUserUsecase(userRepository, authRepository)
+
+	userRepository.EXPECT().GetUserById(context.TODO(), uint64(1)).Return(expectedUser, nil).Times(1)
+	userRepository.EXPECT().UpdateUserPasswordById(context.TODO(), expectedNewUser).Return(expectedUser, nil).Times(1)
 
 	user, err := usecase.PutUserById(context.TODO(), updateUser, uint64(1))
 

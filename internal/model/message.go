@@ -1,8 +1,9 @@
 package model
 
 type Message struct {
-	Id        string `json:"id"         db:"id"`
-	ImageUrl  string `json:"image_url"  db:"image_url"`
+	Id          string `json:"id"         db:"id"`
+	Attachments []File `json:"attachments" db:"attachments"`
+	//ImageUrl  string `json:"image_url"  db:"image_url"`
 	Type      uint64 `json:"type"       db:"type"`
 	Body      string `json:"body"       db:"body"`
 	AuthorId  uint64 `json:"author_id"  db:"author_id"`
@@ -11,25 +12,25 @@ type Message struct {
 }
 
 type WebSocketMessage struct {
-	Id       string `json:"id"        db:"id"`
-	ImageUrl string `json:"image_url" db:"image_url"`
-	Action   uint64 `json:"action"    db:"action"`
-	Type     uint64 `json:"type"      db:"type"`
-	Body     string `json:"body"      db:"body"`
-	AuthorID uint64 `json:"author_id" db:"author_id"`
-	ChatID   uint64 `json:"chat_id"   db:"chat_id"`
+	Id          string `json:"id"        db:"id"`
+	Attachments []File `json:"attachments" db:"attachments"`
+	Action      uint64 `json:"action"    db:"action"`
+	Type        uint64 `json:"type"      db:"type"`
+	Body        string `json:"body"      db:"body"`
+	AuthorID    uint64 `json:"author_id" db:"author_id"`
+	ChatID      uint64 `json:"chat_id"   db:"chat_id"`
 }
 
 type ProducerMessage struct {
-	Id         string `json:"id"          db:"id"`
-	ImageUrl   string `json:"image_url"   db:"image_url"`
-	Action     uint64 `json:"action"      db:"action"`
-	Type       uint64 `json:"type"        db:"type"`
-	Body       string `json:"body"        db:"body"`
-	AuthorId   uint64 `json:"author_id"   db:"author_id"`
-	ChatID     uint64 `json:"chat_id"     db:"chat_id"`
-	ReceiverID uint64 `json:"receiver_id" db:"receiver_id"`
-	CreatedAt  string `json:"created_at"  db:"created_at"`
+	Id          string `json:"id"          db:"id"`
+	Attachments []File `json:"attachments" db:"attachments"`
+	Action      uint64 `json:"action"      db:"action"`
+	Type        uint64 `json:"type"        db:"type"`
+	Body        string `json:"body"        db:"body"`
+	AuthorId    uint64 `json:"author_id"   db:"author_id"`
+	ChatID      uint64 `json:"chat_id"     db:"chat_id"`
+	ReceiverID  uint64 `json:"receiver_id" db:"receiver_id"`
+	CreatedAt   string `json:"created_at"  db:"created_at"`
 }
 
 type Notification struct {
@@ -38,4 +39,15 @@ type Notification struct {
 	ChatAvatar     string `json:"chat_avatar" db:"chat_avatar"`
 	AuthorNickname string `json:"author_nickname" db:"author_nickname"`
 	Body           string `json:"body" db:"body"`
+}
+
+type File struct {
+	Url  string `json:"url"  db:"url"`
+	Name string `json:"name" db:"name"`
+}
+
+type Attachment struct {
+	IdMessage string `json:"id_message"  db:"id_message"`
+	Url       string `json:"url"  db:"url"`
+	Name      string `json:"name" db:"name"`
 }

@@ -85,53 +85,53 @@ func FromUserToProtoUser(user model.User) *protobuf.User {
 
 func FromProtoProducerMessageToProducerMessage(message *protobuf.ProducerMessage) model.ProducerMessage {
 	return model.ProducerMessage{
-		Id:         message.Id,
-		ImageUrl:   message.ImageUrl,
-		Action:     message.Action,
-		Type:       message.Type,
-		Body:       message.Body,
-		AuthorId:   message.AuthorId,
-		ChatID:     message.ChatId,
-		ReceiverID: message.ReceiverID,
-		CreatedAt:  message.CreatedAt,
+		Id:          message.Id,
+		Attachments: FromProtoAttachmentsToAttachments(message.Attachments),
+		Action:      message.Action,
+		Type:        message.Type,
+		Body:        message.Body,
+		AuthorId:    message.AuthorId,
+		ChatID:      message.ChatId,
+		ReceiverID:  message.ReceiverID,
+		CreatedAt:   message.CreatedAt,
 	}
 }
 
 func FromProducerMessageToProtoProducerMessage(message model.ProducerMessage) *protobuf.ProducerMessage {
 	return &protobuf.ProducerMessage{
-		Id:         message.Id,
-		ImageUrl:   message.ImageUrl,
-		Action:     message.Action,
-		Type:       message.Type,
-		Body:       message.Body,
-		AuthorId:   message.AuthorId,
-		ChatId:     message.ChatID,
-		ReceiverID: message.ReceiverID,
-		CreatedAt:  message.CreatedAt,
+		Id:          message.Id,
+		Attachments: FromAttachmentsToProtoAttachments(message.Attachments),
+		Action:      message.Action,
+		Type:        message.Type,
+		Body:        message.Body,
+		AuthorId:    message.AuthorId,
+		ChatId:      message.ChatID,
+		ReceiverID:  message.ReceiverID,
+		CreatedAt:   message.CreatedAt,
 	}
 }
 
 func FromProtoMessageToMessage(message *protobuf.Message) model.Message {
 	return model.Message{
-		Id:        message.Id,
-		ImageUrl:  message.ImageUrl,
-		Type:      message.Type,
-		Body:      message.Body,
-		AuthorId:  message.AuthorId,
-		ChatId:    message.ChatId,
-		CreatedAt: message.CreatedAt,
+		Id:          message.Id,
+		Attachments: FromProtoAttachmentsToAttachments(message.Attachments),
+		Type:        message.Type,
+		Body:        message.Body,
+		AuthorId:    message.AuthorId,
+		ChatId:      message.ChatId,
+		CreatedAt:   message.CreatedAt,
 	}
 }
 
 func FromMessageToProtoMessage(message model.Message) *protobuf.Message {
 	return &protobuf.Message{
-		Id:        message.Id,
-		ImageUrl:  message.ImageUrl,
-		Type:      message.Type,
-		Body:      message.Body,
-		AuthorId:  message.AuthorId,
-		ChatId:    message.ChatId,
-		CreatedAt: message.CreatedAt,
+		Id:          message.Id,
+		Attachments: FromAttachmentsToProtoAttachments(message.Attachments),
+		Type:        message.Type,
+		Body:        message.Body,
+		AuthorId:    message.AuthorId,
+		ChatId:      message.ChatId,
+		CreatedAt:   message.CreatedAt,
 	}
 }
 
@@ -213,6 +213,40 @@ func FromCreateChatToProtoCreateChat(chat model.CreateChat) *protobuf.CreateChat
 		Title:   chat.Title,
 		Members: chat.Members,
 	}
+}
+
+func FromFileToProtoFile(file model.File) *protobuf.File {
+	return &protobuf.File{
+		Url:  file.Url,
+		Name: file.Name,
+	}
+}
+
+func FromProtoFileToFile(file *protobuf.File) model.File {
+	return model.File{
+		Url:  file.Url,
+		Name: file.Name,
+	}
+}
+
+func FromProtoAttachmentsToAttachments(attachments []*protobuf.File) []model.File {
+	res := make([]model.File, len(attachments))
+
+	for idx, value := range attachments {
+		res[idx] = FromProtoFileToFile(value)
+	}
+
+	return res
+}
+
+func FromAttachmentsToProtoAttachments(attachments []model.File) []*protobuf.File {
+	res := make([]*protobuf.File, len(attachments))
+
+	for idx, value := range attachments {
+		res[idx] = FromFileToProtoFile(value)
+	}
+
+	return res
 }
 
 func FromProtoSearchChatsToSearchChats(protoChats *protobuf.FoundedChatsMessagesChannels) model.FoundedChatsMessagesChannels {

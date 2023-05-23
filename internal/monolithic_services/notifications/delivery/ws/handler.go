@@ -46,7 +46,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
-			log.Error("nil client")
 			return
 		}
 
@@ -82,7 +81,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			}
 		}
 
-		if producerMessage.ImageUrl != "" {
+		if len(producerMessage.Attachments) != 0 {
 			notification.Body = "Картинка"
 		}
 

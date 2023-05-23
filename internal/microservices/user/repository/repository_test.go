@@ -381,45 +381,44 @@ func TestPostgres_CheckExistUserById_False(t *testing.T) {
 	require.NoError(t, err)
 }
 
-//func TestPostgres_GetSearchChannels_OK(t *testing.T) {
-//	userID := uint64(1)
-//	searchString := "abc"
-//	expectedUsers := []model.AuthorizedUser{
-//		{
-//			Id:       1,
-//			Avatar:   "",
-//			Username: "marcussss",
-//			Nickname: "marcussss",
-//			Email:    "marcussss@mail.ru",
-//			Status:   "Hello world!",
-//			Password: "12345678",
-//		},
-//	}
-//
-//	db, mock, err := sqlmock.New()
-//	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
-//	defer func() {
-//		err := db.Close()
-//		if err != nil {
-//			log.Error(err)
-//		}
-//	}()
-//
-//	row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
-//		AddRow(expectedUsers[0].Id, expectedUsers[0].Avatar, expectedUsers[0].Username, expectedUsers[0].Nickname, expectedUsers[0].Email, expectedUsers[0].Status, expectedUsers[0].Password)
-//
-//	mock.
-//		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE nickname ILIKE $1`)).
-//		WithArgs(config.Channel, "%"+searchString+"%", userID).
-//		WillReturnRows(row)
-//
-//	dbx := sqlx.NewDb(db, "sqlmock")
-//	repo := NewChatMemoryRepository(dbx)
-//
-//	searchChannels, err := repo.GetSearchChannels(context.TODO(), searchString, userID)
-//	require.NoError(t, err)
-//	require.Equal(t, expectedChats, searchChannels)
-//
-//	err = mock.ExpectationsWereMet()
-//	require.NoError(t, err)
-//}
+func TestPostgres_GetSearchChannels_OK(t *testing.T) {
+	searchString := "abc"
+	expectedUsers := []model.AuthorizedUser{
+		{
+			Id:       1,
+			Avatar:   "",
+			Username: "marcussss",
+			Nickname: "marcuabcssss",
+			Email:    "marcussss@mail.ru",
+			Status:   "Hello world!",
+			Password: "12345678",
+		},
+	}
+
+	db, mock, err := sqlmock.New()
+	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
+		AddRow(expectedUsers[0].Id, expectedUsers[0].Avatar, expectedUsers[0].Username, expectedUsers[0].Nickname, expectedUsers[0].Email, expectedUsers[0].Status, expectedUsers[0].Password)
+
+	mock.
+		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE nickname ILIKE $1`)).
+		WithArgs("%" + searchString + "%").
+		WillReturnRows(row)
+
+	dbx := sqlx.NewDb(db, "sqlmock")
+	repo := NewUserMemoryRepository(dbx)
+
+	searchUsers, err := repo.GetSearchUsers(context.TODO(), searchString)
+	require.NoError(t, err)
+	require.Equal(t, expectedUsers, searchUsers)
+
+	err = mock.ExpectationsWereMet()
+	require.NoError(t, err)
+}

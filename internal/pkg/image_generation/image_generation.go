@@ -3,23 +3,18 @@ package image_generation
 import (
 	"crypto/rand"
 	"github.com/fogleman/gg"
+	log "github.com/sirupsen/logrus"
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
 	"math"
 	"math/big"
-	"net/url"
 	"os"
 	"strings"
 )
 
 func GenerateAvatar(firstCharacterName string) error {
-	firstCharacterName, err := url.QueryUnescape(firstCharacterName)
-	if err != nil {
-		return err
-	}
-
 	firstCharacterName = strings.ToUpper(firstCharacterName)
 	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))
 
@@ -46,7 +41,13 @@ func GenerateAvatar(firstCharacterName string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		err = file.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
 	if err := png.Encode(file, img); err != nil {
 		return err
 	}
@@ -61,7 +62,7 @@ func GenerateAvatar(firstCharacterName string) error {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
-	if err := dc.LoadFontFace("../Go-Mono.ttf", 728); err != nil {
+	if err := dc.LoadFontFace("../str.ttf", 728); err != nil {
 		return err
 	}
 

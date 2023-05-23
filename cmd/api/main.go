@@ -221,15 +221,15 @@ func main() {
 	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
-	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	_, err = wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
+
+	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
+	if err != nil {
+		log.Error(err)
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

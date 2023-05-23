@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
+	log "github.com/sirupsen/logrus"
 	"project/internal/generated"
 	consumer "project/internal/microservices/consumer/usecase"
 
@@ -20,5 +21,8 @@ func NewConsumerServiceGRPCClient(con *grpc.ClientConn) consumer.Usecase {
 }
 
 func (c consumerServiceGRPCClient) StartConsumeMessages(ctx context.Context) {
-	c.consumerClient.StartConsumeMessages(ctx, new(empty.Empty))
+	_, err := c.consumerClient.StartConsumeMessages(ctx, new(empty.Empty))
+	if err != nil {
+		log.Error(err)
+	}
 }

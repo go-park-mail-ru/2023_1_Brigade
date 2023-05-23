@@ -65,7 +65,7 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 	}
 
 	filename := strconv.FormatUint(sessionUser.Id, 10)
-	firstCharacterName := string(sessionUser.Nickname[0])
+	firstCharacterName := string([]rune(sessionUser.Nickname)[0])
 
 	err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterName)
 	if err != nil {

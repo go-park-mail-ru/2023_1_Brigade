@@ -97,7 +97,8 @@ func Test_PutUserInfoById_OK(t *testing.T) {
 	userRepository := userMock.NewMockRepository(ctl)
 	usecase := NewUserUsecase(userRepository, authRepository)
 
-	userRepository.EXPECT().UpdateUserInfoById(context.TODO(), updateAuthorizedUser).Return(expectedUser, nil).Times(1)
+	userRepository.EXPECT().UpdateUserEmailStatusById(context.TODO(), updateAuthorizedUser).Return(expectedUser, nil).Times(1)
+	userRepository.EXPECT().UpdateUserAvatarNicknameById(context.TODO(), expectedUser).Return(expectedUser, nil).Times(1)
 
 	user, err := usecase.PutUserById(context.TODO(), updateUser, uint64(1))
 

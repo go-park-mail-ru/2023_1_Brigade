@@ -13,12 +13,11 @@ import (
 )
 
 type usecase struct {
-	consumer     *amqp.Connection
-	channel      *amqp.Channel
-	queue        *amqp.Queue
-	messagesChan chan []byte
-	client       *centrifuge.Client
-	channelName  string
+	consumer    *amqp.Connection
+	channel     *amqp.Channel
+	queue       *amqp.Queue
+	client      *centrifuge.Client
+	channelName string
 }
 
 func NewConsumer(connAddr string, queueName string, centrifugo config.Centrifugo) (consumer.Usecase, error) {
@@ -68,13 +67,19 @@ func NewConsumer(connAddr string, queueName string, centrifugo config.Centrifugo
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
-		select {
-		case <-signals:
-			consumer.Close()
-			channel.Close()
-			c.Close()
-			log.Fatal()
+		<-signals
+		err = consumer.Close()
+		if err != nil {
+			log.Error(err)
 		}
+
+		err = channel.Close()
+		if err != nil {
+			log.Error(err)
+		}
+
+		c.Close()
+		log.Fatal()
 	}()
 
 	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: c, channelName: centrifugo.ChannelName}

@@ -51,7 +51,12 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	defer ws.Close()
+	defer func() {
+		err = ws.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws

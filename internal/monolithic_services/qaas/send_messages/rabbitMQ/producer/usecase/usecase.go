@@ -45,12 +45,18 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
-		select {
-		case <-signals:
-			producer.Close()
-			channel.Close()
-			log.Fatal()
+		<-signals
+		err = producer.Close()
+		if err != nil {
+			log.Error(err)
 		}
+
+		err = channel.Close()
+		if err != nil {
+			log.Error(err)
+		}
+
+		log.Fatal()
 	}()
 
 	return &usecase{producer: producer, channel: channel, queue: &queue}, nil

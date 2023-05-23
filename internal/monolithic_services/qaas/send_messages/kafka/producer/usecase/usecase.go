@@ -10,7 +10,6 @@ import (
 
 type usecase struct {
 	producer sarama.AsyncProducer
-	closed   bool
 }
 
 func NewProducer(brokerList []string) (producer.Usecase, error) {

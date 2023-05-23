@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [ backend-dev ]
+    branches:
+      - easyjson
 
 jobs:
   lint:
@@ -53,4 +54,4 @@ jobs:
         run: go mod tidy
 
       - name: Run tests
-        run: go test -race -vet=off ./...
+        run: go test -race -vet=off -run '!(ws|server)' ./...

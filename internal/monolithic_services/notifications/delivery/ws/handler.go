@@ -105,7 +105,12 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	if err != nil {
 		return err
 	}
-	defer ws.Close()
+	defer func() {
+		err = ws.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	u.clients[session.UserId] = ws
 

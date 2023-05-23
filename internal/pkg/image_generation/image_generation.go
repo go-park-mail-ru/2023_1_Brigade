@@ -1,7 +1,6 @@
 package image_generation
 
 import (
-	log "github.com/sirupsen/logrus"
 	"crypto/rand"
 	"github.com/fogleman/gg"
 	"image"
@@ -15,9 +14,7 @@ import (
 )
 
 func GenerateAvatar(firstCharacterName string) error {
-	log.Info(firstCharacterName)
 	firstCharacterName = strings.ToUpper(firstCharacterName)
-	log.Info(firstCharacterName)
 	img := image.NewRGBA(image.Rect(0, 0, 1024, 1024))
 
 	rBig, err := rand.Int(rand.Reader, big.NewInt(math.MaxUint32))

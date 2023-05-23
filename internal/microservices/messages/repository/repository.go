@@ -55,16 +55,39 @@ func (r repository) DeleteMessageById(ctx context.Context, messageID string) err
 }
 
 func (r repository) GetMessageById(ctx context.Context, messageID string) (model.Message, error) {
-	var message model.Message
-	err := r.db.GetContext(ctx, &message, "SELECT * FROM message WHERE id=$1", messageID)
-
+	tx, err := r.db.BeginTxx(ctx, nil)
 	if err != nil {
+		return model.Message{}, err
+	}
+
+	var message model.Message
+	err = r.db.GetContext(ctx, &message, "SELECT * FROM message WHERE id=$1", messageID)
+	if err != nil {
+		tx.Rollback()
 		if errors.Is(err, sql.ErrNoRows) {
 			return model.Message{}, myErrors.ErrMessageNotFound
 		}
 
 		return model.Message{}, err
 	}
+
+	var attachments []model.File
+	err = r.db.SelectContext(ctx, &attachments, `SELECT * FROM attachments WHERE id_message=$1`, messageID)
+	if err != nil {
+		tx.Rollback()
+		if err == sql.ErrNoRows {
+			return model.Message{}, myErrors.ErrMessageNotFound
+		}
+
+		return model.Message{}, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return model.Message{}, err
+	}
+
+	message.Attachments = attachments
 
 	return message, nil
 }
@@ -90,11 +113,20 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		return err
 	}
 
-	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)`+
-		`VALUES (:id, :image_url, :type, :body, :id_chat, :author_id, :created_at)`, message)
+	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, type, body, id_chat, author_id, created_at)`+
+		`VALUES (:id, :type, :body, :id_chat, :author_id, :created_at)`, message)
 	if err != nil {
 		tx.Rollback()
 		return err
+	}
+
+	for _, attachment := range message.Attachments {
+		_, err = r.db.NamedExecContext(ctx, `INSERT INTO attachments (id_message, url)`+
+			`VALUES (:id_message, :url)`, attachment)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
 	_, err = r.db.NamedExecContext(ctx, "INSERT INTO chat_messages (id_chat, id_message) VALUES (:id_chat, :id_message)", model.ChatMessages{
@@ -115,8 +147,13 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 }
 
 func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (model.Message, error) {
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return model.Message{}, err
+	}
+
 	var lastMessage model.Message
-	err := r.db.GetContext(ctx, &lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND created_at = (SELECT MAX(created_at) FROM message WHERE id_chat = $1)`, chatID)
+	err = r.db.GetContext(ctx, &lastMessage, `SELECT * FROM message WHERE id_chat = $1 AND created_at = (SELECT MAX(created_at) FROM message WHERE id_chat = $1)`, chatID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -126,12 +163,30 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 		return model.Message{}, err
 	}
 
+	var attachments []model.File
+	err = r.db.SelectContext(ctx, &attachments, `SELECT * FROM attachments WHERE id_message=$1`, lastMessage.Id)
+	if err != nil {
+		tx.Rollback()
+		if err == sql.ErrNoRows {
+			return model.Message{}, myErrors.ErrMessageNotFound
+		}
+
+		return model.Message{}, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return model.Message{}, err
+	}
+
+	lastMessage.Attachments = attachments
+
 	return lastMessage, nil
 }
 
 func (r repository) GetSearchMessages(ctx context.Context, userID uint64, string string) ([]model.Message, error) {
 	var messages []model.Message
-	err := r.db.Select(&messages, `
+	err := r.db.SelectContext(ctx, &messages, `
 		SELECT message.*
 		FROM message
 		JOIN chat_messages ON message.id = chat_messages.id_message

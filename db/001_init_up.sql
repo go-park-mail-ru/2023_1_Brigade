@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS chat (
 
 CREATE TABLE IF NOT EXISTS message (
     id         VARCHAR(255) UNIQUE,
-    image_url  VARCHAR(1024),
     type       INTEGER,
     body       VARCHAR(1024), -- валидация, со стороны приложения
     id_chat    INTEGER,
@@ -54,6 +53,12 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     id_message VARCHAR(255),
     FOREIGN KEY (id_chat)   REFERENCES chat(id),
     FOREIGN KEY (id_message) REFERENCES message(id)
+);
+
+CREATE TABLE IF NOT EXISTS attachments (
+    id_message INTEGER,
+    url        VARCHAR(1024),
+    FOREIGN KEY (id_message) REFERENCES message(id),
 );
 
 INSERT INTO profile (id, avatar, username, nickname, email, status, password)

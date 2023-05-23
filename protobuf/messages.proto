@@ -9,33 +9,38 @@ message Bytes {
 }
 
 message Message {
-  string Id = 1;
-  string ImageUrl = 2;
-  uint64 Type = 3;
-  string Body = 4;
-  uint64 AuthorId = 5;
-  uint64 ChatId = 6;
-  string CreatedAt = 7;
+  string   Id = 1;
+  repeated File Attachments = 2;
+  uint64   Type = 3;
+  string   Body = 4;
+  uint64   AuthorId = 5;
+  uint64   ChatId = 6;
+  string   CreatedAt = 7;
 }
 
 message WebSocketMessage {
-  string Id = 1;
-  string ImageUrl = 2;
-  uint64 Action = 3;
-  uint64 Type = 4;
-  string Body = 5;
-  uint64 AuthorID = 6;
-  uint64 ChatID = 7;
+  string   Id = 1;
+  repeated File Attachments = 2;
+  uint64   Action = 3;
+  uint64   Type = 4;
+  string   Body = 5;
+  uint64   AuthorID = 6;
+  uint64   ChatID = 7;
 }
 
 message ProducerMessage {
-  string Id = 1;
-  string ImageUrl = 2;
-  uint64 Action = 3;
-  uint64 Type = 4;
-  string Body = 5;
-  uint64 AuthorId = 6;
-  uint64 ChatId = 7;
-  uint64 ReceiverID = 8;
-  string CreatedAt = 9;
+  string   Id = 1;
+  repeated File Attachments = 2;
+  uint64   Action = 3;
+  uint64   Type = 4;
+  string   Body = 5;
+  uint64   AuthorId = 6;
+  uint64   ChatId = 7;
+  uint64   ReceiverID = 8;
+  string   CreatedAt = 9;
+}
+
+message File {
+  string Url = 1;
+  string Name = 2;
 }

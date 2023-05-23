@@ -47,13 +47,13 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	webSocketMessage = httpUtils.SanitizeStruct(webSocketMessage).(model.WebSocketMessage)
 
 	producerMessage := model.ProducerMessage{
-		Id:       webSocketMessage.Id,
-		ImageUrl: webSocketMessage.ImageUrl,
-		Action:   webSocketMessage.Action,
-		Type:     webSocketMessage.Type,
-		Body:     webSocketMessage.Body,
-		AuthorId: webSocketMessage.AuthorID,
-		ChatID:   webSocketMessage.ChatID,
+		Id:          webSocketMessage.Id,
+		Attachments: webSocketMessage.Attachments,
+		Action:      webSocketMessage.Action,
+		Type:        webSocketMessage.Type,
+		Body:        webSocketMessage.Body,
+		AuthorId:    webSocketMessage.AuthorID,
+		ChatID:      webSocketMessage.ChatID,
 	}
 
 	// если пришел ивент на создание сообщения (0)
@@ -66,13 +66,13 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	case config.Create:
 		go func() {
 			err := u.messagesRepo.InsertMessageInDB(context.TODO(), model.Message{
-				Id:        producerMessage.Id,
-				ImageUrl:  producerMessage.ImageUrl,
-				Type:      producerMessage.Type,
-				Body:      producerMessage.Body,
-				AuthorId:  producerMessage.AuthorId,
-				ChatId:    producerMessage.ChatID,
-				CreatedAt: producerMessage.CreatedAt,
+				Id:          producerMessage.Id,
+				Attachments: webSocketMessage.Attachments,
+				Type:        producerMessage.Type,
+				Body:        producerMessage.Body,
+				AuthorId:    producerMessage.AuthorId,
+				ChatId:      producerMessage.ChatID,
+				CreatedAt:   producerMessage.CreatedAt,
 			})
 			if err != nil {
 				log.Error(err)

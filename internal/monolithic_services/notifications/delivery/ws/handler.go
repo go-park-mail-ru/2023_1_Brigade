@@ -46,7 +46,6 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
-			log.Error("nil client")
 			return
 		}
 

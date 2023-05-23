@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"project/internal/config"
 	"project/internal/microservices/user"
+	"project/internal/model"
 	"project/internal/monolithic_services/images"
 )
 
@@ -100,7 +101,7 @@ func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
 		return err
 	}
 
-	file, _, err := ctx.Request().FormFile("image")
+	file, header, err := ctx.Request().FormFile("image")
 	if err != nil {
 		return err
 	}
@@ -123,12 +124,10 @@ func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
 		return err
 	}
 
-	data, err := json.Marshal(url)
-	if err != nil {
-		return err
-	}
-
-	return ctx.JSONBlob(http.StatusCreated, data)
+	return ctx.JSON(http.StatusCreated, model.File{
+		Url:  url,
+		Name: header.Filename,
+	})
 }
 
 func NewImagesHandler(e *echo.Echo, userUsecase user.Usecase, imagesUsecase images.Usecase) imagesHandler {

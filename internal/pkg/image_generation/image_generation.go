@@ -61,7 +61,7 @@ func GenerateAvatar(firstCharacterName string) error {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
-	if err := dc.LoadFontFace("../Go-Mono.ttf", 728); err != nil {
+	if err := dc.LoadFontFace("../str.ttf", 728); err != nil {
 		return err
 	}
 

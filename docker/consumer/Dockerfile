@@ -26,6 +26,6 @@ FROM builder AS build
 
 COPY . .
 
-RUN go build -o ./../../consumer cmd/consumer/main.go
+RUN go build -o ./../../../consumer cmd/consumer/rabbitMQ/main.go
 
 CMD ["/consumer"]

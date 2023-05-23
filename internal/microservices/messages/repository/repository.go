@@ -126,7 +126,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 	}
 
 	for _, attachment := range message.Attachments {
-		_, err = r.db.ExecContext(ctx, `INSERT INTO attachments (id_message, url, name) VALUES (?, ?, ?)`,
+		_, err = r.db.ExecContext(ctx, `INSERT INTO attachments (id_message, url, name) VALUES ($1, $2, $3)`,
 			message.Id, attachment.Url, attachment.Name)
 		if err != nil {
 			_ = tx.Rollback()

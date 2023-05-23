@@ -178,7 +178,7 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 
@@ -370,7 +370,7 @@ func Test_Messages_EditMessage(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 
@@ -562,7 +562,7 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 
@@ -635,7 +635,7 @@ func Test_Messages_UndefinedAction(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 

@@ -166,19 +166,34 @@ func (mr *MockRepositoryMockRecorder) GetUserContacts(ctx, userID interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserContacts", reflect.TypeOf((*MockRepository)(nil).GetUserContacts), ctx, userID)
 }
 
-// UpdateUserInfoById mocks base method.
-func (m *MockRepository) UpdateUserInfoById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+// UpdateUserAvatarNicknameById mocks base method.
+func (m *MockRepository) UpdateUserAvatarNicknameById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateUserInfoById", ctx, user)
+	ret := m.ctrl.Call(m, "UpdateUserAvatarNicknameById", ctx, user)
 	ret0, _ := ret[0].(model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateUserInfoById indicates an expected call of UpdateUserInfoById.
-func (mr *MockRepositoryMockRecorder) UpdateUserInfoById(ctx, user interface{}) *gomock.Call {
+// UpdateUserAvatarNicknameById indicates an expected call of UpdateUserAvatarNicknameById.
+func (mr *MockRepositoryMockRecorder) UpdateUserAvatarNicknameById(ctx, user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserInfoById", reflect.TypeOf((*MockRepository)(nil).UpdateUserInfoById), ctx, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserAvatarNicknameById", reflect.TypeOf((*MockRepository)(nil).UpdateUserAvatarNicknameById), ctx, user)
+}
+
+// UpdateUserEmailStatusById mocks base method.
+func (m *MockRepository) UpdateUserEmailStatusById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserEmailStatusById", ctx, user)
+	ret0, _ := ret[0].(model.AuthorizedUser)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateUserEmailStatusById indicates an expected call of UpdateUserEmailStatusById.
+func (mr *MockRepositoryMockRecorder) UpdateUserEmailStatusById(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserEmailStatusById", reflect.TypeOf((*MockRepository)(nil).UpdateUserEmailStatusById), ctx, user)
 }
 
 // UpdateUserPasswordById mocks base method.

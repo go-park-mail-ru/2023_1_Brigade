@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 	"github.com/mailru/easyjson"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"net/http"
@@ -38,7 +39,7 @@ func (h *WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := e.NewContext(r, w)
 	c.Set("session", model.Session{UserId: 1})
 	forever := make(chan struct{})
-	h.handler(c)
+	_ = h.handler(c)
 	<-forever
 }
 
@@ -126,7 +127,12 @@ func TestHandlers_WSHandler(t *testing.T) {
 	wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/message/"
 	ws, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
 	assert.NoError(t, err, err)
-	defer ws.Close()
+	defer func() {
+		err = ws.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	for _, test := range tests {
 		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).AnyTimes()

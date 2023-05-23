@@ -60,7 +60,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
@@ -77,7 +82,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnConsumer.Close()
+	defer func() {
+		err = grpcConnConsumer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	grpcConnProducer, err := grpc.Dial(
 		config.ProducerService.Addr,
@@ -87,7 +97,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnProducer.Close()
+	defer func() {
+		err = grpcConnProducer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)

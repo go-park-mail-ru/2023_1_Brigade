@@ -103,7 +103,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
@@ -116,7 +121,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnChats.Close()
+	defer func() {
+		err = grpcConnChats.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	grpcConnUsers, err := grpc.Dial(
 		config.UsersService.Addr,
@@ -126,7 +136,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnUsers.Close()
+	defer func() {
+		err = grpcConnUsers.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	grpcConnMessages, err := grpc.Dial(
 		config.MessagesService.Addr,
@@ -136,7 +151,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnMessages.Close()
+	defer func() {
+		err = grpcConnMessages.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	grpcConnAuth, err := grpc.Dial(
 		config.AuthService.Addr,
@@ -146,7 +166,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnAuth.Close()
+	defer func() {
+		err = grpcConnAuth.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
 	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
@@ -195,9 +220,16 @@ func main() {
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
-	wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
-	wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
+	_, err = wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
+	if err != nil {
+		log.Error(err)
+	}
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

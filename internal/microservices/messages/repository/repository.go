@@ -36,13 +36,13 @@ func (r repository) DeleteMessageById(ctx context.Context, messageID string) err
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_messages WHERE id_message=$1", messageID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM message WHERE id=$1", messageID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -93,7 +93,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 	_, err = r.db.NamedExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)`+
 		`VALUES (:id, :image_url, :type, :body, :id_chat, :author_id, :created_at)`, message)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -102,7 +102,7 @@ func (r repository) InsertMessageInDB(ctx context.Context, message model.Message
 		MessageId: message.Id,
 	})
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 

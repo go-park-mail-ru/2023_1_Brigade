@@ -223,7 +223,7 @@ func TestPostgres_UpdateUserPasswordById_OK(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestPostgres_UpdateUserInfoById_OK(t *testing.T) {
+func TestPostgres_UpdateUserEmailStatusById_OK(t *testing.T) {
 	user := model.AuthorizedUser{
 		Id:       1,
 		Avatar:   "",
@@ -257,14 +257,14 @@ func TestPostgres_UpdateUserInfoById_OK(t *testing.T) {
 		AddRow(expectedUser.Id, expectedUser.Avatar, expectedUser.Username, expectedUser.Nickname, expectedUser.Email, expectedUser.Status, expectedUser.Password)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`UPDATE profile SET avatar=$1, nickname=$2, email=$3, status=$4 WHERE id=$5 RETURNING *`)).
-		WithArgs(user.Avatar, user.Nickname, user.Email, user.Status, user.Id).
+		ExpectQuery(regexp.QuoteMeta(`UPDATE profile SET email=$1, status=$2 WHERE id=$3 RETURNING *`)).
+		WithArgs(user.Email, user.Status, user.Id).
 		WillReturnRows(row)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewUserMemoryRepository(dbx)
 
-	returnedUser, err := repo.UpdateUserInfoById(context.TODO(), user)
+	returnedUser, err := repo.UpdateUserEmailStatusById(context.TODO(), user)
 	require.NoError(t, err)
 	require.Equal(t, expectedUser, returnedUser)
 

@@ -3,6 +3,7 @@ package image_generation
 import (
 	"crypto/rand"
 	"github.com/fogleman/gg"
+	log "github.com/sirupsen/logrus"
 	"image"
 	"image/color"
 	"image/draw"
@@ -40,7 +41,13 @@ func GenerateAvatar(firstCharacterName string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		err = file.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
 	if err := png.Encode(file, img); err != nil {
 		return err
 	}

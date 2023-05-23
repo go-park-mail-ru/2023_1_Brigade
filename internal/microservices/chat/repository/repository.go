@@ -30,7 +30,7 @@ func (r repository) CreateTechnogrammChat(ctx context.Context, user model.Author
 	err = tx.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)
    VALUES (0, 0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -38,28 +38,28 @@ func (r repository) CreateTechnogrammChat(ctx context.Context, user model.Author
 	_, err = tx.ExecContext(ctx, `INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)
    VALUES ($1, $2, $3, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $4), (SELECT id FROM profile WHERE id = $5), '0001-01-01 00:00:00+00');`, id, "", config.NotSticker, chat.Id, 0)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = tx.ExecContext(ctx, `INSERT INTO chat_messages (id_chat, id_message)
    VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM message WHERE id = $2));`, chat.Id, id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = tx.ExecContext(ctx, `INSERT INTO chat_members (id_chat, id_member)
    VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM profile WHERE id = $2));`, chat.Id, user.Id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = tx.ExecContext(ctx, `INSERT INTO chat_members (id_chat, id_member)
    VALUES ((SELECT id FROM chat WHERE id = $1), (SELECT id FROM profile WHERE id = 0));`, chat.Id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -155,7 +155,7 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
 		chat.MasterID, chat.Type, "", chat.Title).Scan(&chatDB.Id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return model.Chat{}, err
 	}
 	chat.Id = chatDB.Id
@@ -163,7 +163,7 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 	for _, members := range chat.Members {
 		err = r.AddUserInChatDB(ctx, chat.Id, members.Id)
 		if err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			return model.Chat{}, err
 		}
 	}
@@ -184,25 +184,25 @@ func (r repository) DeleteChatById(ctx context.Context, chatID uint64) error {
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_messages WHERE id_chat=$1", chatID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM chat_members WHERE id_chat=$1", chatID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM message WHERE id_chat=$1", chatID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 
 	_, err = r.db.ExecContext(ctx, "DELETE FROM chat WHERE id=$1", chatID)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return err
 	}
 

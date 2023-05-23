@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/mailru/easyjson"
-	"io/ioutil"
+	"io"
 )
 
 type EasyJsonSerializer struct{}
@@ -20,7 +20,7 @@ func (ejs EasyJsonSerializer) Serialize(ctx echo.Context, data interface{}, inde
 }
 
 func (s EasyJsonSerializer) Deserialize(ctx echo.Context, i interface{}) error {
-	data, err := ioutil.ReadAll(ctx.Request().Body)
+	data, err := io.ReadAll(ctx.Request().Body)
 	if err != nil {
 		return err
 	}

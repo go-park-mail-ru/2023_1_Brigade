@@ -1,0 +1,60 @@
+#!/bin/bash
+
+clean_local_microservices() {
+    if [[ $EUID -ne 0 ]]; then
+        echo "This script must be run as root or with sudo privileges"
+        exit 1
+    fi
+
+    for port in "9001 9002 9003 9004 9000 9005 8081"; do
+        kill $(lsof -ti :"$port")
+        echo "Terminated :$port"
+    done
+}
+
+run_local_microservices() {
+    go run cmd/consumer/rabbitMQ/main.go >> logs/consumer 2>&1 &
+    go run cmd/producer/rabbitMQ/main.go >> logs/producer 2>&1 &
+
+    for service in "auth chat messages user api"; do
+        go run cmd/"$service"/main.go >> logs/"$service" 2>&1 &
+    done
+}
+
+run_stack() {
+	docker compose -f docker/docker-compose-stack.yml up -d
+}
+
+run_prod() {
+	docker compose -f docker/docker-compose-prod.yml up -d
+}
+
+run_sentry() {
+	docker compose -f docker/docker-compose-stack.yml run --rm sentry-base config generate-secret-key
+	docker compose -f docker/docker-compose-stack.yml run --rm sentry-base upgrade
+}
+
+clean_images_containers() {
+	docker stop $(docker ps -q)
+	docker system prune -a
+}
+
+generate_proto_rpc() {
+	protoc --go-grpc_opt=require_unimplemented_servers=false --go-grpc_out=internal/generated protobuf/*_rpc.proto
+}
+
+generate_proto() {
+	find protobuf -type f -name '*.proto' ! -name '*_rpc.proto' -exec protoc --go_out=internal/generated {} +
+}
+
+cover_out() {
+	go test -coverprofile=c.out ./... -coverpkg=./...
+	cat c.out | grep -v "cmd" | grep -v "_mock.go" | grep -v ".pb" | grep -v "_easyjson.go" > tmp.out
+	go tool cover -func=tmp.out
+}
+
+cover_html() {
+	go test -v ./... -coverprofile=c.out ./... -coverpkg=./...
+	cat c.out | grep -v "cmd" | grep -v "_mock.go" | grep -v ".pb" | grep -v "_easyjson.go" > tmp.out
+	go tool cover -html=tmp.out
+}

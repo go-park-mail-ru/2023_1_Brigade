@@ -58,11 +58,6 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 		firstCharacterNameAfter := string([]rune(updateUser.Nickname)[0])
 		user.Nickname = updateUser.Nickname
 
-		log.Info(user.Avatar)
-		log.Info(updateUser.NewAvatarUrl)
-		log.Info(firstCharacterNameBefore)
-		log.Info(firstCharacterNameAfter)
-
 		if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
 			filename := uuid.NewString()
 			err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
@@ -75,7 +70,12 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 				return model.User{}, err
 			}
 
+			log.Info(updateUser.NewAvatarUrl)
+			log.Info(url)
+
 			user.Avatar = url
+		} else {
+			user.Avatar = updateUser.NewAvatarUrl
 		}
 
 		user, err = u.userRepo.UpdateUserAvatarNicknameById(ctx, user)

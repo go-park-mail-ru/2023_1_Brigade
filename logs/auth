@@ -2,3 +2,16 @@ time="2023-05-14T19:44:54Z" level=info msg="auth: starting metrics server..." fu
 time="2023-05-21T19:01:46+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
 time="2023-05-21T19:02:14+03:00" level=error msg="open ../Go-Mono.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/home/marcussss1/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:69"
 signal: killed
+time="2023-05-23T20:14:54Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+signal: killed
+# project/internal/pkg/image_generation
+internal/pkg/image_generation/image_generation.go:12:2: imported and not used: "net/url"
+note: module requires Go 1.19
+# project/internal/pkg/image_generation
+internal/pkg/image_generation/image_generation.go:12:2: imported and not used: "net/url"
+note: module requires Go 1.19
+time="2023-05-23T20:23:49Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+signal: killed
+time="2023-05-23T20:28:53Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-23T20:29:29Z" level=info msg="Ð" func=project/internal/pkg/image_generation.GenerateAvatar file="/home/ubuntu/2023_1_Brigade/internal/pkg/image_generation/image_generation.go:18"
+time="2023-05-23T20:29:29Z" level=info msg="Ð" func=project/internal/pkg/image_generation.GenerateAvatar file="/home/ubuntu/2023_1_Brigade/internal/pkg/image_generation/image_generation.go:20"

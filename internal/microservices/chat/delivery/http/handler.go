@@ -42,8 +42,6 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		}
 	}
 
-	chat = httpUtils.SanitizeStruct(chat).(model.Chat)
-
 	return ctx.JSON(http.StatusOK, chat)
 }
 
@@ -65,6 +63,7 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 	}
 
 	session := ctx.Get("session").(model.Session)
+	chat = httpUtils.SanitizeStruct(chat).(model.CreateChat)
 
 	dbChat, err := u.chatUsecase.CreateChat(context.TODO(), chat, session.UserId)
 	if err != nil {
@@ -108,6 +107,7 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 		return err
 	}
 
+	chat = httpUtils.SanitizeStruct(chat).(model.EditChat)
 	newChat, err := u.chatUsecase.EditChat(context.TODO(), chat)
 	if err != nil {
 		return err

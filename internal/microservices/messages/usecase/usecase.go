@@ -14,6 +14,7 @@ import (
 	"project/internal/microservices/messages"
 	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+	httpUtils "project/internal/pkg/http_utils"
 	"time"
 )
 
@@ -42,6 +43,8 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	if err != nil {
 		return err
 	}
+
+	webSocketMessage = httpUtils.SanitizeStruct(webSocketMessage).(model.WebSocketMessage)
 
 	producerMessage := model.ProducerMessage{
 		Id:       webSocketMessage.Id,

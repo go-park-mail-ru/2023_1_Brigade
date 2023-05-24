@@ -104,7 +104,7 @@ func CSRFMiddleware() echo.MiddlewareFunc {
 			csrf := ctx.Get("csrf")
 			if csrf == nil {
 				cookie := &http.Cookie{
-					Name:     "session_id",
+					Name:     "_csrf",
 					Value:    uuid.NewString(),
 					HttpOnly: false,
 					Path:     "/login",

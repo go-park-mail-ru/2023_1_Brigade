@@ -111,6 +111,8 @@ type AuthService struct {
 	ServiceName string `yaml:"serviceName"`
 }
 
+const CsrfCookie = "_csrf"
+
 const Sticker = 0
 const NotSticker = 1
 

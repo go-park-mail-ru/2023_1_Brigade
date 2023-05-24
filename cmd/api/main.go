@@ -244,18 +244,17 @@ func main() {
 		ExposeHeaders:    config.Cors.ExposeHeaders,
 	}))
 
-	DefaultCSRFConfig := middleware.CSRFConfig{
-		Skipper:      middleware.DefaultSkipper,
-		TokenLength:  32,
-		TokenLookup:  "header:" + echo.HeaderXCSRFToken,
-		ContextKey:   "csrf",
-		CookieName:   "_csrf",
-		CookieMaxAge: 86400,
-		//CookieSameSite: http.SameSiteNoneMode,
-		CookieSecure: true,
-		//CookieHTTPOnly: true,
-	}
-	e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
+	//DefaultCSRFConfig := middleware.CSRFConfig{
+	//	Skipper:      middleware.DefaultSkipper,
+	//	TokenLength:  32,
+	//	TokenLookup:  "header:" + echo.HeaderXCSRFToken,
+	//	ContextKey:   "csrf",
+	//	CookieName:   "_csrf",
+	//	CookiePath:   "https://technogramm.ru",
+	//	CookieMaxAge: 86400,
+	//	CookieSecure: true,
+	//}
+	//e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
 
 	//e.GET("api/v1/csrf/", func(ctx echo.Context) error {
 	//	csrf := ctx.Get("csrf")
@@ -269,6 +268,7 @@ func main() {
 	//})
 
 	e.Use(myMiddleware.LoggerMiddleware)
+	e.Use(myMiddleware.CSRFMiddleware())
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	p := prometheus.NewPrometheus("echo", nil)

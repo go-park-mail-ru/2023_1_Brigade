@@ -2,12 +2,22 @@ package middleware
 
 import (
 	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"math/rand"
+	"net/http"
+	"project/internal/config"
+	"project/internal/model"
 	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	metrics "project/internal/pkg/metrics/prometheus"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -62,6 +72,80 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+func GenerateCSRFToken(userID string) (string, error) {
+	h := hmac.New(sha256.New, []byte("csrf"))
+
+	t := time.Second * 86400
+	timeNow := time.Now().Add(t).Unix()
+
+	data := fmt.Sprintf("%s:%d", userID, timeNow)
+	h.Write([]byte(data))
+
+	token := hex.EncodeToString(h.Sum(nil)) + ":" + strconv.FormatInt(timeNow, 10)
+
+	return token, nil
+}
+
+func RefreshIfNeededCSRFToken(token string, userID string) (string, error) {
+	tokenData := strings.Split(token, ":")
+
+	if len(tokenData) != 2 {
+		return "", errors.New("неверный csrf токен")
+	}
+
+	//tokenExp, err := strconv.ParseInt(tokenData[1], 10, 64)
+	//if err != nil {
+	//	return "", errors.New("неверный csrf токен")
+	//}
+
+	//if tokenExp > time.Now().Unix()+viper.GetInt64(constants.ViperCSRFTTLKey)/2 {
+	//	return "", nil
+	//}
+
+	return GenerateCSRFToken(userID)
+}
+
+func CSRFMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			cookieCSRF, err := ctx.Cookie(config.CsrfCookie)
+			if err != nil || len(cookieCSRF.Value) == 0 {
+				return errors.New("осутствует csrf токен")
+			}
+			tokenCSRF := ctx.QueryParam(config.CsrfCookie)
+
+			if tokenCSRF != cookieCSRF.Value {
+				log.Error("Cookie token: %s; Query token: %s", cookieCSRF.Value, tokenCSRF)
+				return errors.New("неверный csrf токен")
+			}
+
+			session := ctx.Get("session").(model.Session)
+			ctx.Set("session", session)
+
+			newTokenCSRF, err := RefreshIfNeededCSRFToken(tokenCSRF, session.Cookie)
+			if err != nil {
+				return err
+			}
+
+			if len(newTokenCSRF) != 0 {
+				cookie := &http.Cookie{
+					Name:     "session_id",
+					Value:    session.Cookie,
+					HttpOnly: false,
+					Path:     "/",
+					Expires:  time.Now().Add(24 * time.Hour * 30),
+					SameSite: http.SameSiteNoneMode,
+					Secure:   true,
+				}
+				ctx.SetCookie(cookie)
+			}
+			//ctx.SetCookie(utils.CreateCookie(constants.CookieKeyCSRFToken, newTokenCSRF, viper.GetInt64(constants.ViperCSRFTTLKey)))
+
+			return next(ctx)
+		}
+	}
+}
+
 func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
@@ -69,10 +153,9 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 			loginUrl := "/api/v1/login/"
 			logoutUrl := "/api/v1/logout/"
 			authUrl := "/api/v1/auth/"
-			csrfUrl := "/api/v1/csrf/"
 			url := ctx.Request().URL.String()
 
-			if url == signupUrl || url == loginUrl || url == logoutUrl || url == authUrl || url == csrfUrl {
+			if url == signupUrl || url == loginUrl || url == logoutUrl || url == authUrl {
 				return next(ctx)
 			}
 

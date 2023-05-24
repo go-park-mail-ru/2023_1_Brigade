@@ -4,5 +4,5 @@ ARG SRC_PATH
 RUN go build -o service $SRC_PATH
 
 FROM alpine
-COPY --from=builder /app/service .
+COPY --from=builder /app/service /app/.env ./
 CMD ["./service"]

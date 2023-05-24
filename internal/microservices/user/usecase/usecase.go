@@ -5,16 +5,14 @@ import (
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
 	"project/internal/model"
-	"project/internal/monolithic_services/images"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
 )
 
 type usecase struct {
-	userRepo      user.Repository
-	authRepo      authUser.Repository
-	imagesUsecase images.Usecase
+	userRepo user.Repository
+	authRepo authUser.Repository
 }
 
 func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user.Usecase {

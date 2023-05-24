@@ -40,18 +40,9 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-        
-      - name: Change directory
-        run: cd /home/ubuntu/2023_1_Brigade
-      
-      - name: Pull docker-compose images
-        run: docker compose -f .docker-compose.yml pull
-      
-      - name: Stop old cluster
-        run: docker compose down || true
-      
-      - name: Set main docker-compose.yml to new config
-        run: mv {.,}docker-compose.yml
-
-      - name: Run new cluster
-        run: docker compose up
+          script: |
+            cd /home/ubuntu/2023_1_Brigade
+            docker compose -f .docker-compose.yml pull
+            docker compose down || true
+            mv {.,}docker-compose.yml
+            docker compose up

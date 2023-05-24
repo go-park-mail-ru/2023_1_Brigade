@@ -251,14 +251,9 @@ func main() {
 		ContextKey:   "csrf",
 		CookieName:   "_csrf",
 		CookieMaxAge: 86400,
+		CookieSecure: true,
 	}
 	e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
-	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-	//	TokenLookup:    "header:X-Csrf-Token",
-	//	CookieSecure:   true,
-	//	CookieHTTPOnly: true,
-	//	CookiePath:     "/",
-	//}))
 
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))

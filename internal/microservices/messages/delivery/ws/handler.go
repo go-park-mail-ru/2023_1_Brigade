@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"project/internal/microservices/messages"
 	"project/internal/model"
+	"project/internal/monolithic_services/centrifugo"
 	"time"
 
 	"github.com/centrifugal/centrifuge-go"
@@ -18,7 +19,7 @@ type messageHandler struct {
 	messageUsecase messages.Usecase
 	upgrader       websocket.Upgrader
 	clients        map[uint64]*websocket.Conn
-	centrifugo     *centrifuge.Client
+	centrifugo     centrifugo.Centrifugo
 	channelName    string
 }
 
@@ -71,7 +72,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	}
 }
 
-func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo *centrifuge.Client, channelName string) (messageHandler, error) {
+func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo centrifugo.Centrifugo, channelName string) (messageHandler, error) {
 	handler := messageHandler{
 		messageUsecase: messageUsecase,
 		upgrader: websocket.Upgrader{

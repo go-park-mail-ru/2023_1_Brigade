@@ -45,6 +45,106 @@ func (h *WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	<-forever
 }
 
+//type Centrifugo interface {
+//	Publish(ctx context.Context, channel string, data []byte) (centrifuge.PublishResult, error)
+//	OnPublication(handler centrifuge.ServerPublicationHandler)
+//}
+//
+//type centrifugo struct{}
+//
+//func (m *centrifugo) foo() {}
+//
+//type mockCentrifugo struct{}
+//
+//func (m *mockCentrifugo) foo() {}
+//
+//func NewMock() CentrifugoInt {
+//	return &mockCentrifugo{}
+//}
+//
+//func newMock() *centrifuge.Client {
+//	return &mock{}
+//}
+//
+//func (m *mock) Connect() error
+//func (m *mock) Disconnect() error
+//func (m *mock) Close()
+//func (m *mock) State() State
+//func (m *mock) NewSubscription(channel string, config ...SubscriptionConfig) (*Subscription, error)
+//func (m *mock) RemoveSubscription(sub *Subscription) error
+//func (m *mock) GetSubscription(channel string) (*Subscription, bool)
+//func (m *mock) Subscriptions() map[string]*Subscription
+//func (m *mock) Send(ctx context.Context, data []byte) error
+//func (m *mock) RPC(ctx context.Context, method string, data []byte) (RPCResult, error)
+//func (m *mock) nextCmdID() uint32
+//func (m *mock) isConnected() bool
+//func (m *mock) isClosed() bool
+//func (m *mock) isSubscribed(channel string) bool
+//func (m *mock) sendRPC(ctx context.Context, method string, data []byte, fn func(RPCResult, error))
+//func (m *mock) moveToDisconnected(code uint32, reason string)
+//func (m *mock) moveToConnecting(code uint32, reason string)
+//func (m *mock) moveToClosed()
+//func (m *mock) handleError(err error)
+//func (m *mock) clearConnectedState()
+//func (m *mock) handleDisconnect(d *disconnect)
+//func (m *mock) waitServerPing(disconnectCh chan struct{}, pingInterval uint32)
+//func (m *mock) readOnce(t transport) error
+//func (m *mock) reader(t transport, disconnectCh chan struct{})
+//func (m *mock) runHandlerSync(fn func())
+//func (m *mock) runHandlerAsync(fn func())
+//func (m *mock) handle(reply *protocol.Reply)
+//func (m *mock) handleMessage(msg *protocol.Message) error
+//func (m *mock) handlePush(push *protocol.Push)
+//func (m *mock) handleServerPublication(channel string, pub *protocol.Publication)
+//func (m *mock) handleServerJoin(channel string, join *protocol.Join)
+//func (m *mock) handleServerLeave(channel string, leave *protocol.Leave)
+//func (m *mock) handleServerSub(channel string, sub *protocol.Subscribe)
+//func (m *mock) handleServerUnsub(channel string, _ *protocol.Unsubscribe)
+//func (m *mock) getReconnectDelay() time.Duration
+//func (m *mock) startReconnecting() error
+//func (m *mock) startConnecting() error
+//func (m *mock) resubscribe()
+//func (m *mock) refreshToken() (string, error)
+//func (m *mock) sendRefresh()
+//func (m *mock) handleRefreshError(err error)
+//func (m *mock) sendSubRefresh(channel string, token string, fn func(*protocol.SubRefreshResult, error))
+//func (m *mock) sendConnect(fn func(*protocol.ConnectResult, error)) error
+//func (m *mock) sendSubscribe(channel string, data []byte, recover bool, streamPos StreamPosition, token string, positioned bool, recoverable bool, joinLeave bool, fn func(res *protocol.SubscribeResult, err error)) error
+//func (m *mock) nextFutureID() uint64
+//func (m *mock) resolveConnectFutures(err error)
+//func (m *mock) onConnect(fn func(err error))
+//func (m *mock) Publish(ctx context.Context, channel string, data []byte) (PublishResult, error)
+//func (m *mock) publish(ctx context.Context, channel string, data []byte, fn func(PublishResult, error))
+//func (m *mock) sendPublish(channel string, data []byte, fn func(PublishResult, error))
+//func (m *mock) History(ctx context.Context, channel string, opts ...HistoryOption) (HistoryResult, error)
+//func (m *mock) history(ctx context.Context, channel string, opts HistoryOptions, fn func(HistoryResult, error))
+//func (m *mock) sendHistory(channel string, opts HistoryOptions, fn func(HistoryResult, error))
+//func (m *mock) Presence(ctx context.Context, channel string) (PresenceResult, error)
+//func (m *mock) presence(ctx context.Context, channel string, fn func(PresenceResult, error))
+//func (m *mock) sendPresence(channel string, fn func(PresenceResult, error))
+//func (m *mock) PresenceStats(ctx context.Context, channel string) (PresenceStatsResult, error)
+//func (m *mock) presenceStats(ctx context.Context, channel string, fn func(PresenceStatsResult, error))
+//func (m *mock) sendPresenceStats(channel string, fn func(PresenceStatsResult, error))
+//func (m *mock) unsubscribe(channel string, fn func(UnsubscribeResult, error))
+//func (m *mock) sendUnsubscribe(channel string, fn func(UnsubscribeResult, error))
+//func (m *mock) sendAsync(cmd *protocol.Command, cb func(*protocol.Reply, error)) error
+//func (m *mock) send(cmd *protocol.Command) error
+//func (m *mock) addRequest(id uint32, cb func(*protocol.Reply, error))
+//func (m *mock) removeRequest(id uint32)
+//func (m *mock) OnConnected(handler ConnectedHandler)
+//func (m *mock) OnConnecting(handler ConnectingHandler)
+//func (m *mock) OnDisconnected(handler DisconnectHandler)
+//func (m *mock) OnError(handler ErrorHandler)
+//func (m *mock) OnMessage(handler MessageHandler)
+//func (m *mock) OnPublication(handler ServerPublicationHandler)
+//func (m *mock) OnSubscribed(handler ServerSubscribedHandler)
+//func (m *mock) OnSubscribing(handler ServerSubscribingHandler)
+//func (m *mock) OnUnsubscribed(handler ServerUnsubscribedHandler)
+//func (m *mock) OnJoin(handler ServerJoinHandler)
+//func (m *mock) OnLeave(handler ServerLeaveHandler)
+
+//func (a *scas)
+
 func TestHandlers_WSHandler(t *testing.T) {
 	centrifugo := config.Centrifugo{
 		ConnAddr:    "ws://localhost:8900/connection/websocket",
@@ -133,6 +233,10 @@ func TestHandlers_WSHandler(t *testing.T) {
 	if err != nil {
 		log.Error(err)
 	}
+
+	//rrr := &mock{}
+	//var rc centrifuge.Client
+	//rc = &mock{}
 
 	handler, err := NewMessagesHandler(e, messagesUsecase, c, centrifugo.ChannelName)
 	assert.NoError(t, err)

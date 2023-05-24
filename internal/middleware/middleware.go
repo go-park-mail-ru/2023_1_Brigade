@@ -108,7 +108,7 @@ func CSRFMiddleware() echo.MiddlewareFunc {
 					Value:    uuid.NewString(),
 					HttpOnly: false,
 					Path:     "/login",
-					Expires:  time.Now().Add(10 * time.Second),
+					Expires:  time.Now().Add(60 * time.Second),
 					SameSite: http.SameSiteNoneMode,
 					Secure:   true,
 				}

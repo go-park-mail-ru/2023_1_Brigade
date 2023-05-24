@@ -101,9 +101,9 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 func CSRFMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
-			if ctx.Request().Method != echo.POST || ctx.Request().Method != echo.DELETE || ctx.Request().Method != echo.PUT {
-				return next(ctx)
-			}
+			//if ctx.Request().Method != echo.POST || ctx.Request().Method != echo.DELETE || ctx.Request().Method != echo.PUT {
+			//	return next(ctx)
+			//}
 
 			clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
 			if clientCsrf == nil || len(clientCsrf) == 0 {

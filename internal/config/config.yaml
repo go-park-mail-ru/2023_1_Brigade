@@ -18,7 +18,9 @@ Cors:
   allowHeaders:
     - "Content-Type"
     - "Content-Length"
-    - "X-Csrf-Token"
+    - "X-CSRF-Token"
+  ExposeHeaders:
+    - "X-CSRF-Token"
   allowCredentials: true
 
 Redis:

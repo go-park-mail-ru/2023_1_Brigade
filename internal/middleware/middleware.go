@@ -69,9 +69,10 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 			loginUrl := "/api/v1/login/"
 			logoutUrl := "/api/v1/logout/"
 			authUrl := "/api/v1/auth/"
+			csrfUrl := "/api/v1/csrf/"
 			url := ctx.Request().URL.String()
 
-			if url == signupUrl || url == loginUrl || url == logoutUrl || url == authUrl {
+			if url == signupUrl || url == loginUrl || url == logoutUrl || url == authUrl || url == csrfUrl {
 				return next(ctx)
 			}
 

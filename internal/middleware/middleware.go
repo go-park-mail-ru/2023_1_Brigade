@@ -106,6 +106,7 @@ func CSRFMiddleware() echo.MiddlewareFunc {
 			//}
 
 			clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
+			log.Info(clientCsrf)
 			if clientCsrf == nil || len(clientCsrf) == 0 {
 				cookie := &http.Cookie{
 					Name:     "_csrf",

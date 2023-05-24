@@ -7,11 +7,11 @@ import (
 
 type Centrifugo interface {
 	Publish(ctx context.Context, channel string, data []byte) (centrifuge.PublishResult, error)
-	GetSubscription(channel string) (CentrifugoSubscription, bool)
+	GetSubscription(channel string) (*centrifuge.Subscription, bool)
 	Close()
 }
 
-type CentrifugoSubscription interface {
-	OnPublication(handler centrifuge.PublicationHandler)
-	Publish(ctx context.Context, data []byte) (centrifuge.PublishResult, error)
-}
+//type CentrifugoSubscription interface {
+//	OnPublication(handler centrifuge.PublicationHandler)
+//	Publish(ctx context.Context, data []byte) (centrifuge.PublishResult, error)
+//}

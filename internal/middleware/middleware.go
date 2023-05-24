@@ -101,8 +101,12 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 func CSRFMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
-			csrf := ctx.Get("csrf")
-			if csrf == nil || csrf == "" {
+			if ctx.Request().Method != echo.POST || ctx.Request().Method != echo.DELETE || ctx.Request().Method != echo.PUT {
+				return next(ctx)
+			}
+
+			clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
+			if clientCsrf == nil || len(clientCsrf) == 0 {
 				cookie := &http.Cookie{
 					Name:     "_csrf",
 					Value:    uuid.NewString(),
@@ -115,18 +119,46 @@ func CSRFMiddleware() echo.MiddlewareFunc {
 
 				ctx.SetCookie(cookie)
 				return next(ctx)
-			} else {
-				clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
-				if len(clientCsrf) > 0 {
-					if clientCsrf[0] != csrf {
-						return errors.New("неправильный токен")
-					}
-				} else {
-					return errors.New("нет такого хедера")
-				}
+			}
+
+			log.Info(clientCsrf)
+
+			csrf := ctx.Get("_csrf").(string)
+
+			log.Info(csrf)
+
+			if clientCsrf[0] != csrf {
+				return errors.New("неправильный токен")
 			}
 
 			return next(ctx)
+
+			//csrf := ctx.Get("_csrf")
+			//if csrf == nil || csrf == "" {
+			//	cookie := &http.Cookie{
+			//		Name:     "_csrf",
+			//		Value:    uuid.NewString(),
+			//		HttpOnly: false,
+			//		Path:     "/login",
+			//		Expires:  time.Now().Add(60 * time.Second),
+			//		SameSite: http.SameSiteNoneMode,
+			//		Secure:   true,
+			//	}
+			//
+			//	ctx.SetCookie(cookie)
+			//	return next(ctx)
+			//} else {
+			//	clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
+			//	if len(clientCsrf) > 0 {
+			//		if clientCsrf[0] != csrf {
+			//			return errors.New("неправильный токен")
+			//		}
+			//	} else {
+			//		return errors.New("нет такого хедера")
+			//	}
+			//}
+
+			//return next(ctx)
 			//session := ctx.Get("session")
 			//if session == nil {
 			//	cookie := &http.Cookie{

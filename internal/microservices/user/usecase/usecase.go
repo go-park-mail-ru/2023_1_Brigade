@@ -2,9 +2,6 @@ package usecase
 
 import (
 	"context"
-	"github.com/google/uuid"
-	log "github.com/sirupsen/logrus"
-	"project/internal/config"
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
 	"project/internal/model"
@@ -54,35 +51,36 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 			return model.User{}, err
 		}
 
-		firstCharacterNameBefore := ""
-		firstCharacterNameAfter := ""
-
-		if len(updateUser.Nickname) > 0 {
-			firstCharacterNameBefore = string([]rune(user.Nickname)[0])
-			firstCharacterNameAfter = string([]rune(updateUser.Nickname)[0])
-		}
+		//firstCharacterNameBefore := ""
+		//firstCharacterNameAfter := ""
+		//
+		//if len(updateUser.Nickname) > 0 {
+		//	firstCharacterNameBefore = string([]rune(user.Nickname)[0])
+		//	firstCharacterNameAfter = string([]rune(updateUser.Nickname)[0])
+		//}
 
 		user.Nickname = updateUser.Nickname
 
-		if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
-			filename := uuid.NewString()
-			err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
-			if err != nil {
-				return model.User{}, err
-			}
-
-			url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
-			if err != nil {
-				return model.User{}, err
-			}
-
-			log.Info(updateUser.NewAvatarUrl)
-			log.Info(url)
-
-			user.Avatar = url
-		} else {
-			user.Avatar = updateUser.NewAvatarUrl
-		}
+		//if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
+		//	filename := uuid.NewString()
+		//	err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
+		//	if err != nil {
+		//		return model.User{}, err
+		//	}
+		//
+		//	url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
+		//	if err != nil {
+		//		return model.User{}, err
+		//	}
+		//
+		//	log.Info(updateUser.NewAvatarUrl)
+		//	log.Info(url)
+		//
+		//	user.Avatar = url
+		//} else {
+		//	user.Avatar = updateUser.NewAvatarUrl
+		//}
+		user.Avatar = updateUser.NewAvatarUrl
 
 		user, err = u.userRepo.UpdateUserAvatarNicknameById(ctx, user)
 		if err != nil {

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/centrifugal/centrifuge-go"
 	"os"
+	"os/signal"
 	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
 	clientChat "project/internal/microservices/chat/delivery/grpc/client"
 	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
@@ -113,6 +115,55 @@ func main() {
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
+	centrifugoMessagesClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+	centrifugoNotificationsClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugoMessagesClient.Close()
+		centrifugoNotificationsClient.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugoMessagesClient.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = centrifugoNotificationsClient.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	subMessages, err := centrifugoMessagesClient.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	subNotifications, err := centrifugoNotificationsClient.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = subMessages.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = subNotifications.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
 	grpcConnChats, err := grpc.Dial(
 		config.ChatsService.Addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -222,14 +273,15 @@ func main() {
 	httpChat.NewChatHandler(e, chatService, userService)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
 
-	_, err = wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
+	_, err = wsMessages.NewMessagesHandler(e, messagesService, centrifugoMessagesClient, config.Centrifugo.ChannelName)
 	if err != nil {
 		log.Error(err)
 	}
 
-	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, config.Centrifugo)
+	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, centrifugoNotificationsClient, config.Centrifugo.ChannelName)
 	if err != nil {
 		log.Error(err)
+	}
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

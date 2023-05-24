@@ -113,13 +113,13 @@ func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
 		}
 	}()
 
-	filename := uuid.NewString()
-	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.ChatImagesBucket, filename)
+	log.Info(header.Filename)
+	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.ChatImagesBucket, header.Filename)
 	if err != nil {
 		return err
 	}
 
-	url, err := h.imagesUsecase.GetImage(context.TODO(), config.ChatImagesBucket, filename)
+	url, err := h.imagesUsecase.GetImage(context.TODO(), config.ChatImagesBucket, header.Filename)
 	if err != nil {
 		return err
 	}

@@ -7,6 +7,7 @@ import (
 	"project/internal/microservices/chat"
 	"project/internal/microservices/user"
 	"project/internal/model"
+	"project/internal/monolithic_services/centrifugo"
 	"time"
 
 	"github.com/centrifugal/centrifuge-go"
@@ -21,7 +22,7 @@ type notificationsHandler struct {
 	userUsecase user.Usecase
 	upgrader    websocket.Upgrader
 	clients     map[uint64]*websocket.Conn
-	centrifugo  *centrifuge.Client
+	centrifugo  centrifugo.Centrifugo
 	channelName string
 }
 
@@ -120,7 +121,7 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 	}
 }
 
-func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo *centrifuge.Client, channelName string) (notificationsHandler, error) {
+func NewNotificationsHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Usecase, centrifugo centrifugo.Centrifugo, channelName string) (notificationsHandler, error) {
 	handler := notificationsHandler{
 		chatUsecase: chatUsecase,
 		userUsecase: userUsecase,

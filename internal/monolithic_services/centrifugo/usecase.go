@@ -13,4 +13,5 @@ type Centrifugo interface {
 
 type CentrifugoSubscription interface {
 	OnPublication(handler centrifuge.PublicationHandler)
+	Publish(ctx context.Context, data []byte) (centrifuge.PublishResult, error)
 }

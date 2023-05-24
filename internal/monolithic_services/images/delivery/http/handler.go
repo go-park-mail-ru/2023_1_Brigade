@@ -113,7 +113,6 @@ func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
 		}
 	}()
 
-	log.Info(header.Filename)
 	err = h.imagesUsecase.UploadImage(context.TODO(), file, config.ChatImagesBucket, header.Filename)
 	if err != nil {
 		return err

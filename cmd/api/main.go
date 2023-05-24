@@ -245,14 +245,14 @@ func main() {
 	}))
 
 	DefaultCSRFConfig := middleware.CSRFConfig{
-		Skipper:        middleware.DefaultSkipper,
-		TokenLength:    32,
-		TokenLookup:    "header:" + echo.HeaderXCSRFToken,
-		ContextKey:     "csrf",
-		CookieName:     "_csrf",
-		CookieMaxAge:   86400,
-		CookieSecure:   true,
-		CookieHTTPOnly: true,
+		Skipper:      middleware.DefaultSkipper,
+		TokenLength:  32,
+		TokenLookup:  "header:" + echo.HeaderXCSRFToken,
+		ContextKey:   "csrf",
+		CookieName:   "_csrf",
+		CookieMaxAge: 86400,
+		CookieSecure: true,
+		//CookieHTTPOnly: true,
 	}
 	e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
 

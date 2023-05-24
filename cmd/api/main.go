@@ -258,7 +258,7 @@ func main() {
 
 	//e.GET("api/v1/csrf/", func(ctx echo.Context) error {
 	//	csrf := ctx.Get("csrf")
-	//	ctx.Response().Header().Set("X-Csrf-Token", csrf.(string))
+	//	//ctx.Response().Header().Set("X-Csrf-Token", csrf.(string))
 	//	bytes, err := json.Marshal(csrf)
 	//	if err != nil {
 	//		return err

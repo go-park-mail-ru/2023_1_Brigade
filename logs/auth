@@ -49,3 +49,9 @@ signal: killed
 time="2023-05-24T15:16:10+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
 signal: killed
 time="2023-05-24T15:17:42+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-24T16:03:28+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-24T16:03:28+03:00" level=error msg="listen tcp 127.0.0.1:9096: bind: address already in use" func=main.main.func3 file="/home/marcussss1/2023_1_Brigade/cmd/auth/main.go:124"
+time="2023-05-24T16:03:28+03:00" level=fatal msg="listen tcp 127.0.0.1:9005: bind: address already in use" func=main.main file="/home/marcussss1/2023_1_Brigade/cmd/auth/main.go:132"
+exit status 1
+signal: killed
+time="2023-05-24T16:06:22+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"

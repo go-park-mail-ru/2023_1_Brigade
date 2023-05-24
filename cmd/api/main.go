@@ -251,6 +251,7 @@ func main() {
 		ContextKey:   "csrf",
 		CookieName:   "_csrf",
 		CookieMaxAge: 86400,
+		//CookieSameSite: http.SameSiteNoneMode,
 		CookieSecure: true,
 		//CookieHTTPOnly: true,
 	}

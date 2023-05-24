@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Build docker-compose images
-        run: . manage && build_compose ${{ github.sha:0:7 }}
+        run: . manage && build_compose $(echo ${{ github.sha }} | cut -c -7)
 
       - name: Log in dockerhub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin

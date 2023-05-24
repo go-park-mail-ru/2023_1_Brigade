@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/centrifugal/centrifuge-go"
+	"net/http"
 	"os"
 	"os/signal"
 	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
@@ -245,15 +246,21 @@ func main() {
 	}))
 
 	DefaultCSRFConfig := middleware.CSRFConfig{
-		Skipper:      middleware.DefaultSkipper,
-		TokenLength:  32,
-		TokenLookup:  "header:" + echo.HeaderXCSRFToken,
-		ContextKey:   "csrf",
-		CookieName:   "_csrf",
-		CookieMaxAge: 86400,
-		CookieSecure: true,
+		Skipper:        middleware.DefaultSkipper,
+		TokenLength:    32,
+		TokenLookup:    "header:" + echo.HeaderXCSRFToken,
+		ContextKey:     "csrf",
+		CookieName:     "_csrf",
+		CookieMaxAge:   86400,
+		CookieSecure:   true,
+		CookieHTTPOnly: true,
 	}
 	e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
+
+	e.GET("api/v1/csrf/", func(ctx echo.Context) error {
+		ctx.Response().Header().Set("X-Csrf-Token", ctx.Get("csrf").(string))
+		return ctx.NoContent(http.StatusOK)
+	})
 
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))

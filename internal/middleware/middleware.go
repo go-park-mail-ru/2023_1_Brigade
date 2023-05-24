@@ -108,26 +108,12 @@ func RefreshIfNeededCSRFToken(token string, userID string) (string, error) {
 func CSRFMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
-			cookieCSRF, err := ctx.Cookie(config.CsrfCookie)
-			if err != nil || len(cookieCSRF.Value) == 0 {
-				return errors.New("осутствует csrf токен")
-			}
-			tokenCSRF := ctx.QueryParam(config.CsrfCookie)
-
-			if tokenCSRF != cookieCSRF.Value {
-				log.Error("Cookie token: %s; Query token: %s", cookieCSRF.Value, tokenCSRF)
-				return errors.New("неверный csrf токен")
-			}
-
 			session := ctx.Get("session").(model.Session)
 			ctx.Set("session", session)
+			cookieCSRF, err := ctx.Cookie(config.CsrfCookie)
 
-			newTokenCSRF, err := RefreshIfNeededCSRFToken(tokenCSRF, session.Cookie)
-			if err != nil {
-				return err
-			}
-
-			if len(newTokenCSRF) != 0 {
+			if err != nil || len(cookieCSRF.Value) == 0 {
+				//return errors.New("осутствует csrf токен")
 				cookie := &http.Cookie{
 					Name:     "session_id",
 					Value:    session.Cookie,
@@ -138,7 +124,32 @@ func CSRFMiddleware() echo.MiddlewareFunc {
 					Secure:   true,
 				}
 				ctx.SetCookie(cookie)
+				return next(ctx)
 			}
+			tokenCSRF := ctx.QueryParam(config.CsrfCookie)
+
+			if tokenCSRF != cookieCSRF.Value {
+				log.Error("Cookie token: %s; Query token: %s", cookieCSRF.Value, tokenCSRF)
+				return errors.New("неверный csrf токен")
+			}
+
+			//newTokenCSRF, err := RefreshIfNeededCSRFToken(tokenCSRF, session.Cookie)
+			//if err != nil {
+			//	return err
+			//}
+
+			//if len(newTokenCSRF) != 0 {
+			//	cookie := &http.Cookie{
+			//		Name:     "session_id",
+			//		Value:    session.Cookie,
+			//		HttpOnly: false,
+			//		Path:     "/",
+			//		Expires:  time.Now().Add(24 * time.Hour * 30),
+			//		SameSite: http.SameSiteNoneMode,
+			//		Secure:   true,
+			//	}
+			//	ctx.SetCookie(cookie)
+			//}
 			//ctx.SetCookie(utils.CreateCookie(constants.CookieKeyCSRFToken, newTokenCSRF, viper.GetInt64(constants.ViperCSRFTTLKey)))
 
 			return next(ctx)

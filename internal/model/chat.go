@@ -16,6 +16,10 @@ type Chat struct {
 	Messages []Message `json:"messages"  db:"messages"`
 }
 
+type Chats struct {
+	Chats []ChatInListUser `json:"chats"`
+}
+
 type ChatInListUser struct {
 	Id                uint64  `json:"id"                  db:"id"`
 	Type              uint64  `json:"type"                db:"type"`
@@ -27,10 +31,11 @@ type ChatInListUser struct {
 }
 
 type DBChat struct {
-	Id     uint64 `json:"id"     db:"id"`
-	Type   uint64 `json:"type"   db:"type"`
-	Title  string `json:"title"  db:"title"`
-	Avatar string `json:"avatar" db:"avatar"`
+	Id       uint64 `json:"id"     db:"id"`
+	MasterID uint64 `json:"master_id" db:"master_id"`
+	Type     uint64 `json:"type"   db:"type"`
+	Title    string `json:"title"  db:"title"`
+	Avatar   string `json:"avatar" db:"avatar"`
 }
 
 type EditChat struct {

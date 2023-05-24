@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProducerClient interface {
-	ProduceMessage(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error)
+	ProduceMessage(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type producerClient struct {
@@ -34,7 +34,7 @@ func NewProducerClient(cc grpc.ClientConnInterface) ProducerClient {
 	return &producerClient{cc}
 }
 
-func (c *producerClient) ProduceMessage(ctx context.Context, in *Bytes, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *producerClient) ProduceMessage(ctx context.Context, in *ProducerMessage, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/protobuf.Producer/ProduceMessage", in, out, opts...)
 	if err != nil {
@@ -47,14 +47,14 @@ func (c *producerClient) ProduceMessage(ctx context.Context, in *Bytes, opts ...
 // All implementations should embed UnimplementedProducerServer
 // for forward compatibility
 type ProducerServer interface {
-	ProduceMessage(context.Context, *Bytes) (*empty.Empty, error)
+	ProduceMessage(context.Context, *ProducerMessage) (*empty.Empty, error)
 }
 
 // UnimplementedProducerServer should be embedded to have forward compatible implementations.
 type UnimplementedProducerServer struct {
 }
 
-func (UnimplementedProducerServer) ProduceMessage(context.Context, *Bytes) (*empty.Empty, error) {
+func (UnimplementedProducerServer) ProduceMessage(context.Context, *ProducerMessage) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProduceMessage not implemented")
 }
 
@@ -70,7 +70,7 @@ func RegisterProducerServer(s grpc.ServiceRegistrar, srv ProducerServer) {
 }
 
 func _Producer_ProduceMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Bytes)
+	in := new(ProducerMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func _Producer_ProduceMessage_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/protobuf.Producer/ProduceMessage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProducerServer).ProduceMessage(ctx, req.(*Bytes))
+		return srv.(ProducerServer).ProduceMessage(ctx, req.(*ProducerMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }

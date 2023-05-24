@@ -3,20 +3,28 @@ package middleware
 import (
 	"context"
 	"encoding/json"
-	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/status"
+	"errors"
+	"github.com/google/uuid"
 	"math/rand"
-	authSession "project/internal/auth/session"
+	"net/http"
+	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	metrics "project/internal/pkg/metrics/prometheus"
 	"time"
+
+	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 type jsonError struct {
 	Err error `json:"error"`
+}
+
+func (j jsonError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(j.Err.Error())
 }
 
 type GRPCMiddleware struct {
@@ -25,10 +33,6 @@ type GRPCMiddleware struct {
 
 func NewGRPCMiddleware(metric *metrics.MetricsGRPC) *GRPCMiddleware {
 	return &GRPCMiddleware{metric: metric}
-}
-
-func (j jsonError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(j.Err.Error())
 }
 
 func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -40,14 +44,58 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			statusCode := httpUtils.StatusCode(err)
 			log.Error("HTTP code: ", statusCode, ", Error: ", err, ", request_id: ", requestId)
 			if statusCode == 500 {
-				return ctx.JSON(statusCode, jsonError{Err: myErrors.ErrInternal})
+				jsonErr, err := json.Marshal(jsonError{Err: myErrors.ErrInternal})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(statusCode, jsonErr)
 			}
 
-			return ctx.JSON(statusCode, jsonError{Err: err})
+			jsonErr, err := json.Marshal(jsonError{Err: err})
+			if err != nil {
+				log.Error(err)
+			}
+
+			return ctx.JSONBlob(statusCode, jsonErr)
 		}
 
 		log.Info("HTTP code: ", ctx.Response().Status, ", request_id: ", requestId)
 		return nil
+	}
+}
+
+func CSRFMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
+			if clientCsrf == nil || len(clientCsrf) == 1 {
+				cookie := &http.Cookie{
+					Name:     "_csrf",
+					Value:    uuid.NewString(),
+					HttpOnly: false,
+					Path:     "/login",
+					Expires:  time.Now().Add(60 * time.Second),
+					SameSite: http.SameSiteNoneMode,
+					Secure:   true,
+				}
+
+				ctx.SetCookie(cookie)
+				return next(ctx)
+			}
+
+			log.Info(clientCsrf)
+
+			csrf := ctx.Get("_csrf").(string)
+
+			log.Info(csrf)
+
+			if clientCsrf[0] != csrf {
+				return errors.New("неправильный токен")
+			}
+
+			return next(ctx)
+		}
 	}
 }
 
@@ -66,12 +114,22 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 
 			session, err := ctx.Cookie("session_id")
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonError{Err: myErrors.ErrCookieNotFound})
+				jsonErr, err := json.Marshal(jsonError{Err: myErrors.ErrCookieNotFound})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonErr)
 			}
 
 			authSession, err := authSessionUsecase.GetSessionByCookie(context.TODO(), session.Value)
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(err), jsonError{Err: err})
+				jsonErr, err := json.Marshal(jsonError{Err: err})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(httpUtils.StatusCode(err), jsonErr)
 			}
 
 			ctx.Set("session", authSession)
@@ -84,6 +142,9 @@ func (m *GRPCMiddleware) GRPCMetricsMiddleware(ctx context.Context, req interfac
 	start := time.Now()
 
 	resp, err := uHandler(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
 	errStatus, _ := status.FromError(err)
 	code := errStatus.Code()

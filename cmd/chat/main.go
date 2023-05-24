@@ -5,24 +5,28 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	serverChat "project/internal/chat/delivery/grpc"
-	repositoryChat "project/internal/chat/repository"
-	usecaseChat "project/internal/chat/usecase"
-	"project/internal/configs"
-	repositoryMessages "project/internal/messages/repository"
+	"project/internal/config"
+	serverChat "project/internal/microservices/chat/delivery/grpc/server"
+	repositoryChat "project/internal/microservices/chat/repository"
+	usecaseChat "project/internal/microservices/chat/usecase"
+	repositoryMessages "project/internal/microservices/messages/repository"
+	repositoryUser "project/internal/microservices/user/repository"
 	"project/internal/middleware"
+	repositoryImages "project/internal/monolithic_services/images/repository"
+	usecaseImages "project/internal/monolithic_services/images/usecase"
 	metrics "project/internal/pkg/metrics/prometheus"
-	repositoryUser "project/internal/user/repository"
 )
 
 func init() {
 	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 }
 
@@ -40,34 +44,65 @@ func main() {
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
-		log.Error("Yaml path not found")
+		log.Fatal("Yaml path not found")
 	}
 
 	yamlFile, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
+	userAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	chatAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	chatImagesClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
-	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
+	chatUsecase := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo, imagesUsecase)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.ChatsService.ServiceName)
 	if err != nil {
@@ -90,6 +125,6 @@ func main() {
 
 	err = service.StartGRPCServer(config.ChatsService.Addr)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 }

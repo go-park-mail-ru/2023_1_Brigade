@@ -1,0 +1,89 @@
+Server:
+  port: ":8081"
+
+Postgres:
+  db: "postgres"
+  connectionToDB: "user=brigade password=123 dbname=brigade host=postgres port=5432 sslmode=disable" #postgres host=postgres
+
+Cors:
+  allowMethods:
+    - "POST"
+    - "PUT"
+    - "GET"
+    - "DELETE"
+    - "OPTIONS"
+  allowOrigins:
+    - "http://95.163.249.116"
+    - "http://localhost:10000"
+  allowHeaders:
+    - "Content-Type"
+    - "Content-Length"
+    - "X-CSRF-Token"
+  ExposeHeaders:
+    - "X-CSRF-Token"
+  allowCredentials: true
+
+Redis:
+  addr: "redis:6379"
+
+Minio:
+  endpoint: "minio:9000"
+  username: "minio"
+  password: "minio123"
+  token: ""
+
+VkCloud:
+  endpoint: "hb.bizmrg.com"
+  ssl: true
+
+  userAvatarsAccessKey: "hPGMCe6ZttM8VBVs7sXkFi"
+  userAvatarsSecretKey: "9knxejdQVDA3J8YGchKjh2XvMzyupvakHJqG6kBwe15R"
+
+  chatAvatarsAccessKey: "2XKnMttiwcnrhEFMc3CyQn"
+  chatAvatarsSecretKey: "gGkBv2g2Wohn44TJ9VSbhvfL6SmmsdSH7aYuANQ28mTT"
+
+  chatImagesAccessKey: "fYFdKpruC7mBpjJVVv8Ejq"
+  chatImagesSecretKey: "bzQGe4wzVKFyruzocmYJ8ZtqqnnrzAVsUhKpMqaLsP7k"
+
+Kafka:
+  brokerList:
+    - "kafka:9092"
+  groupID: "messages"
+
+RabbitMQ:
+  connAddr: "amqp://user:password@rabbitmq:5672/"
+  queueName: "messages"
+
+Centrifugo:
+  connAddr: "ws://localhost:8900/connection/websocket"
+  channelName: "channel"
+
+ChatsService:
+  addr: "localhost:9000"
+  addrMetrics: "localhost:9091"
+  serviceName: "chat"
+
+UsersService:
+  addr: "localhost:9001"
+  addrMetrics: "localhost:9092"
+  serviceName: "user"
+
+MessagesService:
+  addr: "localhost:9002"
+  addrMetrics: "localhost:9093"
+  serviceName: "messages"
+
+ConsumerService:
+  addr: "localhost:9003"
+  addrMetrics: "localhost:9094"
+  serviceName: "consumer"
+
+ProducerService:
+  addr: "localhost:9004"
+  addrMetrics: "localhost:9095"
+  serviceName: "producer"
+
+AuthService:
+  addr: "localhost:9005"
+  addrMetrics: "localhost:9096"
+  serviceName: "auth"

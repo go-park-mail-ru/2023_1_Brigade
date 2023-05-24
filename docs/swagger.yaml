@@ -627,7 +627,45 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AddUsersInGroupForm'
-  /api/v1/images:
+  /api/v1/chats/search/{string}/:
+    parameters:
+      - name: string
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      description: Getting found chats, messages.
+      tags:
+        - chats
+      responses:
+        "200":
+          description: Successfully getting chats, messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundedChatsMessagesChannels'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/images/user/:
     post:
       tags:
         - images
@@ -666,11 +704,142 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
+  /api/v1/images/user/images/:
+    post:
+      tags:
+        - images
+      summary: Upload an chat avatar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Avatar'
+      responses:
+        "201":
+          description: The avatar successfully uploaded
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/User'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+                  - $ref: '#/components/schemas/ErrAvatarNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/images/chat/images/:
+    post:
+      tags:
+        - images
+      summary: Upload an chat image
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Avatar'
+      responses:
+        "201":
+          description: The avatar successfully uploaded
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/User'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+                  - $ref: '#/components/schemas/ErrAvatarNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/users/search/{string}/:
+    parameters:
+      - name: string
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      description: Getting found contacts.
+      tags:
+        - users
+      responses:
+        "200":
+          description: Successfully getting chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacts'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/csrf:
+    get:
+      summary: Получить CSRF токен
+      description: Возвращает новый CSRF токен для защиты от CSRF-атак
+      responses:
+        '200':
+          description: CSRF
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSRF'
 components:
   schemas:
     SentMessage:
       type: object
       properties:
+        id:
+          type: string
+        type:
+          type: integer
         body:
           type: string
         author_id:
@@ -688,6 +857,40 @@ components:
           type: integer
         author_id:
           type: integer
+    FoundedChatsMessagesChannels:
+      type: object
+      properties:
+        founded_messages:
+          items:
+            $ref: '#/components/schemas/UserFoundedChats'
+        founded_chats:
+          items:
+            $ref: '#/components/schemas/UserFoundedChats'
+        founded_channels:
+          items:
+            $ref: '#/components/schemas/UserFoundedChats'
+        founded_contacts:
+          items:
+            $ref: '#/components/schemas/Contacts'
+    UserFoundedChats:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: integer
+        title:
+          type: string
+        avatar:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        last_message:
+          $ref: '#/components/schemas/Message'
+        last_message_author:
+          $ref: '#/components/schemas/User'
     AllChatMessages:
       type: object
       properties:
@@ -724,6 +927,10 @@ components:
           type: integer
         title:
           type: string
+        avatar:
+          type: string
+        description:
+          type: string
         members:
           type: array
           items:
@@ -745,11 +952,15 @@ components:
       properties:
         id:
           type: integer
+        master_id:
+          type: integer
         type:
           type: integer
         title:
           type: string
         avatar:
+          type: string
+        description:
           type: string
         members:
           type: array
@@ -775,16 +986,13 @@ components:
           items:
             $ref: '#/components/schemas/User'
         last_message:
-          items:
-            $ref: '#/components/schemas/Message'
+          $ref: '#/components/schemas/Message'
         last_message_author:
-          items:
-            $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/User'
     Contacts:
       type: object
       properties:
         contacts:
-          type: array
           items:
             $ref: '#/components/schemas/User'
     User:
@@ -816,8 +1024,6 @@ components:
           type: string
         new_password:
           type: string
-        new_avatar:
-          type: string
       description: User model
     LoginForm:
       type: object
@@ -843,6 +1049,12 @@ components:
         string:
           example: 'The message was successfully delivered'
           type: string
+    CSRF:
+      type: object
+      properties:
+        csrf:
+          type: string
+      description: CSRF
     UserSuccessDeleted:
       type: object
       properties:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/centrifugal/centrifuge-go"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
@@ -10,13 +11,14 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
-	repositoryChat "project/internal/chat/repository"
-	"project/internal/clients/consumer"
-	"project/internal/clients/producer"
-	"project/internal/configs"
-	serverMessages "project/internal/messages/delivery/grpc"
-	repositoryMessages "project/internal/messages/repository"
-	usecaseMessages "project/internal/messages/usecase"
+	"os/signal"
+	"project/internal/config"
+	repositoryChat "project/internal/microservices/chat/repository"
+	consumer "project/internal/microservices/consumer/delivery/grpc/client"
+	serverMessages "project/internal/microservices/messages/delivery/grpc/server"
+	repositoryMessages "project/internal/microservices/messages/repository"
+	usecaseMessages "project/internal/microservices/messages/usecase"
+	producer "project/internal/microservices/producer/delivery/grpc/client"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
 )
@@ -24,7 +26,7 @@ import (
 func init() {
 	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 }
 
@@ -42,31 +44,66 @@ func main() {
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
-		log.Error("Yaml path not found")
+		log.Fatal("Yaml path not found")
 	}
 
 	yamlFile, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	chatRepo := repositoryChat.NewChatMemoryRepository(db)
+	centrifugo := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugo.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugo.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := centrifugo.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
+
+	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 
 	grpcConnConsumer, err := grpc.Dial(
 		config.ConsumerService.Addr,
@@ -76,7 +113,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnConsumer.Close()
+	defer func() {
+		err = grpcConnConsumer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	grpcConnProducer, err := grpc.Dial(
 		config.ProducerService.Addr,
@@ -86,12 +128,17 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnProducer.Close()
+	defer func() {
+		err = grpcConnProducer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)
 
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, messagesRepo, consumerService, producerService)
+	messagesUsecase := usecaseMessages.NewMessagesUsecase(chatRepo, consumerService, producerService, messagesRepo)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.MessagesService.ServiceName)
 	if err != nil {

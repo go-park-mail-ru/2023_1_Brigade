@@ -9,19 +9,19 @@ import (
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
-	repositoryAuthUser "project/internal/auth/user/repository"
-	"project/internal/configs"
+	"project/internal/config"
+	repositoryAuthUser "project/internal/microservices/auth/repository"
+	serverUser "project/internal/microservices/user/delivery/grpc/server"
+	repositoryUser "project/internal/microservices/user/repository"
+	usecaseUser "project/internal/microservices/user/usecase"
 	"project/internal/middleware"
 	metrics "project/internal/pkg/metrics/prometheus"
-	clientUser "project/internal/user/delivery/grpc"
-	repositoryUser "project/internal/user/repository"
-	usecaseUser "project/internal/user/usecase"
 )
 
 func init() {
 	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 }
 
@@ -39,25 +39,30 @@ func main() {
 
 	yamlPath, exists := os.LookupEnv("YAML_PATH")
 	if !exists {
-		log.Error("Yaml path not found")
+		log.Fatal("Yaml path not found")
 	}
 
 	yamlFile, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
@@ -84,10 +89,10 @@ func main() {
 		}
 	}()
 
-	service := clientUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
+	service := serverUser.NewUsersServiceGRPCServer(grpcServer, userUsecase)
 
 	err = service.StartGRPCServer(config.UsersService.Addr)
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 }

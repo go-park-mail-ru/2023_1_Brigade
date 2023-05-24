@@ -1,0 +1,8 @@
+#!/bin/bash
+
+build_compose() {
+	version="$1"
+	docker build -t "technogramm/base:$version" -f "Dockerfile-base" .
+	VERSION="$version" envsubst < docker-compose-template.yml > docker-compose.yml
+	docker compose build
+}

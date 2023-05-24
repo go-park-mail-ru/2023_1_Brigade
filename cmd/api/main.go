@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/centrifugal/centrifuge-go"
-	"net/http"
 	"os"
 	"os/signal"
 	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
@@ -258,16 +256,16 @@ func main() {
 	}
 	e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
 
-	e.GET("api/v1/csrf/", func(ctx echo.Context) error {
-		csrf := ctx.Get("csrf")
-		ctx.Response().Header().Set("X-Csrf-Token", csrf.(string))
-		bytes, err := json.Marshal(csrf)
-		if err != nil {
-			return err
-		}
-
-		return ctx.JSONBlob(http.StatusOK, bytes)
-	})
+	//e.GET("api/v1/csrf/", func(ctx echo.Context) error {
+	//	csrf := ctx.Get("csrf")
+	//	ctx.Response().Header().Set("X-Csrf-Token", csrf.(string))
+	//	bytes, err := json.Marshal(csrf)
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//	return ctx.JSONBlob(http.StatusOK, bytes)
+	//})
 
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))

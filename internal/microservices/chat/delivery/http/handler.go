@@ -42,6 +42,8 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		}
 	}
 
+	chat = httpUtils.SanitizeStruct(chat).(model.Chat)
+
 	return ctx.JSON(http.StatusOK, chat)
 }
 
@@ -50,6 +52,10 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	listUserChats, err := u.chatUsecase.GetListUserChats(context.TODO(), session.UserId)
 	if err != nil {
 		return err
+	}
+
+	for idx, listUserChat := range listUserChats {
+		listUserChats[idx] = httpUtils.SanitizeStruct(listUserChat).(model.ChatInListUser)
 	}
 
 	return ctx.JSON(http.StatusOK, model.Chats{Chats: listUserChats})
@@ -108,6 +114,7 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 	}
 
 	chat = httpUtils.SanitizeStruct(chat).(model.EditChat)
+
 	newChat, err := u.chatUsecase.EditChat(context.TODO(), chat)
 	if err != nil {
 		return err

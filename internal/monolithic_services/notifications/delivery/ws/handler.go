@@ -8,6 +8,7 @@ import (
 	"project/internal/microservices/user"
 	"project/internal/model"
 	"project/internal/monolithic_services/centrifugo"
+	httpUtils "project/internal/pkg/http_utils"
 	"time"
 
 	"github.com/centrifugal/centrifuge-go"
@@ -37,6 +38,8 @@ func (u *notificationsHandler) SendNotificationsHandler(ctx echo.Context) error 
 			log.Error(err)
 			return
 		}
+
+		producerMessage = httpUtils.SanitizeStruct(producerMessage).(model.ProducerMessage)
 
 		if producerMessage.Action != config.Create {
 			log.Error("action don't create")

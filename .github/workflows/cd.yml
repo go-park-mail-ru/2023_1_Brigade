@@ -3,26 +3,35 @@ name: CD
 on:
   push:
     branches:
-      - dev
+      - easyjson
 
 jobs:
-  build-and-push:
+  build-n-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Build docker-compose images
+        run: . manage && build_compose $(echo ${{ github.sha }} | cut -c -7)
 
-      - name: Build Docker image
-        run: docker build -t backend:${{ github.sha }} .
-
-      - name: Push Docker image
-        run: |
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker tag backend:${{ github.sha }} technogramm/backend:${{ github.sha }}
-          docker push technogramm/backend:${{ github.sha }}
-
-  deploy:
-    needs: build-and-push
+      - name: Log in dockerhub
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      
+      - name: Push docker-compose images to registry
+        run: docker compose push
+      
+      - name: Copy docker-compose.yml config
+        uses: easingthemes/ssh-deploy@v4.1.8
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          REMOTE_HOST: ${{ secrets.HOST }}
+          SOURCE: docker-compose.yml
+          TARGET: /home/ubuntu/2023_1_Brigade/.docker-compose.yml
+  
+  stop-old-start-new:
+    needs: build-n-push
     runs-on: ubuntu-latest
     steps:
       - name: Connect to server via SSH
@@ -31,8 +40,9 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-
-      - name: Pull Docker image
-        run: |
-          export GIT_COMMIT_SHA=${{ github.sha }}
-          docker pull technogramm/backend:${{ github.sha }}
+          script: |
+            cd /home/ubuntu/2023_1_Brigade
+            docker compose -f .docker-compose.yml pull
+            docker compose down || true
+            mv {.,}docker-compose.yml
+            docker compose up -d

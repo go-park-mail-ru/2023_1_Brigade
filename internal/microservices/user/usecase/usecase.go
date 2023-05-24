@@ -54,13 +54,15 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 			return model.User{}, err
 		}
 
-		firstCharacterNameBefore := string([]rune(user.Nickname)[0])
-		var firstCharacterNameAfter string
+		firstCharacterNameBefore := ""
+		firstCharacterNameAfter := ""
 
-		if updateUser.Nickname != "" {
+		if len(updateUser.Nickname) > 0 {
+			firstCharacterNameBefore = string([]rune(user.Nickname)[0])
 			firstCharacterNameAfter = string([]rune(updateUser.Nickname)[0])
-			user.Nickname = updateUser.Nickname
 		}
+
+		user.Nickname = updateUser.Nickname
 
 		if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
 			filename := uuid.NewString()

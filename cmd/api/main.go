@@ -244,6 +244,15 @@ func main() {
 		ExposeHeaders:    config.Cors.ExposeHeaders,
 	}))
 
+	DefaultCSRFConfig := middleware.CSRFConfig{
+		Skipper:      middleware.DefaultSkipper,
+		TokenLength:  32,
+		TokenLookup:  "header:" + echo.HeaderXCSRFToken,
+		ContextKey:   "csrf",
+		CookieName:   "_csrf",
+		CookieMaxAge: 86400,
+	}
+	e.Use(middleware.CSRFWithConfig(DefaultCSRFConfig))
 	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 	//	TokenLookup:    "header:X-Csrf-Token",
 	//	CookieSecure:   true,

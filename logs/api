@@ -293,3 +293,187 @@ time="2023-05-23T20:29:30Z" level=info msg="Incoming request: /api/v1/chats/, ip
 time="2023-05-23T20:29:30Z" level=info msg="HTTP code: 200, request_id: 8171713213900849594" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:60"
 time="2023-05-23T20:29:30Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 5994311304307221652" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:38"
 time="2023-05-23T20:29:30Z" level=info msg="Incoming request: /api/v1/notification/, ip: 195.239.169.108, method: GET, request_id: 9124204022734481856" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:38"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+time="2023-05-24T13:07:09+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1256134630094382789" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:09+03:00" level=info msg="HTTP code: 200, request_id: 1256134630094382789" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:09+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6801335930532636708" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:09+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 6801335930532636708" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:13+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2842206636578331449" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:13+03:00" level=info msg="HTTP code: 200, request_id: 2842206636578331449" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:13+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 553196718416614331" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:13+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 553196718416614331" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8591748096379769396" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:25+03:00" level=info msg="HTTP code: 200, request_id: 8591748096379769396" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:25+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 4530874204795883438" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:25+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 4530874204795883438" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:30+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4558584192787714118" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:30+03:00" level=info msg="HTTP code: 200, request_id: 4558584192787714118" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:30+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 7168156210090327681" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:30+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 7168156210090327681" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:57432: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 91 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001c8cc0})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000432780}, {0xd582c0?, 0xc0001c8c60}, {0xc000696f40?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000432780, 0x190, {0xd582c0, 0xc0001c8c60}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000432780, 0xc0001c8c60?, {0xd582c0, 0xc0001c8c60})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc0001c8c30?}, {0xfbd4d0, 0xc000432780})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc0005e0540}, 0xc0004a8400)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xc00049ab70?}, {0xfaeac0, 0xc0005e0540}, 0xc0004a8400)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000284ab0, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:52068: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 45 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001ed470})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc0006890e0}, {0xd582c0?, 0xc0001ed410}, {0xc0004a3210?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0006890e0, 0x190, {0xd582c0, 0xc0001ed410}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0006890e0, 0xc0001ed410?, {0xd582c0, 0xc0001ed410})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc0001ed3b0?}, {0xfbd4d0, 0xc0006890e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc00054aa80}, 0xc000252600)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xc0001ecea0?}, {0xfaeac0, 0xc00054aa80}, 0xc000252600)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000eebd0, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T13:07:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2964203633733817222" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:38+03:00" level=info msg="HTTP code: 200, request_id: 2964203633733817222" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:38+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 8278805407038001656" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:38+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 8278805407038001656" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:44+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6877943830556313821" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:44+03:00" level=info msg="HTTP code: 200, request_id: 6877943830556313821" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:44+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 5433641564503237974" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:44+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 5433641564503237974" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:08:27+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1678720774554171426" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:08:27+03:00" level=error msg="HTTP code: 500, Error: sql: no rows in result set, request_id: 1678720774554171426" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:08:33+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5848065924556511368" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:08:33+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5848065924556511368" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:52078: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 46 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00049bd40})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000688000}, {0xd582c0?, 0xc00049bce0}, {0xc0004a2850?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000688000, 0x190, {0xd582c0, 0xc00049bce0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000688000, 0xc00049bce0?, {0xd582c0, 0xc00049bce0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00049bcb0?}, {0xfbd4d0, 0xc000688000})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc00054a540}, 0xc0004a8200)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc00054a540}, 0xc0004a8200)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000eec60, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:37972: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 163 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00049bf80})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000688e60}, {0xd582c0?, 0xc00049bf20}, {0xc0004a2930?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000688e60, 0x190, {0xd582c0, 0xc00049bf20}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000688e60, 0xc00049bf20?, {0xd582c0, 0xc00049bf20})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00049bef0?}, {0xfbd4d0, 0xc000688e60})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc00054a620}, 0xc0004a8400)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc00054a620}, 0xc0004a8400)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0004a65a0, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T13:08:51+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1569958923001656824" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:08:51+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1569958923001656824" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:39832: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 151 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00062b1d0})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000432b40}, {0xd582c0?, 0xc00062b170}, {0xc000697ab0?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000432b40, 0x190, {0xd582c0, 0xc00062b170}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000432b40, 0xc00062b170?, {0xd582c0, 0xc00062b170})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00062b140?}, {0xfbd4d0, 0xc000432b40})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc0005e0ee0}, 0xc000122e00)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc0005e0ee0}, 0xc000122e00)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ee510, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:39834: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 153 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00062b380})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc0001e97c0}, {0xd582c0?, 0xc00062b320}, {0xc000697b80?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0001e97c0, 0x190, {0xd582c0, 0xc00062b320}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0001e97c0, 0xc00062b320?, {0xd582c0, 0xc00062b320})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00062b2f0?}, {0xfbd4d0, 0xc0001e97c0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc0005e0fc0}, 0xc000252500)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc0005e0fc0}, 0xc000252500)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ee990, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T13:09:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2040188227577219715" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:09:34+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2040188227577219715" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"

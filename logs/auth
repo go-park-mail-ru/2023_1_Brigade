@@ -15,3 +15,4 @@ signal: killed
 time="2023-05-23T20:28:53Z" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/ubuntu/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
 time="2023-05-23T20:29:29Z" level=info msg="Ð" func=project/internal/pkg/image_generation.GenerateAvatar file="/home/ubuntu/2023_1_Brigade/internal/pkg/image_generation/image_generation.go:18"
 time="2023-05-23T20:29:29Z" level=info msg="Ð" func=project/internal/pkg/image_generation.GenerateAvatar file="/home/ubuntu/2023_1_Brigade/internal/pkg/image_generation/image_generation.go:20"
+time="2023-05-24T13:06:26+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"

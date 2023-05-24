@@ -1,16 +1,19 @@
 package middleware
 
 import (
+	"context"
 	"encoding/json"
-	"github.com/labstack/echo/v4"
-	"github.com/microcosm-cc/bluemonday"
-	log "github.com/sirupsen/logrus"
-	"io"
 	"math/rand"
-	authSession "project/internal/auth/session"
+	authSession "project/internal/monolithic_services/session"
 	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
-	"regexp"
+	metrics "project/internal/pkg/metrics/prometheus"
+	"time"
+
+	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 type jsonError struct {
@@ -21,31 +24,12 @@ func (j jsonError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j.Err.Error())
 }
 
-func XSSMidlleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		contentType := ctx.Request().Header.Get("Content-Type")
-		if contentType == "multipart/form-data" {
-			return next(ctx)
-		}
+type GRPCMiddleware struct {
+	metric *metrics.MetricsGRPC
+}
 
-		p := bluemonday.UGCPolicy()
-		body, err := io.ReadAll(ctx.Request().Body)
-		if err != nil {
-			return err
-		}
-
-		if body != nil {
-			stringBody := string(body)
-			stringBody = p.Sanitize(stringBody)
-			re := regexp.MustCompile("&#34;")
-			stringBody = re.ReplaceAllString(stringBody, `"`)
-			re = regexp.MustCompile("&#39;")
-			stringBody = re.ReplaceAllString(stringBody, `'`)
-			ctx.Set("body", []byte(stringBody))
-		}
-
-		return next(ctx)
-	}
+func NewGRPCMiddleware(metric *metrics.MetricsGRPC) *GRPCMiddleware {
+	return &GRPCMiddleware{metric: metric}
 }
 
 func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -53,16 +37,24 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		requestId := rand.Int63()
 		log.Info("Incoming request: ", ctx.Request().URL, ", ip: ", ctx.RealIP(), ", method: ", ctx.Request().Method, ", request_id: ", requestId)
 
-		//curl -X 'POST' 'http://localhost:8081/api/v1/signup/' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "username": "<a onblur="alert(secret)" href="http://www.google.com">Google</a>", "email": "danssssddsila22om", "name": "string", "password": "tests", "status":"i am star" }'
-
 		if err := next(ctx); err != nil {
 			statusCode := httpUtils.StatusCode(err)
 			log.Error("HTTP code: ", statusCode, ", Error: ", err, ", request_id: ", requestId)
 			if statusCode == 500 {
-				return ctx.JSON(statusCode, jsonError{Err: myErrors.ErrInternal})
+				jsonErr, err := json.Marshal(jsonError{Err: myErrors.ErrInternal})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(statusCode, jsonErr)
 			}
 
-			return ctx.JSON(statusCode, jsonError{Err: err})
+			jsonErr, err := json.Marshal(jsonError{Err: err})
+			if err != nil {
+				log.Error(err)
+			}
+
+			return ctx.JSONBlob(statusCode, jsonErr)
 		}
 
 		log.Info("HTTP code: ", ctx.Response().Status, ", request_id: ", requestId)
@@ -85,16 +77,43 @@ func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc 
 
 			session, err := ctx.Cookie("session_id")
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonError{Err: myErrors.ErrCookieNotFound})
+				jsonErr, err := json.Marshal(jsonError{Err: myErrors.ErrCookieNotFound})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(httpUtils.StatusCode(myErrors.ErrCookieNotFound), jsonErr)
 			}
 
-			authSession, err := authSessionUsecase.GetSessionByCookie(ctx, session.Value)
+			authSession, err := authSessionUsecase.GetSessionByCookie(context.TODO(), session.Value)
 			if err != nil {
-				return ctx.JSON(httpUtils.StatusCode(err), jsonError{Err: err})
+				jsonErr, err := json.Marshal(jsonError{Err: err})
+				if err != nil {
+					log.Error(err)
+				}
+
+				return ctx.JSONBlob(httpUtils.StatusCode(err), jsonErr)
 			}
 
 			ctx.Set("session", authSession)
 			return next(ctx)
 		}
 	}
+}
+
+func (m *GRPCMiddleware) GRPCMetricsMiddleware(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, uHandler grpc.UnaryHandler) (interface{}, error) {
+	start := time.Now()
+
+	resp, err := uHandler(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	errStatus, _ := status.FromError(err)
+	code := errStatus.Code()
+
+	m.metric.ResponseTime.WithLabelValues(code.String(), info.FullMethod).Observe(time.Since(start).Seconds())
+	m.metric.Hits.Inc()
+
+	return resp, err
 }

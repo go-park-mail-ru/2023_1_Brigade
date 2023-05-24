@@ -1,48 +1,51 @@
 package main
 
 import (
-	"github.com/go-redis/redis"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/centrifugal/centrifuge-go"
+	"os"
+	"os/signal"
+	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
+	clientChat "project/internal/microservices/chat/delivery/grpc/client"
+	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
+	clientUser "project/internal/microservices/user/delivery/grpc/client"
+	"project/internal/pkg/serialization"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
+	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
-	"gopkg.in/yaml.v2"
-	"os"
-
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"gopkg.in/yaml.v2"
+
+	httpUser "project/internal/microservices/user/delivery/http"
+
+	"project/internal/config"
+	wsMessages "project/internal/microservices/messages/delivery/ws"
 	myMiddleware "project/internal/middleware"
 
-	"project/internal/configs"
-
 	log "github.com/sirupsen/logrus"
-	httpAuthUser "project/internal/auth/user/delivery/http"
-	httpChat "project/internal/chat/delivery/http"
-	httpImages "project/internal/images/delivery/http"
-	wsMessages "project/internal/messages/delivery/ws"
-	httpUser "project/internal/user/delivery/http"
 
-	usecaseAuthSession "project/internal/auth/session/usecase"
-	usecaseAuthUser "project/internal/auth/user/usecase"
-	usecaseChat "project/internal/chat/usecase"
-	usecaseImages "project/internal/images/usecase"
-	usecaseMessages "project/internal/messages/usecase"
-	usecaseUser "project/internal/user/usecase"
+	httpAuthUser "project/internal/microservices/auth/delivery/http"
+	httpChat "project/internal/microservices/chat/delivery/http"
+	httpImages "project/internal/monolithic_services/images/delivery/http"
+	usecaseImages "project/internal/monolithic_services/images/usecase"
+	wsNotifications "project/internal/monolithic_services/notifications/delivery/ws"
+	usecaseAuthSession "project/internal/monolithic_services/session/usecase"
 
-	repositoryAuthSession "project/internal/auth/session/repository"
-	repositoryAuthUser "project/internal/auth/user/repository"
-	repositoryChat "project/internal/chat/repository"
-	repositoryImages "project/internal/images/repository"
-	repositoryMessages "project/internal/messages/repository"
-	repositoryUser "project/internal/user/repository"
+	repositoryImages "project/internal/monolithic_services/images/repository"
+	repositoryAuthSession "project/internal/monolithic_services/session/repository/postgres"
 )
 
 func init() {
-	envPath := "../../.env"
+	envPath := ".env"
 	if err := godotenv.Load(envPath); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 }
 
@@ -68,43 +71,169 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var config configs.Config
+	var config config.Config
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB) // ping
+	userAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	redis := redis.NewClient(&redis.Options{
-		Addr: config.Redis.Addr,
+	chatAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
 	})
-
-	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
-		Creds: credentials.NewStaticV4(config.Minio.Username, config.Minio.Password, config.Minio.Token),
-	})
-
 	if err != nil {
 		log.Fatal(err)
-		return
 	}
 
-	userRepository := repositoryUser.NewUserMemoryRepository(db)
-	chatRepository := repositoryChat.NewChatMemoryRepository(db)
-	imagesRepostiory := repositoryImages.NewImagesMemoryRepository(minioClient)
-	messagesRepository := repositoryMessages.NewMessagesMemoryRepository(db)
-	authUserRepository := repositoryAuthUser.NewAuthUserMemoryRepository(db)
-	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(redis)
+	chatImagesClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	userUsecase := usecaseUser.NewUserUsecase(userRepository, authUserRepository)
-	authUserUsecase := usecaseAuthUser.NewAuthUserUsecase(authUserRepository, userRepository)
+	db, err := sqlx.Open(config.Postgres.DB, config.Postgres.ConnectionToDB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
+
+	centrifugoMessagesClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+	centrifugoNotificationsClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugoMessagesClient.Close()
+		centrifugoNotificationsClient.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugoMessagesClient.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = centrifugoNotificationsClient.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	subMessages, err := centrifugoMessagesClient.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	subNotifications, err := centrifugoNotificationsClient.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = subMessages.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = subNotifications.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	grpcConnChats, err := grpc.Dial(
+		config.ChatsService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Fatal("cant connect to grpc ", err)
+	}
+	defer func() {
+		err = grpcConnChats.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	grpcConnUsers, err := grpc.Dial(
+		config.UsersService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Fatal("cant connect to grpc ", err)
+	}
+	defer func() {
+		err = grpcConnUsers.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	grpcConnMessages, err := grpc.Dial(
+		config.MessagesService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Fatal("cant connect to grpc ", err)
+	}
+	defer func() {
+		err = grpcConnMessages.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	grpcConnAuth, err := grpc.Dial(
+		config.AuthService.Addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Fatal("cant connect to grpc ", err)
+	}
+	defer func() {
+		err = grpcConnAuth.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
+	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
+	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
+	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
+
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
+	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
+
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
-	chatUsecase := usecaseChat.NewChatUsecase(chatRepository, userRepository)
-	messagesUsecase := usecaseMessages.NewMessagesUsecase(messagesRepository, config.Kafka)
-	imagesUsecase := usecaseImages.NewChatUsecase(imagesRepostiory)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -112,16 +241,47 @@ func main() {
 		AllowOrigins:     config.Cors.AllowOrigins,
 		AllowCredentials: config.Cors.AllowCredentials,
 		AllowHeaders:     config.Cors.AllowHeaders,
+		ExposeHeaders:    config.Cors.ExposeHeaders,
 	}))
-	e.Use(myMiddleware.LoggerMiddleware)
-	//e.Use(myMiddleware.XSSMidlleware)
-	//e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
-	httpUser.NewUserHandler(e, userUsecase)
-	httpAuthUser.NewAuthHandler(e, authUserUsecase, authSessionUsecase, userUsecase)
-	httpChat.NewChatHandler(e, chatUsecase, userUsecase)
-	wsMessages.NewMessagesHandler(e, messagesUsecase)
-	httpImages.NewImagesHandler(e, imagesUsecase)
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	TokenLookup:    "header:X-Csrf-Token",
+	//	CookieSecure:   true,
+	//	CookieHTTPOnly: true,
+	//	CookiePath:     "/",
+	//}))
+
+	e.Use(myMiddleware.LoggerMiddleware)
+	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
+
+	p := prometheus.NewPrometheus("echo", nil)
+	eProtheus := echo.New()
+
+	e.Use(p.HandlerFunc)
+	eProtheus.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
+	go func() {
+		err := eProtheus.Start(":5555")
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	e.JSONSerializer = serialization.EasyJsonSerializer{}
+
+	httpUser.NewUserHandler(e, userService)
+	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
+	httpChat.NewChatHandler(e, chatService, userService)
+	httpImages.NewImagesHandler(e, userService, imagesUsecase)
+
+	_, err = wsMessages.NewMessagesHandler(e, messagesService, centrifugoMessagesClient, config.Centrifugo.ChannelName)
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, centrifugoNotificationsClient, config.Centrifugo.ChannelName)
+	if err != nil {
+		log.Error(err)
+	}
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

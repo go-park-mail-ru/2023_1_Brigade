@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+message User {
+  uint64 id = 1;
+  string avatar = 2;
+  string username = 3;
+  string nickname = 4;
+  string email = 5;
+  string status = 6;
+}
+
+message AuthorizedUser {
+  uint64 id = 1;
+  string avatar = 2;
+  string username = 3;
+  string nickname = 4;
+  string email = 5;
+  string status = 6;
+  string password = 7;
+}
+
+message UpdateUser {
+  string email = 1;
+  string new_avatar_url = 2;
+  string nickname = 3;
+  string status = 4;
+  string current_password = 5;
+  string new_password = 6;
+}
+
+message UserID {
+  uint64 UserID = 1;
+}
+
+message Contacts {
+  repeated User contacts = 1;
+}
+
+message AddUserContactArguments {
+  uint64 UserID = 1;
+  uint64 ContactID = 2;
+}
+
+message PutUserArguments {
+  UpdateUser user = 1;
+  uint64  userID = 2;
+}
+
+message String {
+  string string = 1;
+}

@@ -35,7 +35,7 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/ErrCookieNotFound'
         "404":
-          description: Username, email, nickname, password validity check
+          description: Nickname, email, nickname, password validity check
           content:
             application/json:
               schema:
@@ -95,9 +95,8 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/ErrInvalidUsername'
+                  - $ref: '#/components/schemas/ErrInvalidNickname'
                   - $ref: '#/components/schemas/ErrInvalidEmail'
-                  - $ref: '#/components/schemas/ErrInvalidNick'
                   - $ref: '#/components/schemas/ErrInvalidPassword'
         "409":
           description: Checking whether such an email and username is registered
@@ -106,7 +105,6 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/ErrEmailIsAlreadyRegistred'
-                  - $ref: '#/components/schemas/ErrUsernameIsAlreadyRegistred'
         "500":
           description: Internal error
           content:
@@ -199,7 +197,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         "400":
-          description: Invalid username, email, password
+          description: Invalid username, email, password, status
           content:
             application/json:
               schema:
@@ -224,13 +222,12 @@ paths:
                   - $ref: '#/components/schemas/ErrSessionNotFound'
                   - $ref: '#/components/schemas/ErrIncorrectPassword'
         "409":
-          description: Username or email is already registred
+          description: Username is already registred
           content:
             application/json:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/ErrUsernameIsAlreadyRegistred'
-                  - $ref: '#/components/schemas/ErrEmailIsAlreadyRegistred'
         "500":
           description: Internal error
           content:
@@ -242,39 +239,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PutUser'
-  /api/v1/users/remove:
-    delete:
-      description: Delete current user.
-      tags:
-        - users
-      responses:
-        "204":
-          description: The user successfully deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserSuccessDeleted'
-        "401":
-          description: Cookie not found
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ErrCookieNotFound'
-        "404":
-          description: No such cookie or user
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ErrUserNotFound'
-                  - $ref: '#/components/schemas/ErrSessionNotFound'
-        "500":
-          description: Internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrInternal'
   /api/v1/users/contacts:
     get:
       description: Getting current user info and info for changes.
@@ -359,11 +323,11 @@ paths:
         - users
       responses:
         "201":
-          description: Successfully add user
-          # content:
-          #   application/json:
-          #     schema:
-          #       $ref: '#/components/schemas/User'
+          description: Successfully adding user in contacts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacts'
         "401":
           description: Cookie not found
           content:
@@ -393,6 +357,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
   /api/v1/chats:
+    get:
+      description: Getting chat info and info for changes.
+      tags:
+        - chats
+      responses:
+        "200":
+          description: Successfully getting chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserChats'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "403":
+          description: The user does not have access to this chat
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrNotChatAccess'
+        "404":
+          description: Chat or session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+                  - $ref: '#/components/schemas/ErrChatNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
     post:
       tags:
         - chats
@@ -428,6 +430,41 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatingChatForm'
+    put:
+      tags:
+        - chats
+      responses:
+        "201":
+          description: Successfully creating chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            error:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutChatForm'
   /api/v1/chats/{chatID}:
     parameters:
       - name: chatID
@@ -534,58 +571,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SentMessage'
-  /api/v1/chats/{chatID}/messages:
+  /api/v1/chats/{chatID}/add:
     parameters:
       - name: chatID
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      tags:
-        - messages
-      responses:
-        "200":
-          description: The all chat messages successfully getting
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllChatMessages'
-        "401":
-          description: Cookie not found
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ErrCookieNotFound'
-        "403":
-          description: The user does not have access to this messages
-          content:
-            error:
-              schema:
-                $ref: '#/components/schemas/ErrNotMessagesAccess'
-        "404":
-          description: Session or message not found
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ErrSessionNotFound'
-                  - $ref: '#/components/schemas/ErrChatNotFound'
-        "500":
-          description: Internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrInternal'
-  /api/v1/chats/{chatID}/add/{userID}:
-    parameters:
-      - name: chatID
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: userID
         in: path
         required: true
         schema:
@@ -634,28 +622,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
-  /api/v1/chats/{chatID}/messages/{messageID}:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUsersInGroupForm'
+  /api/v1/chats/search/{string}/:
     parameters:
-      - name: chatID
+      - name: string
         in: path
         required: true
         schema:
-          type: integer
-      - name: messageID
-        in: path
-        required: true
-        schema:
-          type: integer
+          type: string
     get:
+      description: Getting found chats, messages.
       tags:
-        - messages
+        - chats
       responses:
         "200":
-          description: The message successfully getting
+          description: Successfully getting chats, messages
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Message'
+                $ref: '#/components/schemas/FoundedChatsMessagesChannels'
         "401":
           description: Cookie not found
           content:
@@ -663,47 +652,37 @@ paths:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/ErrCookieNotFound'
-        "403":
-          description: The user does not have access to this message
-          content:
-            error:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ErrNotMessageAccess'
-                  - $ref: '#/components/schemas/ErrNotChatAccess'
         "404":
-          description: Session or message not found
+          description: Session not found
           content:
             application/json:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/ErrSessionNotFound'
-                  - $ref: '#/components/schemas/ErrChatNotFound'
-                  - $ref: '#/components/schemas/ErrMessageNotFound'
         "500":
           description: Internal error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
-  /api/v1/images:
+  /api/v1/images/user/:
     post:
       tags:
         - images
       summary: Upload an avatar current user
       requestBody:
-        required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/Avatar'
       responses:
         "201":
           description: The avatar successfully uploaded
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/User'
         "401":
           description: Cookie not found
           content:
@@ -725,11 +704,142 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrInternal'
+  /api/v1/images/user/images/:
+    post:
+      tags:
+        - images
+      summary: Upload an chat avatar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Avatar'
+      responses:
+        "201":
+          description: The avatar successfully uploaded
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/User'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+                  - $ref: '#/components/schemas/ErrAvatarNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/images/chat/images/:
+    post:
+      tags:
+        - images
+      summary: Upload an chat image
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Avatar'
+      responses:
+        "201":
+          description: The avatar successfully uploaded
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/User'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: User session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+                  - $ref: '#/components/schemas/ErrAvatarNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/v1/users/search/{string}/:
+    parameters:
+      - name: string
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      description: Getting found contacts.
+      tags:
+        - users
+      responses:
+        "200":
+          description: Successfully getting chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacts'
+        "401":
+          description: Cookie not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrCookieNotFound'
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ErrSessionNotFound'
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrInternal'
+  /api/csrf:
+    get:
+      summary: Получить CSRF токен
+      description: Возвращает новый CSRF токен для защиты от CSRF-атак
+      responses:
+        '200':
+          description: CSRF
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSRF'
 components:
   schemas:
     SentMessage:
       type: object
       properties:
+        id:
+          type: string
+        type:
+          type: integer
         body:
           type: string
         author_id:
@@ -743,12 +853,44 @@ components:
           type: integer
         body:
           type: string
-        author_id:
-          type: integer
         chat_id:
           type: integer
-        is_read:
+        author_id:
+          type: integer
+    FoundedChatsMessagesChannels:
+      type: object
+      properties:
+        founded_messages:
+          items:
+            $ref: '#/components/schemas/UserFoundedChats'
+        founded_chats:
+          items:
+            $ref: '#/components/schemas/UserFoundedChats'
+        founded_channels:
+          items:
+            $ref: '#/components/schemas/UserFoundedChats'
+        founded_contacts:
+          items:
+            $ref: '#/components/schemas/Contacts'
+    UserFoundedChats:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: integer
+        title:
           type: string
+        avatar:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        last_message:
+          $ref: '#/components/schemas/Message'
+        last_message_author:
+          $ref: '#/components/schemas/User'
     AllChatMessages:
       type: object
       properties:
@@ -756,31 +898,101 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Message'
-    CreatingChatForm:
+    AddUsersInGroupForm:
       type: object
       properties:
-        title:
-          type: string
+        type:
+          type: integer
         members:
           type: array
           items:
             type: integer
-    Chat:
+    PutChatForm:
       type: object
       properties:
         id:
+          type: integer
+        type:
           type: integer
         title:
           type: string
         members:
           type: array
           items:
+            type: integer
+    CreatingChatForm:
+      type: object
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        avatar:
+          type: string
+        description:
+          type: string
+        members:
+          type: array
+          items:
+            type: integer
+    Avatar:
+      type: object
+      properties:
+        file:
+          type: string #binary
+    UserChats:
+      type: object
+      properties:
+        chats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatInListUser'
+    Chat:
+      type: object
+      properties:
+        id:
+          type: integer
+        master_id:
+          type: integer
+        type:
+          type: integer
+        title:
+          type: string
+        avatar:
+          type: string
+        description:
+          type: string
+        members:
+          type: array
+          items:
             $ref: '#/components/schemas/User'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    ChatInListUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: integer
+        title:
+          type: string
+        avatar:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        last_message:
+          $ref: '#/components/schemas/Message'
+        last_message_author:
+          $ref: '#/components/schemas/User'
     Contacts:
       type: object
       properties:
         contacts:
-          type: array
           items:
             $ref: '#/components/schemas/User'
     User:
@@ -790,19 +1002,21 @@ components:
           type: integer
         username:
           type: string
+        nickname:
+          type: string
         email:
           type: string
         status:
           type: string
-        password:
+        avatar:
           type: string
-      description: User model
+      description: Contact
     PutUser:
       type: object
       properties:
         username:
           type: string
-        email:
+        nickname:
           type: string
         status:
           type: string
@@ -822,7 +1036,7 @@ components:
     RegistrationForm:
       type: object
       properties:
-        username:
+        nickname:
           type: string
         email:
           type: string
@@ -835,6 +1049,12 @@ components:
         string:
           example: 'The message was successfully delivered'
           type: string
+    CSRF:
+      type: object
+      properties:
+        csrf:
+          type: string
+      description: CSRF
     UserSuccessDeleted:
       type: object
       properties:
@@ -871,7 +1091,7 @@ components:
         error:
           example: 'Invalid email'
           type: string
-    ErrInvalidNick:
+    ErrInvalidNickname:
       type: object
       properties:
         error:

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option go_package = ".;generated";
+
+package protobuf;
+
+import "google/protobuf/empty.proto";
+
+service Consumer {
+  rpc StartConsumeMessages(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}

@@ -102,7 +102,7 @@ func CSRFMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			csrf := ctx.Get("csrf")
-			if csrf == nil {
+			if csrf == nil || csrf == "" {
 				cookie := &http.Cookie{
 					Name:     "_csrf",
 					Value:    uuid.NewString(),

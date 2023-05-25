@@ -44,14 +44,33 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 			Status:   updateUser.Status,
 		}
 
-		err := u.userRepo.CheckExistUserByEmail(ctx, user.Email)
-		if err == nil {
-			return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
-		} else {
-			if err != myErrors.ErrUserNotFound {
-				return model.User{}, err
+		userFromDB, err := u.userRepo.GetUserById(ctx, userID)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		if userFromDB.Email != user.Email {
+			err = u.userRepo.CheckExistUserByEmail(ctx, user.Email)
+			if err == nil {
+				return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
+			} else {
+				if err != myErrors.ErrUserNotFound {
+					return model.User{}, err
+				}
 			}
 		}
+		//if err != nil {
+		//	if
+		//}
+		//if updateUser.Email != гыу
+		//err := u.userRepo.CheckExistUserByEmail(ctx, user.Email)
+		//if err == nil {
+		//	return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
+		//} else {
+		//	if err != myErrors.ErrUserNotFound {
+		//		return model.User{}, err
+		//	}
+		//}
 
 		user, err = u.userRepo.UpdateUserEmailStatusById(ctx, user)
 		if err != nil {

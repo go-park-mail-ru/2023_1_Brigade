@@ -160,7 +160,21 @@ func (r repository) AddUserInContact(ctx context.Context, contact model.UserCont
 
 func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error {
 	var exists bool
-	err := r.db.Get(&exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
+
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return myErrors.ErrUserNotFound
+	}
+
+	return nil
+}
+
+func (r repository) CheckExistUserByEmail(ctx context.Context, email string) error {
+	var exists bool
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", email)
 
 	if err != nil {
 		return err

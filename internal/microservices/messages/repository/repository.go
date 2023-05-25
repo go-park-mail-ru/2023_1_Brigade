@@ -211,7 +211,7 @@ func (r repository) GetSearchMessages(ctx context.Context, userID uint64, string
 		"%"+string+"%", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, myErrors.ErrChatNotFound
+			return messages, nil
 		}
 
 		return nil, err

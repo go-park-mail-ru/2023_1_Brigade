@@ -80,8 +80,8 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 		},
 		{
 			name: `send message;
-                      get chat members error;
-                      zero members`,
+                   get chat members error;
+                   zero members`,
 			dbError:       nil,
 			members:       []model.ChatMembers{},
 			membersError:  myErrors.ErrMembersNotFound,
@@ -89,9 +89,9 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 			result:        myErrors.ErrMembersNotFound,
 		},
 		{
-			name: `send message;
-                      insert message in DB error;
-                      zero members`,
+			name: `send message; 
+                   insert message in DB error;
+			       zero members`,
 			dbError: myErrors.ErrInternal,
 			members: []model.ChatMembers{
 				{

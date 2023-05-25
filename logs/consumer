@@ -46,3 +46,4 @@ time="2023-05-24T16:03:28+03:00" level=fatal msg="listen tcp 127.0.0.1:9003: bin
 exit status 1
 signal: killed
 time="2023-05-24T16:06:22+03:00" level=info msg="consumer: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-25T00:34:23+03:00" level=error msg="Exception (504) Reason: \"channel/connection is not open\"" func="project/internal/monolithic_services/qaas/send_messages/rabbitMQ/consumer/usecase.(*usecase).StartConsumeMessages" file="/home/marcussss1/2023_1_Brigade/internal/monolithic_services/qaas/send_messages/rabbitMQ/consumer/usecase/usecase.go:100"

@@ -2,21 +2,25 @@ package usecase
 
 import (
 	"context"
+	"github.com/google/uuid"
+	"project/internal/config"
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
 	"project/internal/model"
+	"project/internal/monolithic_services/images"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"project/internal/pkg/security"
 )
 
 type usecase struct {
-	userRepo user.Repository
-	authRepo authUser.Repository
+	userRepo      user.Repository
+	authRepo      authUser.Repository
+	imagesUsecase images.Usecase
 }
 
-func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user.Usecase {
-	return &usecase{userRepo: userRepo, authRepo: authRepo}
+func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository, imagesUsecase images.Usecase) user.Usecase {
+	return &usecase{userRepo: userRepo, authRepo: authRepo, imagesUsecase: imagesUsecase}
 }
 
 func (u usecase) DeleteUserById(ctx context.Context, userID uint64) error {
@@ -59,6 +63,26 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 				}
 			}
 		}
+
+		if userFromDB.Nickname != user.Nickname {
+			firstCharacterNameBefore := string([]rune(userFromDB.Nickname)[0])
+			firstCharacterNameAfter := string([]rune(user.Nickname)[0])
+
+			if firstCharacterNameBefore != firstCharacterNameAfter {
+				filename := uuid.NewString()
+				err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
+				if err != nil {
+					return model.User{}, err
+				}
+
+				url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
+				if err != nil {
+					return model.User{}, err
+				}
+
+				user.Avatar = url
+			}
+		}
 		//if err != nil {
 		//	if
 		//}
@@ -85,7 +109,7 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 		//	firstCharacterNameAfter = string([]rune(updateUser.Nickname)[0])
 		//}
 
-		user.Nickname = updateUser.Nickname
+		//user.Nickname = updateUser.Nickname
 
 		//if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
 		//	filename := uuid.NewString()
@@ -106,7 +130,7 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 		//} else {
 		//	user.Avatar = updateUser.NewAvatarUrl
 		//}
-		user.Avatar = updateUser.NewAvatarUrl
+		//user.Avatar = updateUser.NewAvatarUrl
 
 		user, err = u.userRepo.UpdateUserAvatarNicknameById(ctx, user)
 		if err != nil {

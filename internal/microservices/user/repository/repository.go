@@ -174,7 +174,7 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 
 func (r repository) CheckExistUserByEmail(ctx context.Context, email string) error {
 	var exists bool
-	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", email)
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1)", email)
 
 	if err != nil {
 		return err

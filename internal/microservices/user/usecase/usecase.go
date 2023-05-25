@@ -64,6 +64,14 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 			}
 		}
 
+		user, err = u.userRepo.UpdateUserEmailStatusById(ctx, user)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		user.Avatar = updateUser.NewAvatarUrl
+		user.Nickname = updateUser.Nickname
+
 		if userFromDB.Nickname != user.Nickname {
 			firstCharacterNameBefore := string([]rune(userFromDB.Nickname)[0])
 			firstCharacterNameAfter := string([]rune(user.Nickname)[0])
@@ -83,54 +91,6 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 				user.Avatar = url
 			}
 		}
-		//if err != nil {
-		//	if
-		//}
-		//if updateUser.Email != гыу
-		//err := u.userRepo.CheckExistUserByEmail(ctx, user.Email)
-		//if err == nil {
-		//	return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
-		//} else {
-		//	if err != myErrors.ErrUserNotFound {
-		//		return model.User{}, err
-		//	}
-		//}
-
-		user, err = u.userRepo.UpdateUserEmailStatusById(ctx, user)
-		if err != nil {
-			return model.User{}, err
-		}
-
-		//firstCharacterNameBefore := ""
-		//firstCharacterNameAfter := ""
-		//
-		//if len(updateUser.Nickname) > 0 {
-		//	firstCharacterNameBefore = string([]rune(user.Nickname)[0])
-		//	firstCharacterNameAfter = string([]rune(updateUser.Nickname)[0])
-		//}
-
-		//user.Nickname = updateUser.Nickname
-
-		//if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
-		//	filename := uuid.NewString()
-		//	err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
-		//	if err != nil {
-		//		return model.User{}, err
-		//	}
-		//
-		//	url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
-		//	if err != nil {
-		//		return model.User{}, err
-		//	}
-		//
-		//	log.Info(updateUser.NewAvatarUrl)
-		//	log.Info(url)
-		//
-		//	user.Avatar = url
-		//} else {
-		//	user.Avatar = updateUser.NewAvatarUrl
-		//}
-		//user.Avatar = updateUser.NewAvatarUrl
 
 		user, err = u.userRepo.UpdateUserAvatarNicknameById(ctx, user)
 		if err != nil {

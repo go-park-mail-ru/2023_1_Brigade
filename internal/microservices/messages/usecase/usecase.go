@@ -65,7 +65,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	switch producerMessage.Action {
 	case config.Create:
 		go func() {
-			err := u.messagesRepo.InsertMessageInDB(ctx, model.Message{
+			err := u.messagesRepo.InsertMessageInDB(context.TODO(), model.Message{
 				Id:          producerMessage.Id,
 				Attachments: webSocketMessage.Attachments,
 				Type:        producerMessage.Type,
@@ -80,14 +80,14 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		}()
 	case config.Edit:
 		go func() {
-			_, err := u.messagesRepo.EditMessageById(ctx, producerMessage)
+			_, err := u.messagesRepo.EditMessageById(context.TODO(), producerMessage)
 			if err != nil {
 				log.Error(err)
 			}
 		}()
 	case config.Delete:
 		go func() {
-			err := u.messagesRepo.DeleteMessageById(ctx, producerMessage.Id)
+			err := u.messagesRepo.DeleteMessageById(context.TODO(), producerMessage.Id)
 			if err != nil {
 				log.Error(err)
 			}

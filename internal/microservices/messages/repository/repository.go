@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/microservices/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -36,7 +37,7 @@ func (r repository) EditMessageById(ctx context.Context, producerMessage model.P
 		_ = tx.Rollback()
 		return model.Message{}, err
 	}
-
+	log.Info(producerMessage.Attachments)
 	for _, attachment := range producerMessage.Attachments {
 		_, err = r.db.ExecContext(ctx, `INSERT INTO attachments (id_message, url, name) VALUES ($1, $2, $3)`,
 			message.Id, attachment.Url, attachment.Name)

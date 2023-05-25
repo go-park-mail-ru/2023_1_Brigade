@@ -65,7 +65,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	switch producerMessage.Action {
 	case config.Create:
 		go func() {
-			err := u.messagesRepo.InsertMessageInDB(context.TODO(), model.Message{
+			err := u.messagesRepo.InsertMessageInDB(ctx, model.Message{
 				Id:          producerMessage.Id,
 				Attachments: webSocketMessage.Attachments,
 				Type:        producerMessage.Type,
@@ -80,14 +80,14 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		}()
 	case config.Edit:
 		go func() {
-			_, err := u.messagesRepo.EditMessageById(context.TODO(), producerMessage)
+			_, err := u.messagesRepo.EditMessageById(ctx, producerMessage)
 			if err != nil {
 				log.Error(err)
 			}
 		}()
 	case config.Delete:
 		go func() {
-			err := u.messagesRepo.DeleteMessageById(context.TODO(), producerMessage.Id)
+			err := u.messagesRepo.DeleteMessageById(ctx, producerMessage.Id)
 			if err != nil {
 				log.Error(err)
 			}
@@ -96,7 +96,7 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		return errors.New("не выбран ни один из трех 0, 1, 2")
 	}
 
-	members, err := u.chatRepo.GetChatMembersByChatId(context.TODO(), webSocketMessage.ChatID)
+	members, err := u.chatRepo.GetChatMembersByChatId(ctx, webSocketMessage.ChatID)
 	if err != nil {
 		return err
 	}

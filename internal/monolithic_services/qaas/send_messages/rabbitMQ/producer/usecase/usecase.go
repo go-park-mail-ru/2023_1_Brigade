@@ -30,7 +30,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	err = channel.ExchangeDeclarePassive(
+	err = channel.ExchangeDeclare(
 		"dlx_exchange",
 		"fanout",
 		true,
@@ -44,7 +44,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	dlxQueue, err := channel.QueueDeclarePassive(
+	dlxQueue, err := channel.QueueDeclare(
 		"dlx_queue",
 		true,
 		false,
@@ -71,7 +71,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	err = channel.ExchangeDeclarePassive(
+	err = channel.ExchangeDeclare(
 		"messages_exchange",
 		"fanout",
 		true,
@@ -85,7 +85,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	queue, err := channel.QueueDeclarePassive(
+	queue, err := channel.QueueDeclare(
 		queueName,
 		true,
 		false,

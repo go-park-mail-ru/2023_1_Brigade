@@ -169,7 +169,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer conn.Close()
+	//defer conn.Close()
 
 	consumer, err := rabbitmq.NewConsumer(
 		conn,
@@ -187,7 +187,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 				//return errors.New("не подписан")
 			}
 
-			_, err := sub.Publish(context.TODO(), d.Body)
+			_, err := sub.Publish(context.Background(), d.Body)
 			if err != nil {
 				log.Error(err)
 				//return err
@@ -197,7 +197,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 
 			return rabbitmq.Ack
 		},
-		"my_queue",
+		"messages",
 		rabbitmq.WithConsumerOptionsRoutingKey("my_routing_key"),
 		rabbitmq.WithConsumerOptionsExchangeName("events"),
 		rabbitmq.WithConsumerOptionsExchangeDeclare,
@@ -205,7 +205,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer consumer.Close()
+	//defer consumer.Close()
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
@@ -213,6 +213,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 	go func() {
 		<-signals
 		consumer.Close()
+		conn.Close()
 		log.Fatal()
 		//err = consumer.Close()
 		//if err != nil {

@@ -205,6 +205,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	go func() {
 		<-signals
 		producer.Close()
+		conn.Close()
 		log.Fatal()
 		//err = producer.Close()
 		//if err != nil {
@@ -271,7 +272,8 @@ func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.Prod
 		return err
 	}
 
-	err = u.producer.Publish(
+	err = u.producer.PublishWithContext(
+		ctx,
 		message,
 		[]string{"my_routing_key"},
 		amqp.WithPublishOptionsContentType("application/json"),

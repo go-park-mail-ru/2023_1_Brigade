@@ -12,9 +12,9 @@ import (
 )
 
 type usecase struct {
-	consumer    *amqp.Connection
-	channel     *amqp.Channel
-	queue       *amqp.Queue
+	consumer *amqp.Connection
+	channel  *amqp.Channel
+	//queue       *amqp.Queue
 	client      centrifugo.Centrifugo
 	channelName string
 }
@@ -26,18 +26,6 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 	}
 
 	channel, err := consumer.Channel()
-	if err != nil {
-		return nil, err
-	}
-
-	queue, err := channel.QueueDeclare(
-		queueName,
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +49,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 		log.Fatal()
 	}()
 
-	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: centrifugo, channelName: channelName}
+	consumerUsecase := usecase{consumer: consumer, channel: channel, client: centrifugo, channelName: channelName}
 
 	go func() {
 		consumerUsecase.StartConsumeMessages(context.TODO())
@@ -87,7 +75,7 @@ func (u *usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
 func (u *usecase) StartConsumeMessages(ctx context.Context) {
 	for {
 		msgs, err := u.channel.Consume(
-			u.queue.Name,
+			"messages",
 			"",
 			true,
 			false,
@@ -101,7 +89,11 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		}
 
 		for msg := range msgs {
-			err := u.centrifugePublication(msg.Body)
+			err = u.centrifugePublication(msg.Body)
+			if err != nil {
+				log.Error(err)
+			}
+
 			if err != nil {
 				log.Error(err)
 			}

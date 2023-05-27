@@ -30,46 +30,46 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	err = channel.ExchangeDeclare(
-		"dlx_exchange",
-		"fanout",
-		true,
-		false,
-		false,
-		false,
-		nil)
+	//err = channel.ExchangeDeclare(
+	//	"dlx_exchange",
+	//	"fanout",
+	//	true,
+	//	false,
+	//	false,
+	//	false,
+	//	nil)
+	//
+	//if err != nil {
+	//	log.Fatal(err)
+	//	return nil, err
+	//}
+	//
+	//dlxQueue, err := channel.QueueDeclare(
+	//	"dlx_queue",
+	//	true,
+	//	false,
+	//	false,
+	//	false,
+	//	nil,
+	//)
+	//
+	//if err != nil {
+	//	log.Fatal(err)
+	//	return nil, err
+	//}
 
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
+	//err = channel.QueueBind(
+	//	"dlx_queue",
+	//	"dlx-routing-key",
+	//	"dlx_exchange",
+	//	false,
+	//	nil,
+	//)
 
-	dlxQueue, err := channel.QueueDeclare(
-		"dlx_queue",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-
-	err = channel.QueueBind(
-		"dlx_queue",
-		"dlx-routing-key",
-		"dlx_exchange",
-		false,
-		nil,
-	)
-
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
+	//if err != nil {
+	//	log.Fatal(err)
+	//	return nil, err
+	//}
 
 	err = channel.ExchangeDeclare(
 		"messages_exchange",
@@ -91,10 +91,11 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		false,
 		false,
 		false,
-		amqp.Table{
-			"x-dead-letter-exchange":    "dlx_exchange",
-			"x-dead-letter-routing-key": "dlx-routing-key",
-		},
+		nil,
+		//amqp.Table{
+		//	"x-dead-letter-exchange":    "dlx_exchange",
+		//	"x-dead-letter-routing-key": "dlx-routing-key",
+		//},
 	)
 
 	if err != nil {
@@ -133,7 +134,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		log.Fatal()
 	}()
 
-	return &usecase{producer: producer, channel: channel, queue: &queue, dlxQueue: &dlxQueue}, nil
+	return &usecase{producer: producer, channel: channel, queue: &queue, dlxQueue: nil}, nil
 }
 
 func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.ProducerMessage) error {

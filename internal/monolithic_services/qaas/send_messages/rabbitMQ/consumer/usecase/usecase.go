@@ -77,32 +77,31 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		msgs, err := u.channel.Consume(
 			"messages",
 			"",
+			true,
 			false,
 			false,
-			false,
-			false,
+			true,
 			nil,
 		)
 
 		if err != nil {
 			log.Error(err)
 		}
-		go func() {
-			for msg := range msgs {
-				err = u.centrifugePublication(msg.Body)
-				if err != nil {
-					log.Error(err)
-				}
-
-				if err != nil {
-					log.Error(err)
-				}
-
-				err = msg.Ack(false)
-				if err != nil {
-					log.Error(err)
-				}
+		//go func() {
+		for msg := range msgs {
+			err = u.centrifugePublication(msg.Body)
+			if err != nil {
+				log.Error(err)
 			}
-		}()
+
+			if err != nil {
+				log.Error(err)
+			}
+
+			if err != nil {
+				log.Error(err)
+			}
+		}
+		//}()
 	}
 }

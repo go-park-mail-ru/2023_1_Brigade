@@ -156,7 +156,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 		false,
 		false,
 		false,
-		false,
+		true,
 		nil,
 	)
 	if err != nil {

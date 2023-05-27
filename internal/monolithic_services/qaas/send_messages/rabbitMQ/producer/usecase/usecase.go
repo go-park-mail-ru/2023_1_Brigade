@@ -145,7 +145,7 @@ func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.Prod
 
 	err = u.channel.PublishWithContext(
 		ctx,
-		"",
+		"messages_exchange",
 		u.queue.Name,
 		false,
 		false,

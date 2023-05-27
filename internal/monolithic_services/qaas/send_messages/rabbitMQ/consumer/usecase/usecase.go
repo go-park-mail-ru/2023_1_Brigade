@@ -77,7 +77,7 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		msgs, err := u.channel.Consume(
 			"messages",
 			"",
-			true,
+			false,
 			false,
 			false,
 			false,
@@ -94,6 +94,11 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 					log.Error(err)
 				}
 
+				if err != nil {
+					log.Error(err)
+				}
+
+				err = msg.Ack(false)
 				if err != nil {
 					log.Error(err)
 				}

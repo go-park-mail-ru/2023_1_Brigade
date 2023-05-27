@@ -87,16 +87,17 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		if err != nil {
 			log.Error(err)
 		}
+		go func() {
+			for msg := range msgs {
+				err = u.centrifugePublication(msg.Body)
+				if err != nil {
+					log.Error(err)
+				}
 
-		for msg := range msgs {
-			err = u.centrifugePublication(msg.Body)
-			if err != nil {
-				log.Error(err)
+				if err != nil {
+					log.Error(err)
+				}
 			}
-
-			if err != nil {
-				log.Error(err)
-			}
-		}
+		}()
 	}
 }

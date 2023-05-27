@@ -40,6 +40,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		nil)
 
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
@@ -53,6 +54,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	)
 
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
@@ -64,6 +66,11 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		nil,
 	)
 
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
 	err = channel.ExchangeDeclarePassive(
 		"messages_exchange",
 		"fanout",
@@ -74,6 +81,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		nil)
 
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
@@ -90,6 +98,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	)
 
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
@@ -100,6 +109,11 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		false,
 		nil,
 	)
+
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)

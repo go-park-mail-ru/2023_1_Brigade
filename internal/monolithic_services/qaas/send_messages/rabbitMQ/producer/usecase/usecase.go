@@ -77,7 +77,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		true,
 		false,
 		false,
-		false,
+		true,
 		nil)
 
 	if err != nil {
@@ -90,7 +90,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		true,
 		false,
 		false,
-		false,
+		true,
 		nil,
 		//amqp.Table{
 		//	"x-dead-letter-exchange":    "dlx_exchange",
@@ -107,7 +107,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		queueName,
 		"",
 		"messages_exchange",
-		false,
+		true,
 		nil,
 	)
 

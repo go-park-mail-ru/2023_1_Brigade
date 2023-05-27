@@ -55,3 +55,23 @@ time="2023-05-24T16:03:28+03:00" level=fatal msg="listen tcp 127.0.0.1:9005: bin
 exit status 1
 signal: killed
 time="2023-05-24T16:06:22+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/home/marcussss1/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T14:57:59+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T15:09:44+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T15:09:44+03:00" level=fatal msg="listen tcp 127.0.0.1:9005: bind: address already in use" func=main.main file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/cmd/auth/main.go:132"
+exit status 1
+time="2023-05-27T15:15:33+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+time="2023-05-27T15:17:57+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+time="2023-05-27T15:25:09+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+time="2023-05-27T15:26:18+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+signal: killed
+time="2023-05-27T15:34:40+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T15:35:41+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+signal: killed
+time="2023-05-27T15:38:42+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T15:39:19+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+signal: killed
+time="2023-05-27T15:42:49+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T15:43:29+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"
+signal: killed
+time="2023-05-27T15:44:45+03:00" level=info msg="auth: starting metrics server..." func=project/internal/pkg/metrics/prometheus.MetricsGRPC.StartGRPCMetricsServer file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/pkg/metrics/prometheus/metrics.go:43"
+time="2023-05-27T15:45:16+03:00" level=error msg="open ../str.ttf: no such file or directory" func=project/internal/microservices/auth/usecase.usecase.Signup file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/microservices/auth/usecase/usecase.go:72"

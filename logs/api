@@ -1778,3 +1778,287 @@ time="2023-05-24T16:12:25+03:00" level=info msg="Incoming request: /api/v1/auth/
 time="2023-05-24T16:12:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5315821445743565238" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
 time="2023-05-24T16:12:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 842409876154742653" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
 time="2023-05-24T16:12:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 842409876154742653" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+{"time":"2023-05-27T15:10:48.849492+03:00","level":"FATAL","prefix":"echo","file":"main.go","line":"280","message":"listen tcp :8081: bind: address already in use"}
+exit status 1
+time="2023-05-27T15:11:27+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4685206137719053094" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:11:27+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4685206137719053094" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:11:35+03:00" level=info msg="Incoming request: /api/v1/login/, ip: 127.0.0.1, method: POST, request_id: 353369119302937819" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:11:35+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = dial tcp: lookup postgres: no such host, request_id: 353369119302937819" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:14:50+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2245513877393045388" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:14:50+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2245513877393045388" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:14:52+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8820992664221920341" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:14:52+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8820992664221920341" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:15:06+03:00" level=info msg="Incoming request: /api/v1/login/, ip: 127.0.0.1, method: POST, request_id: 5240769649141500874" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:06+03:00" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = email не найден, request_id: 5240769649141500874" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:15:33+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 8780884407778197943" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:34+03:00" level=info msg="HTTP code: 201, request_id: 8780884407778197943" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:15:34+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 319545039865932218" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:34+03:00" level=info msg="HTTP code: 401, request_id: 319545039865932218" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:15:43+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 5904378961174432350" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:43+03:00" level=info msg="HTTP code: 401, request_id: 5904378961174432350" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:15:43+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 7094951098452021815" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:43+03:00" level=info msg="HTTP code: 401, request_id: 7094951098452021815" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:15:56+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 3056036893075968494" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:56+03:00" level=info msg="HTTP code: 401, request_id: 3056036893075968494" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:15:58+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 9061196413100462053" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:15:58+03:00" level=info msg="HTTP code: 401, request_id: 9061196413100462053" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:16:00+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 3131914293879925374" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:16:00+03:00" level=info msg="HTTP code: 401, request_id: 3131914293879925374" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:16:01+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6855953154357815054" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:16:01+03:00" level=info msg="HTTP code: 401, request_id: 6855953154357815054" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:16:07+03:00" level=info msg="Incoming request: /api/v1/logout/, ip: 127.0.0.1, method: DELETE, request_id: 2443967578395113179" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:16:07+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2443967578395113179" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:16:13+03:00" level=info msg="Incoming request: /api/v1/logout/, ip: 127.0.0.1, method: DELETE, request_id: 3927666696127661006" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:16:13+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3927666696127661006" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:17:09+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3480792329183082776" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:17:09+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3480792329183082776" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:17:57+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 2744927039272476457" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:17:57+03:00" level=info msg="HTTP code: 201, request_id: 2744927039272476457" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:17:57+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 5628176182539127374" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:17:57+03:00" level=info msg="HTTP code: 401, request_id: 5628176182539127374" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:18:07+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 3023884322820257263" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:18:07+03:00" level=info msg="HTTP code: 401, request_id: 3023884322820257263" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:24:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2454002092118067905" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:24:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2454002092118067905" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:24:57+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4988448042865331221" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:24:57+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4988448042865331221" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:24:57+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 957628294367601803" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:24:57+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 957628294367601803" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:25:09+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 8453807836950061870" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:25:09+03:00" level=info msg="HTTP code: 201, request_id: 8453807836950061870" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:25:10+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 716478321235505102" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:25:10+03:00" level=info msg="HTTP code: 401, request_id: 716478321235505102" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:25:13+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 1670834859665171057" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:25:13+03:00" level=info msg="HTTP code: 401, request_id: 1670834859665171057" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:25:15+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 382565955675761382" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:25:15+03:00" level=info msg="HTTP code: 401, request_id: 382565955675761382" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:25:42+03:00" level=info msg="Incoming request: /api/v1/logout/, ip: 127.0.0.1, method: DELETE, request_id: 4112883576848122993" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:25:42+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4112883576848122993" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:25:50+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4726645546467855325" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:25:50+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4726645546467855325" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:26:18+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 7986227458641093608" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:26:18+03:00" level=info msg="HTTP code: 201, request_id: 7986227458641093608" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:26:18+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 726543315840129921" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:26:18+03:00" level=info msg="HTTP code: 401, request_id: 726543315840129921" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:27:51+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5476139973451465075" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:27:51+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5476139973451465075" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:27:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4148068378339606696" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:27:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4148068378339606696" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:27:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2318399816336964548" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:27:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2318399816336964548" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+⇨ http server started on [::]:8081
+time="2023-05-27T15:35:15+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7106170249064462840" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:35:15+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7106170249064462840" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:35:17+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2252582192348864972" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:35:17+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2252582192348864972" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:35:41+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 63806788324593774" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:35:41+03:00" level=info msg="HTTP code: 201, request_id: 63806788324593774" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:35:41+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 497812828932797936" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:35:41+03:00" level=info msg="HTTP code: 401, request_id: 497812828932797936" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:37:19+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2815935435285674889" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:37:19+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2815935435285674889" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+⇨ http server started on [::]:8081
+time="2023-05-27T15:38:51+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5698886959010985573" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:38:51+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5698886959010985573" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:38:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1815398262212176741" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:38:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1815398262212176741" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:38:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2769367138532080455" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:38:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2769367138532080455" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:39:19+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 581030110797846187" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:39:19+03:00" level=info msg="HTTP code: 201, request_id: 581030110797846187" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:39:19+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 3876618225928742079" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:39:19+03:00" level=info msg="HTTP code: 401, request_id: 3876618225928742079" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-27T15:42:58+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1937351005754553848" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:42:58+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1937351005754553848" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:43:00+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7483952488727464518" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:43:00+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7483952488727464518" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:43:00+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2167648684150578226" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:43:00+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2167648684150578226" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:43:00+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 113737751279378858" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:43:00+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 113737751279378858" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:43:29+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 932768914555783636" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:43:29+03:00" level=info msg="HTTP code: 201, request_id: 932768914555783636" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:43:29+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6163228726488687687" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:43:29+03:00" level=info msg="HTTP code: 401, request_id: 6163228726488687687" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+⇨ http server started on [::]:8081
+time="2023-05-27T15:44:52+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2742174952537723141" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:44:52+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2742174952537723141" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:44:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 9012802696126418560" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:44:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 9012802696126418560" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:44:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3102225996400416378" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:44:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3102225996400416378" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:45:16+03:00" level=info msg="Incoming request: /api/v1/signup/, ip: 127.0.0.1, method: POST, request_id: 821835167819938425" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:16+03:00" level=info msg="HTTP code: 201, request_id: 821835167819938425" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:16+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6855235192495880448" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:16+03:00" level=info msg="HTTP code: 200, request_id: 6855235192495880448" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4390695360428592585" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:38+03:00" level=info msg="HTTP code: 200, request_id: 4390695360428592585" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:38+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6689056551978310099" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:38+03:00" level=info msg="HTTP code: 200, request_id: 6689056551978310099" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:44+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 10867898670538924" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:44+03:00" level=info msg="HTTP code: 200, request_id: 10867898670538924" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:44+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 2593835304625627599" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:44+03:00" level=info msg="HTTP code: 200, request_id: 2593835304625627599" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:45+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2293584995073268280" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:45+03:00" level=info msg="HTTP code: 200, request_id: 2293584995073268280" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:45+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 2313065963248959952" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:45+03:00" level=info msg="HTTP code: 200, request_id: 2313065963248959952" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:48+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7118169292993173051" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:48+03:00" level=info msg="HTTP code: 200, request_id: 7118169292993173051" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:48+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 3923742004843652338" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:48+03:00" level=info msg="HTTP code: 200, request_id: 3923742004843652338" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:50+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 1542863116328068076" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:50+03:00" level=info msg="HTTP code: 200, request_id: 1542863116328068076" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:51+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 3630577618199189726" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:51+03:00" level=info msg="HTTP code: 200, request_id: 3630577618199189726" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:52+03:00" level=info msg="Incoming request: /api/v1/users/contacts/, ip: 127.0.0.1, method: GET, request_id: 1973946652711238894" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:52+03:00" level=info msg="HTTP code: 200, request_id: 1973946652711238894" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:53+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6719251879764726632" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:53+03:00" level=info msg="HTTP code: 200, request_id: 6719251879764726632" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:45:56+03:00" level=info msg="Incoming request: /api/v1/chats/4/, ip: 127.0.0.1, method: GET, request_id: 6297671306487215827" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:45:56+03:00" level=info msg="HTTP code: 200, request_id: 6297671306487215827" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:31+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8106257887771773512" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:31+03:00" level=info msg="HTTP code: 200, request_id: 8106257887771773512" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:31+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 226707539499120388" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:31+03:00" level=info msg="HTTP code: 200, request_id: 226707539499120388" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4949296724448138491" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6477883079873259384" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:34+03:00" level=info msg="HTTP code: 200, request_id: 4949296724448138491" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:34+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 3532279910951270214" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6948266772344779946" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:34+03:00" level=info msg="HTTP code: 200, request_id: 6477883079873259384" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:34+03:00" level=info msg="HTTP code: 200, request_id: 6948266772344779946" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:34+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 8440240592087783347" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:34+03:00" level=info msg="Incoming request: /api/v1/chats/4/, ip: 127.0.0.1, method: GET, request_id: 3155464705200898504" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:34+03:00" level=info msg="HTTP code: 200, request_id: 3532279910951270214" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:34+03:00" level=info msg="HTTP code: 200, request_id: 8440240592087783347" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:34+03:00" level=info msg="HTTP code: 200, request_id: 3155464705200898504" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:35+03:00" level=info msg="Incoming request: /api/v1/logout/, ip: 127.0.0.1, method: DELETE, request_id: 6882749483306326058" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:35+03:00" level=info msg="HTTP code: 204, request_id: 6882749483306326058" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:43+03:00" level=info msg="Incoming request: /api/v1/login/, ip: 127.0.0.1, method: POST, request_id: 1737122039781915938" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:43+03:00" level=info msg="HTTP code: 200, request_id: 1737122039781915938" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:43+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 8727452018958111034" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:43+03:00" level=info msg="HTTP code: 200, request_id: 8727452018958111034" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:63"
+time="2023-05-27T15:47:54+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: POST, request_id: 5882186330680119171" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:47:54+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = open ../str.ttf: no such file or directory, request_id: 5882186330680119171" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"
+time="2023-05-27T15:48:09+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: POST, request_id: 567997734416251525" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:41"
+time="2023-05-27T15:48:09+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = open ../str.ttf: no such file or directory, request_id: 567997734416251525" func=project/internal/middleware.LoggerMiddleware.func1 file="/Users/sugarbearzelagmail.com/Documents/IT/2023_1_Brigade/internal/middleware/middleware.go:45"

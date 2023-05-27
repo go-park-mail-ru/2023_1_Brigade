@@ -2,13 +2,14 @@ package http_utils
 
 import (
 	"errors"
-	"github.com/labstack/echo/v4"
-	"github.com/microcosm-cc/bluemonday"
 	"net/http"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
 	"reflect"
 	"time"
+
+	"github.com/labstack/echo/v4"
+	"github.com/microcosm-cc/bluemonday"
 )
 
 func StatusCode(err error) int {
@@ -52,9 +53,9 @@ func StatusCode(err error) int {
 
 func SetCookie(ctx echo.Context, session model.Session) {
 	cookie := &http.Cookie{
-		Name:     "session_id",
-		Value:    session.Cookie,
-		HttpOnly: true,
+		Name:  "session_id",
+		Value: session.Cookie,
+		// HttpOnly: true,
 		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour * 30),
 		SameSite: http.SameSiteNoneMode,
@@ -65,9 +66,9 @@ func SetCookie(ctx echo.Context, session model.Session) {
 
 func DeleteCookie(ctx echo.Context) {
 	cookie := &http.Cookie{
-		Name:     "session_id",
-		Value:    "",
-		HttpOnly: true,
+		Name:  "session_id",
+		Value: "",
+		// HttpOnly: true,
 		Expires:  time.Now().AddDate(0, 0, -1),
 		Path:     "/",
 		SameSite: http.SameSiteNoneMode,

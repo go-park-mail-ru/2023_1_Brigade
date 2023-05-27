@@ -71,19 +71,19 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	//	return nil, err
 	//}
 
-	err = channel.ExchangeDeclare(
-		"messages_exchange",
-		"fanout",
-		true,
-		false,
-		false,
-		true,
-		nil)
-
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
+	//err = channel.ExchangeDeclare(
+	//	"messages_exchange",
+	//	"fanout",
+	//	true,
+	//	false,
+	//	false,
+	//	true,
+	//	nil)
+	//
+	//if err != nil {
+	//	log.Fatal(err)
+	//	return nil, err
+	//}
 
 	queue, err := channel.QueueDeclare(
 		queueName,
@@ -103,18 +103,18 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	err = channel.QueueBind(
-		queueName,
-		"",
-		"messages_exchange",
-		true,
-		nil,
-	)
-
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
+	//err = channel.QueueBind(
+	//	queueName,
+	//	"",
+	//	"messages_exchange",
+	//	true,
+	//	nil,
+	//)
+	//
+	//if err != nil {
+	//	log.Fatal(err)
+	//	return nil, err
+	//}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
@@ -150,7 +150,7 @@ func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.Prod
 		false,
 		false,
 		amqp.Publishing{
-			ContentType: "text/plain",
+			ContentType: "application/json",
 			Body:        message,
 		},
 	)

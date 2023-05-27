@@ -12,9 +12,9 @@ import (
 )
 
 type usecase struct {
-	consumer *amqp.Connection
-	channel  *amqp.Channel
-	//queue       *amqp.Queue
+	consumer    *amqp.Connection
+	channel     *amqp.Channel
+	queue       *amqp.Queue
 	client      centrifugo.Centrifugo
 	channelName string
 }

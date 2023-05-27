@@ -245,7 +245,7 @@ func main() {
 	}))
 
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(myMiddleware.CSRFMiddleware())
+	//e.Use(myMiddleware.CSRFMiddleware())
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	p := prometheus.NewPrometheus("echo", nil)

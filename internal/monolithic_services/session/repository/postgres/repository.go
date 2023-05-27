@@ -22,6 +22,10 @@ func (r repository) GetSessionByCookie(ctx context.Context, cookie string) (mode
 	var session model.Session
 	err := r.db.GetContext(ctx, &session, `SELECT * FROM session WHERE cookie = $1`, cookie)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.Session{}, myErrors.ErrCookieNotFound
+		}
+
 		return model.Session{}, err
 	}
 
@@ -37,7 +41,7 @@ func (r repository) DeleteSession(ctx context.Context, cookie string) error {
 	_, err := r.db.ExecContext(ctx, "DELETE FROM session WHERE cookie=$1", cookie)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return myErrors.ErrSessionNotFound
+		return myErrors.ErrCookieNotFound
 	}
 
 	return err

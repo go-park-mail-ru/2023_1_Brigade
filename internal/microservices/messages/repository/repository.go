@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	"project/internal/config"
 	"project/internal/microservices/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -221,6 +222,10 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 			Url:  attachment.Url,
 			Name: attachment.Name,
 		})
+	}
+
+	if lastMessage.Type == config.Sticker {
+		lastMessage.Body = "Cтикер"
 	}
 
 	return lastMessage, nil

@@ -152,7 +152,7 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 	}
 
 	var chatDB model.DBChat
-	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, description, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
+	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, description, avatar, title)  VALUES($1, $2, $3, $4, $5) RETURNING id`,
 		chat.MasterID, chat.Type, chat.Description, chat.Avatar, chat.Title).Scan(&chatDB.Id)
 	if err != nil {
 		_ = tx.Rollback()

@@ -78,14 +78,14 @@ CREATE TABLE IF NOT EXISTS session (
     );
 
 CREATE TABLE IF NOT EXISTS chat (
-                                    id    SERIAL UNIQUE PRIMARY KEY,
-                                    master_id    INTEGER,
-                                    type INTEGER,
-                                    description VARCHAR(255),
-                                    avatar VARCHAR(1024),
+    id    SERIAL UNIQUE PRIMARY KEY,
+    master_id    INTEGER,
+    type INTEGER,
+    description VARCHAR(255),
+    avatar VARCHAR(1024),
     title VARCHAR(255),
     FOREIGN KEY (master_id) REFERENCES profile(id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS message (
     id         VARCHAR(255) UNIQUE,
@@ -99,18 +99,18 @@ CREATE TABLE IF NOT EXISTS message (
     );
 
 CREATE TABLE IF NOT EXISTS chat_members (
-                                            id_chat   INTEGER,
-                                            id_member INTEGER,
-                                            FOREIGN KEY (id_chat)   REFERENCES chat(id),
+    id_chat   INTEGER,
+    id_member INTEGER,
+    FOREIGN KEY (id_chat)   REFERENCES chat(id),
     FOREIGN KEY (id_member) REFERENCES profile(id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS user_contacts (
-                                             id_user    INTEGER,
-                                             id_contact INTEGER,
-                                             FOREIGN KEY (id_user)    REFERENCES profile(id),
+ id_user    INTEGER,
+ id_contact INTEGER,
+ FOREIGN KEY (id_user)    REFERENCES profile(id),
     FOREIGN KEY (id_contact) REFERENCES profile(id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS chat_messages (
                                              id_chat    INTEGER,
@@ -127,4 +127,4 @@ CREATE TABLE IF NOT EXISTS attachments (
     );
 
 INSERT INTO profile (id, avatar, username, nickname, email, status, password)
-VALUES (0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm', 'Technogramm', '', 'Technogramm', '123');
+VALUES (0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm', 'Technogramm', '', 'Служебный чат', '123');

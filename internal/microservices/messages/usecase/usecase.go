@@ -14,6 +14,7 @@ import (
 	"project/internal/microservices/messages"
 	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
 	httpUtils "project/internal/pkg/http_utils"
 	"time"
 )
@@ -42,6 +43,23 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	err := json.Unmarshal(jsonWebSocketMessage, &webSocketMessage)
 	if err != nil {
 		return err
+	}
+
+	members, err := u.chatRepo.GetChatMembersByChatId(ctx, webSocketMessage.ChatID)
+	if err != nil {
+		return err
+	}
+
+	userInChat := false
+	for _, member := range members {
+		if member.MemberId == webSocketMessage.AuthorID {
+			userInChat = true
+			break
+		}
+	}
+
+	if !userInChat {
+		return myErrors.ErrNotChatAccess
 	}
 
 	webSocketMessage = httpUtils.SanitizeStruct(webSocketMessage).(model.WebSocketMessage)
@@ -94,11 +112,6 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		}()
 	default:
 		return errors.New("не выбран ни один из трех 0, 1, 2")
-	}
-
-	members, err := u.chatRepo.GetChatMembersByChatId(ctx, webSocketMessage.ChatID)
-	if err != nil {
-		return err
 	}
 
 	for _, member := range members {

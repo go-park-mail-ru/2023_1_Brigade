@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	"project/internal/microservices/chat"
 	"project/internal/microservices/messages"
@@ -182,6 +183,7 @@ func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64, userID uint
 }
 
 func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
+	log.Info(chat)
 	var members []model.User
 	for _, userID := range chat.Members {
 		user, err := u.userRepo.GetUserById(ctx, userID)

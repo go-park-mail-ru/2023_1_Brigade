@@ -10,6 +10,7 @@ import (
 	"project/internal/monolithic_services/images"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
+	"sort"
 	"strconv"
 )
 
@@ -310,6 +311,10 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 			}
 		}
 	}
+
+	sort.Slice(chatsInListUser, func(i, j int) bool {
+		return chatsInListUser[i].LastMessage.CreatedAt < chatsInListUser[j].LastMessage.CreatedAt
+	})
 
 	return chatsInListUser, nil
 }

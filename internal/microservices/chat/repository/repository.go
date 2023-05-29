@@ -27,8 +27,8 @@ func (r repository) CreateTechnogrammChat(ctx context.Context, user model.Author
 	}
 
 	var chat model.DBChat
-	err = tx.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)
-   VALUES (0, 0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
+	err = tx.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, description, avatar, title)
+   VALUES (0, 0, 'Служебный чат', 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm') RETURNING id;`).Scan(&chat.Id)
 	if err != nil {
 		_ = tx.Rollback()
 		return err
@@ -136,11 +136,12 @@ func (r repository) GetChatById(ctx context.Context, chatID uint64) (model.Chat,
 	}
 
 	return model.Chat{
-		Id:       chat.Id,
-		MasterID: chat.MasterID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
+		Id:          chat.Id,
+		MasterID:    chat.MasterID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
 	}, nil
 }
 
@@ -151,8 +152,8 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 	}
 
 	var chatDB model.DBChat
-	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
-		chat.MasterID, chat.Type, chat.Avatar, chat.Title).Scan(&chatDB.Id)
+	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, description, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
+		chat.MasterID, chat.Type, chat.Description, chat.Avatar, chat.Title).Scan(&chatDB.Id)
 	if err != nil {
 		_ = tx.Rollback()
 		return model.Chat{}, err
@@ -233,18 +234,19 @@ func (r repository) UpdateChatAvatar(ctx context.Context, url string, chatID uin
 	}
 
 	return model.Chat{
-		Id:       chat.Id,
-		MasterID: chat.MasterID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
+		Id:          chat.Id,
+		MasterID:    chat.MasterID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
 	}, nil
 }
 
 func (r repository) GetSearchChats(ctx context.Context, userID uint64, string string) ([]model.Chat, error) {
 	var groups []model.Chat
 	err := r.db.SelectContext(ctx, &groups, `
-		SELECT id, type, avatar, title 
+		SELECT id, type, description, avatar, title 
 		FROM chat WHERE type != $1 AND title ILIKE $2 AND 
 		EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		config.Chat, "%"+string+"%", userID)
@@ -262,7 +264,7 @@ func (r repository) GetSearchChats(ctx context.Context, userID uint64, string st
 func (r repository) GetSearchChannels(ctx context.Context, string string, userID uint64) ([]model.Chat, error) {
 	var channels []model.Chat
 	err := r.db.SelectContext(ctx, &channels, `
-		SELECT id, type, avatar, title 
+		SELECT id, type, description, avatar, title 
 		FROM chat WHERE type = $1 AND title ILIKE $2 AND 
 		NOT EXISTS (SELECT 1 FROM chat_members WHERE id_chat = chat.id AND id_member = $3)`,
 		config.Channel, "%"+string+"%", userID)

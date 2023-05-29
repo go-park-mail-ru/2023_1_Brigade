@@ -376,6 +376,8 @@ func easyjson9b8f5552DecodeProjectInternalModel2(in *jlexer.Lexer, out *DBChat) 
 			out.MasterID = uint64(in.Uint64())
 		case "type":
 			out.Type = uint64(in.Uint64())
+		case "description":
+			out.Description = string(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "avatar":
@@ -408,6 +410,11 @@ func easyjson9b8f5552EncodeProjectInternalModel2(out *jwriter.Writer, in DBChat)
 		const prefix string = ",\"type\":"
 		out.RawString(prefix)
 		out.Uint64(uint64(in.Type))
+	}
+	{
+		const prefix string = ",\"description\":"
+		out.RawString(prefix)
+		out.String(string(in.Description))
 	}
 	{
 		const prefix string = ",\"title\":"
@@ -466,6 +473,8 @@ func easyjson9b8f5552DecodeProjectInternalModel3(in *jlexer.Lexer, out *CreateCh
 		switch key {
 		case "type":
 			out.Type = uint64(in.Uint64())
+		case "description":
+			out.Description = string(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "avatar":
@@ -511,6 +520,11 @@ func easyjson9b8f5552EncodeProjectInternalModel3(out *jwriter.Writer, in CreateC
 		const prefix string = ",\"type\":"
 		out.RawString(prefix[1:])
 		out.Uint64(uint64(in.Type))
+	}
+	{
+		const prefix string = ",\"description\":"
+		out.RawString(prefix)
+		out.String(string(in.Description))
 	}
 	{
 		const prefix string = ",\"title\":"
@@ -969,10 +983,12 @@ func easyjson9b8f5552DecodeProjectInternalModel8(in *jlexer.Lexer, out *Chat) {
 		switch key {
 		case "id":
 			out.Id = uint64(in.Uint64())
-		case "master_id":
+		case "master_id  ":
 			out.MasterID = uint64(in.Uint64())
 		case "type":
 			out.Type = uint64(in.Uint64())
+		case "description":
+			out.Description = string(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "avatar":
@@ -1043,7 +1059,7 @@ func easyjson9b8f5552EncodeProjectInternalModel8(out *jwriter.Writer, in Chat) {
 		out.Uint64(uint64(in.Id))
 	}
 	{
-		const prefix string = ",\"master_id\":"
+		const prefix string = ",\"master_id  \":"
 		out.RawString(prefix)
 		out.Uint64(uint64(in.MasterID))
 	}
@@ -1051,6 +1067,11 @@ func easyjson9b8f5552EncodeProjectInternalModel8(out *jwriter.Writer, in Chat) {
 		const prefix string = ",\"type\":"
 		out.RawString(prefix)
 		out.Uint64(uint64(in.Type))
+	}
+	{
+		const prefix string = ",\"description\":"
+		out.RawString(prefix)
+		out.String(string(in.Description))
 	}
 	{
 		const prefix string = ",\"title\":"

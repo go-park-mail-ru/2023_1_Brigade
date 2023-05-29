@@ -87,13 +87,14 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 	}
 
 	returnedChat := model.Chat{
-		Id:       chat.Id,
-		MasterID: chat.MasterID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
-		Members:  members,
-		Messages: messages,
+		Id:          chat.Id,
+		MasterID:    chat.MasterID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     members,
+		Messages:    messages,
 	}
 
 	if returnedChat.Type == config.Chat {
@@ -101,9 +102,11 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 			if returnedChat.Members[0].Id == userID {
 				returnedChat.Title = returnedChat.Members[1].Nickname
 				returnedChat.Avatar = returnedChat.Members[1].Avatar
+				returnedChat.Description = returnedChat.Members[1].Status
 			} else {
 				returnedChat.Title = returnedChat.Members[0].Nickname
 				returnedChat.Avatar = returnedChat.Members[0].Avatar
+				returnedChat.Description = returnedChat.Members[0].Status
 			}
 		}
 	}
@@ -193,12 +196,13 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	createdChat := model.Chat{
-		MasterID: userID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
-		Members:  members,
-		Messages: []model.Message{},
+		MasterID:    userID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     members,
+		Messages:    []model.Message{},
 	}
 
 	chatFromDB, err := u.chatRepo.CreateChat(ctx, createdChat)
@@ -231,9 +235,11 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 			if chatFromDB.Members[0].Id == userID {
 				chatFromDB.Title = chatFromDB.Members[1].Nickname
 				chatFromDB.Avatar = chatFromDB.Members[1].Avatar
+				chatFromDB.Description = chatFromDB.Members[1].Status
 			} else {
 				chatFromDB.Title = chatFromDB.Members[0].Nickname
 				chatFromDB.Avatar = chatFromDB.Members[0].Avatar
+				chatFromDB.Description = chatFromDB.Members[0].Status
 			}
 		}
 	}
@@ -325,10 +331,11 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 		return model.Chat{}, err
 	}
 	chat := model.Chat{
-		Id:     chatFromDB.Id,
-		Type:   chatFromDB.Type,
-		Title:  chatFromDB.Title,
-		Avatar: chatFromDB.Avatar,
+		Id:          chatFromDB.Id,
+		Type:        chatFromDB.Type,
+		Description: chatFromDB.Description,
+		Title:       chatFromDB.Title,
+		Avatar:      chatFromDB.Avatar,
 	}
 
 	err = u.chatRepo.DeleteChatMembers(context.TODO(), editChat.Id)

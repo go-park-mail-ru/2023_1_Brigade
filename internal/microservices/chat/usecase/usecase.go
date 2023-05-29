@@ -141,7 +141,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		return model.Chat{}, err
 	}
 
-	if createdChat.Type != config.Chat && createdChat.Avatar != "" {
+	if createdChat.Type != config.Chat && createdChat.Avatar == "" {
 		filename := strconv.FormatUint(chatFromDB.Id, 10)
 		firstCharacterName := string(chat.Title[0])
 

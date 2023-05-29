@@ -68,7 +68,7 @@ func main() {
 		}
 	}()
 
-	db.SetMaxIdleConns(10)
+	db.SetMaxIdleConns(1)
 	db.SetMaxOpenConns(10)
 
 	userAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{

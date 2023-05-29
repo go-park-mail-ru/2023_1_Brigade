@@ -112,7 +112,7 @@ func main() {
 		}
 	}()
 
-	db.SetMaxIdleConns(10)
+	db.SetMaxIdleConns(1)
 	db.SetMaxOpenConns(10)
 
 	centrifugoMessagesClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})

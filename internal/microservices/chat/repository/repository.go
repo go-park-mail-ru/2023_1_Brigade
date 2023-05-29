@@ -107,7 +107,6 @@ func (r repository) GetChatsByUserId(ctx context.Context, userID uint64) ([]mode
 	}
 
 	return chatMembers, nil
-
 }
 
 func (r repository) GetChatMembersByChatId(ctx context.Context, chatID uint64) ([]model.ChatMembers, error) {

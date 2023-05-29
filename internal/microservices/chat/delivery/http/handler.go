@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
 	"project/internal/microservices/chat"
@@ -70,6 +71,7 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+	log.Info(chat)
 
 	session := ctx.Get("session").(model.Session)
 	chat = httpUtils.SanitizeStruct(chat).(model.CreateChat)

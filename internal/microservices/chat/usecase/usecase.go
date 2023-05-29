@@ -313,7 +313,7 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 	}
 
 	sort.Slice(chatsInListUser, func(i, j int) bool {
-		return chatsInListUser[i].LastMessage.CreatedAt < chatsInListUser[j].LastMessage.CreatedAt
+		return chatsInListUser[i].LastMessage.CreatedAt > chatsInListUser[j].LastMessage.CreatedAt
 	})
 
 	return chatsInListUser, nil

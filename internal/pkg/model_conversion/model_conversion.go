@@ -203,6 +203,7 @@ func FromProtoCreateChatToCreateChat(chat *protobuf.CreateChat) model.CreateChat
 	return model.CreateChat{
 		Type:    chat.Type,
 		Title:   chat.Title,
+		Avatar:  chat.Avatar,
 		Members: chat.Members,
 	}
 }
@@ -211,6 +212,7 @@ func FromCreateChatToProtoCreateChat(chat model.CreateChat) *protobuf.CreateChat
 	return &protobuf.CreateChat{
 		Type:    chat.Type,
 		Title:   chat.Title,
+		Avatar:  chat.Avatar,
 		Members: chat.Members,
 	}
 }

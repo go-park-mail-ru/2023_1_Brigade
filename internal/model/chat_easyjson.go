@@ -468,6 +468,8 @@ func easyjson9b8f5552DecodeProjectInternalModel3(in *jlexer.Lexer, out *CreateCh
 			out.Type = uint64(in.Uint64())
 		case "title":
 			out.Title = string(in.String())
+		case "avatar":
+			out.Avatar = string(in.String())
 		case "members":
 			if in.IsNull() {
 				in.Skip()
@@ -514,6 +516,11 @@ func easyjson9b8f5552EncodeProjectInternalModel3(out *jwriter.Writer, in CreateC
 		const prefix string = ",\"title\":"
 		out.RawString(prefix)
 		out.String(string(in.Title))
+	}
+	{
+		const prefix string = ",\"avatar\":"
+		out.RawString(prefix)
+		out.String(string(in.Avatar))
 	}
 	{
 		const prefix string = ",\"members\":"

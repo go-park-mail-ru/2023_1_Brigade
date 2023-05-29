@@ -27,7 +27,8 @@ message EditChatModel {
 message CreateChat {
   uint64 Type = 1;
   string Title = 2;
-  repeated uint64 Members = 3;
+  string Avatar = 3;
+  repeated uint64 Members = 4;
 }
 
 message GetChatArguments {

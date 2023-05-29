@@ -48,6 +48,7 @@ type EditChat struct {
 type CreateChat struct {
 	Type    uint64   `json:"type"     db:"type"`
 	Title   string   `json:"title"    db:"title"`
+	Avatar  string   `json:"avatar"   db:"avatar"`
 	Members []uint64 `json:"members"  db:"members"`
 }
 

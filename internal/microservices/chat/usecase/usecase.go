@@ -116,6 +116,7 @@ func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64) (model.Chat
 }
 
 func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
+	log.Info(chat)
 	var members []model.User
 	for _, userID := range chat.Members {
 		user, err := u.userRepo.GetUserById(ctx, userID)
@@ -125,12 +126,12 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 
 		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 	}
-	log.Info(members)
 
 	createdChat := model.Chat{
 		MasterID: userID,
 		Type:     chat.Type,
 		Title:    chat.Title,
+		Avatar:   chat.Avatar,
 		Members:  members,
 		Messages: []model.Message{},
 	}
@@ -140,7 +141,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		return model.Chat{}, err
 	}
 
-	if createdChat.Type != config.Chat {
+	if createdChat.Type != config.Chat && createdChat.Avatar != "" {
 		filename := strconv.FormatUint(chatFromDB.Id, 10)
 		firstCharacterName := string(chat.Title[0])
 

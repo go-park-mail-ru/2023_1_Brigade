@@ -212,7 +212,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 
 	if createdChat.Type != config.Chat && createdChat.Avatar == "" {
 		filename := strconv.FormatUint(chatFromDB.Id, 10)
-		firstCharacterName := string(chat.Title[0])
+		firstCharacterName := string([]rune(chat.Title)[0])
 
 		err = u.imagesUsecase.UploadGeneratedImage(ctx, config.ChatAvatarsBucket, filename, firstCharacterName)
 		if err != nil {

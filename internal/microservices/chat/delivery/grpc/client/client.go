@@ -38,6 +38,16 @@ func (c chatServiceGRPCClient) GetChatById(ctx context.Context, chatID uint64, u
 	return model_conversion.FromProtoChatToChat(chat), nil
 }
 
+func (c chatServiceGRPCClient) GetChatInfoById(ctx context.Context, chatID uint64) (model.ChatInListUser, error) {
+	chat, err := c.chatClient.GetChatInfoById(ctx, model_conversion.FromChatIDToProtoChatID(chatID))
+
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	return model_conversion.FromProtoUserChatToUserChat(chat), nil
+}
+
 func (c chatServiceGRPCClient) EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error) {
 	chat, err := c.chatClient.EditChat(ctx, model_conversion.FromEditChatToProtoEditChat(editChat))
 

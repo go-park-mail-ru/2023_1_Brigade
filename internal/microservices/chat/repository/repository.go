@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
+	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	"project/internal/microservices/chat"
 	"project/internal/model"
@@ -150,7 +151,7 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 	if err != nil {
 		return model.Chat{}, err
 	}
-
+	log.Info(chat.Members)
 	var chatDB model.DBChat
 	err = r.db.QueryRowContext(ctx, `INSERT INTO chat (master_id, type, avatar, title)  VALUES($1, $2, $3, $4) RETURNING id`,
 		chat.MasterID, chat.Type, "", chat.Title).Scan(&chatDB.Id)
@@ -159,7 +160,7 @@ func (r repository) CreateChat(ctx context.Context, chat model.Chat) (model.Chat
 		return model.Chat{}, err
 	}
 	chat.Id = chatDB.Id
-
+	log.Info(chat.Members)
 	for _, members := range chat.Members {
 		err = r.AddUserInChatDB(ctx, chat.Id, members.Id)
 		if err != nil {

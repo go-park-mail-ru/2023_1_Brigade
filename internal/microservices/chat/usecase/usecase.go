@@ -86,7 +86,7 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 		messages = append(messages, message)
 	}
 
-	return model.Chat{
+	returnedChat := model.Chat{
 		Id:       chat.Id,
 		MasterID: chat.MasterID,
 		Type:     chat.Type,
@@ -94,7 +94,25 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 		Avatar:   chat.Avatar,
 		Members:  members,
 		Messages: messages,
-	}, nil
+	}
+
+	if returnedChat.Type == config.Chat {
+		if len(returnedChat.Members) > 0 {
+			if returnedChat.Members[0].Id == userID {
+				returnedChat.Title = returnedChat.Members[1].Nickname
+				returnedChat.Avatar = returnedChat.Members[1].Avatar
+			} else {
+				returnedChat.Title = returnedChat.Members[0].Nickname
+				returnedChat.Avatar = returnedChat.Members[0].Avatar
+			}
+		}
+	}
+
+	return returnedChat, nil
+}
+
+func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64) (model.ChatInListUser, error) {
+	return model.ChatInListUser{}, nil
 }
 
 func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
@@ -107,6 +125,7 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 
 		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 	}
+	log.Info(members)
 
 	createdChat := model.Chat{
 		MasterID: userID,
@@ -127,21 +146,34 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 
 		err = u.imagesUsecase.UploadGeneratedImage(ctx, config.ChatAvatarsBucket, filename, firstCharacterName)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		url, err := u.imagesUsecase.GetImage(ctx, config.ChatAvatarsBucket, filename)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		chatFromDB, err = u.chatRepo.UpdateChatAvatar(ctx, url, chatFromDB.Id)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 	}
 
-	return chatFromDB, err
+	if chat.Type == config.Chat {
+		if len(chatFromDB.Members) > 0 {
+			if chatFromDB.Members[0].Id == userID {
+				chatFromDB.Title = chatFromDB.Members[1].Nickname
+				chatFromDB.Avatar = chatFromDB.Members[1].Avatar
+			} else {
+				chatFromDB.Title = chatFromDB.Members[0].Nickname
+				chatFromDB.Avatar = chatFromDB.Members[0].Avatar
+			}
+		}
+	}
+
+	chatFromDB.MasterID = userID
+	return chatFromDB, nil
 }
 
 func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {

@@ -38,8 +38,8 @@ func (c chatServiceGRPCClient) GetChatById(ctx context.Context, chatID uint64, u
 	return model_conversion.FromProtoChatToChat(chat), nil
 }
 
-func (c chatServiceGRPCClient) GetChatInfoById(ctx context.Context, chatID uint64) (model.ChatInListUser, error) {
-	chat, err := c.chatClient.GetChatInfoById(ctx, model_conversion.FromChatIDToProtoChatID(chatID))
+func (c chatServiceGRPCClient) GetChatInfoById(ctx context.Context, chatID uint64, userID uint64) (model.ChatInListUser, error) {
+	chat, err := c.chatClient.GetChatInfoById(ctx, &generated.GetChatArguments{ChatID: chatID, UserID: userID})
 
 	if err != nil {
 		return model.ChatInListUser{}, err

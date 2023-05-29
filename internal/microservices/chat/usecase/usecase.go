@@ -110,8 +110,74 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 	return returnedChat, nil
 }
 
-func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64) (model.ChatInListUser, error) {
-	return model.ChatInListUser{}, nil
+func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64, userID uint64) (model.ChatInListUser, error) {
+	chat, err := u.chatRepo.GetChatById(ctx, chatID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chatID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	if chat.Type != config.Channel {
+		userInChat := false
+		for _, chatMember := range chatMembers {
+			if chatMember.MemberId == userID {
+				userInChat = true
+				continue
+			}
+		}
+
+		if !userInChat {
+			return model.ChatInListUser{}, myErrors.ErrNotChatAccess
+		}
+	}
+
+	var members []model.User
+	for _, chatMember := range chatMembers {
+		user, err := u.userRepo.GetUserById(ctx, chatMember.MemberId)
+		if err != nil {
+			return model.ChatInListUser{}, err
+		}
+
+		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
+	}
+
+	lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chatID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	lastMessageAuthor, err := u.userRepo.GetUserById(ctx, userID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	returnedChat := model.ChatInListUser{
+		Id:                chat.Id,
+		Type:              chat.Type,
+		Title:             chat.Title,
+		Avatar:            chat.Avatar,
+		Members:           members,
+		LastMessage:       lastMessage,
+		LastMessageAuthor: model_conversion.FromAuthorizedUserToUser(lastMessageAuthor),
+	}
+
+	if returnedChat.Type == config.Chat {
+		if len(returnedChat.Members) > 0 {
+			if returnedChat.Members[0].Id == userID {
+				returnedChat.Title = returnedChat.Members[1].Nickname
+				returnedChat.Avatar = returnedChat.Members[1].Avatar
+			} else {
+				returnedChat.Title = returnedChat.Members[0].Nickname
+				returnedChat.Avatar = returnedChat.Members[0].Avatar
+			}
+		}
+	}
+
+	return returnedChat, nil
 }
 
 func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {

@@ -40,7 +40,8 @@ func (u chatHandler) GetChatInfoHandler(ctx echo.Context) error {
 		return err
 	}
 
-	chat, err := u.chatUsecase.GetChatInfoById(context.TODO(), chatID)
+	session := ctx.Get("session").(model.Session)
+	chat, err := u.chatUsecase.GetChatInfoById(context.TODO(), chatID, session.UserId)
 	if err != nil {
 		return err
 	}

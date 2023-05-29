@@ -24,7 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatsClient interface {
 	GetChatById(ctx context.Context, in *GetChatArguments, opts ...grpc.CallOption) (*Chat, error)
-	GetChatInfoById(ctx context.Context, in *ChatID, opts ...grpc.CallOption) (*ChatInListUser, error)
+	GetChatInfoById(ctx context.Context, in *GetChatArguments, opts ...grpc.CallOption) (*ChatInListUser, error)
 	EditChat(ctx context.Context, in *EditChatModel, opts ...grpc.CallOption) (*Chat, error)
 	CreateChat(ctx context.Context, in *CreateChatArguments, opts ...grpc.CallOption) (*Chat, error)
 	DeleteChatById(ctx context.Context, in *ChatID, opts ...grpc.CallOption) (*empty.Empty, error)
@@ -50,7 +50,7 @@ func (c *chatsClient) GetChatById(ctx context.Context, in *GetChatArguments, opt
 	return out, nil
 }
 
-func (c *chatsClient) GetChatInfoById(ctx context.Context, in *ChatID, opts ...grpc.CallOption) (*ChatInListUser, error) {
+func (c *chatsClient) GetChatInfoById(ctx context.Context, in *GetChatArguments, opts ...grpc.CallOption) (*ChatInListUser, error) {
 	out := new(ChatInListUser)
 	err := c.cc.Invoke(ctx, "/protobuf.Chats/GetChatInfoById", in, out, opts...)
 	if err != nil {
@@ -118,7 +118,7 @@ func (c *chatsClient) GetSearchChatsMessagesChannels(ctx context.Context, in *Se
 // for forward compatibility
 type ChatsServer interface {
 	GetChatById(context.Context, *GetChatArguments) (*Chat, error)
-	GetChatInfoById(context.Context, *ChatID) (*ChatInListUser, error)
+	GetChatInfoById(context.Context, *GetChatArguments) (*ChatInListUser, error)
 	EditChat(context.Context, *EditChatModel) (*Chat, error)
 	CreateChat(context.Context, *CreateChatArguments) (*Chat, error)
 	DeleteChatById(context.Context, *ChatID) (*empty.Empty, error)
@@ -134,7 +134,7 @@ type UnimplementedChatsServer struct {
 func (UnimplementedChatsServer) GetChatById(context.Context, *GetChatArguments) (*Chat, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChatById not implemented")
 }
-func (UnimplementedChatsServer) GetChatInfoById(context.Context, *ChatID) (*ChatInListUser, error) {
+func (UnimplementedChatsServer) GetChatInfoById(context.Context, *GetChatArguments) (*ChatInListUser, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChatInfoById not implemented")
 }
 func (UnimplementedChatsServer) EditChat(context.Context, *EditChatModel) (*Chat, error) {
@@ -186,7 +186,7 @@ func _Chats_GetChatById_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _Chats_GetChatInfoById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChatID)
+	in := new(GetChatArguments)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -198,7 +198,7 @@ func _Chats_GetChatInfoById_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/protobuf.Chats/GetChatInfoById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatsServer).GetChatInfoById(ctx, req.(*ChatID))
+		return srv.(ChatsServer).GetChatInfoById(ctx, req.(*GetChatArguments))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -10,7 +10,7 @@ import "protobuf/chat.proto";
 
 service Chats {
   rpc GetChatById(GetChatArguments) returns(Chat) {}
-  rpc GetChatInfoById(ChatID) returns(ChatInListUser) {}
+  rpc GetChatInfoById(GetChatArguments) returns(ChatInListUser) {}
   rpc EditChat(EditChatModel) returns(Chat) {}
   rpc CreateChat(CreateChatArguments) returns(Chat) {}
   rpc DeleteChatById(ChatID) returns(google.protobuf.Empty) {}

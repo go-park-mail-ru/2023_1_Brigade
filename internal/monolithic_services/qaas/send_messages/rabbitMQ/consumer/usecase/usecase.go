@@ -35,7 +35,7 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 		false,
 		false,
 		false,
-		nil,
+		amqp.Table{"x-dead-letter-exchange": "user_dlx"},
 	)
 	if err != nil {
 		return nil, err

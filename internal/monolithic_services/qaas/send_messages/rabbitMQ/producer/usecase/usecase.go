@@ -201,9 +201,10 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	queue, err := channel.QueueDeclare(
-		queueName,
-		false,
+	err = channel.ExchangeDeclare(
+		"user_dlx",
+		"fanout",
+		true,
 		false,
 		false,
 		false,
@@ -212,6 +213,53 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	_, err = channel.QueueDeclare(
+		"user_create_dlx",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	err = channel.QueueBind(
+		"user_create_dlx",
+		"",
+		"user_dlx",
+		false,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	queue, err := channel.QueueDeclare(
+		queueName,
+		true,
+		false,
+		false,
+		false,
+		amqp.Table{"x-dead-letter-exchange": "user_dlx"},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	//queue, err := channel.QueueDeclare(
+	//	queueName,
+	//	false,
+	//	false,
+	//	false,
+	//	false,
+	//	nil,
+	//)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)

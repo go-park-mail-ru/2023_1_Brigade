@@ -983,7 +983,7 @@ func easyjson9b8f5552DecodeProjectInternalModel8(in *jlexer.Lexer, out *Chat) {
 		switch key {
 		case "id":
 			out.Id = uint64(in.Uint64())
-		case "master_id  ":
+		case "master_id":
 			out.MasterID = uint64(in.Uint64())
 		case "type":
 			out.Type = uint64(in.Uint64())
@@ -1059,7 +1059,7 @@ func easyjson9b8f5552EncodeProjectInternalModel8(out *jwriter.Writer, in Chat) {
 		out.Uint64(uint64(in.Id))
 	}
 	{
-		const prefix string = ",\"master_id  \":"
+		const prefix string = ",\"master_id\":"
 		out.RawString(prefix)
 		out.Uint64(uint64(in.MasterID))
 	}

@@ -8,7 +8,7 @@ const (
 
 type Chat struct {
 	Id          uint64    `json:"id"          db:"id"`
-	MasterID    uint64    `json:"master_id  " db:"master_id"`
+	MasterID    uint64    `json:"master_id"   db:"master_id"`
 	Type        uint64    `json:"type"        db:"type"`
 	Description string    `json:"description" db:"description"`
 	Title       string    `json:"title"       db:"title"`

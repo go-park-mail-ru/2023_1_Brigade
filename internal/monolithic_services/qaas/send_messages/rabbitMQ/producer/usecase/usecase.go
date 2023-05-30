@@ -239,7 +239,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 
 	queue, err := channel.QueueDeclare(
 		queueName,
-		true,
+		false,
 		false,
 		false,
 		false,

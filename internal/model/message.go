@@ -3,12 +3,11 @@ package model
 type Message struct {
 	Id          string `json:"id"         db:"id"`
 	Attachments []File `json:"attachments" db:"attachments"`
-	//ImageUrl  string `json:"image_url"  db:"image_url"`
-	Type      uint64 `json:"type"       db:"type"`
-	Body      string `json:"body"       db:"body"`
-	AuthorId  uint64 `json:"author_id"  db:"author_id"`
-	ChatId    uint64 `json:"id_chat"    db:"id_chat"`
-	CreatedAt string `json:"created_at" db:"created_at"`
+	Type        uint64 `json:"type"       db:"type"`
+	Body        string `json:"body"       db:"body"`
+	AuthorId    uint64 `json:"author_id"  db:"author_id"`
+	ChatId      uint64 `json:"id_chat"    db:"id_chat"`
+	CreatedAt   string `json:"created_at" db:"created_at"`
 }
 
 type WebSocketMessage struct {

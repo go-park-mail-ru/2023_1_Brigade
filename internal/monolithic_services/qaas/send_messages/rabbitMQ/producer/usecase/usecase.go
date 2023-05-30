@@ -174,26 +174,40 @@ import (
 
 	"github.com/mailru/easyjson"
 
-	amqp "github.com/wagslane/go-rabbitmq"
+	amqp "github.com/rabbitmq/amqp091-go"
+	//amqp "github.com/wagslane/go-rabbitmq"
 )
 
+//type usecase struct {
+//	producer *amqp.
+//	channel  *amqp.Channel
+//	queue    *amqp.Queue
+//}
+
 type usecase struct {
-	producer *amqp.Publisher
-	//channel  *amqp.Channel
-	//queue    *amqp.Queue
+	//producer *amqp.Connection
+	channel *amqp.Channel
+	queue   *amqp.Queue
 }
 
 func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
-	conn, err := amqp.NewConn(connAddr, amqp.WithConnectionOptionsLogging)
+	producer, err := amqp.Dial(connAddr)
 	if err != nil {
 		return nil, err
 	}
 
-	producer, err := amqp.NewPublisher(
-		conn,
-		amqp.WithPublisherOptionsLogging,
-		amqp.WithPublisherOptionsExchangeName("events"),
-		amqp.WithPublisherOptionsExchangeDeclare,
+	channel, err := producer.Channel()
+	if err != nil {
+		return nil, err
+	}
+
+	queue, err := channel.QueueDeclare(
+		queueName,
+		false,
+		false,
+		false,
+		false,
+		nil,
 	)
 	if err != nil {
 		return nil, err
@@ -204,66 +218,20 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 
 	go func() {
 		<-signals
-		producer.Close()
-		conn.Close()
+		err = producer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+
+		err = channel.Close()
+		if err != nil {
+			log.Error(err)
+		}
+
 		log.Fatal()
-		//err = producer.Close()
-		//if err != nil {
-		//	log.Error(err)
-		//}
-		//
-		//err = channel.Close()
-		//if err != nil {
-		//	log.Error(err)
-		//}
-		//
-		//log.Fatal()
 	}()
 
-	return &usecase{producer: producer}, nil
-
-	//defer publisher.Close()
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//defer publisher.Close()
-
-	//channel, err := producer.Channel()
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//queue, err := channel.QueueDeclare(
-	//	queueName,
-	//	false,
-	//	false,
-	//	false,
-	//	true,
-	//	nil,
-	//)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//signals := make(chan os.Signal, 1)
-	//signal.Notify(signals, os.Interrupt)
-	//
-	//go func() {
-	//	<-signals
-	//	err = producer.Close()
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//
-	//	err = channel.Close()
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//
-	//	log.Fatal()
-	//}()
-	//
-	//return &usecase{producer: producer, channel: channel, queue: &queue}, nil
+	return &usecase{channel: channel, queue: &queue}, nil
 }
 
 func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.ProducerMessage) error {
@@ -272,34 +240,144 @@ func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.Prod
 		return err
 	}
 
-	err = u.producer.PublishWithContext(
+	err = u.channel.PublishWithContext(
 		ctx,
-		message,
-		[]string{"my_routing_key"},
-		amqp.WithPublishOptionsContentType("application/json"),
-		amqp.WithPublishOptionsExchange("events"),
+		"",
+		u.queue.Name,
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        message,
+		},
 	)
+
 	if err != nil {
 		return err
 	}
 
 	return nil
-
-	//err = u.channel.PublishWithContext(
-	//	ctx,
-	//	"",
-	//	u.queue.Name,
-	//	false,
-	//	false,
-	//	amqp.Publishing{
-	//		ContentType: "application/json",
-	//		Body:        message,
-	//	},
-	//)
-	//
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//return nil
 }
+
+//func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
+//	conn, err := amqp.NewConn(connAddr, amqp.WithConnectionOptionsLogging)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	amqp.
+//
+//	producer, err := amqp.NewPublisher(
+//		conn,
+//		amqp.WithPublisherOptionsLogging,
+//		amqp.WithPublisherOptionsExchangeName("events"),
+//		amqp.WithPublisherOptionsExchangeDeclare,
+//	)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	signals := make(chan os.Signal, 1)
+//	signal.Notify(signals, os.Interrupt)
+//
+//	go func() {
+//		<-signals
+//		producer.Close()
+//		conn.Close()
+//		log.Fatal()
+//		//err = producer.Close()
+//		//if err != nil {
+//		//	log.Error(err)
+//		//}
+//		//
+//		//err = channel.Close()
+//		//if err != nil {
+//		//	log.Error(err)
+//		//}
+//		//
+//		//log.Fatal()
+//	}()
+//
+//	return &usecase{producer: producer}, nil
+//
+//	//defer publisher.Close()
+//	//if err != nil {
+//	//	log.Fatal(err)
+//	//}
+//	//defer publisher.Close()
+//
+//	//channel, err := producer.Channel()
+//	//if err != nil {
+//	//	return nil, err
+//	//}
+//	//
+//	//queue, err := channel.QueueDeclare(
+//	//	queueName,
+//	//	false,
+//	//	false,
+//	//	false,
+//	//	true,
+//	//	nil,
+//	//)
+//	//if err != nil {
+//	//	return nil, err
+//	//}
+//	//
+//	//signals := make(chan os.Signal, 1)
+//	//signal.Notify(signals, os.Interrupt)
+//	//
+//	//go func() {
+//	//	<-signals
+//	//	err = producer.Close()
+//	//	if err != nil {
+//	//		log.Error(err)
+//	//	}
+//	//
+//	//	err = channel.Close()
+//	//	if err != nil {
+//	//		log.Error(err)
+//	//	}
+//	//
+//	//	log.Fatal()
+//	//}()
+//	//
+//	//return &usecase{producer: producer, channel: channel, queue: &queue}, nil
+//}
+//
+//func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.ProducerMessage) error {
+//	message, err := easyjson.Marshal(producerMessage)
+//	if err != nil {
+//		return err
+//	}
+//
+//	err = u.producer.PublishWithContext(
+//		ctx,
+//		message,
+//		[]string{"my_routing_key"},
+//		amqp.WithPublishOptionsContentType("application/json"),
+//		amqp.WithPublishOptionsExchange("events"),
+//	)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return nil
+//
+//	//err = u.channel.PublishWithContext(
+//	//	ctx,
+//	//	"",
+//	//	u.queue.Name,
+//	//	false,
+//	//	false,
+//	//	amqp.Publishing{
+//	//		ContentType: "application/json",
+//	//		Body:        message,
+//	//	},
+//	//)
+//	//
+//	//if err != nil {
+//	//	return err
+//	//}
+//	//
+//	//return nil
+//}

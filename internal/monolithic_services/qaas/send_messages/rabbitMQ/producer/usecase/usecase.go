@@ -204,7 +204,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	err = channel.ExchangeDeclare(
 		"user_dlx",
 		"fanout",
-		false,
+		true,
 		false,
 		false,
 		false,
@@ -216,7 +216,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 
 	_, err = channel.QueueDeclare(
 		"user_create_dlx",
-		false,
+		true,
 		false,
 		false,
 		false,

@@ -35,7 +35,9 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 		false,
 		false,
 		false,
-		amqp.Table{"x-dead-letter-exchange": "user_dlx"},
+		amqp.Table{
+			"x-dead-letter-exchange": "user_dlx",
+		},
 	)
 	if err != nil {
 		return nil, err
@@ -60,7 +62,12 @@ func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centri
 		log.Fatal()
 	}()
 
-	consumerUsecase := usecase{channel: channel, queue: &queue, client: centrifugo, channelName: channelName}
+	consumerUsecase := usecase{
+		channel:     channel,
+		queue:       &queue,
+		client:      centrifugo,
+		channelName: channelName,
+	}
 
 	go func() {
 		consumerUsecase.StartConsumeMessages(context.TODO())

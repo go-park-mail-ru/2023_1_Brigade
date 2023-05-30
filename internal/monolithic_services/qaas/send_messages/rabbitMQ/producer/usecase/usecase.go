@@ -71,7 +71,9 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		false,
 		false,
 		false,
-		amqp.Table{"x-dead-letter-exchange": "user_dlx"},
+		amqp.Table{
+			"x-dead-letter-exchange": "user_dlx",
+		},
 	)
 	if err != nil {
 		return nil, err
@@ -95,7 +97,10 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		log.Fatal()
 	}()
 
-	return &usecase{channel: channel, queue: &queue}, nil
+	return &usecase{
+		channel: channel,
+		queue:   &queue,
+	}, nil
 }
 
 func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.ProducerMessage) error {

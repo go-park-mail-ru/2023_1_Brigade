@@ -185,8 +185,8 @@ func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64, userID uint
 
 func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
 	var members []model.User
-	for _, userID := range chat.Members {
-		user, err := u.userRepo.GetUserById(ctx, userID)
+	for _, memberID := range chat.Members {
+		user, err := u.userRepo.GetUserById(ctx, memberID)
 		if err != nil {
 			return model.Chat{}, err
 		}

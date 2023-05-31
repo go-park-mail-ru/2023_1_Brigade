@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	"project/internal/microservices/chat"
 	"project/internal/microservices/messages"
@@ -326,10 +327,12 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 }
 
 func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error) {
+	log.Info(editChat)
 	chatFromDB, err := u.chatRepo.UpdateChatById(ctx, editChat)
 	if err != nil {
 		return model.Chat{}, err
 	}
+	log.Info(chatFromDB)
 
 	chat := model.Chat{
 		Id:          chatFromDB.Id,

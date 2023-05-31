@@ -174,7 +174,7 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     volumes:
-      - monitoring/prometheus:/etc/prometheus
+      - ./monitoring/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -188,9 +188,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - monitoring/grafana/data:/var/lib/grafana
-      - monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./monitoring/grafana/data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     restart: always
     networks:
       - backend-network

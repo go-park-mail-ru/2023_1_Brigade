@@ -143,7 +143,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-#      - db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
     restart: always
     networks:

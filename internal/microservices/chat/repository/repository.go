@@ -95,6 +95,7 @@ func (r repository) UpdateChatById(ctx context.Context, editChat model.EditChat)
 		if err == sql.ErrNoRows {
 			return model.DBChat{}, myErrors.ErrChatNotFound
 		}
+
 		return model.DBChat{}, err
 	}
 

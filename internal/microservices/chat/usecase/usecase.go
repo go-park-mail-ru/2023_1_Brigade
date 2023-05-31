@@ -330,6 +330,7 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 	if err != nil {
 		return model.Chat{}, err
 	}
+
 	chat := model.Chat{
 		Id:          chatFromDB.Id,
 		MasterID:    chatFromDB.MasterID,
@@ -346,7 +347,7 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 
 	var members []model.User
 	for _, memberID := range editChat.Members {
-		err := u.userRepo.CheckExistUserById(context.TODO(), memberID)
+		err = u.userRepo.CheckExistUserById(context.TODO(), memberID)
 		if err != nil {
 			return model.Chat{}, err
 		}

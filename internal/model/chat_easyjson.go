@@ -253,6 +253,10 @@ func easyjson9b8f5552DecodeProjectInternalModel1(in *jlexer.Lexer, out *EditChat
 		switch key {
 		case "id":
 			out.Id = uint64(in.Uint64())
+		case "avatar":
+			out.Avatar = string(in.String())
+		case "description":
+			out.Description = string(in.String())
 		case "type":
 			out.Type = uint64(in.Uint64())
 		case "title":
@@ -298,6 +302,16 @@ func easyjson9b8f5552EncodeProjectInternalModel1(out *jwriter.Writer, in EditCha
 		const prefix string = ",\"id\":"
 		out.RawString(prefix[1:])
 		out.Uint64(uint64(in.Id))
+	}
+	{
+		const prefix string = ",\"avatar\":"
+		out.RawString(prefix)
+		out.String(string(in.Avatar))
+	}
+	{
+		const prefix string = ",\"description\":"
+		out.RawString(prefix)
+		out.String(string(in.Description))
 	}
 	{
 		const prefix string = ",\"type\":"

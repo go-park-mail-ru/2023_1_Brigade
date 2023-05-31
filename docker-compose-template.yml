@@ -129,7 +129,7 @@ services:
     container_name: rabbitmq
     restart: always
     env_file:
-      - ../.env
+      - .env
     ports:
       - "5672:5672"
     networks:
@@ -139,11 +139,11 @@ services:
     image: postgres:latest
     container_name: postgres
     env_file:
-      - ../.env
+      - .env
     ports:
       - "5432:5432"
     volumes:
-      - ./../db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+      - db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
     restart: always
     networks:
@@ -156,7 +156,7 @@ services:
     ports:
       - "8900:8900"
     volumes:
-      - ./../config.json:/centrifugo/config.json
+      - config.json:/centrifugo/config.json
     restart: always
     networks:
       - backend-network
@@ -174,7 +174,7 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     volumes:
-      - ./../monitoring/prometheus:/etc/prometheus
+      - monitoring/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -188,9 +188,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./../monitoring/grafana/data:/var/lib/grafana
-      - ./../monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./../monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - monitoring/grafana/data:/var/lib/grafana
+      - monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     restart: always
     networks:
       - backend-network

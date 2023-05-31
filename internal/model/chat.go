@@ -41,10 +41,12 @@ type DBChat struct {
 }
 
 type EditChat struct {
-	Id      uint64   `json:"id"      db:"id"`
-	Type    uint64   `json:"type"    db:"type"`
-	Title   string   `json:"title"   db:"title"`
-	Members []uint64 `json:"members" db:"members"`
+	Id          uint64   `json:"id"          db:"id"`
+	Avatar      string   `json:"avatar"      db:"avatar"`
+	Description string   `json:"description" db:"description"`
+	Type        uint64   `json:"type"        db:"type"`
+	Title       string   `json:"title"       db:"title"`
+	Members     []uint64 `json:"members"     db:"members"`
 }
 
 type CreateChat struct {

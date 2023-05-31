@@ -87,9 +87,10 @@ func (r repository) DeleteChatMembers(ctx context.Context, chatID uint64) error 
 
 }
 
-func (r repository) UpdateChatById(ctx context.Context, title string, chatID uint64) (model.DBChat, error) {
+func (r repository) UpdateChatById(ctx context.Context, editChat model.EditChat) (model.DBChat, error) {
 	var chat model.DBChat
-	err := r.db.GetContext(ctx, &chat, `UPDATE chat SET title=$1 WHERE id=$2 RETURNING *`, title, chatID)
+	err := r.db.GetContext(ctx, &chat, `UPDATE chat SET description=$1, avatar=$2, title=$3 WHERE id=$4 RETURNING *`,
+		editChat.Description, editChat.Avatar, editChat.Title, editChat.Id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return model.DBChat{}, myErrors.ErrChatNotFound

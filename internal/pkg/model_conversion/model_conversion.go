@@ -161,19 +161,23 @@ func FromProtoUserChatToUserChat(chat *protobuf.ChatInListUser) model.ChatInList
 
 func FromProtoEditChatToEditChat(chat *protobuf.EditChatModel) model.EditChat {
 	return model.EditChat{
-		Id:      chat.Id,
-		Type:    chat.Type,
-		Title:   chat.Title,
-		Members: chat.Members,
+		Id:          chat.Id,
+		Avatar:      chat.Avatar,
+		Description: chat.Description,
+		Type:        chat.Type,
+		Title:       chat.Title,
+		Members:     chat.Members,
 	}
 }
 
 func FromEditChatToProtoEditChat(chat model.EditChat) *protobuf.EditChatModel {
 	return &protobuf.EditChatModel{
-		Id:      chat.Id,
-		Type:    chat.Type,
-		Title:   chat.Title,
-		Members: chat.Members,
+		Id:          chat.Id,
+		Avatar:      chat.Avatar,
+		Description: chat.Description,
+		Type:        chat.Type,
+		Title:       chat.Title,
+		Members:     chat.Members,
 	}
 }
 

@@ -20,9 +20,11 @@ message Chat {
 
 message EditChatModel {
   uint64 Id = 1;
-  uint64 Type = 2;
-  string Title = 3;
-  repeated uint64 Members = 4;
+  string Avatar = 2;
+  string Description = 3;
+  uint64 Type = 4;
+  string Title = 5;
+  repeated uint64 Members = 6;
 }
 
 message CreateChat {

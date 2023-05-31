@@ -188,7 +188,7 @@ func (r repository) CheckExistUserByEmail(ctx context.Context, email string) err
 
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	var users []model.AuthorizedUser
-	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1", userID)
+	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1 AND id != $2", userID, 0)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

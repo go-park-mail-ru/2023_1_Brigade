@@ -11,7 +11,6 @@ import (
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
 	"sort"
-	"strconv"
 )
 
 type usecase struct {
@@ -211,18 +210,20 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	if createdChat.Type != config.Chat && createdChat.Avatar == "" {
-		filename := strconv.FormatUint(chatFromDB.Id, 10)
-		firstCharacterName := string([]rune(chat.Title)[0])
+		//filename := strconv.FormatUint(chatFromDB.Id, 10)
+		//firstCharacterName := string([]rune(chat.Title)[0])
 
-		err = u.imagesUsecase.UploadGeneratedImage(ctx, config.ChatAvatarsBucket, filename, firstCharacterName)
-		if err != nil {
-			return model.Chat{}, err
-		}
+		//err = u.imagesUsecase.UploadGeneratedImage(ctx, config.ChatAvatarsBucket, filename, firstCharacterName)
+		//if err != nil {
+		//	return model.Chat{}, err
+		//}
+		//
+		//url, err := u.imagesUsecase.GetImage(ctx, config.ChatAvatarsBucket, filename)
+		//if err != nil {
+		//	return model.Chat{}, err
+		//}
 
-		url, err := u.imagesUsecase.GetImage(ctx, config.ChatAvatarsBucket, filename)
-		if err != nil {
-			return model.Chat{}, err
-		}
+		url := "https://brigade_chat_avatars.hb.bizmrg.com/logo.png"
 
 		chatFromDB, err = u.chatRepo.UpdateChatAvatar(ctx, url, chatFromDB.Id)
 		if err != nil {

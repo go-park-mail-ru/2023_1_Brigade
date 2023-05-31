@@ -36,5 +36,7 @@ var (
 	ErrMembersNotFound   = status.New(codes.Unknown, errors.New("участники не найдены").Error()).Err()
 	ErrContactsNotFound  = status.New(codes.Unknown, errors.New("контакты не найдены").Error()).Err()
 
+	ErrBigFileSize = status.New(codes.Unknown, errors.New("слишком большой размер файла").Error()).Err()
+
 	ErrInternal = errors.New("внутренняя ошибка сервера")
 )

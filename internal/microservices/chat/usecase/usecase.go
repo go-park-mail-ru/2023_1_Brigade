@@ -386,7 +386,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	foundedContacts, err := u.userRepo.GetSearchUsers(ctx, string)
+	foundedContacts, err := u.userRepo.GetSearchUsers(ctx, string, userID)
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}

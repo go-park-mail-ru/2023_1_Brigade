@@ -58,10 +58,6 @@ func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 		return err
 	}
 
-	for idx, listUserChat := range listUserChats {
-		listUserChats[idx] = httpUtils.SanitizeStruct(listUserChat).(model.ChatInListUser)
-	}
-
 	return ctx.JSON(http.StatusOK, model.Chats{Chats: listUserChats})
 }
 

@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+	"time"
 
 	"github.com/mailru/easyjson"
 
@@ -42,7 +43,7 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	_, err = channel.QueueDeclare(
+	dlxQueue, err := channel.QueueDeclare(
 		"user_create_dlx",
 		false,
 		false,
@@ -78,6 +79,39 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	go func() {
+		for {
+			msgs, err := channel.Consume(
+				dlxQueue.Name,
+				"",
+				false,
+				false,
+				false,
+				false,
+				nil,
+			)
+			if err != nil {
+				continue
+			}
+
+			for msg := range msgs {
+				err = channel.PublishWithContext(
+					context.TODO(),
+					"",
+					queue.Name,
+					false,
+					false,
+					amqp.Publishing{
+						ContentType: "application/json",
+						Body:        msg.Body,
+					},
+				)
+			}
+
+			time.Sleep(60 * time.Second)
+		}
+	}()
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)

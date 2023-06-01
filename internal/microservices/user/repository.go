@@ -18,5 +18,5 @@ type Repository interface {
 	CheckExistUserById(ctx context.Context, userID uint64) error
 	CheckExistUserByEmail(ctx context.Context, email string) error
 	GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error)
-	GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error)
+	GetSearchUsers(ctx context.Context, string string, userID uint64) ([]model.AuthorizedUser, error)
 }

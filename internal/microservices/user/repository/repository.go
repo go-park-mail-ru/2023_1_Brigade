@@ -200,9 +200,9 @@ func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uin
 	return users, nil
 }
 
-func (r repository) GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error) {
+func (r repository) GetSearchUsers(ctx context.Context, string string, userID uint64) ([]model.AuthorizedUser, error) {
 	var searchUsers []model.AuthorizedUser
-	err := r.db.SelectContext(ctx, &searchUsers, `SELECT * FROM profile WHERE nickname ILIKE $1`, "%"+string+"%")
+	err := r.db.SelectContext(ctx, &searchUsers, `SELECT * FROM profile WHERE nickname ILIKE $1 AND id != $2`, "%"+string+"%", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, myErrors.ErrUserNotFound

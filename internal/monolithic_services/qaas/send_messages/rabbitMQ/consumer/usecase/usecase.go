@@ -95,7 +95,7 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		msgs, err := u.channel.Consume(
 			u.queue.Name,
 			"",
-			true,
+			false,
 			false,
 			false,
 			false,
@@ -107,10 +107,13 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 		}
 
 		for msg := range msgs {
-			err := u.centrifugePublication(msg.Body)
+			err = u.centrifugePublication(msg.Body)
 			if err != nil {
 				log.Error(err)
+				continue
 			}
+
+			msg.Ack(false)
 		}
 	}
 }

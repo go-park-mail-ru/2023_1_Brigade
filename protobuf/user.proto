@@ -50,6 +50,7 @@ message PutUserArguments {
   uint64  userID = 2;
 }
 
-message String {
+message SearchUsersArguments {
   string string = 1;
+  uint64  userID = 2;
 }

@@ -55,35 +55,35 @@ RabbitMQ:
   queueName: "messages"
 
 Centrifugo:
-  connAddr: "ws://centrifugo:8900/connection/websocket"
+  connAddr: "ws://localhost:8900/connection/websocket"
   channelName: "channel"
 
 ChatsService:
-  addr: "chat:9000"
-  addrMetrics: "chat:9091"
-  serviceName: "chat"
+  addr: "localhost:9000"
+  addrMetrics: "localhost:9091"
+  serviceName: "localhost"
 
 UsersService:
-  addr: "user:9001"
-  addrMetrics: "user:9092"
-  serviceName: "user"
+  addr: "localhost:9001"
+  addrMetrics: "localhost:9092"
+  serviceName: "localhost"
 
 MessagesService:
-  addr: "messages:9002"
-  addrMetrics: "messages:9093"
-  serviceName: "messages"
+  addr: "localhost:9002"
+  addrMetrics: "localhost:9093"
+  serviceName: "localhost"
 
 ConsumerService:
-  addr: "consumer:9003"
-  addrMetrics: "consumer:9094"
-  serviceName: "consumer"
+  addr: "localhost:9003"
+  addrMetrics: "localhost:9094"
+  serviceName: "localhost"
 
 ProducerService:
-  addr: "producer:9004"
-  addrMetrics: "producer:9095"
-  serviceName: "producer"
+  addr: "localhost:9004"
+  addrMetrics: "localhost:9095"
+  serviceName: "localhost"
 
 AuthService:
-  addr: "auth:9005"
-  addrMetrics: "auth:9096"
-  serviceName: "auth"
+  addr: "localhost:9005"
+  addrMetrics: "localhost:9096"
+  serviceName: "localhost"

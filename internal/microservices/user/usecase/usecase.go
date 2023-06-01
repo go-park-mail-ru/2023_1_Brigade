@@ -156,7 +156,11 @@ func (u usecase) AddUserContact(ctx context.Context, userID uint64, contactID ui
 	}
 
 	contacts, err := u.userRepo.GetUserContacts(ctx, userID)
-	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), err
+	if err != nil {
+		return nil, err
+	}
+
+	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), nil
 }
 
 func (u usecase) CheckExistUserById(ctx context.Context, userID uint64) error {

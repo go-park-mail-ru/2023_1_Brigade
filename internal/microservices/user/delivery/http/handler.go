@@ -97,8 +97,9 @@ func (u userHandler) UserAddContactHandler(ctx echo.Context) error {
 
 func (u userHandler) SearchUsersHandler(ctx echo.Context) error {
 	string := ctx.Param("string")
+	session := ctx.Get("session").(model.Session)
 
-	searchContacts, err := u.usecase.GetSearchUsers(context.TODO(), string)
+	searchContacts, err := u.usecase.GetSearchUsers(context.TODO(), string, session.UserId)
 	if err != nil {
 		return err
 	}

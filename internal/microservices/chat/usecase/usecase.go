@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	"project/internal/microservices/chat"
 	"project/internal/microservices/messages"
@@ -256,7 +257,7 @@ func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
 func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
 	userChats, err := u.chatRepo.GetChatsByUserId(ctx, userID)
-
+	log.Info(1)
 	if err != nil {
 		return nil, err
 	}
@@ -266,7 +267,7 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 		if err != nil {
 			return nil, err
 		}
-
+		log.Info(2)
 		chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chat.Id)
 		if err != nil {
 			return nil, err
@@ -281,12 +282,12 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 
 			members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 		}
-
+		log.Info(3)
 		lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chat.Id)
 		if err != nil {
 			return nil, err
 		}
-
+		log.Info(4)
 		var lastMessageAuthor model.AuthorizedUser
 		if lastMessage.AuthorId != 0 {
 			lastMessageAuthor, err = u.userRepo.GetUserById(ctx, lastMessage.AuthorId)
@@ -294,7 +295,7 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 				return nil, err
 			}
 		}
-
+		log.Info(5)
 		chatsInListUser = append(chatsInListUser, model.ChatInListUser{
 			Id:                chat.Id,
 			Type:              chat.Type,

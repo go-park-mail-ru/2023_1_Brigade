@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
 	"project/internal/microservices/chat"
@@ -53,10 +54,12 @@ func (u chatHandler) GetChatInfoHandler(ctx echo.Context) error {
 
 func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
+	log.Info("1")
 	listUserChats, err := u.chatUsecase.GetListUserChats(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}
+	log.Info("     END    ")
 
 	return ctx.JSON(http.StatusOK, model.Chats{Chats: listUserChats})
 }

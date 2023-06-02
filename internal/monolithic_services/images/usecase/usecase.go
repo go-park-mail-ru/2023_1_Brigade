@@ -22,7 +22,7 @@ func (u usecase) UploadGeneratedImage(ctx context.Context, bucketName string, fi
 		return err
 	}
 
-	file, err := os.Open("../background.png")
+	file, err := os.Open("background.png")
 	if err != nil {
 		return err
 	}

@@ -4,10 +4,10 @@ services:
   api:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/api/main.go
     container_name: api
-    image: technogramm/api:443f0fe
+    image: technogramm/api:4fa6dba
     depends_on:
       - postgres
     volumes:
@@ -22,10 +22,10 @@ services:
   chat:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/chat/main.go
     container_name: chat
-    image: technogramm/chat:443f0fe
+    image: technogramm/chat:4fa6dba
     depends_on:
       - postgres
     volumes:
@@ -39,10 +39,10 @@ services:
   user:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/user/main.go
     container_name: user
-    image: technogramm/user:443f0fe
+    image: technogramm/user:4fa6dba
     depends_on:
       - postgres
     volumes:
@@ -56,10 +56,10 @@ services:
   messages:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/messages/main.go
     container_name: messages
-    image: technogramm/messages:443f0fe
+    image: technogramm/messages:4fa6dba
     depends_on:
       - postgres
       - consumer
@@ -75,10 +75,10 @@ services:
   consumer:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/consumer/rabbitMQ/main.go
     container_name: consumer
-    image: technogramm/consumer:443f0fe
+    image: technogramm/consumer:4fa6dba
     depends_on:
       - rabbitmq
     volumes:
@@ -92,10 +92,10 @@ services:
   producer:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/producer/rabbitMQ/main.go
     container_name: producer
-    image: technogramm/producer:443f0fe
+    image: technogramm/producer:4fa6dba
     depends_on:
       - rabbitmq
     volumes:
@@ -109,10 +109,10 @@ services:
   auth:
     build:
       args:
-        VERSION: 443f0fe
+        VERSION: 4fa6dba
         SRC_PATH: cmd/auth/main.go
     container_name: auth
-    image: technogramm/auth:443f0fe
+    image: technogramm/auth:4fa6dba
     depends_on:
       - postgres
     volumes:

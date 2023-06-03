@@ -4,10 +4,17 @@ import (
 	"github.com/centrifugal/centrifuge-go"
 	"os"
 	"os/signal"
-	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
-	clientChat "project/internal/microservices/chat/delivery/grpc/client"
+	usecaseAuth "project/internal/microservices/auth/usecase"
+	//clientAuth "project/internal/microservices/auth/delivery/grpc/client"
+	authUserRepository "project/internal/microservices/auth/repository"
+	//clientChat "project/internal/microservices/chat/delivery/grpc/client"
+	repositoryChat "project/internal/microservices/chat/repository"
+	usecaseChat "project/internal/microservices/chat/usecase"
 	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
-	clientUser "project/internal/microservices/user/delivery/grpc/client"
+	repositoryMessages "project/internal/microservices/messages/repository"
+	//clientUser "project/internal/microservices/user/delivery/grpc/client"
+	repositoryUser "project/internal/microservices/user/repository"
+	usecaseUser "project/internal/microservices/user/usecase"
 	"project/internal/pkg/serialization"
 
 	"github.com/jmoiron/sqlx"
@@ -112,7 +119,7 @@ func main() {
 		}
 	}()
 
-	db.SetMaxIdleConns(15)
+	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
 	centrifugoMessagesClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
@@ -164,35 +171,35 @@ func main() {
 		log.Error(err)
 	}
 
-	grpcConnChats, err := grpc.Dial(
-		config.ChatsService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
-	}
-	defer func() {
-		err = grpcConnChats.Close()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
-
-	grpcConnUsers, err := grpc.Dial(
-		config.UsersService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
-	}
-	defer func() {
-		err = grpcConnUsers.Close()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
+	//grpcConnChats, err := grpc.Dial(
+	//	config.ChatsService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer func() {
+	//	err = grpcConnChats.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
+	//
+	//grpcConnUsers, err := grpc.Dial(
+	//	config.UsersService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer func() {
+	//	err = grpcConnUsers.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
 
 	grpcConnMessages, err := grpc.Dial(
 		config.MessagesService.Addr,
@@ -209,31 +216,41 @@ func main() {
 		}
 	}()
 
-	grpcConnAuth, err := grpc.Dial(
-		config.AuthService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
-	}
-	defer func() {
-		err = grpcConnAuth.Close()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
+	//grpcConnAuth, err := grpc.Dial(
+	//	config.AuthService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer func() {
+	//	err = grpcConnAuth.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
 
-	authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
-	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
-	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
-	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
+	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
+	//authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
+	//imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
+	chatRepo := repositoryChat.NewChatMemoryRepository(db)
+	userRepo := repositoryUser.NewUserMemoryRepository(db)
+	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
 	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
+
+	authService := usecaseAuth.NewAuthUserUsecase(authUserRepository, userRepo, chatRepo, imagesUsecase)
+	chatService := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo, imagesUsecase)
+	userService := usecaseUser.NewUserUsecase(userRepo, authUserRepository, imagesUsecase)
+	//authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
+	//chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
+	//userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
+	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

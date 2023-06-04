@@ -4,9 +4,6 @@
 
 [Репозиторий фронта](https://github.com/frontend-park-mail-ru/2023_1_Brigade)
 
-## Ссылка на деплой (ОБЯЗАТЕЛЬНО ДОБАВИТЬ ПЕРЕД РК)
-https://technogramm.ru/
-
 ## Состав
 
 - [Геворк Габриелян](https://github.com/Gev0rg)

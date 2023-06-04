@@ -16,3 +16,7 @@ https://technogramm.ru/
 
 Ментор по беку - [Олег Реуцкий](https://github.com/astlok)  
 Ментор по фронту - [Антон Елагин](https://github.com/AntonElagin)
+
+## Путь сообщения
+
+![first_iter](https://github.com/go-park-mail-ru/2023_1_Brigade/blob/marcussss1-patch-4/photo_2023-06-01_17-28-13.jpg)

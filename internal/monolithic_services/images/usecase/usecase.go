@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"project/internal/monolithic_services/images"
+	"project/internal/pkg/image_generation"
 )
 
 type usecase struct {
@@ -16,10 +17,10 @@ func NewImagesUsecase(imagesRepo images.Repository) images.Usecase {
 }
 
 func (u usecase) UploadGeneratedImage(ctx context.Context, bucketName string, filename string, firstCharacterName string) error {
-	//err := image_generation.GenerateAvatar(firstCharacterName)
-	//if err != nil {
-	//	return err
-	//}
+	err := image_generation.GenerateAvatar(firstCharacterName)
+	if err != nil {
+		return err
+	}
 
 	file, err := os.Open("background.png")
 	if err != nil {

@@ -11,6 +11,7 @@ import (
 	"project/internal/monolithic_services/images"
 	myErrors "project/internal/pkg/errors"
 	"project/internal/pkg/model_conversion"
+	"sort"
 	"strconv"
 )
 
@@ -86,21 +87,108 @@ func (u usecase) GetChatById(ctx context.Context, chatID uint64, userID uint64) 
 		messages = append(messages, message)
 	}
 
-	return model.Chat{
-		Id:       chat.Id,
-		MasterID: chat.MasterID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
-		Members:  members,
-		Messages: messages,
-	}, nil
+	returnedChat := model.Chat{
+		Id:          chat.Id,
+		MasterID:    chat.MasterID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     members,
+		Messages:    messages,
+	}
+
+	if returnedChat.Type == config.Chat {
+		if len(returnedChat.Members) > 0 {
+			if returnedChat.Members[0].Id == userID {
+				returnedChat.Title = returnedChat.Members[1].Nickname
+				returnedChat.Avatar = returnedChat.Members[1].Avatar
+				returnedChat.Description = returnedChat.Members[1].Status
+			} else {
+				returnedChat.Title = returnedChat.Members[0].Nickname
+				returnedChat.Avatar = returnedChat.Members[0].Avatar
+				returnedChat.Description = returnedChat.Members[0].Status
+			}
+		}
+	}
+
+	return returnedChat, nil
+}
+
+func (u usecase) GetChatInfoById(ctx context.Context, chatID uint64, userID uint64) (model.ChatInListUser, error) {
+	chat, err := u.chatRepo.GetChatById(ctx, chatID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chatID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	if chat.Type != config.Channel {
+		userInChat := false
+		for _, chatMember := range chatMembers {
+			if chatMember.MemberId == userID {
+				userInChat = true
+				continue
+			}
+		}
+
+		if !userInChat {
+			return model.ChatInListUser{}, myErrors.ErrNotChatAccess
+		}
+	}
+
+	var members []model.User
+	for _, chatMember := range chatMembers {
+		user, err := u.userRepo.GetUserById(ctx, chatMember.MemberId)
+		if err != nil {
+			return model.ChatInListUser{}, err
+		}
+
+		members = append(members, model_conversion.FromAuthorizedUserToUser(user))
+	}
+
+	lastMessage, err := u.messagesRepo.GetLastChatMessage(ctx, chatID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	lastMessageAuthor, err := u.userRepo.GetUserById(ctx, userID)
+	if err != nil {
+		return model.ChatInListUser{}, err
+	}
+
+	returnedChat := model.ChatInListUser{
+		Id:                chat.Id,
+		Type:              chat.Type,
+		Title:             chat.Title,
+		Avatar:            chat.Avatar,
+		Members:           members,
+		LastMessage:       lastMessage,
+		LastMessageAuthor: model_conversion.FromAuthorizedUserToUser(lastMessageAuthor),
+	}
+
+	if returnedChat.Type == config.Chat {
+		if len(returnedChat.Members) > 0 {
+			if returnedChat.Members[0].Id == userID {
+				returnedChat.Title = returnedChat.Members[1].Nickname
+				returnedChat.Avatar = returnedChat.Members[1].Avatar
+			} else {
+				returnedChat.Title = returnedChat.Members[0].Nickname
+				returnedChat.Avatar = returnedChat.Members[0].Avatar
+			}
+		}
+	}
+
+	return returnedChat, nil
 }
 
 func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID uint64) (model.Chat, error) {
 	var members []model.User
-	for _, userID := range chat.Members {
-		user, err := u.userRepo.GetUserById(ctx, userID)
+	for _, memberID := range chat.Members {
+		user, err := u.userRepo.GetUserById(ctx, memberID)
 		if err != nil {
 			return model.Chat{}, err
 		}
@@ -109,11 +197,13 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 	}
 
 	createdChat := model.Chat{
-		MasterID: userID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Members:  members,
-		Messages: []model.Message{},
+		MasterID:    userID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     members,
+		Messages:    []model.Message{},
 	}
 
 	chatFromDB, err := u.chatRepo.CreateChat(ctx, createdChat)
@@ -121,27 +211,42 @@ func (u usecase) CreateChat(ctx context.Context, chat model.CreateChat, userID u
 		return model.Chat{}, err
 	}
 
-	if createdChat.Type != config.Chat {
+	if createdChat.Type != config.Chat && createdChat.Avatar == "" {
 		filename := strconv.FormatUint(chatFromDB.Id, 10)
-		firstCharacterName := string(chat.Title[0])
+		firstCharacterName := string([]rune(chat.Title)[0])
 
 		err = u.imagesUsecase.UploadGeneratedImage(ctx, config.ChatAvatarsBucket, filename, firstCharacterName)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		url, err := u.imagesUsecase.GetImage(ctx, config.ChatAvatarsBucket, filename)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 
 		chatFromDB, err = u.chatRepo.UpdateChatAvatar(ctx, url, chatFromDB.Id)
 		if err != nil {
-			log.Error(err)
+			return model.Chat{}, err
 		}
 	}
 
-	return chatFromDB, err
+	if chat.Type == config.Chat {
+		if len(chatFromDB.Members) > 0 {
+			if chatFromDB.Members[0].Id == userID {
+				chatFromDB.Title = chatFromDB.Members[1].Nickname
+				chatFromDB.Avatar = chatFromDB.Members[1].Avatar
+				chatFromDB.Description = chatFromDB.Members[1].Status
+			} else {
+				chatFromDB.Title = chatFromDB.Members[0].Nickname
+				chatFromDB.Avatar = chatFromDB.Members[0].Avatar
+				chatFromDB.Description = chatFromDB.Members[0].Status
+			}
+		}
+	}
+
+	chatFromDB.MasterID = userID
+	return chatFromDB, nil
 }
 
 func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
@@ -152,7 +257,7 @@ func (u usecase) DeleteChatById(ctx context.Context, chatID uint64) error {
 func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.ChatInListUser, error) {
 	var chatsInListUser []model.ChatInListUser
 	userChats, err := u.chatRepo.GetChatsByUserId(ctx, userID)
-
+	log.Info("1 2")
 	if err != nil {
 		return nil, err
 	}
@@ -162,19 +267,19 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 		if err != nil {
 			return nil, err
 		}
-
+		log.Info("1 2 3")
 		chatMembers, err := u.chatRepo.GetChatMembersByChatId(ctx, chat.Id)
 		if err != nil {
 			return nil, err
 		}
-
+		log.Info("1 2 3 4")
 		var members []model.User
 		for _, chatMember := range chatMembers {
 			user, err := u.userRepo.GetUserById(ctx, chatMember.MemberId)
 			if err != nil {
 				return nil, err
 			}
-
+			log.Info("1 2 3 4 5")
 			members = append(members, model_conversion.FromAuthorizedUserToUser(user))
 		}
 
@@ -182,10 +287,11 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 		if err != nil {
 			return nil, err
 		}
-
+		log.Info("1 2 3 4 5 6")
 		var lastMessageAuthor model.AuthorizedUser
 		if lastMessage.AuthorId != 0 {
 			lastMessageAuthor, err = u.userRepo.GetUserById(ctx, lastMessage.AuthorId)
+			log.Info("1 2 3 4 5 6 7")
 			if err != nil {
 				return nil, err
 			}
@@ -214,19 +320,26 @@ func (u usecase) GetListUserChats(ctx context.Context, userID uint64) ([]model.C
 		}
 	}
 
+	sort.Slice(chatsInListUser, func(i, j int) bool {
+		return chatsInListUser[i].LastMessage.CreatedAt > chatsInListUser[j].LastMessage.CreatedAt
+	})
+
 	return chatsInListUser, nil
 }
 
 func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.Chat, error) {
-	chatFromDB, err := u.chatRepo.UpdateChatById(ctx, editChat.Title, editChat.Id)
+	chatFromDB, err := u.chatRepo.UpdateChatById(ctx, editChat)
 	if err != nil {
 		return model.Chat{}, err
 	}
+
 	chat := model.Chat{
-		Id:     chatFromDB.Id,
-		Type:   chatFromDB.Type,
-		Title:  chatFromDB.Title,
-		Avatar: chatFromDB.Avatar,
+		Id:          chatFromDB.Id,
+		MasterID:    chatFromDB.MasterID,
+		Type:        chatFromDB.Type,
+		Description: chatFromDB.Description,
+		Title:       chatFromDB.Title,
+		Avatar:      chatFromDB.Avatar,
 	}
 
 	err = u.chatRepo.DeleteChatMembers(context.TODO(), editChat.Id)
@@ -236,7 +349,7 @@ func (u usecase) EditChat(ctx context.Context, editChat model.EditChat) (model.C
 
 	var members []model.User
 	for _, memberID := range editChat.Members {
-		err := u.userRepo.CheckExistUserById(context.TODO(), memberID)
+		err = u.userRepo.CheckExistUserById(context.TODO(), memberID)
 		if err != nil {
 			return model.Chat{}, err
 		}
@@ -274,7 +387,7 @@ func (u usecase) GetSearchChatsMessagesChannels(ctx context.Context, userID uint
 		return model.FoundedChatsMessagesChannels{}, err
 	}
 
-	foundedContacts, err := u.userRepo.GetSearchUsers(ctx, string)
+	foundedContacts, err := u.userRepo.GetSearchUsers(ctx, string, userID)
 	if err != nil {
 		return model.FoundedChatsMessagesChannels{}, err
 	}

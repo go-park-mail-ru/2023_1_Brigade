@@ -160,7 +160,21 @@ func (r repository) AddUserInContact(ctx context.Context, contact model.UserCont
 
 func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error {
 	var exists bool
-	err := r.db.Get(&exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
+
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return myErrors.ErrUserNotFound
+	}
+
+	return nil
+}
+
+func (r repository) CheckExistUserByEmail(ctx context.Context, email string) error {
+	var exists bool
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1)", email)
 
 	if err != nil {
 		return err
@@ -174,7 +188,7 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	var users []model.AuthorizedUser
-	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1", userID)
+	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1 AND id != $2", userID, 0)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -186,9 +200,9 @@ func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uin
 	return users, nil
 }
 
-func (r repository) GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error) {
+func (r repository) GetSearchUsers(ctx context.Context, string string, userID uint64) ([]model.AuthorizedUser, error) {
 	var searchUsers []model.AuthorizedUser
-	err := r.db.Select(&searchUsers, `SELECT * FROM profile WHERE nickname ILIKE $1`, "%"+string+"%")
+	err := r.db.SelectContext(ctx, &searchUsers, `SELECT * FROM profile WHERE nickname ILIKE $1 AND id != $2`, "%"+string+"%", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, myErrors.ErrUserNotFound

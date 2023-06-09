@@ -45,6 +45,8 @@ func StatusCode(err error) int {
 		return http.StatusConflict
 	case errors.Is(err, myErrors.ErrUserIsAlreadyInChat):
 		return http.StatusConflict
+	case errors.Is(err, myErrors.ErrBigFileSize):
+		return http.StatusRequestEntityTooLarge
 	default:
 		return http.StatusInternalServerError
 	}

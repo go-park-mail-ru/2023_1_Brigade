@@ -11,6 +11,7 @@ import (
 	"project/internal/microservices/user"
 	"project/internal/model"
 	"project/internal/monolithic_services/images"
+	myErrors "project/internal/pkg/errors"
 )
 
 type imagesHandler struct {
@@ -19,10 +20,10 @@ type imagesHandler struct {
 }
 
 func (h imagesHandler) UploadUserAvatarsHandler(ctx echo.Context) error {
-	maxSize := int64(64 << 20)
+	maxSize := int64(64 << 18)
 	err := ctx.Request().ParseMultipartForm(maxSize)
 	if err != nil {
-		return err
+		return myErrors.ErrBigFileSize
 	}
 
 	file, _, err := ctx.Request().FormFile("image")
@@ -57,10 +58,10 @@ func (h imagesHandler) UploadUserAvatarsHandler(ctx echo.Context) error {
 }
 
 func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
-	maxSize := int64(64 << 20)
+	maxSize := int64(64 << 18)
 	err := ctx.Request().ParseMultipartForm(maxSize)
 	if err != nil {
-		return err
+		return myErrors.ErrBigFileSize
 	}
 
 	file, _, err := ctx.Request().FormFile("image")
@@ -95,10 +96,10 @@ func (h imagesHandler) UploadChatAvatarsHandler(ctx echo.Context) error {
 }
 
 func (h imagesHandler) UploadChatImagesHandler(ctx echo.Context) error {
-	maxSize := int64(64 << 20)
+	maxSize := int64(64 << 18)
 	err := ctx.Request().ParseMultipartForm(maxSize)
 	if err != nil {
-		return err
+		return myErrors.ErrBigFileSize
 	}
 
 	file, header, err := ctx.Request().FormFile("image")

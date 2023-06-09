@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	"project/internal/config"
 	"project/internal/microservices/messages"
 	"project/internal/model"
 	myErrors "project/internal/pkg/errors"
@@ -19,8 +20,34 @@ func NewMessagesMemoryRepository(db *sqlx.DB) messages.Repository {
 }
 
 func (r repository) EditMessageById(ctx context.Context, producerMessage model.ProducerMessage) (model.Message, error) {
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return model.Message{}, err
+	}
+
 	var message model.Message
-	err := r.db.GetContext(ctx, &message, "UPDATE message SET body = $1 WHERE id = $2 RETURNING *", producerMessage.Body, producerMessage.Id)
+	err = r.db.GetContext(ctx, &message, "UPDATE message SET body = $1 WHERE id = $2 RETURNING *", producerMessage.Body, producerMessage.Id)
+	if err != nil {
+		_ = tx.Rollback()
+		return model.Message{}, err
+	}
+
+	_, err = r.db.ExecContext(ctx, "DELETE FROM attachments WHERE id_message=$1", message.Id)
+	if err != nil {
+		_ = tx.Rollback()
+		return model.Message{}, err
+	}
+
+	for _, attachment := range producerMessage.Attachments {
+		_, err = r.db.ExecContext(ctx, `INSERT INTO attachments (id_message, url, name) VALUES ($1, $2, $3)`,
+			message.Id, attachment.Url, attachment.Name)
+		if err != nil {
+			_ = tx.Rollback()
+			return model.Message{}, err
+		}
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		return model.Message{}, err
 	}
@@ -197,6 +224,10 @@ func (r repository) GetLastChatMessage(ctx context.Context, chatID uint64) (mode
 		})
 	}
 
+	if lastMessage.Type == config.Sticker {
+		lastMessage.Body = "Cтикер"
+	}
+
 	return lastMessage, nil
 }
 
@@ -211,7 +242,7 @@ func (r repository) GetSearchMessages(ctx context.Context, userID uint64, string
 		"%"+string+"%", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, myErrors.ErrChatNotFound
+			return messages, nil
 		}
 
 		return nil, err

@@ -14,6 +14,8 @@ import (
 	"project/internal/microservices/messages"
 	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+	myErrors "project/internal/pkg/errors"
+	httpUtils "project/internal/pkg/http_utils"
 	"time"
 )
 
@@ -25,7 +27,7 @@ type usecase struct {
 }
 
 func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, producer producer.Usecase, messagesRepo messages.Repository) messages.Usecase {
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {
@@ -43,14 +45,33 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		return err
 	}
 
+	members, err := u.chatRepo.GetChatMembersByChatId(ctx, webSocketMessage.ChatID)
+	if err != nil {
+		return err
+	}
+
+	userInChat := false
+	for _, member := range members {
+		if member.MemberId == webSocketMessage.AuthorID {
+			userInChat = true
+			break
+		}
+	}
+
+	if !userInChat {
+		return myErrors.ErrNotChatAccess
+	}
+
+	webSocketMessage = httpUtils.SanitizeStruct(webSocketMessage).(model.WebSocketMessage)
+
 	producerMessage := model.ProducerMessage{
-		Id:       webSocketMessage.Id,
-		ImageUrl: webSocketMessage.ImageUrl,
-		Action:   webSocketMessage.Action,
-		Type:     webSocketMessage.Type,
-		Body:     webSocketMessage.Body,
-		AuthorId: webSocketMessage.AuthorID,
-		ChatID:   webSocketMessage.ChatID,
+		Id:          webSocketMessage.Id,
+		Attachments: webSocketMessage.Attachments,
+		Action:      webSocketMessage.Action,
+		Type:        webSocketMessage.Type,
+		Body:        webSocketMessage.Body,
+		AuthorId:    webSocketMessage.AuthorID,
+		ChatID:      webSocketMessage.ChatID,
 	}
 
 	// если пришел ивент на создание сообщения (0)
@@ -63,13 +84,13 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 	case config.Create:
 		go func() {
 			err := u.messagesRepo.InsertMessageInDB(context.TODO(), model.Message{
-				Id:        producerMessage.Id,
-				ImageUrl:  producerMessage.ImageUrl,
-				Type:      producerMessage.Type,
-				Body:      producerMessage.Body,
-				AuthorId:  producerMessage.AuthorId,
-				ChatId:    producerMessage.ChatID,
-				CreatedAt: producerMessage.CreatedAt,
+				Id:          producerMessage.Id,
+				Attachments: webSocketMessage.Attachments,
+				Type:        producerMessage.Type,
+				Body:        producerMessage.Body,
+				AuthorId:    producerMessage.AuthorId,
+				ChatId:      producerMessage.ChatID,
+				CreatedAt:   producerMessage.CreatedAt,
 			})
 			if err != nil {
 				log.Error(err)
@@ -91,11 +112,6 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 		}()
 	default:
 		return errors.New("не выбран ни один из трех 0, 1, 2")
-	}
-
-	members, err := u.chatRepo.GetChatMembersByChatId(context.TODO(), webSocketMessage.ChatID)
-	if err != nil {
-		return err
 	}
 
 	for _, member := range members {

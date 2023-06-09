@@ -90,6 +90,10 @@ func TestDeleteMessageById(t *testing.T) {
 		WithArgs(messageID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
+	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM attachments WHERE id_message=$1`)).
+		WithArgs(messageID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
 	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM message WHERE id=$1`)).
 		WithArgs(messageID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
@@ -105,11 +109,12 @@ func TestDeleteMessageById(t *testing.T) {
 
 func TestPostgres_GetMessageByID_OK(t *testing.T) {
 	expectedMessage := model.Message{
-		Id:        uuid.New().String(),
-		Body:      "Hello world!",
-		AuthorId:  1,
-		ChatId:    1,
-		CreatedAt: time.Now().String(),
+		Id:          uuid.New().String(),
+		Attachments: []model.File{{}},
+		Body:        "Hello world!",
+		AuthorId:    1,
+		ChatId:      1,
+		CreatedAt:   time.Now().String(),
 	}
 
 	db, mock, err := sqlmock.New()
@@ -121,13 +126,24 @@ func TestPostgres_GetMessageByID_OK(t *testing.T) {
 		}
 	}()
 
-	row := sqlmock.NewRows([]string{"id", "body", "author_id", "id_chat", "created_at"}).
+	rowMessage := sqlmock.NewRows([]string{"id", "body", "author_id", "id_chat", "created_at"}).
 		AddRow(expectedMessage.Id, expectedMessage.Body, expectedMessage.AuthorId, expectedMessage.ChatId, expectedMessage.CreatedAt)
+
+	rowAttachments := sqlmock.NewRows([]string{"id_message", "url"}).
+		AddRow("", "")
+
+	mock.ExpectBegin()
 
 	mock.
 		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM message WHERE id=$1`)).
 		WithArgs(expectedMessage.Id).
-		WillReturnRows(row)
+		WillReturnRows(rowMessage)
+
+	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM attachments WHERE id_message=$1")).
+		WithArgs(expectedMessage.Id).
+		WillReturnRows(rowAttachments)
+
+	mock.ExpectCommit()
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewMessagesMemoryRepository(dbx)
@@ -181,7 +197,6 @@ func TestPostgres_GetChatMessages_OK(t *testing.T) {
 func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 	message := model.Message{
 		Id:        uuid.New().String(),
-		ImageUrl:  "",
 		Type:      config.NotSticker,
 		Body:      "Hello world!",
 		AuthorId:  1,
@@ -203,9 +218,13 @@ func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 
 	mock.ExpectBegin()
 
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)`+`VALUES (?, ?, ?, ?, ?, ?, ?)`)).
-		WithArgs(message.Id, message.ImageUrl, message.Type, message.Body, message.ChatId, message.AuthorId, message.CreatedAt).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO message (id, type, body, id_chat, author_id, created_at)`+`VALUES (?, ?, ?, ?, ?, ?)`)).
+		WithArgs(message.Id, message.Type, message.Body, message.ChatId, message.AuthorId, message.CreatedAt).
 		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	//mock.ExpectExec(regexp.QuoteMeta("INSERT INTO attachments (id_message, url) VALUES (?, ?)")).
+	//	WithArgs(message.ChatId, message.Id).
+	//	WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectExec(regexp.QuoteMeta("INSERT INTO chat_messages (id_chat, id_message) VALUES (?, ?)")).
 		WithArgs(message.ChatId, message.Id).
@@ -222,11 +241,12 @@ func TestPostgres_InsertMessageInDB_OK(t *testing.T) {
 
 func TestPostgres_GetLastChatMessage_OK(t *testing.T) {
 	expectedMessage := model.Message{
-		Id:        uuid.New().String(),
-		Body:      "Hello world!",
-		AuthorId:  1,
-		ChatId:    1,
-		CreatedAt: time.Now().String(),
+		Id:          uuid.New().String(),
+		Attachments: []model.File{{}},
+		Body:        "Hello world!",
+		AuthorId:    1,
+		ChatId:      1,
+		CreatedAt:   time.Now().String(),
 	}
 
 	db, mock, err := sqlmock.New()
@@ -238,13 +258,24 @@ func TestPostgres_GetLastChatMessage_OK(t *testing.T) {
 		}
 	}()
 
-	row := sqlmock.NewRows([]string{"id", "body", "author_id", "id_chat", "created_at"}).
+	rowMessage := sqlmock.NewRows([]string{"id", "body", "author_id", "id_chat", "created_at"}).
 		AddRow(expectedMessage.Id, expectedMessage.Body, expectedMessage.AuthorId, expectedMessage.ChatId, expectedMessage.CreatedAt)
+
+	rowAttachments := sqlmock.NewRows([]string{"id_message", "url"}).
+		AddRow("", "")
+
+	mock.ExpectBegin()
 
 	mock.
 		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM message WHERE id_chat = $1 AND created_at = (SELECT MAX(created_at) FROM message WHERE id_chat = $1)`)).
 		WithArgs(expectedMessage.ChatId).
-		WillReturnRows(row)
+		WillReturnRows(rowMessage)
+
+	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM attachments WHERE id_message=$1")).
+		WithArgs(expectedMessage.Id).
+		WillReturnRows(rowAttachments)
+
+	mock.ExpectCommit()
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewMessagesMemoryRepository(dbx)

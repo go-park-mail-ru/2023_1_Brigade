@@ -2,16 +2,19 @@ package ws
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/centrifugal/centrifuge-go"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"os/signal"
 	"project/internal/config"
 	messagesMock "project/internal/microservices/messages/usecase/mocks"
 	"project/internal/model"
@@ -38,7 +41,7 @@ func (h *WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := e.NewContext(r, w)
 	c.Set("session", model.Session{UserId: 1})
 	forever := make(chan struct{})
-	h.handler(c)
+	_ = h.handler(c)
 	<-forever
 }
 
@@ -47,20 +50,6 @@ func TestHandlers_WSHandler(t *testing.T) {
 		ConnAddr:    "ws://localhost:8900/connection/websocket",
 		ChannelName: "channel",
 	}
-
-	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
-
-	err := c.Connect()
-	assert.NoError(t, err)
-
-	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	assert.NoError(t, err)
-
-	err = sub.Subscribe()
-	assert.NoError(t, err)
 
 	wsMessage := model.WebSocketMessage{
 		Id:       "",
@@ -79,10 +68,10 @@ func TestHandlers_WSHandler(t *testing.T) {
 		ReceiverID: 1,
 	}
 
-	wsMessageJson, err := json.Marshal(wsMessage)
+	wsMessageJson, err := easyjson.Marshal(wsMessage)
 	assert.NoError(t, err)
 
-	producerMessageJson, err := json.Marshal(producerMessage)
+	producerMessageJson, err := easyjson.Marshal(producerMessage)
 	assert.NoError(t, err)
 
 	tests := []testCase{
@@ -116,7 +105,36 @@ func TestHandlers_WSHandler(t *testing.T) {
 
 	messagesUsecase := messagesMock.NewMockUsecase(ctl)
 
-	handler, err := NewMessagesHandler(e, messagesUsecase, centrifugo)
+	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		c.Close()
+		log.Fatal()
+	}()
+
+	err = c.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	handler, err := NewMessagesHandler(e, messagesUsecase, c, centrifugo.ChannelName)
 	assert.NoError(t, err)
 
 	h := WsHandler{handler: handler.SendMessagesHandler}
@@ -126,7 +144,12 @@ func TestHandlers_WSHandler(t *testing.T) {
 	wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/message/"
 	ws, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
 	assert.NoError(t, err, err)
-	defer ws.Close()
+	defer func() {
+		err = ws.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	for _, test := range tests {
 		messagesUsecase.EXPECT().PutInProducer(context.TODO(), test.wsBody).Return(test.producerResult).AnyTimes()
@@ -147,7 +170,7 @@ func TestHandlers_WSHandler(t *testing.T) {
 
 		_, err := sub.Publish(context.TODO(), test.producerBody)
 		require.NoError(t, err)
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(250 * time.Millisecond)
 
 		_, msg, err := ws.ReadMessage()
 		require.Equal(t, test.producerBody, msg)

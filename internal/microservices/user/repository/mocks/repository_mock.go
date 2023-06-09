@@ -166,17 +166,47 @@ func (mr *MockRepositoryMockRecorder) GetUserContacts(ctx, userID interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserContacts", reflect.TypeOf((*MockRepository)(nil).GetUserContacts), ctx, userID)
 }
 
-// UpdateUserById mocks base method.
-func (m *MockRepository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+// UpdateUserAvatarNicknameById mocks base method.
+func (m *MockRepository) UpdateUserAvatarNicknameById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateUserById", ctx, user)
+	ret := m.ctrl.Call(m, "UpdateUserAvatarNicknameById", ctx, user)
 	ret0, _ := ret[0].(model.AuthorizedUser)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateUserById indicates an expected call of UpdateUserById.
-func (mr *MockRepositoryMockRecorder) UpdateUserById(ctx, user interface{}) *gomock.Call {
+// UpdateUserAvatarNicknameById indicates an expected call of UpdateUserAvatarNicknameById.
+func (mr *MockRepositoryMockRecorder) UpdateUserAvatarNicknameById(ctx, user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserById", reflect.TypeOf((*MockRepository)(nil).UpdateUserById), ctx, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserAvatarNicknameById", reflect.TypeOf((*MockRepository)(nil).UpdateUserAvatarNicknameById), ctx, user)
+}
+
+// UpdateUserEmailStatusById mocks base method.
+func (m *MockRepository) UpdateUserEmailStatusById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserEmailStatusById", ctx, user)
+	ret0, _ := ret[0].(model.AuthorizedUser)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateUserEmailStatusById indicates an expected call of UpdateUserEmailStatusById.
+func (mr *MockRepositoryMockRecorder) UpdateUserEmailStatusById(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserEmailStatusById", reflect.TypeOf((*MockRepository)(nil).UpdateUserEmailStatusById), ctx, user)
+}
+
+// UpdateUserPasswordById mocks base method.
+func (m *MockRepository) UpdateUserPasswordById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserPasswordById", ctx, user)
+	ret0, _ := ret[0].(model.AuthorizedUser)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateUserPasswordById indicates an expected call of UpdateUserPasswordById.
+func (mr *MockRepositoryMockRecorder) UpdateUserPasswordById(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserPasswordById", reflect.TypeOf((*MockRepository)(nil).UpdateUserPasswordById), ctx, user)
 }

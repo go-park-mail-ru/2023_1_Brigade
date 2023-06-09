@@ -42,6 +42,15 @@ func (c *chatsServiceGRPCServer) GetChatById(ctx context.Context, getChatArgumen
 	return model_conversion.FromChatToProtoChat(chat), nil
 }
 
+func (c *chatsServiceGRPCServer) GetChatInfoById(ctx context.Context, getChatArguments *generated.GetChatArguments) (*generated.ChatInListUser, error) {
+	chat, err := c.chatUsecase.GetChatInfoById(ctx, getChatArguments.ChatID, getChatArguments.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	return model_conversion.FromUserChatToProtoUserChat(chat), nil
+}
+
 func (c *chatsServiceGRPCServer) EditChat(ctx context.Context, editChat *generated.EditChatModel) (*generated.Chat, error) {
 	chat, err := c.chatUsecase.EditChat(ctx, model_conversion.FromProtoEditChatToEditChat(editChat))
 	if err != nil {

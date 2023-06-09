@@ -26,6 +26,10 @@ run_stack:
 run_prod:
 	cd docker && docker compose -f docker-compose-prod.yml up -d
 
+.PHONY: stop_prod
+stop_prod:
+	cd docker && docker compose -f docker-compose-prod.yml down
+
 .PHONY: run_sentry
 run_sentry: |
 	cd docker && docker compose -f docker-compose-stack.yml run --rm sentry-base config generate-secret-key
@@ -44,14 +48,18 @@ generate_proto_rpc: |
 generate_proto: |
 	find protobuf -type f -name '*.proto' ! -name '*_rpc.proto' -exec protoc --go_out=internal/generated {} +
 
+.PHONY: generate_easyjson
+generate_easyjson: |
+	cd internal/model && easyjson --all *.go
+
 .PHONY: cover_out
 cover_out: |
 	go test -coverprofile=c.out ./... -coverpkg=./...
-	cat c.out | grep -v "cmd" | grep -v "_mock.go" | grep -v ".pb" > tmp.out
+	cat c.out | grep -v "_mock.go" | grep -v ".pb" | grep -v "_easyjson.go" > tmp.out
 	go tool cover -func=tmp.out
 
 .PHONY: cover_html
 cover_html: |
 	go test -v ./... -coverprofile=c.out ./... -coverpkg=./...
-	cat c.out | grep -v "cmd" | grep -v "_mock.go" | grep -v ".pb" > tmp.out
+	cat c.out | grep -v "cmd" | grep -v "_mock.go" | grep -v ".pb" | grep -v "_easyjson.go" > tmp.out
 	go tool cover -html=tmp.out

@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS chat (
     id    SERIAL UNIQUE PRIMARY KEY,
     master_id    INTEGER,
     type INTEGER,
+    description VARCHAR(255),
     avatar VARCHAR(1024),
     title VARCHAR(255),
     FOREIGN KEY (master_id) REFERENCES profile(id)
@@ -25,9 +26,8 @@ CREATE TABLE IF NOT EXISTS chat (
 
 CREATE TABLE IF NOT EXISTS message (
     id         VARCHAR(255) UNIQUE,
-    image_url  VARCHAR(1024),
     type       INTEGER,
-    body       VARCHAR(1024), -- валидация, со стороны приложения
+    body       VARCHAR(1024),
     id_chat    INTEGER,
     author_id  INTEGER,
     created_at VARCHAR(255),
@@ -56,5 +56,12 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     FOREIGN KEY (id_message) REFERENCES message(id)
 );
 
+CREATE TABLE IF NOT EXISTS attachments (
+    id_message VARCHAR(255),
+    url        VARCHAR(1024),
+    name       VARCHAR(255),
+    FOREIGN KEY (id_message) REFERENCES message(id)
+);
+
 INSERT INTO profile (id, avatar, username, nickname, email, status, password)
-VALUES (0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm', 'Technogramm', '', 'Technogramm', '123');
+VALUES (0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm', 'Technogramm', 'technogramm@mail.ru', 'Служебный чат', 'Technogramm');

@@ -64,9 +64,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
-	db.SetMaxIdleConns(10)
+	db.SetMaxIdleConns(15)
 	db.SetMaxOpenConns(10)
 
 	userAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{

@@ -62,7 +62,7 @@ func (u *usecase) StartConsumeMessages(ctx context.Context) {
 	handler := messageHandler{messagesChan: u.messagesChan}
 	topic := []string{"messages"}
 
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
 	go func() {

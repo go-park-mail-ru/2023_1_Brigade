@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/golang/mock/gomock"
+	"github.com/mailru/easyjson"
 	"github.com/stretchr/testify/require"
 	"project/internal/config"
 	chatMock "project/internal/microservices/chat/repository/mocks"
@@ -79,8 +80,8 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 		},
 		{
 			name: `send message;
-                      get chat members error;
-                      zero members`,
+                   get chat members error;
+                   zero members`,
 			dbError:       nil,
 			members:       []model.ChatMembers{},
 			membersError:  myErrors.ErrMembersNotFound,
@@ -88,9 +89,9 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 			result:        myErrors.ErrMembersNotFound,
 		},
 		{
-			name: `send message;
-                      insert message in DB error;
-                      zero members`,
+			name: `send message; 
+                   insert message in DB error;
+			       zero members`,
 			dbError: myErrors.ErrInternal,
 			members: []model.ChatMembers{
 				{
@@ -173,11 +174,11 @@ func Test_Messages_SendingChatMembers(t *testing.T) {
 			jsonMessages[idx] = []byte("fdafdafd")
 			continue
 		}
-		jsonMessages[idx], err = json.Marshal(message)
+		jsonMessages[idx], err = easyjson.Marshal(message)
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 
@@ -365,11 +366,11 @@ func Test_Messages_EditMessage(t *testing.T) {
 			jsonMessages[idx] = []byte("fdafdafd")
 			continue
 		}
-		jsonMessages[idx], err = json.Marshal(message)
+		jsonMessages[idx], err = easyjson.Marshal(message)
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 
@@ -557,11 +558,11 @@ func Test_Messages_DeleteMessage(t *testing.T) {
 			jsonMessages[idx] = []byte("fdafdafd")
 			continue
 		}
-		jsonMessages[idx], err = json.Marshal(message)
+		jsonMessages[idx], err = easyjson.Marshal(message)
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 
@@ -634,7 +635,7 @@ func Test_Messages_UndefinedAction(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	for idx, _ := range messages {
+	for idx := range messages {
 		tests[idx].body = jsonMessages[idx]
 	}
 

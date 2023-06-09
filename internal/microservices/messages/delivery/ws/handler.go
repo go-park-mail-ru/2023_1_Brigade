@@ -2,25 +2,24 @@ package ws
 
 import (
 	"context"
-	"encoding/json"
+	"net/http"
+	"project/internal/microservices/messages"
+	"project/internal/model"
+	"project/internal/monolithic_services/centrifugo"
+	"time"
+
 	"github.com/centrifugal/centrifuge-go"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
+	"github.com/mailru/easyjson"
 	log "github.com/sirupsen/logrus"
-	"net/http"
-	"os"
-	"os/signal"
-	"project/internal/config"
-	"project/internal/microservices/messages"
-	"project/internal/model"
-	"time"
 )
 
 type messageHandler struct {
 	messageUsecase messages.Usecase
 	upgrader       websocket.Upgrader
 	clients        map[uint64]*websocket.Conn
-	centrifugo     *centrifuge.Client
+	centrifugo     centrifugo.Centrifugo
 	channelName    string
 }
 
@@ -29,7 +28,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 	sub.OnPublication(func(e centrifuge.PublicationEvent) {
 		var producerMessage model.ProducerMessage
-		err := json.Unmarshal(e.Data, &producerMessage)
+		err := easyjson.Unmarshal(e.Data, &producerMessage)
 		if err != nil {
 			log.Error(err)
 			return
@@ -37,7 +36,6 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 
 		client := u.clients[producerMessage.ReceiverID]
 		if client == nil {
-			log.Error("nil client")
 			return
 		}
 
@@ -51,7 +49,12 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	defer ws.Close()
+	defer func() {
+		err = ws.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	session := ctx.Get("session").(model.Session)
 	u.clients[session.UserId] = ws
@@ -69,36 +72,7 @@ func (u *messageHandler) SendMessagesHandler(ctx echo.Context) error {
 	}
 }
 
-func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo config.Centrifugo) (messageHandler, error) {
-	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
-
-	signals := make(chan os.Signal)
-	signal.Notify(signals, os.Interrupt)
-
-	go func() {
-		<-signals
-		c.Close()
-		log.Fatal()
-	}()
-
-	err := c.Connect()
-	if err != nil {
-		return messageHandler{}, err
-	}
-
-	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	if err != nil {
-		return messageHandler{}, err
-	}
-
-	err = sub.Subscribe()
-	if err != nil {
-		return messageHandler{}, err
-	}
-
+func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifugo centrifugo.Centrifugo, channelName string) (messageHandler, error) {
 	handler := messageHandler{
 		messageUsecase: messageUsecase,
 		upgrader: websocket.Upgrader{
@@ -110,8 +84,8 @@ func NewMessagesHandler(e *echo.Echo, messageUsecase messages.Usecase, centrifug
 			HandshakeTimeout: time.Second * 3600,
 		},
 		clients:     make(map[uint64]*websocket.Conn),
-		centrifugo:  c,
-		channelName: centrifugo.ChannelName,
+		centrifugo:  centrifugo,
+		channelName: channelName,
 	}
 
 	sendMessagesUrl := "/message/"

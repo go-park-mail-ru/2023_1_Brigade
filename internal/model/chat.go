@@ -7,13 +7,18 @@ const (
 )
 
 type Chat struct {
-	Id       uint64    `json:"id"        db:"id"`
-	MasterID uint64    `json:"master_id" db:"master_id"`
-	Type     uint64    `json:"type"      db:"type"`
-	Title    string    `json:"title"     db:"title"`
-	Avatar   string    `json:"avatar"    db:"avatar"`
-	Members  []User    `json:"members"   db:"members"`
-	Messages []Message `json:"messages"  db:"messages"`
+	Id          uint64    `json:"id"          db:"id"`
+	MasterID    uint64    `json:"master_id"   db:"master_id"`
+	Type        uint64    `json:"type"        db:"type"`
+	Description string    `json:"description" db:"description"`
+	Title       string    `json:"title"       db:"title"`
+	Avatar      string    `json:"avatar"      db:"avatar"`
+	Members     []User    `json:"members"     db:"members"`
+	Messages    []Message `json:"messages"    db:"messages"`
+}
+
+type Chats struct {
+	Chats []ChatInListUser `json:"chats"`
 }
 
 type ChatInListUser struct {
@@ -27,24 +32,29 @@ type ChatInListUser struct {
 }
 
 type DBChat struct {
-	Id       uint64 `json:"id"     db:"id"`
-	MasterID uint64 `json:"master_id" db:"master_id"`
-	Type     uint64 `json:"type"   db:"type"`
-	Title    string `json:"title"  db:"title"`
-	Avatar   string `json:"avatar" db:"avatar"`
+	Id          uint64 `json:"id"          db:"id"`
+	MasterID    uint64 `json:"master_id"   db:"master_id"`
+	Type        uint64 `json:"type"        db:"type"`
+	Description string `json:"description" db:"description"`
+	Title       string `json:"title"       db:"title"`
+	Avatar      string `json:"avatar"      db:"avatar"`
 }
 
 type EditChat struct {
-	Id      uint64   `json:"id"       db:"id"`
-	Type    uint64   `json:"type"     db:"type"`
-	Title   string   `json:"title"    db:"title"`
-	Members []uint64 `json:"members"  db:"members"`
+	Id          uint64   `json:"id"          db:"id"`
+	Avatar      string   `json:"avatar"      db:"avatar"`
+	Description string   `json:"description" db:"description"`
+	Type        uint64   `json:"type"        db:"type"`
+	Title       string   `json:"title"       db:"title"`
+	Members     []uint64 `json:"members"     db:"members"`
 }
 
 type CreateChat struct {
-	Type    uint64   `json:"type"     db:"type"`
-	Title   string   `json:"title"    db:"title"`
-	Members []uint64 `json:"members"  db:"members"`
+	Type        uint64   `json:"type"        db:"type"`
+	Description string   `json:"description" db:"description"`
+	Title       string   `json:"title"       db:"title"`
+	Avatar      string   `json:"avatar"      db:"avatar"`
+	Members     []uint64 `json:"members"     db:"members"`
 }
 
 type ChatMembers struct {

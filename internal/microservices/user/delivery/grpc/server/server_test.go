@@ -159,7 +159,6 @@ func TestServer_PutUserById_OK(t *testing.T) {
 
 	userID := uint64(1)
 	updateUser := model.UpdateUser{
-		Username:        "marcussss2",
 		Nickname:        "marcussss2",
 		Status:          "Привет, я использую технограм! Это круто",
 		CurrentPassword: "password",

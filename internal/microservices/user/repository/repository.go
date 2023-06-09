@@ -72,7 +72,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 	err = r.db.SelectContext(ctx, &contacts, "SELECT * FROM user_contacts WHERE id_user=$1", userID)
 
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return nil, err
 	}
 
@@ -80,7 +80,7 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 	for _, contact := range contacts {
 		contactInfo, err := r.GetUserById(ctx, contact.IdContact)
 		if err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			return nil, err
 		}
 
@@ -95,9 +95,39 @@ func (r repository) GetUserContacts(ctx context.Context, userID uint64) ([]model
 	return contactsInfo, nil
 }
 
-func (r repository) UpdateUserById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
-	err := r.db.GetContext(ctx, &user, `UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5 RETURNING *`,
-		user.Username, user.Nickname, user.Status, user.Password, user.Id)
+func (r repository) UpdateUserPasswordById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET password=$1 WHERE id=$2 RETURNING *`,
+		user.Password, user.Id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+		}
+
+		return model.AuthorizedUser{}, err
+	}
+
+	return user, nil
+}
+
+func (r repository) UpdateUserEmailStatusById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET email=$1, status=$2 WHERE id=$3 RETURNING *`,
+		user.Email, user.Status, user.Id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return model.AuthorizedUser{}, myErrors.ErrUserNotFound
+		}
+
+		return model.AuthorizedUser{}, err
+	}
+
+	return user, nil
+}
+
+func (r repository) UpdateUserAvatarNicknameById(ctx context.Context, user model.AuthorizedUser) (model.AuthorizedUser, error) {
+	err := r.db.GetContext(ctx, &user, `UPDATE profile SET avatar=$1, nickname=$2 WHERE id=$3 RETURNING *`,
+		user.Avatar, user.Nickname, user.Id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -130,7 +160,21 @@ func (r repository) AddUserInContact(ctx context.Context, contact model.UserCont
 
 func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error {
 	var exists bool
-	err := r.db.Get(&exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE id=$1)", userID)
+
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return myErrors.ErrUserNotFound
+	}
+
+	return nil
+}
+
+func (r repository) CheckExistUserByEmail(ctx context.Context, email string) error {
+	var exists bool
+	err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM profile WHERE email=$1)", email)
 
 	if err != nil {
 		return err
@@ -144,7 +188,7 @@ func (r repository) CheckExistUserById(ctx context.Context, userID uint64) error
 
 func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64) ([]model.AuthorizedUser, error) {
 	var users []model.AuthorizedUser
-	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1", userID)
+	err := r.db.SelectContext(ctx, &users, "SELECT * FROM profile WHERE id != $1 AND id != $2", userID, 0)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -156,9 +200,9 @@ func (r repository) GetAllUsersExceptCurrentUser(ctx context.Context, userID uin
 	return users, nil
 }
 
-func (r repository) GetSearchUsers(ctx context.Context, string string) ([]model.AuthorizedUser, error) {
+func (r repository) GetSearchUsers(ctx context.Context, string string, userID uint64) ([]model.AuthorizedUser, error) {
 	var searchUsers []model.AuthorizedUser
-	err := r.db.Select(&searchUsers, `SELECT * FROM profile WHERE nickname ILIKE $1`, "%"+string+"%")
+	err := r.db.SelectContext(ctx, &searchUsers, `SELECT * FROM profile WHERE nickname ILIKE $1 AND id != $2`, "%"+string+"%", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, myErrors.ErrUserNotFound

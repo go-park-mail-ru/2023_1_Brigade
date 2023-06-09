@@ -1,6 +1,22 @@
 package main
 
 import (
+	"github.com/centrifugal/centrifuge-go"
+	"os"
+	"os/signal"
+	usecaseAuth "project/internal/microservices/auth/usecase"
+	//clientAuth "project/internal/microservices/auth/delivery/grpc/client"
+	authUserRepository "project/internal/microservices/auth/repository"
+	//clientChat "project/internal/microservices/chat/delivery/grpc/client"
+	repositoryChat "project/internal/microservices/chat/repository"
+	usecaseChat "project/internal/microservices/chat/usecase"
+	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
+	repositoryMessages "project/internal/microservices/messages/repository"
+	//clientUser "project/internal/microservices/user/delivery/grpc/client"
+	repositoryUser "project/internal/microservices/user/repository"
+	usecaseUser "project/internal/microservices/user/usecase"
+	"project/internal/pkg/serialization"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/prometheus"
@@ -13,11 +29,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
-	"os"
-	clientAuth "project/internal/microservices/auth/delivery/grpc/client"
-	clientChat "project/internal/microservices/chat/delivery/grpc/client"
-	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
-	clientUser "project/internal/microservices/user/delivery/grpc/client"
 
 	httpUser "project/internal/microservices/user/delivery/http"
 
@@ -31,6 +42,7 @@ import (
 	httpChat "project/internal/microservices/chat/delivery/http"
 	httpImages "project/internal/monolithic_services/images/delivery/http"
 	usecaseImages "project/internal/monolithic_services/images/usecase"
+	wsNotifications "project/internal/monolithic_services/notifications/delivery/ws"
 	usecaseAuthSession "project/internal/monolithic_services/session/usecase"
 
 	repositoryImages "project/internal/monolithic_services/images/repository"
@@ -100,30 +112,94 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
 
-	grpcConnChats, err := grpc.Dial(
-		config.ChatsService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
-	}
-	defer grpcConnChats.Close()
+	centrifugoMessagesClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+	centrifugoNotificationsClient := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
 
-	grpcConnUsers, err := grpc.Dial(
-		config.UsersService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugoMessagesClient.Close()
+		centrifugoNotificationsClient.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugoMessagesClient.Connect()
 	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
+		log.Error(err)
 	}
-	defer grpcConnUsers.Close()
+
+	err = centrifugoNotificationsClient.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	subMessages, err := centrifugoMessagesClient.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	subNotifications, err := centrifugoNotificationsClient.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = subMessages.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = subNotifications.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	//grpcConnChats, err := grpc.Dial(
+	//	config.ChatsService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer func() {
+	//	err = grpcConnChats.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
+	//
+	//grpcConnUsers, err := grpc.Dial(
+	//	config.UsersService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer func() {
+	//	err = grpcConnUsers.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
 
 	grpcConnMessages, err := grpc.Dial(
 		config.MessagesService.Addr,
@@ -133,28 +209,48 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnMessages.Close()
+	defer func() {
+		err = grpcConnMessages.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
-	grpcConnAuth, err := grpc.Dial(
-		config.AuthService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
-	}
-	defer grpcConnAuth.Close()
+	//grpcConnAuth, err := grpc.Dial(
+	//	config.AuthService.Addr,
+	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	//	grpc.WithBlock(),
+	//)
+	//if err != nil {
+	//	log.Fatal("cant connect to grpc ", err)
+	//}
+	//defer func() {
+	//	err = grpcConnAuth.Close()
+	//	if err != nil {
+	//		log.Error(err)
+	//	}
+	//}()
 
-	authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
-	chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
-	userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
-	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
+	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
+	//authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
+	//imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
+	chatRepo := repositoryChat.NewChatMemoryRepository(db)
+	userRepo := repositoryUser.NewUserMemoryRepository(db)
+	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
 	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
 	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
+
+	authService := usecaseAuth.NewAuthUserUsecase(authUserRepository, userRepo, chatRepo, imagesUsecase)
+	chatService := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo, imagesUsecase)
+	userService := usecaseUser.NewUserUsecase(userRepo, authUserRepository, imagesUsecase)
+	//authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
+	//chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
+	//userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
+	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -165,14 +261,8 @@ func main() {
 		ExposeHeaders:    config.Cors.ExposeHeaders,
 	}))
 
-	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-	//	TokenLookup:    "header:X-Csrf-Token",
-	//	CookieSecure:   true,
-	//	CookieHTTPOnly: true,
-	//	CookiePath:     "/",
-	//}))
-
 	e.Use(myMiddleware.LoggerMiddleware)
+	//e.Use(myMiddleware.CSRFMiddleware())
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	p := prometheus.NewPrometheus("echo", nil)
@@ -187,11 +277,22 @@ func main() {
 		}
 	}()
 
+	e.JSONSerializer = serialization.EasyJsonSerializer{}
+
 	httpUser.NewUserHandler(e, userService)
 	httpAuthUser.NewAuthHandler(e, authService, authSessionUsecase, userService)
 	httpChat.NewChatHandler(e, chatService, userService)
-	wsMessages.NewMessagesHandler(e, messagesService, config.Centrifugo)
 	httpImages.NewImagesHandler(e, userService, imagesUsecase)
+
+	_, err = wsMessages.NewMessagesHandler(e, messagesService, centrifugoMessagesClient, config.Centrifugo.ChannelName)
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = wsNotifications.NewNotificationsHandler(e, chatService, userService, centrifugoNotificationsClient, config.Centrifugo.ChannelName)
+	if err != nil {
+		log.Error(err)
+	}
 
 	e.Logger.Fatal(e.Start(config.Server.Port))
 }

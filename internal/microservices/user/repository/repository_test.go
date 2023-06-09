@@ -174,7 +174,7 @@ func TestPostgres_GetUserContacts_OK(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestPostgres_UpdateUserById_OK(t *testing.T) {
+func TestPostgres_UpdateUserPasswordById_OK(t *testing.T) {
 	user := model.AuthorizedUser{
 		Id:       1,
 		Avatar:   "",
@@ -208,14 +208,112 @@ func TestPostgres_UpdateUserById_OK(t *testing.T) {
 		AddRow(expectedUser.Id, expectedUser.Avatar, expectedUser.Username, expectedUser.Nickname, expectedUser.Email, expectedUser.Status, expectedUser.Password)
 
 	mock.
-		ExpectQuery(regexp.QuoteMeta(`UPDATE profile SET username=$1, nickname=$2, status=$3, password=$4 WHERE id=$5 RETURNING *`)).
-		WithArgs(user.Username, user.Nickname, user.Status, user.Password, user.Id).
+		ExpectQuery(regexp.QuoteMeta(`UPDATE profile SET password=$1 WHERE id=$2 RETURNING *`)).
+		WithArgs(user.Password, user.Id).
 		WillReturnRows(row)
 
 	dbx := sqlx.NewDb(db, "sqlmock")
 	repo := NewUserMemoryRepository(dbx)
 
-	returnedUser, err := repo.UpdateUserById(context.TODO(), user)
+	returnedUser, err := repo.UpdateUserPasswordById(context.TODO(), user)
+	require.NoError(t, err)
+	require.Equal(t, expectedUser, returnedUser)
+
+	err = mock.ExpectationsWereMet()
+	require.NoError(t, err)
+}
+
+func TestPostgres_UpdateUserEmailStatusById_OK(t *testing.T) {
+	user := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss",
+		Nickname: "marcussss",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: "12345678",
+	}
+
+	expectedUser := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss1",
+		Nickname: "marcussss1",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: "12345678",
+	}
+
+	db, mock, err := sqlmock.New()
+	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
+		AddRow(expectedUser.Id, expectedUser.Avatar, expectedUser.Username, expectedUser.Nickname, expectedUser.Email, expectedUser.Status, expectedUser.Password)
+
+	mock.
+		ExpectQuery(regexp.QuoteMeta(`UPDATE profile SET email=$1, status=$2 WHERE id=$3 RETURNING *`)).
+		WithArgs(user.Email, user.Status, user.Id).
+		WillReturnRows(row)
+
+	dbx := sqlx.NewDb(db, "sqlmock")
+	repo := NewUserMemoryRepository(dbx)
+
+	returnedUser, err := repo.UpdateUserEmailStatusById(context.TODO(), user)
+	require.NoError(t, err)
+	require.Equal(t, expectedUser, returnedUser)
+
+	err = mock.ExpectationsWereMet()
+	require.NoError(t, err)
+}
+
+func TestPostgres_UpdateUserAvatarNicknameById_OK(t *testing.T) {
+	user := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss",
+		Nickname: "marcussss",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: "12345678",
+	}
+
+	expectedUser := model.AuthorizedUser{
+		Id:       1,
+		Avatar:   "",
+		Username: "marcussss1",
+		Nickname: "marcussss1",
+		Email:    "marcussss@mail.ru",
+		Status:   "Hello world!",
+		Password: "12345678",
+	}
+
+	db, mock, err := sqlmock.New()
+	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
+		AddRow(expectedUser.Id, expectedUser.Avatar, expectedUser.Username, expectedUser.Nickname, expectedUser.Email, expectedUser.Status, expectedUser.Password)
+
+	mock.
+		ExpectQuery(regexp.QuoteMeta(`UPDATE profile SET avatar=$1, nickname=$2 WHERE id=$3 RETURNING *`)).
+		WithArgs(user.Avatar, user.Nickname, user.Id).
+		WillReturnRows(row)
+
+	dbx := sqlx.NewDb(db, "sqlmock")
+	repo := NewUserMemoryRepository(dbx)
+
+	returnedUser, err := repo.UpdateUserAvatarNicknameById(context.TODO(), user)
 	require.NoError(t, err)
 	require.Equal(t, expectedUser, returnedUser)
 
@@ -278,6 +376,48 @@ func TestPostgres_CheckExistUserById_False(t *testing.T) {
 
 	err = repo.CheckExistUserById(context.TODO(), userID)
 	require.Error(t, myErrors.ErrUserNotFound, err)
+
+	err = mock.ExpectationsWereMet()
+	require.NoError(t, err)
+}
+
+func TestPostgres_GetSearchChannels_OK(t *testing.T) {
+	searchString := "abc"
+	expectedUsers := []model.AuthorizedUser{
+		{
+			Id:       1,
+			Avatar:   "",
+			Username: "marcussss",
+			Nickname: "marcuabcssss",
+			Email:    "marcussss@mail.ru",
+			Status:   "Hello world!",
+			Password: "12345678",
+		},
+	}
+
+	db, mock, err := sqlmock.New()
+	require.Nil(t, err, fmt.Errorf("cant create mock: %s", err))
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	row := sqlmock.NewRows([]string{"id", "avatar", "username", "nickname", "email", "status", "password"}).
+		AddRow(expectedUsers[0].Id, expectedUsers[0].Avatar, expectedUsers[0].Username, expectedUsers[0].Nickname, expectedUsers[0].Email, expectedUsers[0].Status, expectedUsers[0].Password)
+
+	mock.
+		ExpectQuery(regexp.QuoteMeta(`SELECT * FROM profile WHERE nickname ILIKE $1`)).
+		WithArgs("%" + searchString + "%").
+		WillReturnRows(row)
+
+	dbx := sqlx.NewDb(db, "sqlmock")
+	repo := NewUserMemoryRepository(dbx)
+
+	searchUsers, err := repo.GetSearchUsers(context.TODO(), searchString)
+	require.NoError(t, err)
+	require.Equal(t, expectedUsers, searchUsers)
 
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err)

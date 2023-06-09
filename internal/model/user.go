@@ -3,16 +3,20 @@ package model
 type AuthorizedUser struct {
 	Id       uint64 `json:"id"       valid:"type(int)"         db:"id"`
 	Avatar   string `json:"avatar"                             db:"avatar"`
-	Username string `json:"username" valid:"usernameValidator" db:"username"`
+	Username string `json:"username"                           db:"username"`
 	Nickname string `json:"nickname" valid:"nicknameValidator" db:"nickname"`
 	Email    string `json:"email"    valid:"emailValidator"    db:"email"`
 	Status   string `json:"status"   valid:"type(string)"      db:"status"`
 	Password string `json:"password" valid:"passwordValidator" db:"password"`
 }
 
+type Contacts struct {
+	Contacts []User `json:"contacts"`
+}
+
 type User struct {
 	Id       uint64 `json:"id"       valid:"type(int)"         db:"id"`
-	Username string `json:"username"         				   db:"username"`
+	Username string `json:"username"                           db:"username"`
 	Nickname string `json:"nickname" valid:"nicknameValidator" db:"nickname"`
 	Email    string `json:"email"    valid:"emailValidator"    db:"email"`
 	Status   string `json:"status"   valid:"type(string)"      db:"status"`
@@ -31,7 +35,8 @@ type RegistrationUser struct {
 }
 
 type UpdateUser struct {
-	Username        string `json:"username"         valid:"usernameValidator" db:"username"`
+	Email           string `json:"email"            valid:"emailValidator"    db:"email"`
+	NewAvatarUrl    string `json:"new_avatar_url"                             db:"new_avatar_url"`
 	Nickname        string `json:"nickname"         valid:"nicknameValidator" db:"nickname"`
 	Status          string `json:"status"           valid:"type(string)"      db:"status"`
 	CurrentPassword string `json:"current_password" valid:"passwordValidator" db:"current_password"`

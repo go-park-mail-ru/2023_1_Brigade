@@ -45,9 +45,9 @@ func TestPostgres_CreateTechnogrammChat_OK(t *testing.T) {
     VALUES (0, 0, 'https://brigade_chat_avatars.hb.bizmrg.com/logo.png', 'Technogramm') RETURNING id;`)).
 		WillReturnRows(row)
 
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO message (id, image_url, type, body, id_chat, author_id, created_at)
-    VALUES ($1, $2, $3, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $4), (SELECT id FROM profile WHERE id = $5), '0001-01-01 00:00:00+00');`)).
-		WithArgs(sqlmock.AnyArg(), "", config.NotSticker, 1, 0).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO message (id, type, body, id_chat, author_id, created_at)
+    VALUES ($1, $2, 'Привет, это технограмм!', (SELECT id FROM chat WHERE id = $3), (SELECT id FROM profile WHERE id = $4), '0001-01-01 00:00:00+00');`)).
+		WithArgs(sqlmock.AnyArg(), config.NotSticker, 1, 0).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO chat_messages (id_chat, id_message)

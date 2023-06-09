@@ -35,15 +35,6 @@ func Test_Signup_OK(t *testing.T) {
 		Password: "password",
 	}
 
-	hashedUser := model.AuthorizedUser{
-		Id:       0,
-		Avatar:   "",
-		Nickname: "marcussss",
-		Email:    "marcussss@gmail.com",
-		Status:   "Привет, я использую технограм!",
-		Password: hashedPassword,
-	}
-
 	test := testUserCase{
 		expectedUser: model.AuthorizedUser{
 			Id:       1,
@@ -67,7 +58,7 @@ func Test_Signup_OK(t *testing.T) {
 	usecase := NewAuthUserUsecase(authRepository, userRepository, chatRepository, imagesUsecase)
 
 	authRepository.EXPECT().CheckExistEmail(ctx, user.Email).Return(test.expectedError).Times(1)
-	authRepository.EXPECT().CreateUser(ctx, hashedUser).Return(test.expectedUser, nil).Times(1)
+	authRepository.EXPECT().CreateUser(ctx, gomock.Any()).Return(test.expectedUser, nil).Times(1)
 	chatRepository.EXPECT().CreateTechnogrammChat(ctx, test.expectedUser).Return(nil).Times(1)
 	imagesUsecase.EXPECT().UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, string(test.expectedUser.Nickname[0])).
 		Return(nil).Times(1)

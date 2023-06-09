@@ -5,6 +5,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
@@ -15,6 +17,8 @@ import (
 	repositoryUser "project/internal/microservices/user/repository"
 	usecaseUser "project/internal/microservices/user/usecase"
 	"project/internal/middleware"
+	repositoryImages "project/internal/monolithic_services/images/repository"
+	usecaseImages "project/internal/monolithic_services/images/usecase"
 	metrics "project/internal/pkg/metrics/prometheus"
 )
 
@@ -57,15 +61,46 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
-	db.SetMaxIdleConns(10)
+	db.SetMaxIdleConns(15)
 	db.SetMaxOpenConns(10)
 
+	userAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.UserAvatarsAccessKey, config.VkCloud.UserAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	chatAvatarsClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatAvatarsAccessKey, config.VkCloud.ChatAvatarsSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	chatImagesClient, err := minio.New(config.VkCloud.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.VkCloud.ChatImagesAccessKey, config.VkCloud.ChatImagesSecretKey, ""),
+		Secure: config.VkCloud.Ssl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	imagesRepo := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
 	authUserRepo := repositoryAuthUser.NewAuthUserMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db)
+	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepo)
 
-	userUsecase := usecaseUser.NewUserUsecase(userRepo, authUserRepo)
+	userUsecase := usecaseUser.NewUserUsecase(userRepo, authUserRepo, imagesUsecase)
 
 	metrics, err := metrics.NewMetricsGRPCServer(config.UsersService.ServiceName)
 	if err != nil {

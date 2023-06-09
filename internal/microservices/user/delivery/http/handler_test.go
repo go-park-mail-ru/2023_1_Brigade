@@ -104,13 +104,11 @@ func TestHandlers_DeleteUser_OK(t *testing.T) {
 	require.Equal(t, test.status, w.Code)
 }
 
-func TestHandlers_PutUser_OK(t *testing.T) {
+func TestHandlers_PutUserInfo_OK(t *testing.T) {
 	test := testCase{[]byte(`{
-		"username":        "marcussss",
+		"nickname":        "marcussss",
 		"email":           "marcussss@gmail.com",
-		"status":          "I'm marcussss",
-		"current_password": "baumanka",
-		"new_password":     "baumanka_cool"
+		"status":          "I'm marcussss"
 	}`),
 		http.StatusOK,
 		"Successfull put user"}
@@ -124,10 +122,9 @@ func TestHandlers_PutUser_OK(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	newUser := model.UpdateUser{
-		Username:        "marcussss",
-		Status:          "I'm marcussss",
-		CurrentPassword: "baumanka",
-		NewPassword:     "baumanka_cool",
+		Nickname: "marcussss",
+		Email:    "marcussss@gmail.com",
+		Status:   "I'm marcussss",
 	}
 	user := model.AuthorizedUser{
 		Id:       1,

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/centrifugal/centrifuge-go"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
@@ -10,6 +11,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 	"os"
+	"os/signal"
 	"project/internal/config"
 	repositoryChat "project/internal/microservices/chat/repository"
 	consumer "project/internal/microservices/consumer/delivery/grpc/client"
@@ -60,10 +62,44 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
-	db.SetMaxIdleConns(10)
+	db.SetMaxIdleConns(15)
 	db.SetMaxOpenConns(10)
+
+	centrifugo := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugo.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugo.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := centrifugo.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
 
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
@@ -77,7 +113,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnConsumer.Close()
+	defer func() {
+		err = grpcConnConsumer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	grpcConnProducer, err := grpc.Dial(
 		config.ProducerService.Addr,
@@ -87,7 +128,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to grpc ", err)
 	}
-	defer grpcConnProducer.Close()
+	defer func() {
+		err = grpcConnProducer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 
 	consumerService := consumer.NewConsumerServiceGRPCClient(grpcConnConsumer)
 	producerService := producer.NewProducerServiceGRPCClient(grpcConnProducer)

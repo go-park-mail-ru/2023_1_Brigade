@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"project/internal/monolithic_services/images"
-	"project/internal/pkg/image_generation"
 )
 
 type usecase struct {
@@ -17,12 +16,12 @@ func NewImagesUsecase(imagesRepo images.Repository) images.Usecase {
 }
 
 func (u usecase) UploadGeneratedImage(ctx context.Context, bucketName string, filename string, firstCharacterName string) error {
-	err := image_generation.GenerateAvatar(firstCharacterName)
-	if err != nil {
-		return err
-	}
+	//err := image_generation.GenerateAvatar(firstCharacterName)
+	//if err != nil {
+	//	return err
+	//}
 
-	file, err := os.Open("../background.png")
+	file, err := os.Open("background.png")
 	if err != nil {
 		return err
 	}
@@ -36,13 +35,15 @@ func (u usecase) UploadGeneratedImage(ctx context.Context, bucketName string, fi
 }
 
 func (u usecase) UploadImage(ctx context.Context, file io.Reader, bucketName string, filename string) error {
-	filename = filename + ".png"
 	err := u.imagesRepo.UploadImage(ctx, file, bucketName, filename)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 
 func (u usecase) GetImage(ctx context.Context, bucketName string, filename string) (string, error) {
-	filename = filename + ".png"
 	url, err := u.imagesRepo.GetImage(ctx, bucketName, filename)
 	if err != nil {
 		return "", err

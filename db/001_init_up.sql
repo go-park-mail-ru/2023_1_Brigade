@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS chat (
 -- 3 НФ
 CREATE TABLE IF NOT EXISTS message (
     id         TEXT PRIMARY KEY,
-    type       INTEGER, -- тип сообщения (обычное/стикер)
+    type       INTEGER, -- тип сообщения (обычное/стикер/картинка)
     body       TEXT,
     id_chat    INTEGER,
     author_id  INTEGER,

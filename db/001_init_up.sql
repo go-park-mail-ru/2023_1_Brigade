@@ -13,20 +13,18 @@ CREATE TABLE IF NOT EXISTS profile (
 -- таблица связи 1:1 куки и пользователя
 CREATE TABLE IF NOT EXISTS session (
     cookie     TEXT PRIMARY KEY,
-    profile_id INTEGER,
-    FOREIGN KEY (profile_id) REFERENCES profile(id)
+    profile_id INTEGER REFERENCES profile(id)
 );
 
 -- таблица чатов
 -- 3 НФ
 CREATE TABLE IF NOT EXISTS chat (
     id    SERIAL PRIMARY KEY,
-    master_id    INTEGER, -- айди автора
+    master_id    INTEGER REFERENCES profile(id), -- айди автора
     type INTEGER, -- тип чата (диалог/группа/канал)
     description TEXT,
     avatar TEXT, -- url аватарки
-    title TEXT,
-    FOREIGN KEY (master_id) REFERENCES profile(id)
+    title TEXT
 );
 
 -- таблица сообщений
@@ -35,37 +33,29 @@ CREATE TABLE IF NOT EXISTS message (
     id         TEXT PRIMARY KEY,
     type       INTEGER, -- тип сообщения (обычное/стикер/картинка)
     body       TEXT,
-    id_chat    INTEGER,
-    author_id  INTEGER,
-    created_at TEXT,
-    FOREIGN KEY (author_id) REFERENCES profile(id),
-    FOREIGN KEY (id_chat)   REFERENCES chat(id)
+    id_chat    INTEGER REFERENCES chat(id),
+    author_id  INTEGER REFERENCES profile(id),
+    created_at TEXT
 );
 
 -- таблица связи M:N чатов и пользователей (участников чата)
 CREATE TABLE IF NOT EXISTS chat_members (
-    id_chat   INTEGER,
-    id_member INTEGER,
-    FOREIGN KEY (id_chat)   REFERENCES chat(id),
-    FOREIGN KEY (id_member) REFERENCES profile(id),
+    id_chat   INTEGER REFERENCES chat(id),
+    id_member INTEGER REFERENCES profile(id),
     -- используется в 5+ запросах (в т.ч. с AND), поэтому решили добавить индекс (primary key) здесь
     PRIMARY KEY (id_chat, id_member)
 );
 
 -- таблица связи M:N пользователей и пользователей в списке контактов
 CREATE TABLE IF NOT EXISTS user_contacts (
-    id_user    INTEGER,
-    id_contact INTEGER,
-    FOREIGN KEY (id_user)    REFERENCES profile(id),
-    FOREIGN KEY (id_contact) REFERENCES profile(id),
+    id_user    INTEGER REFERENCES profile(id),
+    id_contact INTEGER REFERENCES profile(id)
 );
 
 -- таблица связи 1:M чатов и сообщений
 CREATE TABLE IF NOT EXISTS chat_messages (
-    id_chat    INTEGER,
-    id_message TEXT,
-    FOREIGN KEY (id_chat)   REFERENCES chat(id),
-    FOREIGN KEY (id_message) REFERENCES message(id)
+    id_chat    INTEGER REFERENCES chat(id),
+    id_message TEXT REFERENCES message(id)
     -- в принципе, здесь можно было использовать PRIMARY KEY для составного ключа
     -- но мы решили так не делать, поскольку нет ни одного запроса, где используется AND
     -- поэтому мы вынесли в отдельные индексы id_chat и id_message
@@ -73,10 +63,9 @@ CREATE TABLE IF NOT EXISTS chat_messages (
 
 -- таблица ссылок на файлы, прикрепленные к сообщениям
 CREATE TABLE IF NOT EXISTS attachments (
-    id_message TEXT,
+    id_message TEXT REFERENCES message(id),
     url        TEXT,
-    name       TEXT,
-    FOREIGN KEY (id_message) REFERENCES message(id)
+    name       TEXT
 );
 
 -- перед каждым индексом указаны ссылки на запросы, для которых они используются

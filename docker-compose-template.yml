@@ -17,7 +17,8 @@ services:
       - "8079:8079"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.1
 
   chat:
     build:
@@ -34,7 +35,8 @@ services:
       - "9000:9000"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.2
 
   user:
     build:
@@ -51,7 +53,8 @@ services:
       - "9001:9001"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.3
 
   messages:
     build:
@@ -70,7 +73,8 @@ services:
       - "9002:9002"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.4
 
   consumer:
     build:
@@ -87,7 +91,8 @@ services:
       - "9003:9003"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.5
 
   producer:
     build:
@@ -104,7 +109,8 @@ services:
       - "9004:9004"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.6
 
   auth:
     build:
@@ -121,7 +127,8 @@ services:
       - "9005:9005"
     restart: always
     networks:
-      - backend-network
+      backend-network:
+        ipv4_address: 192.168.243.7
 
   rabbitmq:
     image: rabbitmq:latest
@@ -215,8 +222,9 @@ networks:
   backend-network:
     name: "backend-network"
     driver: bridge
-  sentry:
-    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.243.0/24
 
 volumes:
   postgres_data: { }

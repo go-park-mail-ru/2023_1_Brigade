@@ -161,19 +161,23 @@ func FromProtoUserChatToUserChat(chat *protobuf.ChatInListUser) model.ChatInList
 
 func FromProtoEditChatToEditChat(chat *protobuf.EditChatModel) model.EditChat {
 	return model.EditChat{
-		Id:      chat.Id,
-		Type:    chat.Type,
-		Title:   chat.Title,
-		Members: chat.Members,
+		Id:          chat.Id,
+		Avatar:      chat.Avatar,
+		Description: chat.Description,
+		Type:        chat.Type,
+		Title:       chat.Title,
+		Members:     chat.Members,
 	}
 }
 
 func FromEditChatToProtoEditChat(chat model.EditChat) *protobuf.EditChatModel {
 	return &protobuf.EditChatModel{
-		Id:      chat.Id,
-		Type:    chat.Type,
-		Title:   chat.Title,
-		Members: chat.Members,
+		Id:          chat.Id,
+		Avatar:      chat.Avatar,
+		Description: chat.Description,
+		Type:        chat.Type,
+		Title:       chat.Title,
+		Members:     chat.Members,
 	}
 }
 
@@ -201,17 +205,21 @@ func FromUpdateUserToProtoUpdateUser(user model.UpdateUser) *protobuf.UpdateUser
 
 func FromProtoCreateChatToCreateChat(chat *protobuf.CreateChat) model.CreateChat {
 	return model.CreateChat{
-		Type:    chat.Type,
-		Title:   chat.Title,
-		Members: chat.Members,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     chat.Members,
 	}
 }
 
 func FromCreateChatToProtoCreateChat(chat model.CreateChat) *protobuf.CreateChat {
 	return &protobuf.CreateChat{
-		Type:    chat.Type,
-		Title:   chat.Title,
-		Members: chat.Members,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     chat.Members,
 	}
 }
 
@@ -369,25 +377,27 @@ func FromUserChatsToProtoUserChats(chats []model.ChatInListUser) *protobuf.Array
 
 func FromProtoChatToChat(chat *protobuf.Chat) model.Chat {
 	return model.Chat{
-		Id:       chat.Id,
-		MasterID: chat.MasterID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
-		Members:  FromProtoMembersToMembers(chat.Members),
-		Messages: FromProtoMessagesToMessages(chat.Messages),
+		Id:          chat.Id,
+		MasterID:    chat.MasterID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     FromProtoMembersToMembers(chat.Members),
+		Messages:    FromProtoMessagesToMessages(chat.Messages),
 	}
 }
 
 func FromChatToProtoChat(chat model.Chat) *protobuf.Chat {
 	return &protobuf.Chat{
-		Id:       chat.Id,
-		MasterID: chat.MasterID,
-		Type:     chat.Type,
-		Title:    chat.Title,
-		Avatar:   chat.Avatar,
-		Members:  FromMembersToProtoMembers(chat.Members),
-		Messages: FromMessagesToProtoMessages(chat.Messages),
+		Id:          chat.Id,
+		MasterID:    chat.MasterID,
+		Type:        chat.Type,
+		Description: chat.Description,
+		Title:       chat.Title,
+		Avatar:      chat.Avatar,
+		Members:     FromMembersToProtoMembers(chat.Members),
+		Messages:    FromMessagesToProtoMessages(chat.Messages),
 	}
 }
 

@@ -15,5 +15,5 @@ service Users {
   rpc GetUserContacts(UserID) returns(Contacts) {}
   rpc PutUserById(PutUserArguments) returns(User) {}
   rpc GetAllUsersExceptCurrentUser(UserID) returns(Contacts) {}
-  rpc GetSearchUsers(String) returns(Contacts) {}
+  rpc GetSearchUsers(SearchUsersArguments) returns(Contacts) {}
 }

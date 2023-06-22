@@ -2,20 +2,21 @@ package usecase
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+	"time"
 
 	"github.com/mailru/easyjson"
+
 	amqp "github.com/rabbitmq/amqp091-go"
-	log "github.com/sirupsen/logrus"
 )
 
 type usecase struct {
-	producer *amqp.Connection
-	channel  *amqp.Channel
-	queue    *amqp.Queue
+	channel *amqp.Channel
+	queue   *amqp.Queue
 }
 
 func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
@@ -29,8 +30,9 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		return nil, err
 	}
 
-	queue, err := channel.QueueDeclare(
-		queueName,
+	err = channel.ExchangeDeclare(
+		"user_dlx",
+		"fanout",
 		false,
 		false,
 		false,
@@ -40,6 +42,76 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	dlxQueue, err := channel.QueueDeclare(
+		"user_create_dlx",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	err = channel.QueueBind(
+		"user_create_dlx",
+		"",
+		"user_dlx",
+		false,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	queue, err := channel.QueueDeclare(
+		queueName,
+		false,
+		false,
+		false,
+		false,
+		amqp.Table{
+			"x-dead-letter-exchange": "user_dlx",
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	go func() {
+		for {
+			msgs, err := channel.Consume(
+				dlxQueue.Name,
+				"",
+				false,
+				false,
+				false,
+				false,
+				nil,
+			)
+			if err != nil {
+				continue
+			}
+
+			for msg := range msgs {
+				err = channel.PublishWithContext(
+					context.TODO(),
+					"",
+					queue.Name,
+					false,
+					false,
+					amqp.Publishing{
+						ContentType: "application/json",
+						Body:        msg.Body,
+					},
+				)
+			}
+
+			time.Sleep(60 * time.Second)
+		}
+	}()
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
@@ -59,7 +131,10 @@ func NewProducer(connAddr string, queueName string) (producer.Usecase, error) {
 		log.Fatal()
 	}()
 
-	return &usecase{producer: producer, channel: channel, queue: &queue}, nil
+	return &usecase{
+		channel: channel,
+		queue:   &queue,
+	}, nil
 }
 
 func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.ProducerMessage) error {
@@ -75,7 +150,7 @@ func (u *usecase) ProduceMessage(ctx context.Context, producerMessage model.Prod
 		false,
 		false,
 		amqp.Publishing{
-			ContentType: "text/plain",
+			ContentType: "application/json",
 			Body:        message,
 		},
 	)

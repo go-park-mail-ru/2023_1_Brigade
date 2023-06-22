@@ -4,8 +4,6 @@
 
 [Репозиторий фронта](https://github.com/frontend-park-mail-ru/2023_1_Brigade)
 
-## Ссылка на деплой
-http://95.163.249.116/
 ## Состав
 
 - [Геворк Габриелян](https://github.com/Gev0rg)

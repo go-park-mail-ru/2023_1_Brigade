@@ -293,3 +293,1509 @@ time="2023-05-23T20:29:30Z" level=info msg="Incoming request: /api/v1/chats/, ip
 time="2023-05-23T20:29:30Z" level=info msg="HTTP code: 200, request_id: 8171713213900849594" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:60"
 time="2023-05-23T20:29:30Z" level=info msg="Incoming request: /api/v1/message/, ip: 195.239.169.108, method: GET, request_id: 5994311304307221652" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:38"
 time="2023-05-23T20:29:30Z" level=info msg="Incoming request: /api/v1/notification/, ip: 195.239.169.108, method: GET, request_id: 9124204022734481856" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/ubuntu/2023_1_Brigade/internal/middleware/middleware.go:38"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+time="2023-05-24T13:07:09+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1256134630094382789" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:09+03:00" level=info msg="HTTP code: 200, request_id: 1256134630094382789" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:09+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 6801335930532636708" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:09+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 6801335930532636708" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:13+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2842206636578331449" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:13+03:00" level=info msg="HTTP code: 200, request_id: 2842206636578331449" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:13+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 553196718416614331" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:13+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 553196718416614331" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8591748096379769396" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:25+03:00" level=info msg="HTTP code: 200, request_id: 8591748096379769396" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:25+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 4530874204795883438" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:25+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 4530874204795883438" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:30+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4558584192787714118" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:30+03:00" level=info msg="HTTP code: 200, request_id: 4558584192787714118" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:30+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 7168156210090327681" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:30+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 7168156210090327681" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:57432: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 91 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001c8cc0})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000432780}, {0xd582c0?, 0xc0001c8c60}, {0xc000696f40?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000432780, 0x190, {0xd582c0, 0xc0001c8c60}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000432780, 0xc0001c8c60?, {0xd582c0, 0xc0001c8c60})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc0001c8c30?}, {0xfbd4d0, 0xc000432780})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc0005e0540}, 0xc0004a8400)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xc00049ab70?}, {0xfaeac0, 0xc0005e0540}, 0xc0004a8400)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000284ab0, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:52068: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 45 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001ed470})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc0006890e0}, {0xd582c0?, 0xc0001ed410}, {0xc0004a3210?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0006890e0, 0x190, {0xd582c0, 0xc0001ed410}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0006890e0, 0xc0001ed410?, {0xd582c0, 0xc0001ed410})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc0001ed3b0?}, {0xfbd4d0, 0xc0006890e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc00054aa80}, 0xc000252600)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xc0001ecea0?}, {0xfaeac0, 0xc00054aa80}, 0xc000252600)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000eebd0, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T13:07:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2964203633733817222" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:38+03:00" level=info msg="HTTP code: 200, request_id: 2964203633733817222" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:38+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 8278805407038001656" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:38+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 8278805407038001656" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:07:44+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6877943830556313821" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:44+03:00" level=info msg="HTTP code: 200, request_id: 6877943830556313821" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T13:07:44+03:00" level=info msg="Incoming request: /api/v1/chats/, ip: 127.0.0.1, method: GET, request_id: 5433641564503237974" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:07:44+03:00" level=error msg="HTTP code: 500, Error: rpc error: code = Unknown desc = missing destination name image_url in *model.Message, request_id: 5433641564503237974" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:08:27+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1678720774554171426" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:08:27+03:00" level=error msg="HTTP code: 500, Error: sql: no rows in result set, request_id: 1678720774554171426" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T13:08:33+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5848065924556511368" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:08:33+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5848065924556511368" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:52078: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 46 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00049bd40})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000688000}, {0xd582c0?, 0xc00049bce0}, {0xc0004a2850?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000688000, 0x190, {0xd582c0, 0xc00049bce0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000688000, 0xc00049bce0?, {0xd582c0, 0xc00049bce0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00049bcb0?}, {0xfbd4d0, 0xc000688000})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc00054a540}, 0xc0004a8200)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc00054a540}, 0xc0004a8200)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000eec60, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:37972: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 163 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00049bf80})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000688e60}, {0xd582c0?, 0xc00049bf20}, {0xc0004a2930?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000688e60, 0x190, {0xd582c0, 0xc00049bf20}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000688e60, 0xc00049bf20?, {0xd582c0, 0xc00049bf20})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00049bef0?}, {0xfbd4d0, 0xc000688e60})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc00054a620}, 0xc0004a8400)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc00054a620}, 0xc0004a8400)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0004a65a0, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T13:08:51+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1569958923001656824" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:08:51+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1569958923001656824" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:39832: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 151 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00062b1d0})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc000432b40}, {0xd582c0?, 0xc00062b170}, {0xc000697ab0?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc000432b40, 0x190, {0xd582c0, 0xc00062b170}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000432b40, 0xc00062b170?, {0xd582c0, 0xc00062b170})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00062b140?}, {0xfbd4d0, 0xc000432b40})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc0005e0ee0}, 0xc000122e00)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc0005e0ee0}, 0xc000122e00)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ee510, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:39834: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 153 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc00062b380})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc0001e97c0}, {0xd582c0?, 0xc00062b320}, {0xc000697b80?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0001e97c0, 0x190, {0xd582c0, 0xc00062b320}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0001e97c0, 0xc00062b320?, {0xd582c0, 0xc00062b320})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0001486c0, {0xfa7a80, 0xc00062b2f0?}, {0xfbd4d0, 0xc0001e97c0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0001486c0, {0xfaeac0?, 0xc0005e0fc0}, 0xc000252500)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc0005e0fc0}, 0xc000252500)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ee990, {0xfaf7d8, 0xc000685620})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T13:09:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2040188227577219715" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T13:09:34+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2040188227577219715" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+{"time":"2023-05-24T14:01:12.538374449+03:00","level":"FATAL","prefix":"echo","file":"main.go","line":"310","message":"listen tcp :8081: bind: address already in use"}
+exit status 1
+time="2023-05-24T14:01:20+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4767458704918053990" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:01:20+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4767458704918053990" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:03:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7000073162960313726" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:03:34+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7000073162960313726" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:03:34+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 209101070878874205" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:03:34+03:00" level=info msg="HTTP code: 401, request_id: 209101070878874205" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:03:34+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3446471595513740538" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:03:34+03:00" level=info msg="HTTP code: 401, request_id: 3446471595513740538" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:03:34+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8078896110027881906" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:03:34+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8078896110027881906" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+time="2023-05-24T14:03:58+03:00" level=error msg="listen tcp :5555: bind: address already in use" func=main.main.func11 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:289"
+{"time":"2023-05-24T14:03:58.558460196+03:00","level":"FATAL","prefix":"echo","file":"main.go","line":"310","message":"listen tcp :8081: bind: address already in use"}
+exit status 1
+time="2023-05-24T14:04:01+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2989923068112409993" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:04:01+03:00" level=info msg="HTTP code: 401, request_id: 2989923068112409993" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:04:01+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8284381818933358729" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:04:01+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8284381818933358729" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:04:15+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1280970501066146455" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:04:15+03:00" level=info msg="HTTP code: 401, request_id: 1280970501066146455" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:04:15+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6159573661822797392" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:04:15+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 6159573661822797392" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:05:36+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8636728812585537213" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:36+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1122819757427518454" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:36+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8636728812585537213" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:05:36+03:00" level=info msg="HTTP code: 401, request_id: 1122819757427518454" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:05:38+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8508417502251157162" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:38+03:00" level=info msg="HTTP code: 401, request_id: 8508417502251157162" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:05:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4513186152137644804" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:38+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4513186152137644804" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:05:59+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 366787720437219312" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:59+03:00" level=info msg="HTTP code: 401, request_id: 366787720437219312" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:05:59+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1359579981023695816" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:59+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1359579981023695816" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:05:59+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4697719505965631906" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:59+03:00" level=info msg="HTTP code: 401, request_id: 4697719505965631906" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:05:59+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1872306458079109873" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:05:59+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1872306458079109873" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:51946: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 92 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc0001e1290})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe650, 0xc0005cc500}, {0xd592c0?, 0xc0001e1230}, {0xc000037320?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0005cc500, 0x190, {0xd592c0, 0xc0001e1230}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0005cc500, 0xc0001e1230?, {0xd592c0, 0xc0001e1230})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0005ba6c0, {0xfa8c00, 0xc0001e1200?}, {0xfbe650, 0xc0005cc500})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0005ba6c0, {0xfafc40?, 0xc00019c8c0}, 0xc000198800)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfadc58?}, {0xfafc40, 0xc00019c8c0}, 0xc000198800)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0005be7e0, {0xfb0958, 0xc000605c20})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:51944: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 76 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc0004a5cb0})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe650, 0xc0004a6500}, {0xd592c0?, 0xc0004a5c50}, {0xc0003fd150?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0004a6500, 0x193, {0xd592c0, 0xc0004a5c50}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0004a6500, 0xc0004a5c50?, {0xd592c0, 0xc0004a5c50})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0005ba6c0, {0xfa8c00, 0xc0001b40c0?}, {0xfbe650, 0xc0004a6500})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0005ba6c0, {0xfafc40?, 0xc0000ea700}, 0xc000462700)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfadc58?}, {0xfafc40, 0xc0000ea700}, 0xc000462700)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0005ec000, {0xfb0958, 0xc000605c20})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:45252: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 102 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc0001b4300})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe650, 0xc0005cc8c0}, {0xd592c0?, 0xc0001e1f50}, {0xc000037410?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0005cc8c0, 0x190, {0xd592c0, 0xc0001e1f50}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0005cc8c0, 0xc0001e1f50?, {0xd592c0, 0xc0001e1f50})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0005ba6c0, {0xfa8c00, 0xc0001e1e90?}, {0xfbe650, 0xc0005cc8c0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0005ba6c0, {0xfafc40?, 0xc00019c9a0}, 0xc000198a00)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfadc58?}, {0xfafc40, 0xc00019c9a0}, 0xc000198a00)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0004dd170, {0xfb0958, 0xc000605c20})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:45262: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 114 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc000419b60})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe650, 0xc00041a320}, {0xd592c0?, 0xc000419b00}, {0xc000437670?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc00041a320, 0x193, {0xd592c0, 0xc000419b00}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc00041a320, 0xc000419b00?, {0xd592c0, 0xc000419b00})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0005ba6c0, {0xfa8c00, 0xc0001b40c0?}, {0xfbe650, 0xc00041a320})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0005ba6c0, {0xfafc40?, 0xc0000002a0}, 0xc000198b00)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfadc58?}, {0xfafc40, 0xc0000002a0}, 0xc000198b00)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0005bf050, {0xfb0958, 0xc000605c20})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:08:56+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5108030655244947778" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:08:56+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5108030655244947778" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:08:56+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6601867280679344334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:08:56+03:00" level=info msg="HTTP code: 401, request_id: 6601867280679344334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:08:56+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6396604056664284092" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:08:56+03:00" level=info msg="HTTP code: 401, request_id: 6396604056664284092" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:08:56+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1495922587400231741" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:08:56+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1495922587400231741" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:44364: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 43 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc000619350})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd530, 0xc0003b6780}, {0xd582c0?, 0xc0006192f0}, {0xc0001e3e00?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0003b6780, 0x190, {0xd582c0, 0xc0006192f0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0003b6780, 0xc0006192f0?, {0xd582c0, 0xc0006192f0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0b40, {0xfa7ae0, 0xc0006192c0?}, {0xfbd530, 0xc0003b6780})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0b40, {0xfaeb20?, 0xc000534b60}, 0xc00051a700)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacb38?}, {0xfaeb20, 0xc000534b60}, 0xc00051a700)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0005166c0, {0xfaf838, 0xc000618ab0})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:44360: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 42 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc000619470})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd530, 0xc0003b6960}, {0xd582c0?, 0xc000619410}, {0xc0001e3ed0?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0003b6960, 0x193, {0xd582c0, 0xc000619410}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0003b6960, 0xc000619410?, {0xd582c0, 0xc000619410})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0b40, {0xfa7ae0, 0xc0001ec0c0?}, {0xfbd530, 0xc0003b6960})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0b40, {0xfaeb20?, 0xc000534c40}, 0xc00051a900)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacb38?}, {0xfaeb20, 0xc000534c40}, 0xc00051a900)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000516630, {0xfaf838, 0xc000618ab0})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:35464: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 44 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001ed050})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd530, 0xc00061a320}, {0xd582c0?, 0xc0001ecff0}, {0xc000512460?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc00061a320, 0x190, {0xd582c0, 0xc0001ecff0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc00061a320, 0xc0001ecff0?, {0xd582c0, 0xc0001ecff0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0b40, {0xfa7ae0, 0xc0001ecfc0?}, {0xfbd530, 0xc00061a320})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0b40, {0xfaeb20?, 0xc0005700e0}, 0xc00056a200)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacb38?}, {0xfaeb20, 0xc0005700e0}, 0xc00056a200)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000516750, {0xfaf838, 0xc000618ab0})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:35474: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 46 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001ed260})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd530, 0xc00061a3c0}, {0xd582c0?, 0xc0001ed200}, {0xc000512540?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc00061a3c0, 0x193, {0xd582c0, 0xc0001ed200}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc00061a3c0, 0xc0001ed200?, {0xd582c0, 0xc0001ed200})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0b40, {0xfa7ae0, 0xc0001ec0c0?}, {0xfbd530, 0xc00061a3c0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0b40, {0xfaeb20?, 0xc0005701c0}, 0xc00056a400)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacb38?}, {0xfaeb20, 0xc0005701c0}, 0xc00056a400)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000516900, {0xfaf838, 0xc000618ab0})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:09:39+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1531504984582075916" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:09:39+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1532623809223665423" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:09:39+03:00" level=info msg="HTTP code: 401, request_id: 1531504984582075916" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:09:39+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1532623809223665423" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+echo: http: panic serving 127.0.0.1:39660: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 63 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001c8e10})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc0004b6820}, {0xd582c0?, 0xc0001c8db0}, {0xc0003fb320?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0004b6820, 0x190, {0xd582c0, 0xc0001c8db0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0004b6820, 0xc0001c8db0?, {0xd582c0, 0xc0001c8db0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0240, {0xfa7a80, 0xc0001c8d80?}, {0xfbd4d0, 0xc0004b6820})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0240, {0xfaeac0?, 0xc000212460}, 0xc0001e0300)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc000212460}, 0xc0001e0300)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ee750, {0xfaf7d8, 0xc00011fd70})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:39674: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 30 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001ec450})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc00011c640}, {0xd582c0?, 0xc0001ec300}, {0xc000419b60?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc00011c640, 0x193, {0xd582c0, 0xc0001ec300}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc00011c640, 0xc0001ec300?, {0xd582c0, 0xc0001ec300})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0240, {0xfa7a80, 0xc0001ec0c0?}, {0xfbd4d0, 0xc00011c640})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0240, {0xfaeac0?, 0xc0004fc8c0}, 0xc000438700)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc0004fc8c0}, 0xc000438700)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0004b8000, {0xfaf7d8, 0xc00011fd70})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:58208: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 99 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001c9020})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc0003c40a0}, {0xd582c0?, 0xc0001c8fc0}, {0xc0003fb3f0?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc0003c40a0, 0x190, {0xd582c0, 0xc0001c8fc0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0003c40a0, 0xc0001c8fc0?, {0xd582c0, 0xc0001c8fc0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0240, {0xfa7a80, 0xc0001c8f90?}, {0xfbd4d0, 0xc0003c40a0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0240, {0xfaeac0?, 0xc000212540}, 0xc0001e0600)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc000212540}, 0xc0001e0600)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ef200, {0xfaf7d8, 0xc00011fd70})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+echo: http: panic serving 127.0.0.1:58218: interface conversion: echo.Map is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 97 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd53300, 0xc0001ec900})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbd4d0, 0xc00011c6e0}, {0xd582c0?, 0xc0001ec810}, {0xc000419c40?, 0xe5eea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:13 +0x3b
+github.com/labstack/echo/v4.(*context).json(0xc00011c6e0, 0x193, {0xd582c0, 0xc0001ec810}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc00011c6e0, 0xc0001ec810?, {0xd582c0, 0xc0001ec810})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+github.com/labstack/echo/v4.(*Echo).DefaultHTTPErrorHandler(0xc0000c0240, {0xfa7a80, 0xc0001ec0c0?}, {0xfbd4d0, 0xc00011c6e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:453 +0x336
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc0000c0240, {0xfaeac0?, 0xc0004fc9a0}, 0xc000438800)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:663 +0x3f3
+net/http.serverHandler.ServeHTTP({0xfacad8?}, {0xfaeac0, 0xc0004fc9a0}, 0xc000438800)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc00041d290, {0xfaf7d8, 0xc00011fd70})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+time="2023-05-24T14:10:33+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7643024060913723823" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:10:33+03:00" level=info msg="HTTP code: 401, request_id: 7643024060913723823" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:10:33+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5981571965965633407" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:10:33+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5981571965965633407" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:10:38+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: POST, request_id: 6316353581962351378" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:10:38+03:00" level=info msg="HTTP code: 401, request_id: 6316353581962351378" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:10:38+03:00" level=info msg="Incoming request: /api/v1/login/, ip: 127.0.0.1, method: POST, request_id: 1353634164091060806" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:10:38+03:00" level=error msg="HTTP code: 404, Error: rpc error: code = Unknown desc = email не найден, request_id: 1353634164091060806" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:18:47+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4904668302748937168" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:18:47+03:00" level=info msg="HTTP code: 401, request_id: 4904668302748937168" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:18:47+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3257327899326291040" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:18:47+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3257327899326291040" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:18:53+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8947153068865488340" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:18:53+03:00" level=info msg="HTTP code: 401, request_id: 8947153068865488340" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:18:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2025684820417958908" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:18:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2025684820417958908" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:20:01+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2775416723211462868" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:20:01+03:00" level=info msg="HTTP code: 401, request_id: 2775416723211462868" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:20:01+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 982539494331908988" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:20:01+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 982539494331908988" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:20:53+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8979531655111168713" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:20:53+03:00" level=info msg="HTTP code: 401, request_id: 8979531655111168713" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:20:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7721175858330333769" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:20:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7721175858330333769" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:22:23+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8357953568970662812" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:22:23+03:00" level=info msg="HTTP code: 401, request_id: 8357953568970662812" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:22:23+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4866338355073530720" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:22:23+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4866338355073530720" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:24:36+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4453267019413964076" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:24:36+03:00" level=info msg="HTTP code: 401, request_id: 4453267019413964076" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:24:36+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5291408313964082069" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:24:36+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5291408313964082069" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:24:37+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8522293566965603078" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:24:37+03:00" level=info msg="HTTP code: 401, request_id: 8522293566965603078" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:24:37+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2702647475463503504" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:24:37+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2702647475463503504" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:26:47+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3201274772646770507" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:26:47+03:00" level=info msg=/api/v1/csrf/ func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40"
+time="2023-05-24T14:26:47+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2973509141803226053" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:26:47+03:00" level=info msg=/api/v1/auth/ func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40"
+time="2023-05-24T14:26:47+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2973509141803226053" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:47"
+time="2023-05-24T14:26:50+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7386421302996023795" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:26:50+03:00" level=info msg=/api/v1/csrf/ func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40"
+time="2023-05-24T14:26:50+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8014317229284647602" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:26:50+03:00" level=info msg=/api/v1/auth/ func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40"
+time="2023-05-24T14:26:50+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8014317229284647602" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:47"
+time="2023-05-24T14:27:12+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 5957309691770252166" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:27:12+03:00" level=info msg=/api/v1/csrf/ func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40"
+time="2023-05-24T14:27:12+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8075757081274125612" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:27:12+03:00" level=info msg=/api/v1/auth/ func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40"
+time="2023-05-24T14:27:12+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8075757081274125612" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:47"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:28:06+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1375296406445199340" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:28:06+03:00" level=info msg=6GXwQ8KUOULcaOI9pNR9pbLpkuRJ5jai func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:28:06+03:00" level=info msg="HTTP code: 200, request_id: 1375296406445199340" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:28:06+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3545604295248664667" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:28:06+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3545604295248664667" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:28:42+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6388732693355860775" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:28:42+03:00" level=info msg=PuvVwuUsWwQnhNLfvT6MpaQeoKvVAmXe func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:28:42+03:00" level=info msg="HTTP code: 200, request_id: 6388732693355860775" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:28:42+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1569012993296699659" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:28:42+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1569012993296699659" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:28:58+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2996357456356565890" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:28:58+03:00" level=info msg=acpJlvNtgMpgmniAMwSoRZc8EYXVJnI1 func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:28:58+03:00" level=info msg="HTTP code: 200, request_id: 2996357456356565890" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:28:58+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3798926207903852196" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:28:58+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3798926207903852196" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:30:13+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2976097957024333693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:13+03:00" level=info msg=Tkj2tF6sNcovj9idylmMdh1d204KcV7d func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:30:13+03:00" level=info msg="HTTP code: 200, request_id: 2976097957024333693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:30:13+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7550458048803818646" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:13+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7550458048803818646" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:30:20+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7270160612080952439" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:20+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2159989413671147258" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:20+03:00" level=info msg=OOLL7UH6qh2UuUhgZrUv3gugJjMH5F3e func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:30:20+03:00" level=info msg="HTTP code: 200, request_id: 7270160612080952439" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:30:20+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2159989413671147258" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:30:37+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3010870497533284129" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:37+03:00" level=info msg=mjL86lcX8WaJvMcAO8hF4N5kdkPzDZQQ func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:30:37+03:00" level=info msg="HTTP code: 200, request_id: 3010870497533284129" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:30:37+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 460175410672466541" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:37+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 460175410672466541" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:30:37+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6599110906974260026" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:37+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:30:37+03:00" level=info msg="HTTP code: 200, request_id: 6599110906974260026" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:30:37+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4152485651943470072" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:37+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4152485651943470072" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:30:38+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6665576104144496823" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:38+03:00" level=info msg=Ij3pugAY98g9t48MGL1GdFQPqLd90ELK func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:30:38+03:00" level=info msg="HTTP code: 200, request_id: 6665576104144496823" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:30:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 496175293445399237" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:30:38+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 496175293445399237" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:31:27+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7156044507616415824" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:27+03:00" level=info msg=waFb3raqYrQwLQDMaCoYJFMaampqrLyQ func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:31:27+03:00" level=info msg="HTTP code: 200, request_id: 7156044507616415824" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:31:27+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3089163309839647869" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:27+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3089163309839647869" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:31:28+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1680373363052426840" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:28+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:31:28+03:00" level=info msg="HTTP code: 200, request_id: 1680373363052426840" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:31:28+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8351701431651062120" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:28+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8351701431651062120" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:31:29+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7668624654033060693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:29+03:00" level=info msg=C5OByuIK8MVjxQaDR2ehK91oDgyzwm91 func=main.main.func10 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:31:29+03:00" level=info msg="HTTP code: 200, request_id: 7668624654033060693" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:31:29+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2979248005339074330" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:29+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2979248005339074330" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:31:49+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1164519959858535973" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:49+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1558807979730826864" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:49+03:00" level=info msg=fo1Hsb3xInGdhVpcdfdzPwxOeavCK7ae func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:31:49+03:00" level=info msg="HTTP code: 200, request_id: 1558807979730826864" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:31:49+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1164519959858535973" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:31:50+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4540444109766538834" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:50+03:00" level=info msg=Xq7xSOChL9jt4rUOLU83B4Mkt5aP8GXF func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:31:50+03:00" level=info msg="HTTP code: 200, request_id: 4540444109766538834" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:31:50+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2229534490954325795" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:31:50+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2229534490954325795" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T14:33:29+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 5342605923668350640" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:33:29+03:00" level=info msg=LDqn587wTqgHTEMXjVLACrjo9MdN06i1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:33:29+03:00" level=info msg="HTTP code: 200, request_id: 5342605923668350640" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:33:29+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7275420903081267117" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:33:29+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7275420903081267117" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:33:30+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7346475988430897373" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:33:30+03:00" level=info msg=AlyMrpcMsgpMLydduMqqjXgS7gSAhVYh func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:33:30+03:00" level=info msg="HTTP code: 200, request_id: 7346475988430897373" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:33:30+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2125451517768867596" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:33:30+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2125451517768867596" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:33:36+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4583998567386969825" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:33:36+03:00" level=info msg=gvCP7GNMvnvMURuKs14jvXF9LFmLtnKE func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:33:36+03:00" level=info msg="HTTP code: 200, request_id: 4583998567386969825" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:33:36+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8206158032815992073" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:33:36+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8206158032815992073" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:35:09+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2459581530561426393" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:09+03:00" level=info msg=H0D7lPX0Mzs6dHa1DTM5hXspRRPrXNQM func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:35:09+03:00" level=info msg="HTTP code: 200, request_id: 2459581530561426393" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:35:09+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4914285981985801758" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:09+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4914285981985801758" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:35:10+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 856713050858531214" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:10+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:35:10+03:00" level=info msg="HTTP code: 200, request_id: 856713050858531214" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:35:10+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4266322933380974224" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:10+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4266322933380974224" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:35:29+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3631795478210637101" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:29+03:00" level=info msg=mezYtNr7aPEtuuzwzVSv6uWzv3yHjeXb func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:35:29+03:00" level=info msg="HTTP code: 200, request_id: 3631795478210637101" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:35:29+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2013595009571321721" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:29+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2013595009571321721" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:35:29+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4109063061313429456" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:29+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:35:29+03:00" level=info msg="HTTP code: 200, request_id: 4109063061313429456" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:35:29+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4116768382915374692" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:29+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4116768382915374692" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:35:32+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8213185493391137009" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:32+03:00" level=info msg=eRKCIzFvwlxmRATcRO5Wsc13JFX8RJn2 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:35:32+03:00" level=info msg="HTTP code: 200, request_id: 8213185493391137009" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:35:32+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1521722308333965516" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:35:32+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1521722308333965516" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:36:07+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2262373840690985511" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:07+03:00" level=info msg=6hRZZel2STOkMzzhIRVTzvuKvcWiw7bw func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:36:07+03:00" level=info msg="HTTP code: 200, request_id: 2262373840690985511" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:36:07+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2384921239479932334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:07+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2384921239479932334" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:36:07+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3824873712187719773" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:07+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3824873712187719773" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:36:07+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 831982924706842614" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:07+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:36:07+03:00" level=info msg="HTTP code: 200, request_id: 831982924706842614" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:36:25+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2031675144899673381" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:25+03:00" level=info msg=qzzs4RVhWtlTD3OTreVhlssp9Y16Pkge func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:36:25+03:00" level=info msg="HTTP code: 200, request_id: 2031675144899673381" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:36:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4788349768617280474" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4788349768617280474" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:36:48+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1625316005871847324" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:48+03:00" level=info msg=Hn4BNy5Q6ehwkWHNQVHjvQ0NrQeHS0u9 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:36:48+03:00" level=info msg="HTTP code: 200, request_id: 1625316005871847324" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:36:48+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8923172598382434219" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:48+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8923172598382434219" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:36:49+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6240409520756714024" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:49+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:36:49+03:00" level=info msg="HTTP code: 200, request_id: 6240409520756714024" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:36:49+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5309849032910304884" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:36:49+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5309849032910304884" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:38:08+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8682460207696755095" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:08+03:00" level=info msg=drLsoKomTnKQTJiVUrRQVDS5FgTo5Z7r func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:38:08+03:00" level=info msg="HTTP code: 200, request_id: 8682460207696755095" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:38:08+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3498995431371609191" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:08+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3498995431371609191" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:38:08+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 5725798545624220724" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:08+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:38:08+03:00" level=info msg="HTTP code: 200, request_id: 5725798545624220724" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:38:08+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8006193032950945921" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:08+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8006193032950945921" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:38:10+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8120163865768965217" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:10+03:00" level=info msg=ThrYZkHr6Vpu48CU2kdl3L0L7CizSEtE func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:38:10+03:00" level=info msg="HTTP code: 200, request_id: 8120163865768965217" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:38:10+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8181143697920738208" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:10+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8181143697920738208" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:38:32+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6018149095156304736" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:32+03:00" level=info msg=GwTkoYp6z61aQkKFM1rht7zpMOEYl95l func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:38:32+03:00" level=info msg="HTTP code: 200, request_id: 6018149095156304736" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:38:32+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2148463179211809068" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:38:32+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2148463179211809068" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:57:48+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8943121955340525767" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:48+03:00" level=info msg=3xvz3PYsrbJtK4WVbpHNMW3TFtcTvSi1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:57:48+03:00" level=info msg="HTTP code: 200, request_id: 8943121955340525767" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:57:48+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2317053532541122515" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:48+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2317053532541122515" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:57:48+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 9069547546520847392" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:48+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:57:48+03:00" level=info msg="HTTP code: 200, request_id: 9069547546520847392" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:57:48+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 383186129947532479" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:48+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 383186129947532479" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:57:49+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 647218093716257792" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:49+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 647218093716257792" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:57:49+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6235915072404225602" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:49+03:00" level=info msg=NjSsHr4KBkpQw5d0k5l0vki3Ds6ktJKd func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:57:49+03:00" level=info msg="HTTP code: 200, request_id: 6235915072404225602" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:57:53+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 9220690325663416686" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:53+03:00" level=info msg=bqD25XjaeWKtyOnvqjkndsjp3NwNLiTo func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:57:53+03:00" level=info msg="HTTP code: 200, request_id: 9220690325663416686" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:57:53+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 991517827144803199" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:57:53+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 991517827144803199" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:58:03+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 731102231499080665" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:58:03+03:00" level=info msg=JzMzslvBFMqabaTGuZuxQ8fqcChe8GfA func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:58:03+03:00" level=info msg="HTTP code: 200, request_id: 731102231499080665" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:58:03+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7832810500050913910" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:58:03+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7832810500050913910" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:59:52+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4889395706962285108" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:52+03:00" level=info msg=jMqPW3ihvlDWdh1Vy4osyZxaKi1qt0N4 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:59:52+03:00" level=info msg="HTTP code: 200, request_id: 4889395706962285108" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:59:52+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 790737022455762986" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:52+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 790737022455762986" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:59:52+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 613585660488231029" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:52+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:59:52+03:00" level=info msg="HTTP code: 200, request_id: 613585660488231029" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:59:52+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3468917564103825744" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:52+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3468917564103825744" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:59:54+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 911898186355048620" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:54+03:00" level=info msg=Mgr3hM0U7B6eJytymOsrcM6AwG1B0Hzj func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:59:54+03:00" level=info msg="HTTP code: 200, request_id: 911898186355048620" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:59:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4978985296315311485" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4978985296315311485" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T14:59:58+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1250594990115623061" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:58+03:00" level=info msg=6gT6M8tNA65qT3AwoEmVzOhsNUkU76tg func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T14:59:58+03:00" level=info msg="HTTP code: 200, request_id: 1250594990115623061" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T14:59:58+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3999287286477346626" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T14:59:58+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3999287286477346626" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:00:13+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7040406350501677777" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:00:13+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7040406350501677777" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:00:13+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4546250892529232486" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:00:13+03:00" level=info msg=YONUFG7GAVx67JcGwpglzX6dRkkbP6Sf func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:00:13+03:00" level=info msg="HTTP code: 200, request_id: 4546250892529232486" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:00:24+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8575122253611986215" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:00:24+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7007446614708290991" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:00:24+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7007446614708290991" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:00:24+03:00" level=info msg=bDwYmEdKPUUB4QRQ9eszkj00sWVVFREn func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:00:24+03:00" level=info msg="HTTP code: 200, request_id: 8575122253611986215" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:00:24+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7598774593616077289" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:00:24+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:00:24+03:00" level=info msg="HTTP code: 200, request_id: 7598774593616077289" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:00:24+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1555846282252746738" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:00:24+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1555846282252746738" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:01:12+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4054849968572287358" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:01:12+03:00" level=info msg=1VH1x3ZJ16GAs49qhEhV9ADgusevRg04 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:01:12+03:00" level=info msg="HTTP code: 200, request_id: 4054849968572287358" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:01:12+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 209218622937938032" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:01:12+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 209218622937938032" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:01:12+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8627016301073116887" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:01:12+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:01:12+03:00" level=info msg="HTTP code: 200, request_id: 8627016301073116887" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:01:12+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3533220539682073378" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:01:12+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3533220539682073378" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:01:14+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4543511475254230865" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:01:14+03:00" level=info msg=ev5g6OPchR8I9xAljwFhAPXPhBmp5aSN func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:01:14+03:00" level=info msg="HTTP code: 200, request_id: 4543511475254230865" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:01:14+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 463072032272256502" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:01:14+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 463072032272256502" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:03:38+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6585582229863913215" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:38+03:00" level=info msg=ogyVTaurJA3C9eV9yCKwhsgO2CeLor3q func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:03:38+03:00" level=info msg="HTTP code: 200, request_id: 6585582229863913215" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:03:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5365373074912181348" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:38+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5365373074912181348" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:03:38+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3919446593978184120" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:38+03:00" level=info msg=9R6tSY8i5FbdAMLRAXSleuKMTMr4aFso func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:03:38+03:00" level=info msg="HTTP code: 200, request_id: 3919446593978184120" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:03:38+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3266315912199879598" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:38+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3266315912199879598" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:03:40+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1072041037782671361" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:40+03:00" level=info msg=4uIPJLUV9Z6R0OoPZg7yQaac465Z22Us func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:03:40+03:00" level=info msg="HTTP code: 200, request_id: 1072041037782671361" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:03:40+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3287584666966061675" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:40+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3287584666966061675" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:03:54+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8802182976275536243" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:54+03:00" level=info msg=PujnVde3zzoGClCSmdSvlgOH9dHYeM72 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:03:54+03:00" level=info msg="HTTP code: 200, request_id: 8802182976275536243" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:03:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5922195919318861160" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5922195919318861160" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:03:54+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2249299488927447565" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:54+03:00" level=info msg=rXkpWAr3KZdQpiMpjsBMyJg7GxI6uovz func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:03:54+03:00" level=info msg="HTTP code: 200, request_id: 2249299488927447565" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:03:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3537096385001842833" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:03:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3537096385001842833" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:06:03+03:00" level=info msg="Incoming request: /api/v1/csrf, ip: 127.0.0.1, method: GET, request_id: 9123517033248293600" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:03+03:00" level=info msg="HTTP code: 401, request_id: 9123517033248293600" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:06:03+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5618625368537843247" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:03+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5618625368537843247" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:06:04+03:00" level=info msg="Incoming request: /api/v1/csrf, ip: 127.0.0.1, method: GET, request_id: 4316173315118655949" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:04+03:00" level=info msg="HTTP code: 401, request_id: 4316173315118655949" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:06:04+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5987728080618380949" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:04+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5987728080618380949" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:06:52+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3775284608556545020" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:52+03:00" level=info msg=uEvxDTEOsbtM2W3eBQPSwIl08OQZ1VmM func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:06:52+03:00" level=info msg="HTTP code: 200, request_id: 3775284608556545020" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:06:52+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5447591462344671461" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:52+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5447591462344671461" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:06:52+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1051322374333158853" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:52+03:00" level=info msg=EzmdJ6DJdr6aLq7cGMwRvNqyfuSSH6mg func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:06:52+03:00" level=info msg="HTTP code: 200, request_id: 1051322374333158853" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:06:52+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 50657466326782994" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:52+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 50657466326782994" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:06:54+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7131775732774720305" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:54+03:00" level=info msg=MkvYbHmhlEQqIZSN1V2QdFUT1LukxedD func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:06:54+03:00" level=info msg="HTTP code: 200, request_id: 7131775732774720305" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:06:54+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8960496376888649302" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:54+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8960496376888649302" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:06:56+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7562069504369657169" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:56+03:00" level=info msg=Kb7XEamyX3ACdQ6JG6c5aQ3vaAiVaJHF func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:06:56+03:00" level=info msg="HTTP code: 200, request_id: 7562069504369657169" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:06:56+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4423847268553147068" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:06:56+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4423847268553147068" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:07:24+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7133323804503090563" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:07:24+03:00" level=info msg=1Yy2iAAsJKHLEeo22Ax7YmnyBIxlkRdx func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:07:24+03:00" level=info msg="HTTP code: 200, request_id: 7133323804503090563" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:07:24+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3726691172472481494" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:07:24+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3726691172472481494" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:07:26+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3488145952193900178" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:07:26+03:00" level=info msg=6wFEYMjpiAa7ZWq5WARPiH6cV270HnSb func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:07:26+03:00" level=info msg="HTTP code: 200, request_id: 3488145952193900178" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:07:26+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3522152830443028190" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:07:26+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3522152830443028190" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:09:15+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7260104535835520925" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:15+03:00" level=info msg=O9V5LNcvUsQJKEoeU924shoV6jRbcXoP func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:09:15+03:00" level=info msg="HTTP code: 200, request_id: 7260104535835520925" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:09:15+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 566821771131455227" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:15+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 566821771131455227" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:09:15+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1560448605076173888" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:15+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:09:15+03:00" level=info msg="HTTP code: 200, request_id: 1560448605076173888" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:09:15+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 451012181455453043" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:15+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 451012181455453043" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:09:47+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 7746970434048156411" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:47+03:00" level=info msg=EEvIBPBzjzpABS25Hn9vsu3Rwf7d67Pj func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:09:47+03:00" level=info msg="HTTP code: 200, request_id: 7746970434048156411" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:09:47+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2272139969474303760" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:47+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2272139969474303760" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:09:47+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2015476857383208324" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:47+03:00" level=info msg=cB8tDhawSLeOLq2laGj2zsuFKmUWgtk1 func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:09:47+03:00" level=info msg="HTTP code: 200, request_id: 2015476857383208324" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:09:47+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4663946181821706386" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:09:47+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4663946181821706386" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+⇨ http server started on [::]:5555
+time="2023-05-24T15:10:16+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1164772292308487232" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:10:16+03:00" level=info msg=Bz4nqCCfSGkE8apGToekC3wtJ7jP2RfG func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:10:16+03:00" level=info msg="HTTP code: 200, request_id: 1164772292308487232" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:10:16+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7425516150670805641" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:10:16+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7425516150670805641" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:10:17+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3544589738904560724" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:10:17+03:00" level=info msg=33aqTBq7bWa3llnBHmqOSt38W26XTWzB func=main.main.func8 file="/home/marcussss1/2023_1_Brigade/cmd/api/main.go:271"
+time="2023-05-24T15:10:17+03:00" level=info msg="HTTP code: 200, request_id: 3544589738904560724" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:10:17+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6366786105009972454" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:10:17+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 6366786105009972454" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+⇨ http server started on [::]:8081
+time="2023-05-24T15:16:14+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6986491164081728073" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+echo: http: panic serving 127.0.0.1:37340: interface conversion: string is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 33 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc00047b050})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe550, 0xc000434140}, {0xd007e0?, 0xc000430b10}, {0xc000430be0?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:31 +0xdb
+github.com/labstack/echo/v4.(*context).json(0xc000434140, 0xc8, {0xd007e0, 0xc000430b10}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000434140, 0xc00047aed0?, {0xd007e0, 0xc000430b10})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+main.main.func8({0xfbe550, 0xc000434140})
+	/home/marcussss1/2023_1_Brigade/cmd/api/main.go:274 +0x157
+github.com/labstack/echo/v4.(*Echo).add.func1({0xfbe550, 0xc000434140})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xfbe550, 0xc000434140})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo-contrib@v0.15.0/prometheus/prometheus.go:420 +0x22b
+project/internal/middleware.AuthMiddleware.func1.1({0xfbe550, 0xc000434140})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:76 +0x179
+project/internal/middleware.LoggerMiddleware.func1({0xfbe550, 0xc000434140})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40 +0x229
+github.com/labstack/echo/v4/middleware.CSRFWithConfig.func1.1({0xfbe550, 0xc000434140})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/csrf.go:212 +0x758
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xfbe550, 0xc000434140})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:264 +0x8b8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc00057efc0, {0xfafb40?, 0xc0002a62a0}, 0xc000536300)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3d1
+net/http.serverHandler.ServeHTTP({0xc00047ae10?}, {0xfafb40, 0xc0002a62a0}, 0xc000536300)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000eeab0, {0xfb0858, 0xc00047ad50})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T15:16:14+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8676628780989499223" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:16:14+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8676628780989499223" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:16:21+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 112165046602391071" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+echo: http: panic serving 127.0.0.1:37346: interface conversion: string is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 131 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc00047ba40})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe550, 0xc0004341e0}, {0xd007e0?, 0xc0004316a0}, {0xc000431770?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:31 +0xdb
+github.com/labstack/echo/v4.(*context).json(0xc0004341e0, 0xc8, {0xd007e0, 0xc0004316a0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0004341e0, 0xc00047b950?, {0xd007e0, 0xc0004316a0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+main.main.func8({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/2023_1_Brigade/cmd/api/main.go:274 +0x157
+github.com/labstack/echo/v4.(*Echo).add.func1({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo-contrib@v0.15.0/prometheus/prometheus.go:420 +0x22b
+project/internal/middleware.AuthMiddleware.func1.1({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:76 +0x179
+project/internal/middleware.LoggerMiddleware.func1({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40 +0x229
+github.com/labstack/echo/v4/middleware.CSRFWithConfig.func1.1({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/csrf.go:212 +0x758
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xfbe550, 0xc0004341e0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:264 +0x8b8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc00057efc0, {0xfafb40?, 0xc0002a67e0}, 0xc000536700)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3d1
+net/http.serverHandler.ServeHTTP({0xc00047b110?}, {0xfafb40, 0xc0002a67e0}, 0xc000536700)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000eec60, {0xfb0858, 0xc00047ad50})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T15:16:21+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4540206044946566431" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+echo: http: panic serving 127.0.0.1:34072: interface conversion: string is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 120 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc00047bd40})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe550, 0xc000434640}, {0xd007e0?, 0xc000431840}, {0xc000431910?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:31 +0xdb
+github.com/labstack/echo/v4.(*context).json(0xc000434640, 0xc8, {0xd007e0, 0xc000431840}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000434640, 0xc00047bc20?, {0xd007e0, 0xc000431840})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+main.main.func8({0xfbe550, 0xc000434640})
+	/home/marcussss1/2023_1_Brigade/cmd/api/main.go:274 +0x157
+github.com/labstack/echo/v4.(*Echo).add.func1({0xfbe550, 0xc000434640})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xfbe550, 0xc000434640})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo-contrib@v0.15.0/prometheus/prometheus.go:420 +0x22b
+project/internal/middleware.AuthMiddleware.func1.1({0xfbe550, 0xc000434640})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:76 +0x179
+project/internal/middleware.LoggerMiddleware.func1({0xfbe550, 0xc000434640})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40 +0x229
+github.com/labstack/echo/v4/middleware.CSRFWithConfig.func1.1({0xfbe550, 0xc000434640})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/csrf.go:212 +0x758
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xfbe550, 0xc000434640})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:264 +0x8b8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc00057efc0, {0xfafb40?, 0xc0002a69a0}, 0xc000536800)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3d1
+net/http.serverHandler.ServeHTTP({0xc00047baa0?}, {0xfafb40, 0xc0002a69a0}, 0xc000536800)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0004aee10, {0xfb0858, 0xc00047ad50})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T15:16:21+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6871443067462923998" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:16:21+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 6871443067462923998" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:16:33+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3051447628042756809" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:16:33+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5374287049162216287" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+echo: http: panic serving 127.0.0.1:34080: interface conversion: string is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 135 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc0000af0b0})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe550, 0xc000434820}, {0xd007e0?, 0xc0004319d0}, {0xc000431aa0?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:31 +0xdb
+github.com/labstack/echo/v4.(*context).json(0xc000434820, 0xc8, {0xd007e0, 0xc0004319d0}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc000434820, 0xc00047bec0?, {0xd007e0, 0xc0004319d0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+main.main.func8({0xfbe550, 0xc000434820})
+	/home/marcussss1/2023_1_Brigade/cmd/api/main.go:274 +0x157
+github.com/labstack/echo/v4.(*Echo).add.func1({0xfbe550, 0xc000434820})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xfbe550, 0xc000434820})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo-contrib@v0.15.0/prometheus/prometheus.go:420 +0x22b
+project/internal/middleware.AuthMiddleware.func1.1({0xfbe550, 0xc000434820})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:76 +0x179
+project/internal/middleware.LoggerMiddleware.func1({0xfbe550, 0xc000434820})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40 +0x229
+github.com/labstack/echo/v4/middleware.CSRFWithConfig.func1.1({0xfbe550, 0xc000434820})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/csrf.go:212 +0x758
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xfbe550, 0xc000434820})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:264 +0x8b8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc00057efc0, {0xfafb40?, 0xc0002a6b60}, 0xc000536b00)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3d1
+net/http.serverHandler.ServeHTTP({0xc00047bb60?}, {0xfafb40, 0xc0002a6b60}, 0xc000536b00)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ef320, {0xfb0858, 0xc00047ad50})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+time="2023-05-24T15:16:33+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5374287049162216287" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:16:33+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 655941250793293805" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+echo: http: panic serving 127.0.0.1:55624: interface conversion: string is not easyjson.Marshaler: missing method MarshalEasyJSON
+goroutine 121 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/current/src/net/http/server.go:1854 +0xbf
+panic({0xd54300, 0xc0001c8450})
+	/snap/go/current/src/runtime/panic.go:890 +0x263
+project/internal/pkg/serialization.EasyJsonSerializer.Serialize({}, {0xfbe550, 0xc0000b9680}, {0xd007e0?, 0xc000517b00}, {0xc000517bd0?, 0xe5fea0?})
+	/home/marcussss1/2023_1_Brigade/internal/pkg/serialization/serialization.go:31 +0xdb
+github.com/labstack/echo/v4.(*context).json(0xc0000b9680, 0xc8, {0xd007e0, 0xc000517b00}, {0x0, 0x0})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:494 +0x8c
+github.com/labstack/echo/v4.(*context).JSON(0xc0000b9680, 0xc0001c8330?, {0xd007e0, 0xc000517b00})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/context.go:502 +0xd2
+main.main.func8({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/2023_1_Brigade/cmd/api/main.go:274 +0x157
+github.com/labstack/echo/v4.(*Echo).add.func1({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:575 +0x51
+github.com/labstack/echo-contrib/prometheus.(*Prometheus).HandlerFunc.func1({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo-contrib@v0.15.0/prometheus/prometheus.go:420 +0x22b
+project/internal/middleware.AuthMiddleware.func1.1({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:76 +0x179
+project/internal/middleware.LoggerMiddleware.func1({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:40 +0x229
+github.com/labstack/echo/v4/middleware.CSRFWithConfig.func1.1({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/csrf.go:212 +0x758
+github.com/labstack/echo/v4/middleware.CORSWithConfig.func1.1({0xfbe550, 0xc0000b9680})
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/middleware/cors.go:264 +0x8b8
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc00057efc0, {0xfafb40?, 0xc0004c6c40}, 0xc000142100)
+	/home/marcussss1/go/pkg/mod/github.com/labstack/echo/v4@v4.10.2/echo.go:662 +0x3d1
+net/http.serverHandler.ServeHTTP({0xc000687650?}, {0xfafb40, 0xc0004c6c40}, 0xc000142100)
+	/snap/go/current/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0004aeea0, {0xfb0858, 0xc00047ad50})
+	/snap/go/current/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/snap/go/current/src/net/http/server.go:3089 +0x5ed
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+time="2023-05-24T15:17:44+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4585717269598568796" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:17:44+03:00" level=info msg="HTTP code: 200, request_id: 4585717269598568796" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:17:44+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 4869460640650515010" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:17:44+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 4869460640650515010" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:17:51+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2387071254606478865" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:17:51+03:00" level=info msg="HTTP code: 200, request_id: 2387071254606478865" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:17:51+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7491546763935190660" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:17:51+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7491546763935190660" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T15:17:57+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2458183781953483201" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:17:57+03:00" level=info msg="HTTP code: 200, request_id: 2458183781953483201" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T15:17:57+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 7705637676617330969" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T15:17:57+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 7705637676617330969" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:03:27+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6506133257650746265" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:27+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 6506133257650746265" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:03:27+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 6251950466111548669" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:27+03:00" level=info msg="HTTP code: 200, request_id: 6251950466111548669" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+{"time":"2023-05-24T16:03:28.45841039+03:00","level":"FATAL","prefix":"echo","file":"main.go","line":"302","message":"listen tcp :8081: bind: address already in use"}
+exit status 1
+time="2023-05-24T16:03:32+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6942026191266573096" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:32+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 6942026191266573096" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:03:32+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8741091628546704267" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:32+03:00" level=info msg="HTTP code: 200, request_id: 8741091628546704267" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T16:03:33+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 4735927305069877303" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:33+03:00" level=info msg="HTTP code: 200, request_id: 4735927305069877303" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T16:03:33+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 8752027742448848332" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:33+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 8752027742448848332" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:03:39+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2179091522102821029" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:39+03:00" level=info msg="HTTP code: 200, request_id: 2179091522102821029" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T16:03:39+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 563448140141186149" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:03:39+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 563448140141186149" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:04:23+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2802386790689779465" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:04:23+03:00" level=info msg="HTTP code: 200, request_id: 2802386790689779465" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T16:04:23+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 6934781354528155976" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:04:23+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 6934781354528155976" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:05:08+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 5288992383952206613" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:05:08+03:00" level=info msg="HTTP code: 200, request_id: 5288992383952206613" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:60"
+time="2023-05-24T16:05:08+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 378831331987189934" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:05:08+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 378831331987189934" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+signal: killed
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+time="2023-05-24T16:06:26+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 8624661100867089131" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:26+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 8624661100867089131" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:26+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1870646800183620277" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:26+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1870646800183620277" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:46+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2497374889474176327" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:46+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 2497374889474176327" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:46+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3537434130486424330" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:46+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3537434130486424330" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:47+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1215700961055423936" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:47+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 1215700961055423936" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:47+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3687262252134898801" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:47+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3687262252134898801" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:47+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 1973223565286104373" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:47+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 1973223565286104373" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:06:47+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 1327055206033651080" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:06:47+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 1327055206033651080" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:08:09+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2584562409629650383" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:08:09+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 2584562409629650383" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:08:09+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2129197127051443621" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:08:09+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2129197127051443621" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:08:33+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 3109816908703085526" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:08:33+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 3109816908703085526" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:08:33+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3624250788197409461" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:08:33+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3624250788197409461" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:09:35+03:00" level=info msg="Incoming request: /api/v1/csrf/, ip: 127.0.0.1, method: GET, request_id: 2564792966027177567" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:09:35+03:00" level=error msg="HTTP code: 500, Error: code=404, message=Not Found, request_id: 2564792966027177567" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:09:35+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3814720129126189788" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:09:35+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3814720129126189788" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 857604969287166194" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 857604969287166194" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3908869291300726411" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3908869291300726411" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:26+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2673734874013555962" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:26+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2673734874013555962" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:26+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2410649728559735328" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:26+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2410649728559735328" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:26+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 3946643143522789335" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:26+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 3946643143522789335" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:36+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2527964500768197755" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:36+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2527964500768197755" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:11:40+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 2152681563529138061" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:11:40+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 2152681563529138061" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:12:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 867213921337314089" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:12:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 867213921337314089" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:12:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5994562387391772315" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:12:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5994562387391772315" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:12:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 5315821445743565238" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:12:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 5315821445743565238" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+time="2023-05-24T16:12:25+03:00" level=info msg="Incoming request: /api/v1/auth/, ip: 127.0.0.1, method: GET, request_id: 842409876154742653" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:38"
+time="2023-05-24T16:12:25+03:00" level=error msg="HTTP code: 401, Error: rpc error: code = Unknown desc = cookie не найдена, request_id: 842409876154742653" func=project/internal/middleware.LoggerMiddleware.func1 file="/home/marcussss1/2023_1_Brigade/internal/middleware/middleware.go:42"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8081
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.10.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5555
+signal: killed

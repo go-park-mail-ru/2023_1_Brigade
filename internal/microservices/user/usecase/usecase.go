@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"github.com/google/uuid"
-	log "github.com/sirupsen/logrus"
 	"project/internal/config"
 	authUser "project/internal/microservices/auth"
 	"project/internal/microservices/user"
@@ -20,8 +19,8 @@ type usecase struct {
 	imagesUsecase images.Usecase
 }
 
-func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository) user.Usecase {
-	return &usecase{userRepo: userRepo, authRepo: authRepo}
+func NewUserUsecase(userRepo user.Repository, authRepo authUser.Repository, imagesUsecase images.Usecase) user.Usecase {
+	return &usecase{userRepo: userRepo, authRepo: authRepo, imagesUsecase: imagesUsecase}
 }
 
 func (u usecase) DeleteUserById(ctx context.Context, userID uint64) error {
@@ -49,33 +48,48 @@ func (u usecase) PutUserById(ctx context.Context, updateUser model.UpdateUser, u
 			Status:   updateUser.Status,
 		}
 
-		user, err := u.userRepo.UpdateUserEmailStatusById(ctx, user)
+		userFromDB, err := u.userRepo.GetUserById(ctx, userID)
 		if err != nil {
 			return model.User{}, err
 		}
 
-		firstCharacterNameBefore := string([]rune(user.Nickname)[0])
-		firstCharacterNameAfter := string([]rune(updateUser.Nickname)[0])
+		if userFromDB.Email != user.Email {
+			err = u.userRepo.CheckExistUserByEmail(ctx, user.Email)
+			if err == nil {
+				return model.User{}, myErrors.ErrEmailIsAlreadyRegistered
+			} else {
+				if err != myErrors.ErrUserNotFound {
+					return model.User{}, err
+				}
+			}
+		}
+
+		user, err = u.userRepo.UpdateUserEmailStatusById(ctx, user)
+		if err != nil {
+			return model.User{}, err
+		}
+
+		user.Avatar = updateUser.NewAvatarUrl
 		user.Nickname = updateUser.Nickname
 
-		if user.Avatar == updateUser.NewAvatarUrl && firstCharacterNameBefore != firstCharacterNameAfter {
-			filename := uuid.NewString()
-			err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
-			if err != nil {
-				return model.User{}, err
+		if userFromDB.Nickname != user.Nickname {
+			firstCharacterNameBefore := string([]rune(userFromDB.Nickname)[0])
+			firstCharacterNameAfter := string([]rune(user.Nickname)[0])
+
+			if firstCharacterNameBefore != firstCharacterNameAfter {
+				filename := uuid.NewString()
+				err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterNameAfter)
+				if err != nil {
+					return model.User{}, err
+				}
+
+				url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
+				if err != nil {
+					return model.User{}, err
+				}
+
+				user.Avatar = url
 			}
-
-			url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
-			if err != nil {
-				return model.User{}, err
-			}
-
-			log.Info(updateUser.NewAvatarUrl)
-			log.Info(url)
-
-			user.Avatar = url
-		} else {
-			user.Avatar = updateUser.NewAvatarUrl
 		}
 
 		user, err = u.userRepo.UpdateUserAvatarNicknameById(ctx, user)
@@ -142,7 +156,11 @@ func (u usecase) AddUserContact(ctx context.Context, userID uint64, contactID ui
 	}
 
 	contacts, err := u.userRepo.GetUserContacts(ctx, userID)
-	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), err
+	if err != nil {
+		return nil, err
+	}
+
+	return model_conversion.FromAuthorizedUserArrayToUserArray(contacts), nil
 }
 
 func (u usecase) CheckExistUserById(ctx context.Context, userID uint64) error {
@@ -159,8 +177,8 @@ func (u usecase) GetAllUsersExceptCurrentUser(ctx context.Context, userID uint64
 	return model_conversion.FromAuthorizedUserArrayToUserArray(users), err
 }
 
-func (u usecase) GetSearchUsers(ctx context.Context, string string) ([]model.User, error) {
-	searchContacts, err := u.userRepo.GetSearchUsers(ctx, string)
+func (u usecase) GetSearchUsers(ctx context.Context, string string, userID uint64) ([]model.User, error) {
+	searchContacts, err := u.userRepo.GetSearchUsers(ctx, string, userID)
 	if err != nil {
 		return nil, err
 	}

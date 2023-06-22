@@ -618,3 +618,83 @@ func (v *File) UnmarshalJSON(data []byte) error {
 func (v *File) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjson4086215fDecodeProjectInternalModel4(l, v)
 }
+func easyjson4086215fDecodeProjectInternalModel5(in *jlexer.Lexer, out *Attachment) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "id_message":
+			out.IdMessage = string(in.String())
+		case "url":
+			out.Url = string(in.String())
+		case "name":
+			out.Name = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjson4086215fEncodeProjectInternalModel5(out *jwriter.Writer, in Attachment) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	{
+		const prefix string = ",\"id_message\":"
+		out.RawString(prefix[1:])
+		out.String(string(in.IdMessage))
+	}
+	{
+		const prefix string = ",\"url\":"
+		out.RawString(prefix)
+		out.String(string(in.Url))
+	}
+	{
+		const prefix string = ",\"name\":"
+		out.RawString(prefix)
+		out.String(string(in.Name))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v Attachment) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjson4086215fEncodeProjectInternalModel5(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v Attachment) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjson4086215fEncodeProjectInternalModel5(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *Attachment) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjson4086215fDecodeProjectInternalModel5(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *Attachment) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjson4086215fDecodeProjectInternalModel5(l, v)
+}

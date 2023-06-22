@@ -3,9 +3,9 @@ package http
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
-	"project/internal/config"
 	"project/internal/microservices/chat"
 	"project/internal/microservices/user"
 	"project/internal/model"
@@ -30,27 +30,36 @@ func (u chatHandler) GetChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	if chat.Type == config.Chat {
-		if len(chat.Members) > 0 {
-			if chat.Members[0].Id == session.UserId {
-				chat.Title = chat.Members[1].Nickname
-				chat.Avatar = chat.Members[1].Avatar
-			} else {
-				chat.Title = chat.Members[0].Nickname
-				chat.Avatar = chat.Members[0].Avatar
-			}
-		}
+	chat = httpUtils.SanitizeStruct(chat).(model.Chat)
+
+	return ctx.JSON(http.StatusOK, chat)
+}
+
+func (u chatHandler) GetChatInfoHandler(ctx echo.Context) error {
+	chatID, err := strconv.ParseUint(ctx.Param("chatID"), 10, 64)
+	if err != nil {
+		return err
 	}
+
+	session := ctx.Get("session").(model.Session)
+	chat, err := u.chatUsecase.GetChatInfoById(context.TODO(), chatID, session.UserId)
+	if err != nil {
+		return err
+	}
+
+	chat = httpUtils.SanitizeStruct(chat).(model.ChatInListUser)
 
 	return ctx.JSON(http.StatusOK, chat)
 }
 
 func (u chatHandler) GetCurrentUserChatsHandler(ctx echo.Context) error {
 	session := ctx.Get("session").(model.Session)
+	log.Info("1")
 	listUserChats, err := u.chatUsecase.GetListUserChats(context.TODO(), session.UserId)
 	if err != nil {
 		return err
 	}
+	log.Info("     END    ")
 
 	return ctx.JSON(http.StatusOK, model.Chats{Chats: listUserChats})
 }
@@ -70,19 +79,6 @@ func (u chatHandler) CreateCurrentUserChatHandler(ctx echo.Context) error {
 		return err
 	}
 
-	if chat.Type == config.Chat {
-		if len(dbChat.Members) > 0 {
-			if dbChat.Members[0].Id == session.UserId {
-				dbChat.Title = dbChat.Members[1].Nickname
-				dbChat.Avatar = dbChat.Members[1].Avatar
-			} else {
-				dbChat.Title = dbChat.Members[0].Nickname
-				dbChat.Avatar = dbChat.Members[0].Avatar
-			}
-		}
-	}
-
-	dbChat.MasterID = session.UserId
 	return ctx.JSON(http.StatusCreated, dbChat)
 }
 
@@ -108,6 +104,7 @@ func (u chatHandler) EditChatHandler(ctx echo.Context) error {
 	}
 
 	chat = httpUtils.SanitizeStruct(chat).(model.EditChat)
+
 	newChat, err := u.chatUsecase.EditChat(context.TODO(), chat)
 	if err != nil {
 		return err
@@ -137,6 +134,7 @@ func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Use
 	currentUserChatsUrl := "/chats/"
 	getChatUrl := "/chats/:chatID/"
 	deleteChatUrl := "/chats/:chatID/"
+	shortChatInfoUrl := "/chats/info/:chatID/"
 	searchChatsMessagesUrl := "/chats/search/:string/"
 
 	api := e.Group("api/v1")
@@ -144,11 +142,13 @@ func NewChatHandler(e *echo.Echo, chatUsecase chat.Usecase, userUsecase user.Use
 	getChat := api.Group(getChatUrl)
 	currentUserChats := api.Group(currentUserChatsUrl)
 	deleteChat := api.Group(deleteChatUrl)
+	shortChatInfo := api.Group(shortChatInfoUrl)
 	searchChatsMessages := api.Group(searchChatsMessagesUrl)
 
 	getChat.GET("", handler.GetChatHandler)
 	deleteChat.DELETE("", handler.DeleteChatHandler)
 	currentUserChats.PUT("", handler.EditChatHandler)
+	shortChatInfo.GET("", handler.GetChatInfoHandler)
 	currentUserChats.GET("", handler.GetCurrentUserChatsHandler)
 	currentUserChats.POST("", handler.CreateCurrentUserChatHandler)
 	searchChatsMessages.GET("", handler.GetChatsMessagesHandler)

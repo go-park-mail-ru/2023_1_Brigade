@@ -493,16 +493,17 @@ func (x *PutUserArguments) GetUserID() uint64 {
 	return 0
 }
 
-type String struct {
+type SearchUsersArguments struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	String_ string `protobuf:"bytes,1,opt,name=string,proto3" json:"string,omitempty"`
+	UserID  uint64 `protobuf:"varint,2,opt,name=userID,proto3" json:"userID,omitempty"`
 }
 
-func (x *String) Reset() {
-	*x = String{}
+func (x *SearchUsersArguments) Reset() {
+	*x = SearchUsersArguments{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_protobuf_user_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -510,13 +511,13 @@ func (x *String) Reset() {
 	}
 }
 
-func (x *String) String() string {
+func (x *SearchUsersArguments) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*String) ProtoMessage() {}
+func (*SearchUsersArguments) ProtoMessage() {}
 
-func (x *String) ProtoReflect() protoreflect.Message {
+func (x *SearchUsersArguments) ProtoReflect() protoreflect.Message {
 	mi := &file_protobuf_user_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -528,16 +529,23 @@ func (x *String) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use String.ProtoReflect.Descriptor instead.
-func (*String) Descriptor() ([]byte, []int) {
+// Deprecated: Use SearchUsersArguments.ProtoReflect.Descriptor instead.
+func (*SearchUsersArguments) Descriptor() ([]byte, []int) {
 	return file_protobuf_user_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *String) GetString_() string {
+func (x *SearchUsersArguments) GetString_() string {
 	if x != nil {
 		return x.String_
 	}
 	return ""
+}
+
+func (x *SearchUsersArguments) GetUserID() uint64 {
+	if x != nil {
+		return x.UserID
+	}
+	return 0
 }
 
 var File_protobuf_user_proto protoreflect.FileDescriptor
@@ -595,10 +603,12 @@ var file_protobuf_user_proto_rawDesc = []byte{
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55,
 	0x73, 0x65, 0x72, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65,
 	0x72, 0x49, 0x44, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
-	0x44, 0x22, 0x20, 0x0a, 0x06, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x12, 0x16, 0x0a, 0x06, 0x73,
-	0x74, 0x72, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x72,
-	0x69, 0x6e, 0x67, 0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x3b, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74,
-	0x65, 0x64, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x44, 0x22, 0x46, 0x0a, 0x14, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x55, 0x73, 0x65, 0x72, 0x73,
+	0x41, 0x72, 0x67, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x72,
+	0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x72, 0x69, 0x6e,
+	0x67, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x44, 0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x3b, 0x67,
+	0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -622,7 +632,7 @@ var file_protobuf_user_proto_goTypes = []interface{}{
 	(*Contacts)(nil),                // 4: protobuf.Contacts
 	(*AddUserContactArguments)(nil), // 5: protobuf.AddUserContactArguments
 	(*PutUserArguments)(nil),        // 6: protobuf.PutUserArguments
-	(*String)(nil),                  // 7: protobuf.String
+	(*SearchUsersArguments)(nil),    // 7: protobuf.SearchUsersArguments
 }
 var file_protobuf_user_proto_depIdxs = []int32{
 	0, // 0: protobuf.Contacts.contacts:type_name -> protobuf.User
@@ -725,7 +735,7 @@ func file_protobuf_user_proto_init() {
 			}
 		}
 		file_protobuf_user_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*String); i {
+			switch v := v.(*SearchUsersArguments); i {
 			case 0:
 				return &v.state
 			case 1:

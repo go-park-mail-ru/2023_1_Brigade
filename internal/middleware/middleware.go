@@ -62,6 +62,40 @@ func LoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+//func CSRFMiddleware() echo.MiddlewareFunc {
+//	return func(next echo.HandlerFunc) echo.HandlerFunc {
+//		return func(ctx echo.Context) error {
+//			clientCsrf := ctx.Request().Header.Values("X-CSRF-Token")
+//			if clientCsrf == nil || len(clientCsrf) == 1 {
+//				cookie := &http.Cookie{
+//					Name:     "_csrf",
+//					Value:    uuid.NewString(),
+//					HttpOnly: false,
+//					Path:     "/login",
+//					Expires:  time.Now().Add(60 * time.Second),
+//					SameSite: http.SameSiteNoneMode,
+//					Secure:   true,
+//				}
+//
+//				ctx.SetCookie(cookie)
+//				return next(ctx)
+//			}
+//
+//			log.Info(clientCsrf)
+//
+//			csrf := ctx.Get("_csrf").(string)
+//
+//			log.Info(csrf)
+//
+//			if clientCsrf[0] != csrf {
+//				return errors.New("неправильный токен")
+//			}
+//
+//			return next(ctx)
+//		}
+//	}
+//}
+
 func AuthMiddleware(authSessionUsecase authSession.Usecase) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {

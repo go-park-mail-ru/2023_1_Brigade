@@ -4,10 +4,10 @@ services:
   api:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/api/main.go
     container_name: api
-    image: technogramm/api:e7d3264
+    image: technogramm/api:04141c5
     depends_on:
       - postgres
     volumes:
@@ -27,10 +27,10 @@ services:
   chat:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/chat/main.go
     container_name: chat
-    image: technogramm/chat:e7d3264
+    image: technogramm/chat:04141c5
     depends_on:
       - postgres
     volumes:
@@ -49,10 +49,10 @@ services:
   user:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/user/main.go
     container_name: user
-    image: technogramm/user:e7d3264
+    image: technogramm/user:04141c5
     depends_on:
       - postgres
     volumes:
@@ -71,10 +71,10 @@ services:
   messages:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/messages/main.go
     container_name: messages
-    image: technogramm/messages:e7d3264
+    image: technogramm/messages:04141c5
     depends_on:
       - postgres
       - consumer
@@ -95,10 +95,10 @@ services:
   consumer:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/consumer/rabbitMQ/main.go
     container_name: consumer
-    image: technogramm/consumer:e7d3264
+    image: technogramm/consumer:04141c5
     depends_on:
       - rabbitmq
     volumes:
@@ -117,10 +117,10 @@ services:
   producer:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/producer/rabbitMQ/main.go
     container_name: producer
-    image: technogramm/producer:e7d3264
+    image: technogramm/producer:04141c5
     depends_on:
       - rabbitmq
     volumes:
@@ -139,10 +139,10 @@ services:
   auth:
     build:
       args:
-        VERSION: e7d3264
+        VERSION: 04141c5
         SRC_PATH: cmd/auth/main.go
     container_name: auth
-    image: technogramm/auth:e7d3264
+    image: technogramm/auth:04141c5
     depends_on:
       - postgres
     volumes:

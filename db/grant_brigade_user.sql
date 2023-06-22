@@ -1,6 +1,3 @@
-CREATE USER brigade WITH PASSWORD 'brigade';
-CREATE USER brigade_chats WITH PASSWORD 'brigade';
-
 GRANT SELECT, UPDATE, INSERT, DELETE ON
     attachments,
     chat,
@@ -13,10 +10,3 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON
     session,
     user_contacts
     TO brigade;
-
-GRANT SELECT ON
-    attachments,
-    chat,
-    chat_messages,
-    message
-    TO brigade_chats;

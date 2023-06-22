@@ -4,10 +4,10 @@ services:
   api:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/api/main.go
     container_name: api
-    image: technogramm/api:4fa6dba
+    image: technogramm/api:e7d3264
     depends_on:
       - postgres
     volumes:
@@ -18,14 +18,19 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   chat:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/chat/main.go
     container_name: chat
-    image: technogramm/chat:4fa6dba
+    image: technogramm/chat:e7d3264
     depends_on:
       - postgres
     volumes:
@@ -35,14 +40,19 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   user:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/user/main.go
     container_name: user
-    image: technogramm/user:4fa6dba
+    image: technogramm/user:e7d3264
     depends_on:
       - postgres
     volumes:
@@ -52,14 +62,19 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9001/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   messages:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/messages/main.go
     container_name: messages
-    image: technogramm/messages:4fa6dba
+    image: technogramm/messages:e7d3264
     depends_on:
       - postgres
       - consumer
@@ -71,14 +86,19 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9002/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   consumer:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/consumer/rabbitMQ/main.go
     container_name: consumer
-    image: technogramm/consumer:4fa6dba
+    image: technogramm/consumer:e7d3264
     depends_on:
       - rabbitmq
     volumes:
@@ -88,14 +108,19 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9003/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   producer:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/producer/rabbitMQ/main.go
     container_name: producer
-    image: technogramm/producer:4fa6dba
+    image: technogramm/producer:e7d3264
     depends_on:
       - rabbitmq
     volumes:
@@ -105,14 +130,19 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9004/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   auth:
     build:
       args:
-        VERSION: 4fa6dba
+        VERSION: e7d3264
         SRC_PATH: cmd/auth/main.go
     container_name: auth
-    image: technogramm/auth:4fa6dba
+    image: technogramm/auth:e7d3264
     depends_on:
       - postgres
     volumes:
@@ -122,6 +152,11 @@ services:
     restart: always
     networks:
       - backend-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9005/health" ]
+      interval: 1s
+      timeout: 2s
+      retries: 2
 
   rabbitmq:
     image: rabbitmq:latest

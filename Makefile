@@ -61,6 +61,6 @@ cover_html: |
 	go tool cover -html=tmp.out
 
 .PHONY: pgbadger
-pgbadger::
+pgbadger: |
 	sudo apt-get install pgbadger || true
 	pgbadger /var/log/postgresql/*.json -o logs/pgbadger/report.html

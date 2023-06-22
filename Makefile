@@ -59,3 +59,8 @@ cover_html: |
 	go test -v ./... -coverprofile=c.out ./... -coverpkg=./...
 	cat c.out | grep -v "cmd" | grep -v "_mock.go" | grep -v ".pb" | grep -v "_easyjson.go" > tmp.out
 	go tool cover -html=tmp.out
+
+.PHONY: pgbadger
+pgbadger: |
+	sudo apt-get install pgbadger || true
+	pgbadger /var/log/postgresql/*.json -o logs/pgbadger/report.html

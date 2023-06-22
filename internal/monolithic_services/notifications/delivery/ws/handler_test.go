@@ -13,6 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"os/signal"
 	"project/internal/config"
 	chatMock "project/internal/microservices/chat/usecase/mocks"
 	userMock "project/internal/microservices/user/usecase/mocks"
@@ -48,20 +50,6 @@ func TestHandlers_WSHandler(t *testing.T) {
 		ConnAddr:    "ws://localhost:8900/connection/websocket",
 		ChannelName: "channel",
 	}
-
-	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
-
-	err := c.Connect()
-	assert.NoError(t, err)
-
-	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	assert.NoError(t, err)
-
-	err = sub.Subscribe()
-	assert.NoError(t, err)
 
 	wsMessage := model.WebSocketMessage{
 		Id:       "",
@@ -112,8 +100,38 @@ func TestHandlers_WSHandler(t *testing.T) {
 
 	userUsecase := userMock.NewMockUsecase(ctl)
 	chatUsecase := chatMock.NewMockUsecase(ctl)
+	//centrfugoUsecase := centrifugoMock.NewMockCentrifugo(ctl)
 
-	handler, err := NewNotificationsHandler(e, chatUsecase, userUsecase, centrifugo)
+	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		c.Close()
+		log.Fatal()
+	}()
+
+	err = c.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	handler, err := NewNotificationsHandler(e, chatUsecase, userUsecase, c, centrifugo.ChannelName)
 	assert.NoError(t, err)
 
 	h := WsHandler{handler: handler.SendNotificationsHandler}
@@ -136,6 +154,13 @@ func TestHandlers_WSHandler(t *testing.T) {
 
 		err = ws.WriteMessage(websocket.TextMessage, test.wsBody)
 		require.NoError(t, err, test.name)
+
+		////centrfugoUsecase.EXPECT().GetSubscription(centrifugo.ChannelName).Return(nil, true).Times(1)
+		//
+		////_, err := sub.Publish(context.TODO(), test.producerBody)
+		////centrfugoUsecase.EXPECT().Publish(context.TODO(), test.producerBody).Return(nil, true).Times(1)
+		//require.NoError(t, err)
+		//time.Sleep(500 * time.Millisecond)
 
 		sub, subscribed := c.GetSubscription(centrifugo.ChannelName)
 		require.Equal(t, true, subscribed)

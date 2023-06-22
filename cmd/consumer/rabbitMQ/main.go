@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/centrifugal/centrifuge-go"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 	"os"
+	"os/signal"
 	"project/internal/config"
 	serverConsumer "project/internal/microservices/consumer/delivery/grpc/server"
 	"project/internal/middleware"
@@ -48,7 +50,36 @@ func main() {
 		log.Fatal(err)
 	}
 
-	consumerUsecase, err := usecase.NewConsumer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName, config.Centrifugo)
+	centrifugo := centrifuge.NewJsonClient(config.Centrifugo.ConnAddr, centrifuge.Config{})
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+	go func() {
+		<-signals
+		centrifugo.Close()
+		log.Fatal()
+	}()
+
+	err = centrifugo.Connect()
+	if err != nil {
+		log.Error(err)
+	}
+
+	sub, err := centrifugo.NewSubscription(config.Centrifugo.ChannelName, centrifuge.SubscriptionConfig{
+		Recoverable: true,
+		JoinLeave:   true,
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = sub.Subscribe()
+	if err != nil {
+		log.Error(err)
+	}
+
+	consumerUsecase, err := usecase.NewConsumer(config.RabbitMQ.ConnAddr, config.RabbitMQ.QueueName, centrifugo, config.Centrifugo.ChannelName)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -3,44 +3,23 @@ package usecase
 import (
 	"context"
 	"errors"
-	"github.com/centrifugal/centrifuge-go"
 	amqp "github.com/rabbitmq/amqp091-go"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
-	"project/internal/config"
 	consumer "project/internal/microservices/consumer/usecase"
+	"project/internal/monolithic_services/centrifugo"
 )
 
 type usecase struct {
 	consumer    *amqp.Connection
 	channel     *amqp.Channel
 	queue       *amqp.Queue
-	client      *centrifuge.Client
+	client      centrifugo.Centrifugo
 	channelName string
 }
 
-func NewConsumer(connAddr string, queueName string, centrifugo config.Centrifugo) (consumer.Usecase, error) {
-	c := centrifuge.NewJsonClient(centrifugo.ConnAddr, centrifuge.Config{})
-
-	err := c.Connect()
-	if err != nil {
-		log.Error(err)
-	}
-
-	sub, err := c.NewSubscription(centrifugo.ChannelName, centrifuge.SubscriptionConfig{
-		Recoverable: true,
-		JoinLeave:   true,
-	})
-	if err != nil {
-		log.Error(err)
-	}
-
-	err = sub.Subscribe()
-	if err != nil {
-		log.Error(err)
-	}
-
+func NewConsumer(connAddr string, queueName string, centrifugo centrifugo.Centrifugo, channelName string) (consumer.Usecase, error) {
 	consumer, err := amqp.Dial(connAddr)
 	if err != nil {
 		return nil, err
@@ -78,11 +57,11 @@ func NewConsumer(connAddr string, queueName string, centrifugo config.Centrifugo
 			log.Error(err)
 		}
 
-		c.Close()
+		centrifugo.Close()
 		log.Fatal()
 	}()
 
-	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: c, channelName: centrifugo.ChannelName}
+	consumerUsecase := usecase{consumer: consumer, channel: channel, queue: &queue, client: centrifugo, channelName: channelName}
 
 	go func() {
 		consumerUsecase.StartConsumeMessages(context.TODO())

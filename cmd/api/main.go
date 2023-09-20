@@ -192,7 +192,6 @@ func main() {
 	}))
 
 	e.Use(myMiddleware.LoggerMiddleware)
-	e.Use(myMiddleware.CSRFMiddleware())
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
 
 	e.JSONSerializer = serialization.EasyJsonSerializer{}

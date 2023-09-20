@@ -1,41 +1,12 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    container_name: api
-    image: api
-    depends_on:
-      - postgres
-    volumes:
-      - /home/ubuntu/avatars:/avatars
-    ports:
-      - "8081:8081"
-    restart: always
-    networks:
-      backend-network:
-        ipv4_address: 192.168.243.1
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_data:/var/lib/postgresql/data
-    restart: always
-    networks:
-      - backend-network
-
   centrifugo:
     image: centrifugo/centrifugo:latest
     container_name: centrifugo
-    command: centrifugo -c config.json --port=8901 --admin
+    command: centrifugo -c config.json --port=8900 --admin
     ports:
-      - "8901:8901"
+      - "8900:8900"
     volumes:
       - ./config.json:/centrifugo/config.json
     restart: always

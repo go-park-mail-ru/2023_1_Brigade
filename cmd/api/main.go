@@ -8,8 +8,8 @@ import (
 	usecaseAuth "project/internal/microservices/auth/usecase"
 	repositoryChat "project/internal/microservices/chat/repository"
 	usecaseChat "project/internal/microservices/chat/usecase"
-	clientMessages "project/internal/microservices/messages/delivery/grpc/client"
 	repositoryMessages "project/internal/microservices/messages/repository"
+	"project/internal/microservices/messages/usecase"
 	repositoryUser "project/internal/microservices/user/repository"
 	usecaseUser "project/internal/microservices/user/usecase"
 	//clientAuth "project/internal/microservices/auth/delivery/grpc/client"
@@ -27,8 +27,6 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v2"
 
 	httpUser "project/internal/microservices/user/delivery/http"
@@ -172,86 +170,19 @@ func main() {
 		log.Error(err)
 	}
 
-	//grpcConnChats, err := grpc.Dial(
-	//	config.ChatsService.Addr,
-	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
-	//	grpc.WithBlock(),
-	//)
-	//if err != nil {
-	//	log.Fatal("cant connect to grpc ", err)
-	//}
-	//defer func() {
-	//	err = grpcConnChats.Close()
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//}()
-	//
-	//grpcConnUsers, err := grpc.Dial(
-	//	config.UsersService.Addr,
-	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
-	//	grpc.WithBlock(),
-	//)
-	//if err != nil {
-	//	log.Fatal("cant connect to grpc ", err)
-	//}
-	//defer func() {
-	//	err = grpcConnUsers.Close()
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//}()
-
-	grpcConnMessages, err := grpc.Dial(
-		config.MessagesService.Addr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatal("cant connect to grpc ", err)
-	}
-	defer func() {
-		err = grpcConnMessages.Close()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
-
-	//grpcConnAuth, err := grpc.Dial(
-	//	config.AuthService.Addr,
-	//	grpc.WithTransportCredentials(insecure.NewCredentials()),
-	//	grpc.WithBlock(),
-	//)
-	//if err != nil {
-	//	log.Fatal("cant connect to grpc ", err)
-	//}
-	//defer func() {
-	//	err = grpcConnAuth.Close()
-	//	if err != nil {
-	//		log.Error(err)
-	//	}
-	//}()
-
+	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
+	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
 	authUserRepository := authUserRepository.NewAuthUserMemoryRepository(db)
-	//authSessionRepository := authSessionRepository.NewAuthSessionMemoryRepository(db)
-	//imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
 	chatRepo := repositoryChat.NewChatMemoryRepository(db)
 	userRepo := repositoryUser.NewUserMemoryRepository(db)
 	messagesRepo := repositoryMessages.NewMessagesMemoryRepository(db)
 
-	imagesRepository := repositoryImages.NewImagesMemoryRepository(userAvatarsClient, chatAvatarsClient, chatImagesClient)
-	authSessionRepository := repositoryAuthSession.NewAuthSessionMemoryRepository(db)
-
 	authSessionUsecase := usecaseAuthSession.NewAuthUserUsecase(authSessionRepository)
 	imagesUsecase := usecaseImages.NewImagesUsecase(imagesRepository)
-
 	authService := usecaseAuth.NewAuthUserUsecase(authUserRepository, userRepo, chatRepo, imagesUsecase)
 	chatService := usecaseChat.NewChatUsecase(chatRepo, userRepo, messagesRepo, imagesUsecase)
 	userService := usecaseUser.NewUserUsecase(userRepo, authUserRepository)
-	//authService := clientAuth.NewAuthUserServiceGRPSClient(grpcConnAuth)
-	//chatService := clientChat.NewChatServiceGRPSClient(grpcConnChats)
-	//userService := clientUser.NewUserServiceGRPSClient(grpcConnUsers)
-	messagesService := clientMessages.NewMessagesServiceGRPSClient(grpcConnMessages)
+	messagesService := usecase.NewMessagesUsecase(chatRepo, centrifugoMessagesClient, config.Centrifugo.ChannelName, messagesRepo)
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

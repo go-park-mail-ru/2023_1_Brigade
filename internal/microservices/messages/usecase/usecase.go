@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/google/uuid"
+	"github.com/mailru/easyjson"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"project/internal/config"
 	"project/internal/microservices/chat"
-	consumer "project/internal/microservices/consumer/usecase"
 	"project/internal/microservices/messages"
-	producer "project/internal/microservices/producer/usecase"
 	"project/internal/model"
+	"project/internal/monolithic_services/centrifugo"
 	httpUtils "project/internal/pkg/http_utils"
 	"time"
 )
@@ -21,11 +21,11 @@ import (
 type usecase struct {
 	chatRepo     chat.Repository
 	messagesRepo messages.Repository
-	producer     producer.Usecase
-	consumer     consumer.Usecase
+	client       centrifugo.Centrifugo
+	channelName  string
 }
 
-func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, producer producer.Usecase, messagesRepo messages.Repository) messages.Usecase {
+func NewMessagesUsecase(chatRepo chat.Repository, client centrifugo.Centrifugo, channelName string, messagesRepo messages.Repository) messages.Usecase {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
@@ -34,7 +34,7 @@ func NewMessagesUsecase(chatRepo chat.Repository, consumer consumer.Usecase, pro
 		log.Fatal()
 	}()
 
-	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, producer: producer, consumer: consumer}
+	return &usecase{chatRepo: chatRepo, messagesRepo: messagesRepo, client: client, channelName: channelName}
 }
 
 func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte) error {
@@ -103,10 +103,30 @@ func (u usecase) PutInProducer(ctx context.Context, jsonWebSocketMessage []byte)
 
 	for _, member := range members {
 		producerMessage.ReceiverID = member.MemberId
-		err = u.producer.ProduceMessage(ctx, producerMessage)
+
+		data, err := easyjson.Marshal(producerMessage)
 		if err != nil {
-			return err
+			log.Error(err)
 		}
+
+		err = u.centrifugePublication(data)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+
+	return nil
+}
+
+func (u *usecase) centrifugePublication(jsonWebSocketMessage []byte) error {
+	sub, subscribed := u.client.GetSubscription(u.channelName)
+	if !subscribed {
+		return errors.New("не подписан")
+	}
+
+	_, err := sub.Publish(context.TODO(), jsonWebSocketMessage)
+	if err != nil {
+		return err
 	}
 
 	return nil

@@ -3,9 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
-	log "github.com/sirupsen/logrus"
 	"math/rand"
-	"project/internal/config"
 	"project/internal/microservices/auth"
 	"project/internal/microservices/chat"
 	"project/internal/microservices/user"
@@ -64,23 +62,23 @@ func (u usecase) Signup(ctx context.Context, registrationUser model.Registration
 		return model.User{}, err
 	}
 
-	filename := strconv.FormatUint(sessionUser.Id, 10)
-	firstCharacterName := string([]rune(sessionUser.Nickname)[0])
+	//filename := strconv.FormatUint(sessionUser.Id, 10)
+	//firstCharacterName := string([]rune(sessionUser.Nickname)[0])
 
-	err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterName)
-	if err != nil {
-		log.Error(err)
-	}
+	//err = u.imagesUsecase.UploadGeneratedImage(ctx, config.UserAvatarsBucket, filename, firstCharacterName)
+	//if err != nil {
+	//	log.Error(err)
+	//}
 
-	url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
-	if err != nil {
-		log.Error(err)
-	}
+	//url, err := u.imagesUsecase.GetImage(ctx, config.UserAvatarsBucket, filename)
+	//if err != nil {
+	//	log.Error(err)
+	//}
 
-	sessionUser, err = u.authRepo.UpdateUserAvatar(ctx, url, sessionUser.Id)
-	if err != nil {
-		log.Error(err)
-	}
+	//sessionUser, err = u.authRepo.UpdateUserAvatar(ctx, url, sessionUser.Id)
+	//if err != nil {
+	//	log.Error(err)
+	//}
 
 	return model_conversion.FromAuthorizedUserToUser(sessionUser), err
 }

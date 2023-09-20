@@ -23,6 +23,7 @@ RUN go mod download
 FROM builder AS build
 
 COPY . .
+COPY /app/internal/config/config.yaml ./
 
 RUN go build -o ./../../api cmd/api/main.go
 

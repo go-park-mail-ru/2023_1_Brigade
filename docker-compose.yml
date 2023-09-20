@@ -3,11 +3,10 @@ version: '3.8'
 services:
   api:
     build:
-      args:
-        VERSION: $VERSION
-        SRC_PATH: cmd/api/main.go
+      context: .
+      dockerfile: ./Dockerfile
     container_name: api
-    image: technogramm/api:$VERSION
+    image: api
     depends_on:
       - postgres
     volumes:
@@ -109,4 +108,3 @@ networks:
 volumes:
   postgres_data: { }
   redis_data: { }
-

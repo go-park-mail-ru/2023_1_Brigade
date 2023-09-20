@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - backend-network
+
   centrifugo:
     image: centrifugo/centrifugo:latest
     container_name: centrifugo

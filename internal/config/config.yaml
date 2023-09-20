@@ -3,7 +3,7 @@ Server:
 
 Postgres:
   db: "postgres"
-  connectionToDB: "user=brigade password=123 dbname=brigade host=localhost port=5432 sslmode=disable" #postgres host=postgres
+  connectionToDB: "user=brigade password=123 dbname=brigade host=postgres port=5432 sslmode=disable" #postgres host=postgres
 
 Cors:
   allowMethods:

@@ -20,13 +20,11 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
-	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gopkg.in/yaml.v2"
 
 	httpUser "project/internal/microservices/user/delivery/http"
@@ -196,18 +194,6 @@ func main() {
 	e.Use(myMiddleware.LoggerMiddleware)
 	e.Use(myMiddleware.CSRFMiddleware())
 	e.Use(myMiddleware.AuthMiddleware(authSessionUsecase))
-
-	p := prometheus.NewPrometheus("echo", nil)
-	eProtheus := echo.New()
-
-	e.Use(p.HandlerFunc)
-	eProtheus.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
-	go func() {
-		err := eProtheus.Start(":5555")
-		if err != nil {
-			log.Error(err)
-		}
-	}()
 
 	e.JSONSerializer = serialization.EasyJsonSerializer{}
 

@@ -13,7 +13,6 @@ services:
       - /home/ubuntu/avatars:/avatars
     ports:
       - "8081:8081"
-      - "8079:8079"
     restart: always
     networks:
       backend-network:
@@ -34,66 +33,12 @@ services:
   centrifugo:
     image: centrifugo/centrifugo:latest
     container_name: centrifugo
-    command: centrifugo -c config.json --port=8900 --admin
+    command: centrifugo -c config.json --port=8901 --admin
     ports:
-      - "8900:8900"
+      - "8901:8901"
     volumes:
       - ./config.json:/centrifugo/config.json
     restart: always
-    networks:
-      - backend-network
-
-  prometheus:
-    hostname: prometheus
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: unless-stopped
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
-    volumes:
-      - ./monitoring/prometheus:/etc/prometheus
-    ports:
-      - "9090:9090"
-    networks:
-      - backend-network
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./monitoring/grafana/data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
-    restart: always
-    networks:
-      - backend-network
-    depends_on:
-      - prometheus
-    user: "472"
-
-  node-exporter:
-    hostname: node-exporter
-    image: prom/node-exporter:latest
-    container_name: node-exporter
-    restart: unless-stopped
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    expose:
-      - "9100"
     networks:
       - backend-network
 
@@ -107,4 +52,3 @@ networks:
 
 volumes:
   postgres_data: { }
-  redis_data: { }

@@ -58,7 +58,7 @@ func SetCookie(ctx echo.Context, session model.Session) {
 		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour * 30),
 		SameSite: http.SameSiteNoneMode,
-		Secure:   false,
+		Secure:   true,
 	}
 	ctx.SetCookie(cookie)
 }
@@ -71,7 +71,7 @@ func DeleteCookie(ctx echo.Context) {
 		Expires:  time.Now().AddDate(0, 0, -1),
 		Path:     "/",
 		SameSite: http.SameSiteNoneMode,
-		Secure:   false,
+		Secure:   true,
 	}
 	ctx.SetCookie(cookie)
 }
